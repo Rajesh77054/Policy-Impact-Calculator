@@ -78,7 +78,10 @@ function calculateProposedTax(income: number, familyStatus: string, hasChildren:
 function calculateHealthcareCosts(
   insuranceType: string, 
   ageRange: string, 
-  familyStatus: string
+  familyStatus: string,
+  income: number,
+  state: string | undefined,
+  employmentStatus: string | undefined
 ): { current: number; proposed: number } {
   
   const isFamily = familyStatus === "family";
@@ -89,51 +92,140 @@ function calculateHealthcareCosts(
   let currentCost = basePremium;
   let proposedCost = basePremium;
   
-  // Age adjustments
-  const ageMultiplier = ageRange === "65+" ? 1.3 : 
-                       ageRange === "45-64" ? 1.1 : 
-                       ageRange === "30-44" ? 1.0 : 0.9;
+  // Age-based adjustments (from ACA rating rules)
+  const ageMultiplier = ageRange === "65+" ? 3.0 : 
+                       ageRange === "45-64" ? 1.4 : 
+                       ageRange === "30-44" ? 1.0 : 
+                       ageRange === "18-29" ? 0.9 : 1.0;
   
   currentCost *= ageMultiplier;
   
-  // Insurance type adjustments
+  // State-based cost adjustments (geographic rating)
+  if (state && STATE_TAX_DATA[state]) {
+    const stateMultiplier = STATE_TAX_DATA[state].cost_of_living_index / 100;
+    currentCost *= stateMultiplier;
+  }
+  
+  // Federal Poverty Level calculations for subsidies
+  const fpl2024 = isFamily ? 31200 : 15060; // Federal Poverty Level
+  const incomeAsFPL = income / fpl2024;
+  
+  // Insurance type adjustments with income-based calculations
   switch (insuranceType) {
     case "employer":
-      currentCost *= 0.7; // Employer typically covers 70%
+      // Employer coverage varies by company size, income, and employment status
+      let employerContribution = 0.72; // Default 72% employer contribution
+      
+      if (employmentStatus === "part-time") {
+        employerContribution = 0.45; // Part-time typically lower contribution
+      } else if (employmentStatus === "self-employed") {
+        employerContribution = 0; // Self-employed pay full premium
+      } else if (income > 150000) {
+        employerContribution = 0.85; // Higher-income jobs often have better benefits
+      } else if (income > 100000) {
+        employerContribution = 0.78; // Mid-high income jobs
+      } else if (income < 35000) {
+        employerContribution = 0.65; // Lower-wage jobs often have lower employer contribution
+      }
+      
+      currentCost *= (1 - employerContribution);
+      
+      // Add typical employee cost-sharing (deductibles, copays)
+      const costSharing = isFamily ? 2800 : 1200;
+      currentCost += costSharing;
       break;
+      
     case "marketplace":
-      currentCost *= 0.85; // Some subsidies
+      // ACA marketplace with income-based subsidies
+      if (incomeAsFPL <= 4.0) { // Eligible for premium tax credits
+        const subsidyAmount = incomeAsFPL <= 1.5 ? 0.85 :
+                             incomeAsFPL <= 2.0 ? 0.65 :
+                             incomeAsFPL <= 2.5 ? 0.45 :
+                             incomeAsFPL <= 3.0 ? 0.25 : 0.15;
+        currentCost *= (1 - subsidyAmount);
+      }
+      // Add deductible costs for marketplace plans
+      currentCost += HEALTHCARE_COSTS_2024.average_deductible * 0.3;
       break;
+      
     case "medicare":
-      currentCost = 2400; // Typical Medicare costs
+      // Medicare Part B + D + Supplement
+      currentCost = 2004 + 480 + 1200; // Part B + Part D + Medigap
+      if (income > 91000) { // IRMAA surcharges
+        currentCost += income > 228000 ? 3060 : 
+                      income > 182000 ? 2448 : 
+                      income > 142000 ? 1836 : 1224;
+      }
       break;
+      
     case "medicaid":
-      currentCost = 0; // Covered by government
+      currentCost = 0; // Fully covered
       break;
+      
     case "military":
-      currentCost = 600; // TRICARE costs
+      currentCost = 600; // TRICARE Prime
       break;
+      
     case "uninsured":
-      currentCost = HEALTHCARE_COSTS_2024.prescription_drug_avg; // Out-of-pocket only
+      // Estimated annual out-of-pocket costs
+      currentCost = HEALTHCARE_COSTS_2024.prescription_drug_avg + 
+                   (isFamily ? 3500 : 1800); // Medical services
       break;
   }
   
-  // Apply proposed changes
+  // Apply proposed policy changes
   proposedCost = currentCost;
   
+  // Enhanced marketplace subsidies and public option
   if (insuranceType === "marketplace") {
-    proposedCost *= (1 - PROPOSED_HEALTHCARE_CHANGES.premium_subsidies_expansion);
+    if (incomeAsFPL <= 6.0) { // Expanded eligibility
+      const enhancedSubsidy = incomeAsFPL <= 1.5 ? 0.95 :
+                             incomeAsFPL <= 2.0 ? 0.80 :
+                             incomeAsFPL <= 3.0 ? 0.65 :
+                             incomeAsFPL <= 4.0 ? 0.50 :
+                             incomeAsFPL <= 5.0 ? 0.35 : 0.20;
+      proposedCost = basePremium * ageMultiplier * (1 - enhancedSubsidy);
+      if (state && STATE_TAX_DATA[state]) {
+        proposedCost *= STATE_TAX_DATA[state].cost_of_living_index / 100;
+      }
+    }
+    
+    // Public option availability (15% lower than marketplace average)
+    const publicOptionCost = basePremium * ageMultiplier * (1 - PROPOSED_HEALTHCARE_CHANGES.public_option_premium_reduction);
+    if (state && STATE_TAX_DATA[state]) {
+      const adjustedPublicOption = publicOptionCost * (STATE_TAX_DATA[state].cost_of_living_index / 100);
+      proposedCost = Math.min(proposedCost, adjustedPublicOption);
+    } else {
+      proposedCost = Math.min(proposedCost, publicOptionCost);
+    }
   }
   
-  // Cap prescription drugs
-  if (currentCost > PROPOSED_HEALTHCARE_CHANGES.prescription_drug_cap) {
-    proposedCost = Math.min(proposedCost, 
-                           currentCost - 
-                           (HEALTHCARE_COSTS_2024.prescription_drug_avg - 
-                            PROPOSED_HEALTHCARE_CHANGES.prescription_drug_cap));
+  // Medicare expansion to age 60+ (for 45-64 age group)
+  if (ageRange === "45-64" && insuranceType !== "medicare" && insuranceType !== "medicaid") {
+    const medicareOption = 2004 + 480 + 600; // Simplified Medicare option
+    proposedCost = Math.min(proposedCost, medicareOption);
   }
   
-  return { current: currentCost, proposed: proposedCost };
+  // Prescription drug cost cap
+  const currentDrugCosts = insuranceType === "medicare" ? 
+                          HEALTHCARE_COSTS_2024.prescription_drug_avg * 1.5 :
+                          HEALTHCARE_COSTS_2024.prescription_drug_avg;
+  
+  if (currentDrugCosts > PROPOSED_HEALTHCARE_CHANGES.prescription_drug_cap) {
+    const drugSavings = currentDrugCosts - PROPOSED_HEALTHCARE_CHANGES.prescription_drug_cap;
+    proposedCost = Math.max(0, proposedCost - drugSavings);
+  }
+  
+  // Medicaid expansion
+  if (insuranceType === "uninsured" && 
+      incomeAsFPL <= PROPOSED_HEALTHCARE_CHANGES.medicaid_expansion_income_limit) {
+    proposedCost = 0; // Would qualify for expanded Medicaid
+  }
+  
+  return { 
+    current: Math.round(currentCost), 
+    proposed: Math.round(proposedCost) 
+  };
 }
 
 export function calculatePolicyImpact(formData: FormData): PolicyResults {
@@ -151,7 +243,14 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
   const taxImpact = proposedTax - currentTax;
   
   // Healthcare calculations
-  const healthcareCosts = calculateHealthcareCosts(insuranceType, ageRange, familyStatus);
+  const healthcareCosts = calculateHealthcareCosts(
+    insuranceType, 
+    ageRange, 
+    familyStatus, 
+    income, 
+    state, 
+    formData.employmentStatus
+  );
   const healthcareImpact = healthcareCosts.proposed - healthcareCosts.current;
   
   // State-specific adjustments

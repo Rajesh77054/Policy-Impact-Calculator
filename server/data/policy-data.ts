@@ -53,18 +53,19 @@ export const PROPOSED_TAX_CHANGES = {
 
 // Healthcare cost data - from Kaiser Family Foundation and CMS
 export const HEALTHCARE_COSTS_2024: HealthcareCosts = {
-  average_premium_individual: 4824, // Annual individual premium
-  average_premium_family: 14424, // Annual family premium
-  average_deductible: 2040,
-  prescription_drug_avg: 1480,
+  average_premium_individual: 7739, // 2024 KFF employer survey average
+  average_premium_family: 23968, // 2024 KFF employer survey average
+  average_deductible: 2040, // Average marketplace silver plan deductible
+  prescription_drug_avg: 1480, // CMS average annual prescription costs
 };
 
-// Proposed healthcare changes
+// Proposed healthcare changes based on Congressional proposals
 export const PROPOSED_HEALTHCARE_CHANGES = {
-  medicare_expansion_age: 60, // Lower Medicare eligibility age
-  prescription_drug_cap: 2000, // Annual out-of-pocket cap
-  premium_subsidies_expansion: 0.20, // 20% premium reduction for middle-income
+  medicare_expansion_age: 60, // Lower Medicare eligibility age to 60
+  prescription_drug_cap: 2000, // Annual out-of-pocket cap for all plans
+  premium_subsidies_expansion: 0.35, // Enhanced ACA premium subsidies
   medicaid_expansion_income_limit: 1.5, // 150% of federal poverty level
+  public_option_premium_reduction: 0.15, // 15% lower than marketplace average
 };
 
 // State-specific data - sample from Tax Foundation and Census Bureau
