@@ -176,6 +176,24 @@ function calculateHealthcareCosts(
   // Apply proposed policy changes
   proposedCost = currentCost;
   
+  // Enhanced employer coverage benefits
+  if (insuranceType === "employer") {
+    // Proposed: Enhanced employer premium support for small businesses
+    if (income < 75000) {
+      const smallBusinessCredit = currentCost * 0.25; // 25% additional employer support
+      proposedCost = currentCost - smallBusinessCredit;
+    } else {
+      proposedCost = currentCost;
+    }
+    
+    // Proposed: Cap on employee out-of-pocket costs
+    const currentOutOfPocket = isFamily ? 2800 : 1200;
+    const proposedOutOfPocketCap = isFamily ? 2000 : 1000;
+    if (currentOutOfPocket > proposedOutOfPocketCap) {
+      proposedCost -= (currentOutOfPocket - proposedOutOfPocketCap);
+    }
+  }
+
   // Enhanced marketplace subsidies and public option
   if (insuranceType === "marketplace") {
     if (incomeAsFPL <= 6.0) { // Expanded eligibility
