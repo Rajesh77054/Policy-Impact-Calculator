@@ -136,8 +136,8 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                     </div>
                     <p className="text-xs text-slate-500">
                       {results.netAnnualImpact > 0 
-                        ? "You would save money overall under these policies"
-                        : "You would pay more overall under these policies"
+                        ? `You would save approximately $${Math.abs(results.netAnnualImpact).toLocaleString()} annually under these policies`
+                        : `You would pay approximately $${Math.abs(results.netAnnualImpact).toLocaleString()} more annually under these policies`
                       }
                     </p>
                   </div>

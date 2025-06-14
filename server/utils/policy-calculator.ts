@@ -282,7 +282,7 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
   
   // State-specific adjustments
   let stateAdjustment = 0;
-  let energyImpact = 120; // Default energy cost impact
+  let energyImpact = Math.round(80 + (income / 10000)); // Base energy impact scales with income
   
   if (state && STATE_TAX_DATA[state]) {
     const stateData = STATE_TAX_DATA[state];
@@ -319,10 +319,15 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
   // Community impact estimates based on state data and income
   const stateData = state ? STATE_TAX_DATA[state] : null;
   
+  // Calculate dynamic default values based on income and national averages
+  const incomeBasedSchoolFunding = Math.round(8 + (income / 75000) * 6); // 8-14% range
+  const incomeBasedInfrastructure = Math.round(1500000 + (income / 100000) * 600000); // Scale with income
+  const incomeBasedJobs = Math.round(200 + (income / 1000) * 2); // Scale with income
+  
   // Calculate state-specific community impacts
-  let schoolFundingImpact = 12; // Default 12%
-  let infrastructureImpact = 2100000; // Default $2.1M
-  let jobOpportunities = 340; // Default 340 jobs
+  let schoolFundingImpact = incomeBasedSchoolFunding;
+  let infrastructureImpact = incomeBasedInfrastructure;
+  let jobOpportunities = incomeBasedJobs;
   
   if (stateData) {
     // School funding varies by state property tax base and income levels
