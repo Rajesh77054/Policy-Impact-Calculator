@@ -30,12 +30,16 @@ function calculateCurrentTax(income: number, familyStatus: string): number {
   
   const taxableIncome = Math.max(0, income - standardDeduction);
   let tax = 0;
+  let previousMax = 0;
   
   for (const bracket of FEDERAL_TAX_BRACKETS_2024) {
-    if (taxableIncome <= bracket.min) break;
+    if (taxableIncome <= previousMax) break;
     
-    const taxableAtThisBracket = Math.min(taxableIncome, bracket.max) - bracket.min + 1;
-    tax += taxableAtThisBracket * bracket.rate;
+    const taxableAtThisBracket = Math.min(taxableIncome, bracket.max) - Math.max(previousMax, bracket.min);
+    if (taxableAtThisBracket > 0) {
+      tax += taxableAtThisBracket * bracket.rate;
+    }
+    previousMax = bracket.max;
   }
   
   return tax;
@@ -47,16 +51,20 @@ function calculateProposedTax(income: number, familyStatus: string, hasChildren:
   
   const taxableIncome = Math.max(0, income - enhancedStandardDeduction);
   let tax = 0;
+  let previousMax = 0;
   
-  // Apply modified brackets
+  // Apply modified brackets with correct progressive calculation
   for (const bracket of FEDERAL_TAX_BRACKETS_2024) {
-    if (taxableIncome <= bracket.min) break;
+    if (taxableIncome <= previousMax) break;
     
-    const taxableAtThisBracket = Math.min(taxableIncome, bracket.max) - bracket.min + 1;
-    const rate = bracket.max === Infinity ? 
-                 bracket.rate + PROPOSED_TAX_CHANGES.top_bracket_rate_change : 
-                 bracket.rate;
-    tax += taxableAtThisBracket * rate;
+    const taxableAtThisBracket = Math.min(taxableIncome, bracket.max) - Math.max(previousMax, bracket.min);
+    if (taxableAtThisBracket > 0) {
+      const rate = bracket.max === Infinity ? 
+                   bracket.rate + PROPOSED_TAX_CHANGES.top_bracket_rate_change : 
+                   bracket.rate;
+      tax += taxableAtThisBracket * rate;
+    }
+    previousMax = bracket.max;
   }
   
   // Apply enhanced child tax credit

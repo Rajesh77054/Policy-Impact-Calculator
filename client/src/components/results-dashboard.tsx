@@ -1,8 +1,10 @@
-import { Shield, Download, Share2, Calculator, Home, Clock } from "lucide-react";
+import { Shield, Download, Share2, Calculator, Home, Clock, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PolicyResults } from "@shared/schema";
 import PolicyCharts from "@/components/policy-charts";
+import MethodologyModal from "@/components/methodology-modal";
+import DataDisclaimer from "@/components/data-disclaimer";
 
 interface ResultsDashboardProps {
   results: PolicyResults;
@@ -26,13 +28,24 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-slate-900 mb-4">Your Personal Policy Impact Report</h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            Based on your profile, here's how different policy proposals might affect you personally.
+            Based on your profile and data from authoritative government and nonpartisan sources, here's how different policy proposals might affect you personally.
+          </p>
+          <p className="text-sm text-slate-500 mt-2">
+            Calculations use current IRS tax brackets, Kaiser Family Foundation healthcare data, and Congressional Budget Office methodology.
           </p>
           <div className="flex justify-center items-center space-x-6 mt-6">
             <div className="flex items-center space-x-2 text-emerald-600">
               <Shield className="w-5 h-5" />
               <span className="text-sm font-medium">Anonymous & Secure</span>
             </div>
+            <MethodologyModal 
+              trigger={
+                <Button variant="outline" size="sm" className="flex items-center space-x-2">
+                  <BookOpen className="w-4 h-4" />
+                  <span>View Sources & Methods</span>
+                </Button>
+              }
+            />
             <div className="flex items-center space-x-2">
               <Button variant="outline" size="sm" className="flex items-center space-x-2">
                 <Share2 className="w-4 h-4" />
@@ -41,6 +54,8 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
             </div>
           </div>
         </div>
+
+        <DataDisclaimer />
 
         {/* Summary Cards Row */}
         <div className="grid md:grid-cols-3 gap-6 mb-8">
@@ -198,9 +213,13 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                       </div>
                     ))}
                   </div>
-                  <Button variant="link" className="mt-4 p-0 h-auto text-sm text-primary">
-                    Read detailed explanation →
-                  </Button>
+                  <MethodologyModal 
+                    trigger={
+                      <Button variant="link" className="mt-4 p-0 h-auto text-sm text-primary">
+                        Read detailed explanation →
+                      </Button>
+                    }
+                  />
                 </div>
               ))}
             </div>
