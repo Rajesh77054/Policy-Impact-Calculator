@@ -18,9 +18,9 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
 
   const formatTaxImpact = (amount: number) => {
     if (amount < 0) {
-      return `$${Math.abs(amount).toLocaleString()} savings`;
+      return `$${Math.abs(amount).toLocaleString()} less in taxes`;
     } else if (amount > 0) {
-      return `$${amount.toLocaleString()} additional`;
+      return `$${amount.toLocaleString()} more in taxes`;
     } else {
       return "No change";
     }
@@ -28,9 +28,9 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
 
   const formatCostImpact = (amount: number) => {
     if (amount < 0) {
-      return `$${Math.abs(amount).toLocaleString()} savings`;
+      return `$${Math.abs(amount).toLocaleString()} less per year`;
     } else if (amount > 0) {
-      return `$${amount.toLocaleString()} increase`;
+      return `$${amount.toLocaleString()} more per year`;
     } else {
       return "No change";
     }
@@ -38,9 +38,9 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
 
   const formatNetImpact = (amount: number) => {
     if (amount < 0) {
-      return `$${Math.abs(amount).toLocaleString()} out of pocket`;
+      return `$${Math.abs(amount).toLocaleString()} more out of pocket`;
     } else if (amount > 0) {
-      return `$${amount.toLocaleString()} in savings`;
+      return `$${amount.toLocaleString()} less out of pocket`;
     } else {
       return "No net change";
     }
@@ -88,6 +88,10 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
         <DataDisclaimer />
 
         {/* Summary Cards Row */}
+        <div className="mb-4">
+          <h3 className="text-xl font-semibold text-slate-900 mb-2">Your Personal Impact</h3>
+          <p className="text-slate-600 text-sm">How the proposed policies would affect your finances and community</p>
+        </div>
         <div className="grid md:grid-cols-3 gap-6 mb-8">
           {/* My Wallet */}
           <Card>
@@ -98,6 +102,11 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
               </div>
             </CardHeader>
             <CardContent>
+              <div className="mb-3 p-3 bg-slate-50 rounded-md">
+                <p className="text-xs text-slate-600">
+                  <strong>Green</strong> = You save money | <strong>Red</strong> = You pay more
+                </p>
+              </div>
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-600">Tax Changes</span>
@@ -118,11 +127,19 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                   </span>
                 </div>
                 <div className="pt-3 border-t border-slate-200">
-                  <div className="flex justify-between font-semibold">
-                    <span>Net Annual Impact</span>
-                    <span className={results.netAnnualImpact > 0 ? "text-green-600" : "text-red-600"}>
-                      {formatNetImpact(results.netAnnualImpact)}
-                    </span>
+                  <div className="space-y-1">
+                    <div className="flex justify-between font-semibold">
+                      <span>Net Annual Impact</span>
+                      <span className={results.netAnnualImpact > 0 ? "text-green-600" : "text-red-600"}>
+                        {formatNetImpact(results.netAnnualImpact)}
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-500">
+                      {results.netAnnualImpact > 0 
+                        ? "You would save money overall under these policies"
+                        : "You would pay more overall under these policies"
+                      }
+                    </p>
                   </div>
                 </div>
               </div>
@@ -178,19 +195,19 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
             <CardContent>
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-600">5-Year Impact</span>
+                  <span className="text-slate-600">5-Year Total</span>
                   <span className={`font-medium ${results.timeline.fiveYear > 0 ? "text-green-600" : "text-red-600"}`}>
                     {formatNetImpact(results.timeline.fiveYear)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-600">10-Year Impact</span>
+                  <span className="text-slate-600">10-Year Total</span>
                   <span className={`font-medium ${results.timeline.tenYear > 0 ? "text-green-600" : "text-red-600"}`}>
                     {formatNetImpact(results.timeline.tenYear)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-600">20-Year Impact</span>
+                  <span className="text-slate-600">20-Year Total</span>
                   <span className={`font-medium ${results.timeline.twentyYear > 0 ? "text-green-600" : "text-red-600"}`}>
                     {formatNetImpact(results.timeline.twentyYear)}
                   </span>
@@ -225,7 +242,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                     </div>
                     <span 
                       className={`px-3 py-1 rounded-full text-sm font-medium ${
-                        (policy.category === "tax" ? policy.impact < 0 : policy.impact < 0)
+                        policy.impact < 0
                           ? "bg-green-100 text-green-800" 
                           : "bg-red-100 text-red-800"
                       }`}
