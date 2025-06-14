@@ -314,11 +314,65 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
   
   // Debug logging
   console.log(`Results: Tax=${Math.round(scaledTaxImpact)}, Healthcare=${Math.round(scaledHealthcareImpact)}, State=${Math.round(stateAdjustment)}, Energy=${Math.round(scaledEnergyImpact)}, Net=${Math.round(netAnnualImpact)}`);
+  console.log(`Community: School=${schoolFundingImpact}%, Infrastructure=$${Math.round(infrastructureImpact/1000)}K, Jobs=${jobOpportunities}`);
   
-  // Community impact estimates based on state data
+  // Community impact estimates based on state data and income
   const stateData = state ? STATE_TAX_DATA[state] : null;
-  const infrastructureImpact = stateData ? 
-                              stateData.property_tax_avg * 500 : 2100000;
+  
+  // Calculate state-specific community impacts
+  let schoolFundingImpact = 12; // Default 12%
+  let infrastructureImpact = 2100000; // Default $2.1M
+  let jobOpportunities = 340; // Default 340 jobs
+  
+  if (stateData) {
+    // School funding varies by state property tax base and income levels
+    const propertyTaxFactor = stateData.property_tax_avg / 3000; // Normalize to average
+    const incomeFactor = income / 75000; // Normalize to median income
+    schoolFundingImpact = Math.round(8 + (propertyTaxFactor * incomeFactor * 8));
+    
+    // Infrastructure investment scales with state size and tax revenue
+    const stateSizeFactor = stateData.cost_of_living_index / 100;
+    const taxRevenueFactor = (stateData.income_tax_rate + stateData.sales_tax_rate) * 10;
+    infrastructureImpact = Math.round(1500000 + (stateSizeFactor * taxRevenueFactor * income * 2));
+    
+    // Job opportunities based on state economic activity and policy impact
+    const economicActivity = stateData.cost_of_living_index * stateData.property_tax_avg / 10000;
+    jobOpportunities = Math.round(200 + (economicActivity * income / 1000) + (taxRevenueFactor * 50));
+    
+    // State-specific adjustments
+    switch (state) {
+      case "CA":
+        schoolFundingImpact += 5; // Higher education investment
+        infrastructureImpact *= 1.4; // Large infrastructure projects
+        jobOpportunities += 150; // Tech sector growth
+        break;
+      case "TX":
+        schoolFundingImpact -= 2; // Lower per-pupil spending
+        infrastructureImpact *= 1.2; // Energy infrastructure
+        jobOpportunities += 100; // Energy sector jobs
+        break;
+      case "NY":
+        schoolFundingImpact += 3; // Urban education investment
+        infrastructureImpact *= 1.3; // Transit and infrastructure
+        jobOpportunities += 80; // Financial sector
+        break;
+      case "FL":
+        schoolFundingImpact -= 1; // Moderate education funding
+        infrastructureImpact *= 0.9; // Lower infrastructure needs
+        jobOpportunities += 60; // Tourism and service jobs
+        break;
+      case "WA":
+        schoolFundingImpact += 4; // Strong education funding
+        infrastructureImpact *= 1.1; // Tech infrastructure
+        jobOpportunities += 120; // Tech sector
+        break;
+    }
+    
+    // Ensure reasonable bounds
+    schoolFundingImpact = Math.max(3, Math.min(25, schoolFundingImpact));
+    infrastructureImpact = Math.max(800000, Math.min(8000000, infrastructureImpact));
+    jobOpportunities = Math.max(150, Math.min(800, jobOpportunities));
+  }
   
   return {
     annualTaxImpact: Math.round(scaledTaxImpact),
@@ -330,9 +384,9 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
       proposed: Math.round(healthcareCosts.proposed),
     },
     communityImpact: {
-      schoolFunding: 12,
+      schoolFunding: schoolFundingImpact,
       infrastructure: infrastructureImpact,
-      jobOpportunities: 340,
+      jobOpportunities: jobOpportunities,
     },
     timeline: {
       fiveYear: Math.round(netAnnualImpact * 5 * 1.025), // 2.5% annual inflation
