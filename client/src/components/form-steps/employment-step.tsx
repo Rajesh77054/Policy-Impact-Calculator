@@ -48,8 +48,12 @@ export default function EmploymentStep({ formData, onComplete }: EmploymentStepP
               {[
                 { value: "fulltime", label: "Full-time employee" },
                 { value: "parttime", label: "Part-time employee" },
-                { value: "selfemployed", label: "Self-employed" },
-                { value: "unemployed", label: "Not currently employed" },
+                { value: "selfemployed", label: "Self-employed/Business owner" },
+                { value: "contract", label: "Contract/Gig worker" },
+                { value: "unemployed", label: "Currently unemployed" },
+                { value: "retired", label: "Retired" },
+                { value: "student", label: "Student" },
+                { value: "unable", label: "Unable to work" },
               ].map((option) => (
                 <div key={option.value} className="flex items-center space-x-4 p-4 border border-slate-300 rounded-lg hover:border-primary transition-colors">
                   <RadioGroupItem value={option.value} id={option.value} />

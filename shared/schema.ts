@@ -22,11 +22,11 @@ export const formDataSchema = z.object({
   familyStatus: z.enum(["single", "married", "family"]).optional(),
   
   // Step 3: Employment
-  employmentStatus: z.enum(["fulltime", "parttime", "selfemployed", "unemployed"]).optional(),
+  employmentStatus: z.enum(["fulltime", "parttime", "selfemployed", "contract", "unemployed", "retired", "student", "unable"]).optional(),
   industry: z.string().optional(),
   
   // Step 4: Healthcare
-  insuranceType: z.enum(["employer", "marketplace", "medicare", "medicaid", "uninsured"]).optional(),
+  insuranceType: z.enum(["employer", "marketplace", "medicare", "medicaid", "military", "uninsured"]).optional(),
   
   // Step 5: Income
   incomeRange: z.enum(["under-25k", "25k-50k", "50k-75k", "75k-100k", "100k-150k", "over-150k"]).optional(),

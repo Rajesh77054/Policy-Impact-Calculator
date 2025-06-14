@@ -49,6 +49,11 @@ export default function HealthcareStep({ formData, onComplete }: HealthcareStepP
                   description: "State health insurance for low-income individuals/families",
                 },
                 {
+                  value: "military",
+                  title: "Military/VA insurance",
+                  description: "TRICARE, VA healthcare, or other military benefits",
+                },
+                {
                   value: "uninsured",
                   title: "Currently uninsured",
                   description: "No health insurance coverage",

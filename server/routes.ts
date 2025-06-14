@@ -3,7 +3,12 @@ import { createServer, type Server } from "http";
 import session from "express-session";
 import { storage } from "./storage";
 import { formDataSchema, policyResultsSchema } from "@shared/schema";
-import { generateSessionId, calculatePolicyImpact } from "./utils/policy-calculator";
+
+declare module 'express-session' {
+  interface SessionData {
+    policySessionId: string;
+  }
+}
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Session middleware
