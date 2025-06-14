@@ -19,11 +19,11 @@ export default function Home() {
             <div className="hidden md:flex items-center space-x-6">
               <div className="flex items-center space-x-2 text-emerald-600">
                 <Shield className="w-4 h-4" />
-                <span className="text-sm font-medium">100% Anonymous</span>
+                <span className="text-sm font-medium">100% Anonymous - No Data Shared</span>
               </div>
               <div className="flex items-center space-x-2 text-emerald-600">
                 <CheckCircle className="w-4 h-4" />
-                <span className="text-sm font-medium">No Registration Required</span>
+                <span className="text-sm font-medium">No Political Agenda</span>
               </div>
             </div>
           </div>

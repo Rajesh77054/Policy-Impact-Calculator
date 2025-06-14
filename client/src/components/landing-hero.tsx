@@ -7,11 +7,12 @@ export default function LandingHero() {
     <section className="bg-gradient-to-br from-primary/5 to-white py-16">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
-          Understand How Policies <span className="text-primary">Affect You</span>
+          See How Policies Affect Your <span className="text-primary">Wallet & Future</span>
         </h2>
         <p className="text-xl text-slate-600 mb-8 max-w-3xl mx-auto">
-          Get personalized insights into how different government policies might impact your finances, 
-          healthcare, and daily life. Educational, non-partisan, and completely anonymous.
+          Curious how new tax, healthcare, or energy policies might change your bottom line? 
+          Get clear answers about what government rules could mean for your family's budget, job, and everyday costs. 
+          No political agenda—just facts, personalized for you.
         </p>
         
         {/* Key Features Grid */}
@@ -20,8 +21,8 @@ export default function LandingHero() {
             <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
               <Calculator className="w-6 h-6 text-primary" />
             </div>
-            <h3 className="font-semibold text-slate-900 mb-2">Personal Impact</h3>
-            <p className="text-sm text-slate-600">See exactly how policies might affect your taxes, healthcare costs, and job prospects.</p>
+            <h3 className="font-semibold text-slate-900 mb-2">Your Personal Impact</h3>
+            <p className="text-sm text-slate-600">See exactly how new policies might affect your taxes, healthcare costs, energy bills, and job opportunities in 3 minutes.</p>
           </div>
           
           <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
