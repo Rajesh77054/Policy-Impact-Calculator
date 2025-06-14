@@ -1,6 +1,7 @@
-import { Shield, Download, Share2, Calculator, Home, Clock, BookOpen } from "lucide-react";
+import { Shield, Download, Share2, Calculator, Home, Clock, BookOpen, Info, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { PolicyResults } from "@shared/schema";
 import PolicyCharts from "@/components/policy-charts";
 import MethodologyModal from "@/components/methodology-modal";
@@ -51,9 +52,28 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
     return `${sign}${value}%`;
   };
 
+  const getCalculationExplanation = (type: string, data: PolicyResults) => {
+    switch (type) {
+      case 'tax':
+        return `Tax changes: ${data.annualTaxImpact < 0 ? 'Savings from' : 'Costs from'} proposed federal tax policy changes including standard deduction increases and bracket adjustments. Based on current IRS tax tables.`;
+      case 'healthcare':
+        return `Healthcare costs: ${data.healthcareCostImpact < 0 ? 'Savings from' : 'Additional costs from'} proposed healthcare policies. For uninsured individuals, this represents elimination of out-of-pocket costs through expanded Medicaid coverage.`;
+      case 'energy':
+        return `Energy costs: ${data.energyCostImpact < 0 ? 'Savings from' : 'Additional costs from'} proposed energy policies including carbon pricing and efficiency programs. Based on average household energy consumption.`;
+      case 'net':
+        return `Net Annual Impact: Total of all policy changes (${formatCurrency(data.annualTaxImpact)} tax + ${formatCurrency(data.healthcareCostImpact)} healthcare + ${formatCurrency(data.energyCostImpact)} energy = ${formatCurrency(data.netAnnualImpact)})`;
+      case 'timeline':
+        return `Timeline projections include inflation adjustments (2.5% annually) and compound effects. Shows cumulative financial impact over different time periods.`;
+      default:
+        return '';
+    }
+  };
+
   return (
-    <div className="py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <TooltipProvider>
+      <div className="py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"></div></div>
+    </TooltipProvider>
         {/* Results Header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-slate-900 mb-4">Your Personal Policy Impact Report</h2>
@@ -109,19 +129,49 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
               </div>
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-600">Tax Changes</span>
+                  <div className="flex items-center space-x-1">
+                    <span className="text-slate-600">Tax Changes</span>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <HelpCircle className="w-3 h-3 text-slate-400 hover:text-slate-600" />
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-xs">
+                        <p className="text-xs">{getCalculationExplanation('tax', results)}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
                   <span className={`font-medium ${results.annualTaxImpact < 0 ? "text-green-600" : "text-red-600"}`}>
                     {formatTaxImpact(results.annualTaxImpact)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-600">Healthcare Costs</span>
+                  <div className="flex items-center space-x-1">
+                    <span className="text-slate-600">Healthcare Costs</span>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <HelpCircle className="w-3 h-3 text-slate-400 hover:text-slate-600" />
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-xs">
+                        <p className="text-xs">{getCalculationExplanation('healthcare', results)}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
                   <span className={`font-medium ${results.healthcareCostImpact < 0 ? "text-green-600" : "text-red-600"}`}>
                     {formatCostImpact(results.healthcareCostImpact)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-600">Energy Costs</span>
+                  <div className="flex items-center space-x-1">
+                    <span className="text-slate-600">Energy Costs</span>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <HelpCircle className="w-3 h-3 text-slate-400 hover:text-slate-600" />
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-xs">
+                        <p className="text-xs">{getCalculationExplanation('energy', results)}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
                   <span className={`font-medium ${results.energyCostImpact < 0 ? "text-green-600" : "text-red-600"}`}>
                     {formatCostImpact(results.energyCostImpact)}
                   </span>
@@ -129,7 +179,17 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                 <div className="pt-3 border-t border-slate-200">
                   <div className="space-y-1">
                     <div className="flex justify-between font-semibold">
-                      <span>Net Annual Impact</span>
+                      <div className="flex items-center space-x-1">
+                        <span>Net Annual Impact</span>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <HelpCircle className="w-3 h-3 text-slate-400 hover:text-slate-600" />
+                          </TooltipTrigger>
+                          <TooltipContent className="max-w-xs">
+                            <p className="text-xs">{getCalculationExplanation('net', results)}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
                       <span className={results.netAnnualImpact < 0 ? "text-green-600" : "text-red-600"}>
                         {formatNetImpact(results.netAnnualImpact)}
                       </span>
@@ -187,7 +247,17 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
           {/* Timeline */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-lg font-semibold">Timeline</CardTitle>
+              <div className="flex items-center space-x-1">
+                <CardTitle className="text-lg font-semibold">Timeline</CardTitle>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <HelpCircle className="w-4 h-4 text-slate-400 hover:text-slate-600" />
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs">
+                    <p className="text-xs">{getCalculationExplanation('timeline', results)}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
               <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
                 <Clock className="w-5 h-5 text-purple-600" />
               </div>
@@ -331,6 +401,6 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
           </Button>
         </div>
       </div>
-    </div>
+    </TooltipProvider>
   );
 }
