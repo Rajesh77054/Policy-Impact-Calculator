@@ -214,12 +214,43 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                 </div>
                 <div className="pt-3 border-t border-slate-200">
                   <div className="space-y-1">
-                    <div className="flex justify-between font-semibold">
-                      <span>Best Period</span>
-                      <span className="text-green-600">Years 5-10</span>
-                    </div>
+                    {(() => {
+                      const periods = [
+                        { name: "Year 1", value: results.netAnnualImpact },
+                        { name: "Years 1-5", value: results.timeline.fiveYear },
+                        { name: "Years 1-10", value: results.timeline.tenYear },
+                        { name: "Years 1-20", value: results.timeline.twentyYear }
+                      ];
+                      
+                      // Find the period with the best (highest) net impact
+                      const bestPeriod = periods.reduce((best, current) => 
+                        current.value > best.value ? current : best
+                      );
+                      
+                      // Check if any period is actually beneficial (positive)
+                      const hasBeneficialPeriod = periods.some(p => p.value > 0);
+                      
+                      if (hasBeneficialPeriod) {
+                        return (
+                          <div className="flex justify-between font-semibold">
+                            <span>Best Period</span>
+                            <span className="text-green-600">{bestPeriod.name}</span>
+                          </div>
+                        );
+                      } else {
+                        return (
+                          <div className="flex justify-between font-semibold">
+                            <span>Impact Trend</span>
+                            <span className="text-orange-600">Costs increase over time</span>
+                          </div>
+                        );
+                      }
+                    })()}
                     <p className="text-xs text-slate-500">
-                      Timeline shows combined impact of all policy changes (taxes + healthcare + energy)
+                      {results.timeline.fiveYear > 0 || results.timeline.tenYear > 0 || results.timeline.twentyYear > 0
+                        ? "Timeline shows when policies provide the most benefit"
+                        : "All periods show net costs. Consider how policy benefits may emerge over time."
+                      }
                     </p>
                   </div>
                 </div>
