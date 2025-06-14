@@ -110,6 +110,8 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
               scales: {
                 y: {
                   beginAtZero: false,
+                  min: Math.min(currentCost, proposedCost) * 0.95, // Start at 95% of the lower value
+                  max: Math.max(currentCost, proposedCost) * 1.05, // End at 105% of the higher value
                   ticks: {
                     callback: function (value) {
                       const sign = value >= 0 ? '+' : '';
@@ -166,7 +168,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
           <Dialog open={openHealthcareModal} onOpenChange={setOpenHealthcareModal}>
             <DialogTrigger asChild>
               <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">
-                <ExternalLink className="w-4 h-4 mr-1" />
+                <Info className="w-4 h-4 mr-1" />
                 Learn more
               </Button>
             </DialogTrigger>
