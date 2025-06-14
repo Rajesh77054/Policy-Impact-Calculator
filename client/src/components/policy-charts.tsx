@@ -109,13 +109,10 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
               },
               scales: {
                 y: {
-                  beginAtZero: false,
-                  min: Math.round(Math.min(currentCost, proposedCost) * 0.95), // Start at 95% of the lower value
-                  max: Math.round(Math.max(currentCost, proposedCost) * 1.05), // End at 105% of the higher value
+                  beginAtZero: true,
                   ticks: {
                     callback: function (value) {
-                      const sign = value >= 0 ? '+' : '';
-                      return sign + '$' + Math.abs(value);
+                      return '$' + value.toLocaleString();
                     }
                   }
                 }
