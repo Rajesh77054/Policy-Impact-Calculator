@@ -63,12 +63,13 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
         }
       }
 
-      // Healthcare Chart
+      // Healthcare Chart - using real calculated costs
       if (healthcareChartRef.current) {
         const healthCtx = healthcareChartRef.current.getContext('2d');
         if (healthCtx) {
-          const currentCost = 4800;
-          const newCost = currentCost + results.healthcareCostImpact;
+          // Use actual healthcare costs from calculations
+          const currentCost = results.healthcareCosts?.current || 0;
+          const proposedCost = results.healthcareCosts?.proposed || 0;
           
           new Chart(healthCtx, {
             type: 'bar',
@@ -76,8 +77,11 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
               labels: ['Current Plan', 'Proposed Plan'],
               datasets: [{
                 label: 'Annual Cost',
-                data: [currentCost, newCost],
-                backgroundColor: ['hsl(215, 16%, 47%)', 'hsl(158, 64%, 52%)'],
+                data: [currentCost, proposedCost],
+                backgroundColor: [
+                  'hsl(215, 16%, 47%)', 
+                  proposedCost <= currentCost ? 'hsl(158, 64%, 52%)' : 'hsl(348, 83%, 47%)'
+                ],
                 borderRadius: 6
               }]
             },

@@ -40,6 +40,10 @@ export const policyResultsSchema = z.object({
   healthcareCostImpact: z.number(),
   energyCostImpact: z.number(),
   netAnnualImpact: z.number(),
+  healthcareCosts: z.object({
+    current: z.number(),
+    proposed: z.number(),
+  }),
   communityImpact: z.object({
     schoolFunding: z.number(),
     infrastructure: z.number(),

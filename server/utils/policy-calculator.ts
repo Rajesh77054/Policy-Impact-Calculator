@@ -180,6 +180,10 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
     healthcareCostImpact: Math.round(healthcareImpact),
     energyCostImpact: Math.round(energyImpact),
     netAnnualImpact: Math.round(netAnnualImpact),
+    healthcareCosts: {
+      current: Math.round(healthcareCosts.current),
+      proposed: Math.round(healthcareCosts.proposed),
+    },
     communityImpact: {
       schoolFunding: 12,
       infrastructure: infrastructureImpact,
