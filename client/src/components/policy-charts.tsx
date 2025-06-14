@@ -1,8 +1,16 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Info, ExternalLink } from "lucide-react";
 import { PolicyResults } from "@shared/schema";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface PolicyChartsProps {
   results: PolicyResults;
@@ -11,6 +19,9 @@ interface PolicyChartsProps {
 export default function PolicyCharts({ results }: PolicyChartsProps) {
   const taxChartRef = useRef<HTMLCanvasElement>(null);
   const healthcareChartRef = useRef<HTMLCanvasElement>(null);
+  const [openTaxModal, setOpenTaxModal] = useState(false); // State for Tax Impact Modal
+  const [openHealthcareModal, setOpenHealthcareModal] = useState(false); // State for Healthcare Modal
+
 
   useEffect(() => {
     // Load Chart.js dynamically
@@ -28,9 +39,9 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
               datasets: [{
                 label: 'Tax Impact',
                 data: [
-                  0, 
-                  results.annualTaxImpact, 
-                  results.annualTaxImpact * 1.05, 
+                  0,
+                  results.annualTaxImpact,
+                  results.annualTaxImpact * 1.05,
                   results.annualTaxImpact * 1.15,
                   results.annualTaxImpact * 1.35
                 ],
@@ -53,7 +64,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                 y: {
                   beginAtZero: false,
                   ticks: {
-                    callback: function(value) {
+                    callback: function (value) {
                       const sign = value >= 0 ? '+' : '';
                       return sign + '$' + Math.abs(value);
                     }
@@ -81,7 +92,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                 label: 'Annual Cost',
                 data: [currentCost, proposedCost],
                 backgroundColor: [
-                  'hsl(215, 16%, 47%)', 
+                  'hsl(215, 16%, 47%)',
                   proposedCost <= currentCost ? 'hsl(158, 64%, 52%)' : 'hsl(348, 83%, 47%)'
                 ],
                 borderRadius: 6
@@ -100,7 +111,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                 y: {
                   beginAtZero: false,
                   ticks: {
-                    callback: function(value) {
+                    callback: function (value) {
                       const sign = value >= 0 ? '+' : '';
                       return sign + '$' + Math.abs(value);
                     }
@@ -122,10 +133,24 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0">
           <CardTitle className="text-lg font-semibold">Tax Impact Over Time</CardTitle>
-          <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">
-            <Info className="w-4 h-4 mr-1" />
-            How we calculate this
-          </Button>
+          <Dialog open={openTaxModal} onOpenChange={setOpenTaxModal}>
+            <DialogTrigger asChild>
+              <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">
+                <Info className="w-4 h-4 mr-1" />
+                How we calculate this
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Tax Impact Calculation</DialogTitle>
+                <DialogDescription>
+                  This chart illustrates the estimated tax impact over time, considering factors such as
+                  policy changes and investment growth.
+                </DialogDescription>
+              </DialogHeader>
+              {/* Add more detailed explanation here */}
+            </DialogContent>
+          </Dialog>
         </CardHeader>
         <CardContent>
           <div className="h-64">
@@ -138,10 +163,25 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0">
           <CardTitle className="text-lg font-semibold">Healthcare Cost Comparison</CardTitle>
-          <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">
-            <ExternalLink className="w-4 h-4 mr-1" />
-            Learn more
-          </Button>
+          <Dialog open={openHealthcareModal} onOpenChange={setOpenHealthcareModal}>
+            <DialogTrigger asChild>
+              <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">
+                <ExternalLink className="w-4 h-4 mr-1" />
+                Learn more
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Healthcare Cost Comparison</DialogTitle>
+                <DialogDescription>
+                  This chart compares the estimated annual healthcare costs between your current plan and the
+                  proposed plan. The "Current Plan" cost represents your existing healthcare expenses. The
+                  "Proposed Plan" cost reflects potential savings or increases based on the new policy.
+                </DialogDescription>
+              </DialogHeader>
+              {/* Add more detailed explanation here, including how the costs are determined */}
+            </DialogContent>
+          </Dialog>
         </CardHeader>
         <CardContent>
           <div className="h-64">

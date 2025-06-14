@@ -192,6 +192,13 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                 <Clock className="w-5 h-5 text-purple-600" />
               </div>
             </CardHeader>
+            
+              <div className="mb-3 p-3 bg-slate-50 rounded-md">
+                <p className="text-xs text-slate-600">
+                  <strong>Cumulative financial impact</strong> from policy changes over time
+                </p>
+              </div>
+            
             <CardContent>
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
@@ -221,15 +228,15 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                         { name: "Years 1-10", value: results.timeline.tenYear },
                         { name: "Years 1-20", value: results.timeline.twentyYear }
                       ];
-                      
+
                       // Find the period with the best (highest) net impact
                       const bestPeriod = periods.reduce((best, current) => 
                         current.value > best.value ? current : best
                       );
-                      
+
                       // Check if any period is actually beneficial (positive)
                       const hasBeneficialPeriod = periods.some(p => p.value > 0);
-                      
+
                       if (hasBeneficialPeriod) {
                         return (
                           <div className="flex justify-between font-semibold">
