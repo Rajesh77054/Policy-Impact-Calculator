@@ -60,15 +60,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/session/form-data", async (req, res) => {
     try {
       const sessionId = req.session.policySessionId;
+      console.log("Form data update - Session ID:", sessionId);
+      console.log("Form data update - Raw body:", JSON.stringify(req.body, null, 2));
+      
       if (!sessionId) {
         return res.status(404).json({ message: "No session found" });
       }
 
       const validatedData = formDataSchema.parse(req.body);
+      console.log("Form data update - Validated data:", JSON.stringify(validatedData, null, 2));
+      
       const session = await storage.updateSessionFormData(sessionId, validatedData);
+      console.log("Form data update - Updated session:", JSON.stringify(session.formData, null, 2));
 
       res.json(session);
     } catch (error: any) {
+      console.error("Form data update error:", error.message);
       res.status(400).json({ message: error.message });
     }
   });
@@ -77,21 +84,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/calculate", async (req, res) => {
     try {
       const sessionId = req.session.policySessionId;
+      console.log("Calculate request - Session ID:", sessionId);
+      
       if (!sessionId) {
         return res.status(404).json({ message: "No session found" });
       }
 
       const session = await storage.getSession(sessionId);
+      console.log("Calculate request - Session data:", JSON.stringify(session, null, 2));
+      
       if (!session || !session.formData) {
         return res.status(400).json({ message: "Form data not found" });
       }
 
-      console.log("Calculating for:", session.formData);
+      console.log("Calculating for form data:", JSON.stringify(session.formData, null, 2));
       const results = calculatePolicyImpact(session.formData);
+      console.log("Calculation results:", JSON.stringify(results, null, 2));
+      
       const updatedSession = await storage.updateSessionResults(sessionId, results);
 
       res.json(updatedSession);
     } catch (error: any) {
+      console.error("Calculate error:", error.message, error.stack);
       res.status(500).json({ message: error.message });
     }
   });
