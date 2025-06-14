@@ -1,0 +1,169 @@
+
+# Replit AI Agent Prompt: Policy Impact Calculator
+
+## Project Overview
+Create a full-stack web application called "Policy Impact Calculator" that helps users understand how different government policies might personally affect them. The app should be educational, non-partisan, and focused on making complex policy consequences understandable through personal relevance.
+
+## Core Requirements
+
+### Frontend (React/Next.js preferred)
+1. **Multi-step form interface** with 6 main steps:
+   - Step 1: Location (State, ZIP code)
+   - Step 2: Demographics (Age, family status)
+   - Step 3: Employment (Job type, industry)
+   - Step 4: Healthcare (Insurance type)
+   - Step 5: Income (Optional, ranges)
+   - Step 6: Priorities (Top 3 concerns)
+
+2. **UI/UX Requirements:**
+   - Clean, professional design using Tailwind CSS
+   - Progress bar showing completion status
+   - Mobile-responsive layout
+   - Previous/Next navigation with skip options
+   - Form validation with helpful error messages
+   - Loading states and smooth transitions
+
+3. **Trust & Privacy Elements:**
+   - Prominent "100% Anonymous" messaging
+   - "No registration required" indicators
+   - Privacy policy link
+   - Non-partisan branding
+
+### Backend (Node.js/Express or similar)
+1. **Data Processing:**
+   - Store user inputs temporarily (session-based, not persistent)
+   - Calculate personalized policy impacts based on user profile
+   - Generate customized results report
+
+2. **Policy Impact Logic:**
+   Create calculation modules for:
+   - **Tax Impact**: Based on income bracket and family status
+   - **Healthcare Costs**: Based on current insurance and proposed changes
+   - **Employment Effects**: Based on industry and location
+   - **Energy Costs**: Based on location and energy policies
+   - **Education Impact**: Based on family status and location
+   - **Social Benefits**: Based on age, income, and family status
+
+3. **Results Generation:**
+   - Personalized dashboard with visual charts
+   - "My Wallet" section (financial impacts)
+   - "My Community" section (local effects)
+   - "Timeline" section (5, 10, 20-year projections)
+
+### Database (Optional - can use JSON files)
+- Policy data and impact calculations
+- State-specific information
+- Industry employment data
+- Cost of living adjustments by ZIP code
+
+## Key Features to Implement
+
+### 1. Interactive Elements
+- Dynamic form fields that show/hide based on previous answers
+- Real-time validation
+- Progress saving (browser session storage)
+- Shareable results (generate unique URLs)
+
+### 2. Visualization Components
+- Simple charts showing financial impact (Chart.js or similar)
+- Before/after comparisons
+- Timeline visualizations
+- Geographic impact maps (optional)
+
+### 3. Educational Content
+- Tooltips explaining policy terms
+- "How we calculate this" explanations
+- Links to authoritative sources
+- Glossary of terms
+
+### 4. Results Page Features
+- Personalized summary report
+- Downloadable PDF option
+- Social sharing buttons (LinkedIn, email)
+- "Explore more" sections for deeper learning
+
+## Technical Specifications
+
+### Frontend Stack
+- React/Next.js with TypeScript
+- Tailwind CSS for styling
+- Framer Motion for animations (optional)
+- Chart.js or Recharts for data visualization
+- React Hook Form for form management
+
+### Backend Stack
+- Node.js with Express
+- Session management (express-session)
+- Data validation (Zod or Joi)
+- PDF generation (Puppeteer or jsPDF)
+
+### Data Sources
+Create mock data for:
+- Federal tax brackets and calculations
+- Average healthcare costs by state
+- Industry employment statistics
+- Energy costs by region
+- Education funding by state
+
+## Content Guidelines
+
+### Language & Tone
+- 6th grade reading level
+- Neutral, educational tone
+- Avoid partisan language
+- Focus on "policies" not "politicians"
+- Use concrete examples over abstract concepts
+
+### Sample Messaging
+- Instead of: "Trump's tax plan"
+- Use: "Proposed tax policy changes"
+- Focus on: "How this affects families like yours"
+
+## File Structure
+```
+policy-calculator/
+├── frontend/
+│   ├── components/
+│   │   ├── FormSteps/
+│   │   ├── Results/
+│   │   ├── Charts/
+│   │   └── UI/
+│   ├── pages/
+│   ├── utils/
+│   └── styles/
+├── backend/
+│   ├── routes/
+│   ├── controllers/
+│   ├── data/
+│   └── utils/
+└── README.md
+```
+
+## Deployment Requirements
+- Deploy to Replit hosting
+- Environment variables for any API keys
+- Responsive design tested on mobile/desktop
+- Fast loading times (< 3 seconds)
+
+## Success Metrics to Track
+- Form completion rate
+- Time spent on results page
+- Social sharing clicks
+- User feedback collection
+
+## Additional Features (Nice to Have)
+- A/B testing for different form flows
+- Analytics dashboard (admin only)
+- Email capture for follow-up (optional)
+- Multi-language support
+- Accessibility compliance (WCAG 2.1)
+
+## Sample Data to Include
+Create realistic mock data for policy calculations including:
+- Tax impact scenarios for different income levels
+- Healthcare cost projections
+- Job impact by industry and region
+- Energy cost variations
+- Education funding changes
+
+Please implement this as a complete, working web application with both frontend and backend components. Focus on creating a smooth user experience that educates without alienating any political viewpoint.
