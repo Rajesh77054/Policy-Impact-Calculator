@@ -72,9 +72,8 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
   return (
     <TooltipProvider>
       <div className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"></div></div>
-    </TooltipProvider>
-        {/* Results Header */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Results Header */}</div>
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-slate-900 mb-4">Your Personal Policy Impact Report</h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
@@ -399,6 +398,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
             <Share2 className="w-4 h-4 mr-2" />
             Share Results
           </Button>
+        </div>
         </div>
       </div>
     </TooltipProvider>
