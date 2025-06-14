@@ -127,7 +127,7 @@ export default function Calculator() {
             >
               Previous
             </Button>
-            
+
             <div className="flex space-x-3">
               <Button
                 variant="ghost"

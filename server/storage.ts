@@ -39,7 +39,7 @@ export class MemStorage implements IStorage {
     if (!session) {
       throw new Error("Session not found");
     }
-    
+
     const updatedSession = { ...session, formData };
     this.sessions.set(sessionId, updatedSession);
     return updatedSession;
@@ -50,7 +50,7 @@ export class MemStorage implements IStorage {
     if (!session) {
       throw new Error("Session not found");
     }
-    
+
     const updatedSession = { ...session, results };
     this.sessions.set(sessionId, updatedSession);
     return updatedSession;

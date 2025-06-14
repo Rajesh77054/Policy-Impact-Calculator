@@ -256,13 +256,17 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
   // Get median income for calculations
   const income = formData.incomeRange ? INCOME_MEDIANS[formData.incomeRange] : 62500;
   
-  // Debug logging
-  console.log(`Calculating for: Income=${income}, State=${formData.state}, Employment=${formData.employmentStatus}, Family=${formData.familyStatus}`);
+  // Extract all form data with proper fallbacks
   const familyStatus = formData.familyStatus || "single";
   const hasChildren = familyStatus === "family";
-  const state = formData.state;
+  const state = formData.state || formData.zipCode?.substring(0, 2); // Try to extract state from zip if available
   const insuranceType = formData.insuranceType || "employer";
   const ageRange = formData.ageRange || "30-44";
+  const employmentStatus = formData.employmentStatus || "full-time";
+  
+  // Debug logging
+  console.log(`Calculating for: Income=${income}, State=${state}, Employment=${employmentStatus}, Family=${familyStatus}, Insurance=${insuranceType}, Age=${ageRange}`);
+  console.log(`Form data received:`, JSON.stringify(formData, null, 2));
   
   // Tax calculations
   const currentTax = calculateCurrentTax(income, familyStatus);

@@ -28,9 +28,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const sessionId = generateSessionId();
       const session = await storage.createSession(sessionId);
-      
+
       req.session.policySessionId = sessionId;
-      
+
       res.json({ sessionId });
     } catch (error: any) {
       res.status(500).json({ message: error.message });
@@ -66,7 +66,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const validatedData = formDataSchema.parse(req.body);
       const session = await storage.updateSessionFormData(sessionId, validatedData);
-      
+
       res.json(session);
     } catch (error: any) {
       res.status(400).json({ message: error.message });
@@ -86,9 +86,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Form data not found" });
       }
 
+      console.log("Calculating for:", session.formData);
       const results = calculatePolicyImpact(session.formData);
       const updatedSession = await storage.updateSessionResults(sessionId, results);
-      
+
       res.json(updatedSession);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
@@ -127,5 +128,3 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
   return httpServer;
 }
-
-
