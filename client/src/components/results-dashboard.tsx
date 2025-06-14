@@ -38,9 +38,9 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
 
   const formatNetImpact = (amount: number) => {
     if (amount < 0) {
-      return `$${Math.abs(amount).toLocaleString()} more out of pocket`;
+      return `$${Math.abs(amount).toLocaleString()} less out of pocket`;
     } else if (amount > 0) {
-      return `$${amount.toLocaleString()} less out of pocket`;
+      return `$${amount.toLocaleString()} more out of pocket`;
     } else {
       return "No net change";
     }
@@ -130,12 +130,12 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                   <div className="space-y-1">
                     <div className="flex justify-between font-semibold">
                       <span>Net Annual Impact</span>
-                      <span className={results.netAnnualImpact > 0 ? "text-green-600" : "text-red-600"}>
+                      <span className={results.netAnnualImpact < 0 ? "text-green-600" : "text-red-600"}>
                         {formatNetImpact(results.netAnnualImpact)}
                       </span>
                     </div>
                     <p className="text-xs text-slate-500">
-                      {results.netAnnualImpact > 0 
+                      {results.netAnnualImpact < 0 
                         ? `You would save approximately $${Math.abs(results.netAnnualImpact).toLocaleString()} annually under these policies`
                         : `You would pay approximately $${Math.abs(results.netAnnualImpact).toLocaleString()} more annually under these policies`
                       }
