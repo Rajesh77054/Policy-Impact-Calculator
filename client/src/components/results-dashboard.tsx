@@ -213,9 +213,14 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                   </span>
                 </div>
                 <div className="pt-3 border-t border-slate-200">
-                  <div className="flex justify-between font-semibold">
-                    <span>Best Period</span>
-                    <span className="text-green-600">Years 5-10</span>
+                  <div className="space-y-1">
+                    <div className="flex justify-between font-semibold">
+                      <span>Best Period</span>
+                      <span className="text-green-600">Years 5-10</span>
+                    </div>
+                    <p className="text-xs text-slate-500">
+                      Timeline shows combined impact of all policy changes (taxes + healthcare + energy)
+                    </p>
                   </div>
                 </div>
               </div>

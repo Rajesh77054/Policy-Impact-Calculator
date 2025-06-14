@@ -16,7 +16,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
     // Load Chart.js dynamically
     const loadChartJS = async () => {
       const { default: Chart } = await import('chart.js/auto');
-      
+
       // Tax Impact Chart
       if (taxChartRef.current) {
         const taxCtx = taxChartRef.current.getContext('2d');
@@ -45,15 +45,17 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
               maintainAspectRatio: false,
               plugins: {
                 legend: {
-                  display: false
+                  display: true,
+                  position: 'bottom'
                 }
               },
               scales: {
                 y: {
-                  beginAtZero: true,
+                  beginAtZero: false,
                   ticks: {
                     callback: function(value) {
-                      return '$' + value;
+                      const sign = value >= 0 ? '+' : '';
+                      return sign + '$' + Math.abs(value);
                     }
                   }
                 }
@@ -70,7 +72,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
           // Use actual healthcare costs from calculations
           const currentCost = results.healthcareCosts?.current || 0;
           const proposedCost = results.healthcareCosts?.proposed || 0;
-          
+
           new Chart(healthCtx, {
             type: 'bar',
             data: {
@@ -90,15 +92,17 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
               maintainAspectRatio: false,
               plugins: {
                 legend: {
-                  display: false
+                  display: true,
+                  position: 'bottom'
                 }
               },
               scales: {
                 y: {
-                  beginAtZero: true,
+                  beginAtZero: false,
                   ticks: {
                     callback: function(value) {
-                      return '$' + value;
+                      const sign = value >= 0 ? '+' : '';
+                      return sign + '$' + Math.abs(value);
                     }
                   }
                 }
