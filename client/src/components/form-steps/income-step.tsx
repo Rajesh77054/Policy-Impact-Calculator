@@ -12,8 +12,12 @@ interface IncomeStepProps {
 export default function IncomeStep({ formData, onComplete }: IncomeStepProps) {
   const [incomeRange, setIncomeRange] = useState(formData.incomeRange || "");
 
-  const handleSubmit = () => {
-    onComplete({ incomeRange: incomeRange as FormData["incomeRange"] });
+  const handleNext = () => {
+    if (incomeRange) {
+      const stepData = { incomeRange };
+      console.log("Income step completing with data:", stepData);
+      onComplete(stepData);
+    }
   };
 
   return (

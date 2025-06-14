@@ -13,9 +13,9 @@ interface LocationStepProps {
 // ZIP code to state mapping - comprehensive ranges
 const getStateFromZip = (zip: string): string => {
   if (zip.length !== 5) return "";
-  
+
   const zipNum = parseInt(zip);
-  
+
   // ZIP code ranges by state
   if (zipNum >= 35000 && zipNum <= 36999) return "AL"; // Alabama
   if (zipNum >= 99500 && zipNum <= 99999) return "AK"; // Alaska
@@ -67,7 +67,7 @@ const getStateFromZip = (zip: string): string => {
   if (zipNum >= 24700 && zipNum <= 26999) return "WV"; // West Virginia
   if (zipNum >= 53000 && zipNum <= 54999) return "WI"; // Wisconsin
   if (zipNum >= 82000 && zipNum <= 83199) return "WY"; // Wyoming
-  
+
   return "";
 };
 
@@ -90,7 +90,7 @@ export default function LocationStep({ formData, onComplete }: LocationStepProps
   // Try to detect user's location
   const detectLocation = () => {
     setIsDetectingLocation(true);
-    
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
@@ -98,7 +98,7 @@ export default function LocationStep({ formData, onComplete }: LocationStepProps
             // Using a simple approximation based on coordinates
             // In a real app, you'd use a geocoding service
             const { latitude, longitude } = position.coords;
-            
+
             // Simple state detection based on general coordinate ranges
             let detectedState = "";
             if (latitude >= 32.5 && latitude <= 42 && longitude >= -124 && longitude <= -114) {
@@ -110,7 +110,7 @@ export default function LocationStep({ formData, onComplete }: LocationStepProps
             } else if (latitude >= 25.5 && latitude <= 36.5 && longitude >= -106.5 && longitude <= -93.5) {
               detectedState = "TX";
             }
-            
+
             if (detectedState) {
               setState(detectedState);
             }
@@ -130,8 +130,12 @@ export default function LocationStep({ formData, onComplete }: LocationStepProps
     }
   };
 
-  const handleSubmit = () => {
-    onComplete({ state, zipCode });
+  const handleNext = () => {
+    if (zipCode.length === 5 && state) {
+      const stepData = { zipCode, state };
+      console.log("Location step completing with data:", stepData);
+      onComplete(stepData);
+    }
   };
 
   return (

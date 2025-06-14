@@ -72,18 +72,37 @@ export default function Calculator() {
     createSession();
   }, []);
 
-  const handleStepComplete = (stepData: Partial<FormData>) => {
-    const updatedFormData = { ...formData, ...stepData };
-    setFormData(updatedFormData);
-    
-    // Always update form data on the server
-    updateFormData(updatedFormData);
+  const handleStepComplete = async (stepData: Partial<FormData>) => {
+    console.log("Step completed with data:", stepData);
+    console.log("Current form data before update:", formData);
 
-    if (currentStep < steps.length) {
-      setCurrentStep(currentStep + 1);
-    } else {
-      // Final step - calculate results
-      calculateResults();
+    // Ensure we're properly merging the data
+    const updatedData = { ...formData, ...stepData };
+    console.log("Updated form data to be sent:", updatedData);
+
+    // Update local state first
+    setFormData(updatedData);
+
+    try {
+      console.log("Sending form data to server:", JSON.stringify(updatedData, null, 2));
+      const response = await fetch("/api/session/form-data", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Server error response:", errorText);
+        throw new Error(`Failed to save form data: ${response.status}`);
+      }
+
+      const session = await response.json();
+      console.log("Server response:", session);
+    } catch (error) {
+      console.error("Error saving form data:", error);
     }
   };
 
@@ -93,14 +112,29 @@ export default function Calculator() {
     }
   };
 
-  const handleSkip = () => {
-    // Update server with current form data even when skipping
-    updateFormData(formData);
-    
-    if (currentStep < steps.length) {
-      setCurrentStep(currentStep + 1);
-    } else {
-      calculateResults();
+  const handleSkip = async () => {
+    console.log("Skipping step, preserving current form data:", formData);
+
+    try {
+      console.log("Skip - Sending form data to server:", JSON.stringify(formData, null, 2));
+      const response = await fetch("/api/session/form-data", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Skip - Server error response:", errorText);
+        throw new Error(`Failed to save form data on skip: ${response.status}`);
+      }
+
+      const session = await response.json();
+      console.log("Skip - Server response:", session);
+    } catch (error) {
+      console.error("Error saving form data on skip:", error);
     }
   };
 
