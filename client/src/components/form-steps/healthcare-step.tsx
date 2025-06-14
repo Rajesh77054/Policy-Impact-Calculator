@@ -72,6 +72,15 @@ export default function HealthcareStep({ formData, onComplete }: HealthcareStepP
             </div>
           </RadioGroup>
         </div>
+
+        <div className="flex justify-end mt-8">
+          <button
+            onClick={handleSubmit}
+            className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+          >
+            Next Step
+          </button>
+        </div>
       </div>
     </div>
   );

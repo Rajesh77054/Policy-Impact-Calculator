@@ -138,6 +138,8 @@ export default function LocationStep({ formData, onComplete }: LocationStepProps
     }
   };
 
+  const isValid = zipCode.length === 5 && state;
+
   return (
     <div>
       <div className="mb-6">
@@ -200,6 +202,20 @@ export default function LocationStep({ formData, onComplete }: LocationStepProps
               </p>
             </div>
           </div>
+        </div>
+
+        <div className="flex justify-end mt-8">
+          <button
+            onClick={handleNext}
+            disabled={!isValid}
+            className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+              isValid
+                ? "bg-blue-600 text-white hover:bg-blue-700"
+                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+            }`}
+          >
+            Next Step
+          </button>
         </div>
       </div>
     </div>

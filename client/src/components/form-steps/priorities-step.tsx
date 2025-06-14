@@ -53,7 +53,7 @@ export default function PrioritiesStep({ formData, onComplete }: PrioritiesStepP
             {PRIORITY_OPTIONS.map((option) => {
               const isChecked = priorities.includes(option.id);
               const isDisabled = !isChecked && priorities.length >= 3;
-              
+
               return (
                 <div 
                   key={option.id} 
@@ -94,6 +94,16 @@ export default function PrioritiesStep({ formData, onComplete }: PrioritiesStepP
             </ul>
           </div>
         )}
+      </div>
+
+        <div className="flex justify-end mt-8">
+          <button
+            onClick={handleSubmit}
+            className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+          >
+            View Results
+          </button>
+        </div>
       </div>
     </div>
   );

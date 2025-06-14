@@ -13,11 +13,9 @@ export default function IncomeStep({ formData, onComplete }: IncomeStepProps) {
   const [incomeRange, setIncomeRange] = useState(formData.incomeRange || "");
 
   const handleNext = () => {
-    if (incomeRange) {
-      const stepData = { incomeRange };
-      console.log("Income step completing with data:", stepData);
-      onComplete(stepData);
-    }
+    const stepData = { incomeRange };
+    console.log("Income step completing with data:", stepData);
+    onComplete(stepData);
   };
 
   return (
@@ -62,6 +60,15 @@ export default function IncomeStep({ formData, onComplete }: IncomeStepProps) {
               </p>
             </div>
           </div>
+        </div>
+
+        <div className="flex justify-end mt-8">
+          <button
+            onClick={handleNext}
+            className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+          >
+            Next Step
+          </button>
         </div>
       </div>
     </div>

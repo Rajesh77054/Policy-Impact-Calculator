@@ -101,6 +101,13 @@ export default function Calculator() {
 
       const session = await response.json();
       console.log("Server response:", session);
+
+      // Move to next step or calculate results
+      if (currentStep === steps.length) {
+        calculateResults();
+      } else {
+        setCurrentStep(currentStep + 1);
+      }
     } catch (error) {
       console.error("Error saving form data:", error);
     }
@@ -179,22 +186,15 @@ export default function Calculator() {
             <div className="flex space-x-3">
               <Button
                 variant="ghost"
-                onClick={handleSkip}
-                disabled={isCalculating}
-              >
-                Skip
-              </Button>
-              <Button
-                onClick={() => {
-                  if (currentStep === steps.length) {
-                    calculateResults();
-                  } else {
-                    handleStepComplete({});
+                onClick={async () => {
+                  await handleSkip();
+                  if (currentStep < steps.length) {
+                    setCurrentStep(currentStep + 1);
                   }
                 }}
                 disabled={isCalculating}
               >
-                {isCalculating ? "Calculating..." : currentStep === steps.length ? "View Results" : "Next Step"}
+                Skip
               </Button>
             </div>
           </div>
