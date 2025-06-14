@@ -113,25 +113,31 @@ function calculateHealthcareCosts(
   // Insurance type adjustments with income-based calculations
   switch (insuranceType) {
     case "employer":
-      // Employer coverage varies by company size, income, and employment status
+      // Employer coverage varies significantly by employment status and income
       let employerContribution = 0.72; // Default 72% employer contribution
+      let costSharing = isFamily ? 2800 : 1200; // Base cost sharing
       
       if (employmentStatus === "part-time") {
-        employerContribution = 0.45; // Part-time typically lower contribution
+        employerContribution = 0.35; // Much lower for part-time
+        costSharing *= 1.4; // Higher deductibles/copays
       } else if (employmentStatus === "self-employed") {
         employerContribution = 0; // Self-employed pay full premium
+        costSharing *= 1.8; // Typically higher deductible plans
+      } else if (employmentStatus === "contract") {
+        employerContribution = 0.15; // Minimal contractor benefits
+        costSharing *= 1.6;
       } else if (income > 150000) {
-        employerContribution = 0.85; // Higher-income jobs often have better benefits
+        employerContribution = 0.85; // Executive/professional benefits
+        costSharing *= 0.7; // Better plans with lower cost sharing
       } else if (income > 100000) {
-        employerContribution = 0.78; // Mid-high income jobs
+        employerContribution = 0.78; // Mid-level professional
+        costSharing *= 0.85;
       } else if (income < 35000) {
-        employerContribution = 0.65; // Lower-wage jobs often have lower employer contribution
+        employerContribution = 0.60; // Lower-wage jobs
+        costSharing *= 1.2;
       }
       
       currentCost *= (1 - employerContribution);
-      
-      // Add typical employee cost-sharing (deductibles, copays)
-      const costSharing = isFamily ? 2800 : 1200;
       currentCost += costSharing;
       break;
       
@@ -249,6 +255,9 @@ function calculateHealthcareCosts(
 export function calculatePolicyImpact(formData: FormData): PolicyResults {
   // Get median income for calculations
   const income = formData.incomeRange ? INCOME_MEDIANS[formData.incomeRange] : 62500;
+  
+  // Debug logging
+  console.log(`Calculating for: Income=${income}, State=${formData.state}, Employment=${formData.employmentStatus}, Family=${formData.familyStatus}`);
   const familyStatus = formData.familyStatus || "single";
   const hasChildren = familyStatus === "family";
   const state = formData.state;
@@ -273,19 +282,38 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
   
   // State-specific adjustments
   let stateAdjustment = 0;
+  let energyImpact = 120; // Default energy cost impact
+  
   if (state && STATE_TAX_DATA[state]) {
     const stateData = STATE_TAX_DATA[state];
-    // Adjust for cost of living
-    const costAdjustment = (stateData.cost_of_living_index - 100) * 50;
-    stateAdjustment = costAdjustment;
+    
+    // State income tax impact (positive = more tax, negative = savings)
+    const stateIncomeTax = income * stateData.income_tax_rate;
+    
+    // Cost of living adjustment affecting all costs
+    const costAdjustment = (stateData.cost_of_living_index - 100) * (income / 100000) * 200;
+    
+    // State-specific energy costs based on regulations and climate
+    energyImpact = state === "CA" ? 250 + (income / 1000) : 
+                   state === "TX" ? 180 + (income / 2000) : 
+                   state === "NY" ? 220 + (income / 1500) :
+                   state === "FL" ? 160 + (income / 1800) :
+                   state === "WA" ? 90 + (income / 2500) :
+                   120 + (income / 2000);
+    
+    stateAdjustment = stateIncomeTax + costAdjustment;
   }
   
-  // Energy cost estimates (simplified)
-  const energyImpact = state === "CA" ? 150 : 
-                      state === "TX" ? 80 : 
-                      state === "NY" ? 140 : 120;
+  // Apply income-based scaling to impacts
+  const incomeScalar = Math.log10(income / 10000); // Logarithmic scaling
+  const scaledTaxImpact = taxImpact * (1 + incomeScalar * 0.1);
+  const scaledHealthcareImpact = healthcareImpact * (1 + incomeScalar * 0.05);
+  const scaledEnergyImpact = energyImpact * (1 + incomeScalar * 0.08);
   
-  const netAnnualImpact = taxImpact + healthcareImpact + stateAdjustment + energyImpact;
+  const netAnnualImpact = scaledTaxImpact + scaledHealthcareImpact + stateAdjustment + scaledEnergyImpact;
+  
+  // Debug logging
+  console.log(`Results: Tax=${Math.round(scaledTaxImpact)}, Healthcare=${Math.round(scaledHealthcareImpact)}, State=${Math.round(stateAdjustment)}, Energy=${Math.round(scaledEnergyImpact)}, Net=${Math.round(netAnnualImpact)}`);
   
   // Community impact estimates based on state data
   const stateData = state ? STATE_TAX_DATA[state] : null;
@@ -293,9 +321,9 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
                               stateData.property_tax_avg * 500 : 2100000;
   
   return {
-    annualTaxImpact: Math.round(taxImpact),
-    healthcareCostImpact: Math.round(healthcareImpact),
-    energyCostImpact: Math.round(energyImpact),
+    annualTaxImpact: Math.round(scaledTaxImpact),
+    healthcareCostImpact: Math.round(scaledHealthcareImpact),
+    energyCostImpact: Math.round(scaledEnergyImpact),
     netAnnualImpact: Math.round(netAnnualImpact),
     healthcareCosts: {
       current: Math.round(healthcareCosts.current),
@@ -316,7 +344,7 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
         category: "tax",
         title: "Federal Tax Policy Changes",
         description: "Based on current IRS brackets and proposed Congressional legislation",
-        impact: Math.round(taxImpact),
+        impact: Math.round(scaledTaxImpact),
         details: [
           { 
             item: "Standard deduction increase", 
@@ -326,7 +354,7 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
             item: hasChildren ? "Enhanced child tax credit" : "Tax bracket adjustment", 
             amount: hasChildren ? 
                    -PROPOSED_TAX_CHANGES.child_tax_credit_increase : 
-                   Math.round(taxImpact * 0.6)
+                   Math.round(scaledTaxImpact * 0.6)
           },
         ],
       },
@@ -334,15 +362,15 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
         category: "healthcare",
         title: "Healthcare Policy Reforms",
         description: "Based on Kaiser Family Foundation data and proposed Medicare expansion",
-        impact: Math.round(healthcareImpact),
+        impact: Math.round(scaledHealthcareImpact),
         details: [
           { 
             item: "Premium subsidies", 
-            amount: Math.round(healthcareImpact * 0.7) 
+            amount: Math.round(scaledHealthcareImpact * 0.7) 
           },
           { 
             item: "Prescription drug cap", 
-            amount: Math.round(healthcareImpact * 0.3) 
+            amount: Math.round(scaledHealthcareImpact * 0.3) 
           },
         ],
       },
