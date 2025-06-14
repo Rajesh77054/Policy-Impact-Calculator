@@ -174,9 +174,10 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
               <DialogHeader>
                 <DialogTitle>Healthcare Cost Comparison</DialogTitle>
                 <DialogDescription>
-                  This chart compares the estimated annual healthcare costs between your current plan and the
-                  proposed plan. The "Current Plan" cost represents your existing healthcare expenses. The
-                  "Proposed Plan" cost reflects potential savings or increases based on the new policy.
+                  This chart compares the total annual healthcare costs between your current plan and the
+                  proposed plan. Both bars show the total annual cost you would pay. The "Current Plan" shows
+                  your existing healthcare expenses. The "Proposed Plan" shows what you would pay under the new
+                  policy. A green bar indicates lower costs (savings), while a red bar indicates higher costs.
                 </DialogDescription>
               </DialogHeader>
               {/* Add more detailed explanation here, including how the costs are determined */}
