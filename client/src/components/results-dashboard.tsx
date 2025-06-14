@@ -16,6 +16,36 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
     return `${sign}$${Math.abs(amount).toLocaleString()}`;
   };
 
+  const formatTaxImpact = (amount: number) => {
+    if (amount < 0) {
+      return `$${Math.abs(amount).toLocaleString()} savings`;
+    } else if (amount > 0) {
+      return `$${amount.toLocaleString()} additional`;
+    } else {
+      return "No change";
+    }
+  };
+
+  const formatCostImpact = (amount: number) => {
+    if (amount < 0) {
+      return `$${Math.abs(amount).toLocaleString()} savings`;
+    } else if (amount > 0) {
+      return `$${amount.toLocaleString()} increase`;
+    } else {
+      return "No change";
+    }
+  };
+
+  const formatNetImpact = (amount: number) => {
+    if (amount < 0) {
+      return `$${Math.abs(amount).toLocaleString()} out of pocket`;
+    } else if (amount > 0) {
+      return `$${amount.toLocaleString()} in savings`;
+    } else {
+      return "No net change";
+    }
+  };
+
   const formatPercentage = (value: number) => {
     const sign = value >= 0 ? "+" : "";
     return `${sign}${value}%`;
@@ -70,28 +100,28 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
             <CardContent>
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-600">Annual Tax Impact</span>
-                  <span className={`font-medium ${results.annualTaxImpact >= 0 ? "text-green-600" : "text-red-600"}`}>
-                    {formatCurrency(results.annualTaxImpact)}
+                  <span className="text-slate-600">Tax Changes</span>
+                  <span className={`font-medium ${results.annualTaxImpact < 0 ? "text-green-600" : "text-red-600"}`}>
+                    {formatTaxImpact(results.annualTaxImpact)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-600">Healthcare Costs</span>
-                  <span className={`font-medium ${results.healthcareCostImpact >= 0 ? "text-green-600" : "text-red-600"}`}>
-                    {formatCurrency(results.healthcareCostImpact)}
+                  <span className={`font-medium ${results.healthcareCostImpact < 0 ? "text-green-600" : "text-red-600"}`}>
+                    {formatCostImpact(results.healthcareCostImpact)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-600">Energy Costs</span>
-                  <span className={`font-medium ${results.energyCostImpact >= 0 ? "text-green-600" : "text-red-600"}`}>
-                    {formatCurrency(results.energyCostImpact)}
+                  <span className={`font-medium ${results.energyCostImpact < 0 ? "text-green-600" : "text-red-600"}`}>
+                    {formatCostImpact(results.energyCostImpact)}
                   </span>
                 </div>
                 <div className="pt-3 border-t border-slate-200">
                   <div className="flex justify-between font-semibold">
                     <span>Net Annual Impact</span>
-                    <span className={results.netAnnualImpact >= 0 ? "text-green-600" : "text-red-600"}>
-                      {formatCurrency(results.netAnnualImpact)}
+                    <span className={results.netAnnualImpact > 0 ? "text-green-600" : "text-red-600"}>
+                      {formatNetImpact(results.netAnnualImpact)}
                     </span>
                   </div>
                 </div>
@@ -149,20 +179,20 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-600">5-Year Impact</span>
-                  <span className={`font-medium ${results.timeline.fiveYear >= 0 ? "text-green-600" : "text-red-600"}`}>
-                    {formatCurrency(results.timeline.fiveYear)}
+                  <span className={`font-medium ${results.timeline.fiveYear > 0 ? "text-green-600" : "text-red-600"}`}>
+                    {formatNetImpact(results.timeline.fiveYear)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-600">10-Year Impact</span>
-                  <span className={`font-medium ${results.timeline.tenYear >= 0 ? "text-green-600" : "text-red-600"}`}>
-                    {formatCurrency(results.timeline.tenYear)}
+                  <span className={`font-medium ${results.timeline.tenYear > 0 ? "text-green-600" : "text-red-600"}`}>
+                    {formatNetImpact(results.timeline.tenYear)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-600">20-Year Impact</span>
-                  <span className={`font-medium ${results.timeline.twentyYear >= 0 ? "text-green-600" : "text-red-600"}`}>
-                    {formatCurrency(results.timeline.twentyYear)}
+                  <span className={`font-medium ${results.timeline.twentyYear > 0 ? "text-green-600" : "text-red-600"}`}>
+                    {formatNetImpact(results.timeline.twentyYear)}
                   </span>
                 </div>
                 <div className="pt-3 border-t border-slate-200">
@@ -195,20 +225,20 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                     </div>
                     <span 
                       className={`px-3 py-1 rounded-full text-sm font-medium ${
-                        policy.impact >= 0 
+                        (policy.category === "tax" ? policy.impact < 0 : policy.impact < 0)
                           ? "bg-green-100 text-green-800" 
                           : "bg-red-100 text-red-800"
                       }`}
                     >
-                      {formatCurrency(policy.impact)} annually
+                      {policy.category === "tax" ? formatTaxImpact(policy.impact) : formatCostImpact(policy.impact)} annually
                     </span>
                   </div>
                   <div className="space-y-3">
                     {policy.details.map((detail, detailIndex) => (
                       <div key={detailIndex} className="flex justify-between text-sm">
                         <span className="text-slate-600">{detail.item}</span>
-                        <span className={`font-medium ${detail.amount >= 0 ? "text-green-600" : "text-red-600"}`}>
-                          {formatCurrency(detail.amount)}
+                        <span className={`font-medium ${detail.amount < 0 ? "text-green-600" : "text-red-600"}`}>
+                          {policy.category === "tax" ? formatTaxImpact(detail.amount) : formatCostImpact(detail.amount)}
                         </span>
                       </div>
                     ))}
