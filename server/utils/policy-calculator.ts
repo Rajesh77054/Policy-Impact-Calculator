@@ -312,10 +312,6 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
   
   const netAnnualImpact = scaledTaxImpact + scaledHealthcareImpact + stateAdjustment + scaledEnergyImpact;
   
-  // Debug logging
-  console.log(`Results: Tax=${Math.round(scaledTaxImpact)}, Healthcare=${Math.round(scaledHealthcareImpact)}, State=${Math.round(stateAdjustment)}, Energy=${Math.round(scaledEnergyImpact)}, Net=${Math.round(netAnnualImpact)}`);
-  console.log(`Community: School=${schoolFundingImpact}%, Infrastructure=$${Math.round(infrastructureImpact/1000)}K, Jobs=${jobOpportunities}`);
-  
   // Community impact estimates based on state data and income
   const stateData = state ? STATE_TAX_DATA[state] : null;
   
@@ -378,6 +374,10 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
     infrastructureImpact = Math.max(800000, Math.min(8000000, infrastructureImpact));
     jobOpportunities = Math.max(150, Math.min(800, jobOpportunities));
   }
+  
+  // Debug logging
+  console.log(`Results: Tax=${Math.round(scaledTaxImpact)}, Healthcare=${Math.round(scaledHealthcareImpact)}, State=${Math.round(stateAdjustment)}, Energy=${Math.round(scaledEnergyImpact)}, Net=${Math.round(netAnnualImpact)}`);
+  console.log(`Community: School=${schoolFundingImpact}%, Infrastructure=$${Math.round(infrastructureImpact/1000)}K, Jobs=${jobOpportunities}`);
   
   return {
     annualTaxImpact: Math.round(scaledTaxImpact),
