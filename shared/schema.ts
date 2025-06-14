@@ -22,7 +22,7 @@ export const formDataSchema = z.object({
   familyStatus: z.enum(["single", "married", "family"]).optional(),
   
   // Step 3: Employment
-  employmentStatus: z.enum(["fulltime", "parttime", "selfemployed", "contract", "unemployed", "retired", "student", "unable"]).optional(),
+  employmentStatus: z.enum(["full-time", "part-time", "self-employed", "contract", "unemployed", "retired", "student", "unable"]).optional(),
   industry: z.string().optional(),
   
   // Step 4: Healthcare

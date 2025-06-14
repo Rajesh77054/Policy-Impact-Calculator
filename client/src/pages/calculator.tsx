@@ -41,7 +41,16 @@ export default function Calculator() {
 
   // Update form data
   const { mutate: updateFormData } = useMutation({
-    mutationFn: (data: FormData) => apiRequest("POST", "/api/session/form-data", data),
+    mutationFn: (data: FormData) => {
+      console.log("Sending form data to server:", data);
+      return apiRequest("POST", "/api/session/form-data", data);
+    },
+    onSuccess: (response) => {
+      console.log("Form data update response:", response);
+    },
+    onError: (error) => {
+      console.error("Form data update error:", error);
+    },
   });
 
   // Calculate results
@@ -66,6 +75,8 @@ export default function Calculator() {
   const handleStepComplete = (stepData: Partial<FormData>) => {
     const updatedFormData = { ...formData, ...stepData };
     setFormData(updatedFormData);
+    
+    // Always update form data on the server
     updateFormData(updatedFormData);
 
     if (currentStep < steps.length) {
@@ -83,6 +94,9 @@ export default function Calculator() {
   };
 
   const handleSkip = () => {
+    // Update server with current form data even when skipping
+    updateFormData(formData);
+    
     if (currentStep < steps.length) {
       setCurrentStep(currentStep + 1);
     } else {

@@ -46,9 +46,9 @@ export default function EmploymentStep({ formData, onComplete }: EmploymentStepP
           <RadioGroup value={employmentStatus} onValueChange={setEmploymentStatus}>
             <div className="grid md:grid-cols-2 gap-3">
               {[
-                { value: "fulltime", label: "Full-time employee" },
-                { value: "parttime", label: "Part-time employee" },
-                { value: "selfemployed", label: "Self-employed/Business owner" },
+                { value: "full-time", label: "Full-time employee" },
+                { value: "part-time", label: "Part-time employee" },
+                { value: "self-employed", label: "Self-employed/Business owner" },
                 { value: "contract", label: "Contract/Gig worker" },
                 { value: "unemployed", label: "Currently unemployed" },
                 { value: "retired", label: "Retired" },
