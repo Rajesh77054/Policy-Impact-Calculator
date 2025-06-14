@@ -6,14 +6,12 @@ export default function LandingHero() {
   return (
     <section className="bg-gradient-to-br from-primary/5 to-white py-16">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
-          See How Policies Affect Your <span className="text-primary">Wallet & Future</span>
+        <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
+          Discover How Trump's Policies Impact Your <span className="text-primary">Finances, Work & Future</span>
+        </h1>
+        <h2 className="text-xl text-slate-600 mb-8 max-w-3xl mx-auto">
+          See what changes to taxes, healthcare, energy costs and more could mean for your household - no spin, just the facts.
         </h2>
-        <p className="text-xl text-slate-600 mb-8 max-w-3xl mx-auto">
-          Curious how new tax, healthcare, or energy policies might change your bottom line? 
-          Get clear answers about what government rules could mean for your family's budget, job, and everyday costs. 
-          No political agenda—just facts, personalized for you.
-        </p>
         
         {/* Key Features Grid */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
