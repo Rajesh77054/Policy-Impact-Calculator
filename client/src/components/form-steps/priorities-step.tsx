@@ -94,7 +94,6 @@ export default function PrioritiesStep({ formData, onComplete }: PrioritiesStepP
             </ul>
           </div>
         )}
-      </div>
 
         <div className="flex justify-end mt-8">
           <button
