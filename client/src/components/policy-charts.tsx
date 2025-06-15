@@ -143,11 +143,25 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
               <DialogHeader>
                 <DialogTitle>Tax Impact Calculation</DialogTitle>
                 <DialogDescription>
-                  This chart illustrates the estimated tax impact over time, considering factors such as
-                  policy changes and investment growth.
+                  This projection shows the potential tax impact if current policy proposals were to remain 
+                  stable over time. It includes adjustments for inflation and income growth.
                 </DialogDescription>
               </DialogHeader>
-              {/* Add more detailed explanation here */}
+              <div className="space-y-3 text-sm">
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                  <p className="font-medium text-amber-800 mb-1">Important Limitations:</p>
+                  <ul className="text-amber-700 space-y-1 text-xs">
+                    <li>• Tax laws frequently change with new legislation</li>
+                    <li>• Different administrations may reverse policies</li>
+                    <li>• Economic conditions affect policy implementation</li>
+                    <li>• This represents a baseline scenario only</li>
+                  </ul>
+                </div>
+                <p className="text-slate-600">
+                  Use this chart to understand the trajectory of specific proposals, not as a guarantee 
+                  of future tax obligations. Real outcomes will depend on future political and economic developments.
+                </p>
+              </div>
             </DialogContent>
           </Dialog>
         </CardHeader>
