@@ -1,7 +1,4 @@
-The code is updated to include a slider input for income selection, improving the user experience.
-```
 
-```replit_final_file
 import { useState } from "react";
 import { FormData } from "@shared/schema";
 import { Button } from "@/components/ui/button";
