@@ -25,7 +25,7 @@ const INCOME_MEDIANS = {
   "over-400k": 500000,
 };
 
-function calculateCurrentTax(income: number, familyStatus: string): number {
+function calculateCurrentTax(income: number, familyStatus: string, numberOfQualifyingChildren: number = 0, numberOfOtherDependents: number = 0): number {
   // Map form values to IRS filing status standard deductions
   const standardDeduction = familyStatus === "single" ? 14600 : 
                            familyStatus === "married-joint" ? 29200 :
@@ -46,10 +46,25 @@ function calculateCurrentTax(income: number, familyStatus: string): number {
     previousMax = bracket.max;
   }
 
-  return tax;
+  // Apply current IRS Child Tax Credit and Credit for Other Dependents
+  const childTaxCredit = numberOfQualifyingChildren * 2000; // $2,000 per qualifying child
+  const otherDependentCredit = numberOfOtherDependents * 500; // $500 per other dependent
+
+  // Phase-out rules for high income
+  const phaseOutThreshold = familyStatus === "single" || familyStatus === "head-of-household" ? 200000 : 400000;
+  let childTaxCreditReduction = 0;
+  if (income > phaseOutThreshold) {
+    const excessIncome = income - phaseOutThreshold;
+    childTaxCreditReduction = Math.floor(excessIncome / 1000) * 50;
+  }
+
+  const finalChildTaxCredit = Math.max(0, childTaxCredit - childTaxCreditReduction);
+  tax -= (finalChildTaxCredit + otherDependentCredit);
+
+  return Math.max(0, tax);
 }
 
-function calculateProposedTax(income: number, familyStatus: string, hasChildren: boolean): number {
+function calculateProposedTax(income: number, familyStatus: string, numberOfQualifyingChildren: number = 0, numberOfOtherDependents: number = 0): number {
   const enhancedStandardDeduction = (familyStatus === "single" ? 14600 : 29200) + 
                                    PROPOSED_TAX_CHANGES.standard_deduction_increase;
 
@@ -71,16 +86,30 @@ function calculateProposedTax(income: number, familyStatus: string, hasChildren:
     previousMax = bracket.max;
   }
 
-  // Apply enhanced child tax credit
-  if (hasChildren && familyStatus === "family") {
-    tax -= PROPOSED_TAX_CHANGES.child_tax_credit_increase;
+  // Apply IRS Child Tax Credit and Credit for Other Dependents
+  // Current 2024: $2,000 per qualifying child, $500 per other dependent
+  // Proposed: Enhanced amounts per PROPOSED_TAX_CHANGES
+  const currentChildTaxCredit = numberOfQualifyingChildren * 2000;
+  const currentOtherDependentCredit = numberOfOtherDependents * 500;
+  const enhancedChildTaxCredit = numberOfQualifyingChildren * (2000 + PROPOSED_TAX_CHANGES.child_tax_credit_increase);
+  const enhancedOtherDependentCredit = numberOfOtherDependents * 500; // No change proposed for other dependents
+
+  // Phase-out rules for high income (AGI > $200K single, $400K married)
+  const phaseOutThreshold = familyStatus === "single" || familyStatus === "head-of-household" ? 200000 : 400000;
+  let childTaxCreditReduction = 0;
+  if (income > phaseOutThreshold) {
+    const excessIncome = income - phaseOutThreshold;
+    childTaxCreditReduction = Math.floor(excessIncome / 1000) * 50; // $50 reduction per $1,000 over threshold
   }
+
+  const finalChildTaxCredit = Math.max(0, enhancedChildTaxCredit - childTaxCreditReduction);
+  tax -= (finalChildTaxCredit + enhancedOtherDependentCredit);
 
   return Math.max(0, tax);
 }
 
-function calculateBigBillTax(income: number, familyStatus: string, hasChildren: boolean): number {
-  const currentTax = calculateCurrentTax(income, familyStatus);
+function calculateBigBillTax(income: number, familyStatus: string, numberOfQualifyingChildren: number = 0, numberOfOtherDependents: number = 0): number {
+  const currentTax = calculateCurrentTax(income, familyStatus, numberOfQualifyingChildren, numberOfOtherDependents);
   const provisions = ONE_BIG_BEAUTIFUL_BILL_PROVISIONS.tax_changes;
 
   // Enhanced standard deduction
@@ -90,8 +119,9 @@ function calculateBigBillTax(income: number, familyStatus: string, hasChildren: 
   const middleClassCut = (income > 25000 && income < 400000) ? 
     Math.min(income - 25000, 375000) * provisions.middle_class_tax_cut : 0;
 
-  // Enhanced child tax credit
-  const childTaxCreditBonus = hasChildren ? provisions.child_tax_credit : 0;
+  // Enhanced child tax credit per IRS methodology
+  const totalDependents = numberOfQualifyingChildren + numberOfOtherDependents;
+  const childTaxCreditBonus = totalDependents > 0 ? provisions.child_tax_credit * totalDependents : 0;
 
   // Calculate total tax reduction
   const taxReduction = (standardDeductionBonus * 0.22) + middleClassCut + childTaxCreditBonus;
@@ -283,7 +313,9 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
 
   // Extract all form data with proper fallbacks
   const familyStatus = formData.familyStatus || "single";
-  const hasChildren = familyStatus === "family";
+  const hasChildren = (formData.numberOfQualifyingChildren ?? 0) > 0 || (formData.numberOfOtherDependents ?? 0) > 0;
+  const numberOfQualifyingChildren = formData.numberOfQualifyingChildren ?? 0;
+  const numberOfOtherDependents = formData.numberOfOtherDependents ?? 0;
   const state = formData.state || formData.zipCode?.substring(0, 2); // Try to extract state from zip if available
   const insuranceType = formData.insuranceType || "employer";
   const ageRange = formData.ageRange || "30-44";
@@ -296,9 +328,9 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
   console.log(`Form data received:`, JSON.stringify(formData, null, 2));
 
   // Tax calculations
-  const currentTax = calculateCurrentTax(income, familyStatus);
-  const proposedTax = calculateProposedTax(income, familyStatus, hasChildren);
-  const bigBillTax = includeBigBill ? calculateBigBillTax(income, familyStatus, hasChildren) : proposedTax;
+  const currentTax = calculateCurrentTax(income, familyStatus, numberOfQualifyingChildren, numberOfOtherDependents);
+  const proposedTax = calculateProposedTax(income, familyStatus, numberOfQualifyingChildren, numberOfOtherDependents);
+  const bigBillTax = includeBigBill ? calculateBigBillTax(income, familyStatus, numberOfQualifyingChildren, numberOfOtherDependents) : proposedTax;
   const taxImpact = bigBillTax - currentTax;
 
   // Healthcare calculations - both scenarios

@@ -13,6 +13,8 @@ export default function DemographicsStep({ formData, onComplete }: DemographicsS
   const [ageRange, setAgeRange] = useState(formData.ageRange || "");
   const [familyStatus, setFamilyStatus] = useState(formData.familyStatus || "");
   const [hasChildren, setHasChildren] = useState(formData.hasChildren || false);
+  const [numberOfQualifyingChildren, setNumberOfQualifyingChildren] = useState<number>(formData.numberOfQualifyingChildren ?? 0);
+  const [numberOfOtherDependents, setNumberOfOtherDependents] = useState<number>(formData.numberOfOtherDependents ?? 0);
   const [errors, setErrors] = useState<string[]>([]);
 
   const validateForm = () => {
@@ -29,7 +31,9 @@ export default function DemographicsStep({ formData, onComplete }: DemographicsS
     onComplete({ 
       ageRange: ageRange as FormData["ageRange"], 
       familyStatus: familyStatus as FormData["familyStatus"],
-      hasChildren: hasChildren
+      hasChildren: hasChildren,
+      numberOfQualifyingChildren: hasChildren ? numberOfQualifyingChildren : 0,
+      numberOfOtherDependents: hasChildren ? numberOfOtherDependents : 0
     });
   };
 

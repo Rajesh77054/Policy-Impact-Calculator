@@ -21,6 +21,8 @@ export const formDataSchema = z.object({
   ageRange: z.enum(["18-29", "30-44", "45-64", "65+"]).optional(),
   familyStatus: z.enum(["single", "married-joint", "married-separate", "head-of-household"]).optional(),
   hasChildren: z.boolean().optional(),
+  numberOfQualifyingChildren: z.number().min(0).max(10).optional(), // IRS qualifying children under 17
+  numberOfOtherDependents: z.number().min(0).max(10).optional(), // IRS other dependents (17+, elderly parents, etc.)
 
   // Step 3: Employment
   employmentStatus: z.enum(["full-time", "part-time", "self-employed", "contract", "unemployed", "retired", "student", "unable"]).optional(),
