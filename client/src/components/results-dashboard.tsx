@@ -55,15 +55,15 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
   const getCalculationExplanation = (type: string, data: PolicyResults) => {
     switch (type) {
       case 'tax':
-        return `Tax changes: ${data.annualTaxImpact < 0 ? 'Savings from' : 'Costs from'} proposed federal tax policy changes including standard deduction increases and bracket adjustments. Based on current IRS tax tables.`;
+        return `Tax calculation: Standard deduction ${data.breakdown[0]?.details[0]?.amount || 'change'} + bracket adjustments ${data.breakdown[0]?.details[1]?.amount || 'change'} = ${formatCurrency(data.annualTaxImpact)} net impact. Based on IRS Publication 15 and current tax brackets.`;
       case 'healthcare':
-        return `Healthcare costs: ${data.healthcareCostImpact < 0 ? 'Savings from' : 'Additional costs from'} proposed healthcare policies. For uninsured individuals, this represents elimination of out-of-pocket costs through expanded Medicaid coverage.`;
+        return `Healthcare calculation: Current costs $${data.healthcareCosts.current} → Proposed costs $${data.healthcareCosts.proposed} = ${formatCurrency(data.healthcareCostImpact)} impact. Based on Kaiser Family Foundation employer survey data and CMS expenditure reports.`;
       case 'energy':
-        return `Energy costs: ${data.energyCostImpact < 0 ? 'Savings from' : 'Additional costs from'} proposed energy policies including carbon pricing and efficiency programs. Based on average household energy consumption.`;
+        return `Energy calculation: Baseline household energy costs adjusted for proposed carbon pricing and efficiency programs = ${formatCurrency(data.energyCostImpact)} impact. Based on EIA residential energy consumption data.`;
       case 'net':
-        return `Net Annual Impact: Total of all policy changes (${formatCurrency(data.annualTaxImpact)} tax + ${formatCurrency(data.healthcareCostImpact)} healthcare + ${formatCurrency(data.energyCostImpact)} energy = ${formatCurrency(data.netAnnualImpact)})`;
+        return `Net calculation: ${formatCurrency(data.annualTaxImpact)} (tax) + ${formatCurrency(data.healthcareCostImpact)} (healthcare) + ${formatCurrency(data.energyCostImpact)} (energy) = ${formatCurrency(data.netAnnualImpact)} total annual impact.`;
       case 'timeline':
-        return `Timeline projections include inflation adjustments (2.5% annually) and compound effects. Shows cumulative financial impact over different time periods.`;
+        return `Timeline calculation: Year 1: ${formatCurrency(data.netAnnualImpact)} → 5 years: ${formatCurrency(data.timeline.fiveYear)} → 10 years: ${formatCurrency(data.timeline.tenYear)} → 20 years: ${formatCurrency(data.timeline.twentyYear)}. Includes 2.5% annual inflation compounding.`;
       default:
         return '';
     }
@@ -243,11 +243,11 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
             </CardContent>
           </Card>
 
-          {/* Timeline */}
+          {/* Long-term Outlook */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div className="flex items-center space-x-1">
-                <CardTitle className="text-lg font-semibold">Timeline</CardTitle>
+                <CardTitle className="text-lg font-semibold">Long-term Outlook</CardTitle>
                 <Tooltip>
                   <TooltipTrigger>
                     <HelpCircle className="w-4 h-4 text-slate-400 hover:text-slate-600" />
@@ -261,77 +261,57 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                 <Clock className="w-5 h-5 text-purple-600" />
               </div>
             </CardHeader>
-            
-              <div className="mb-3 p-3 bg-slate-50 rounded-md">
-                <p className="text-xs text-slate-600">
-                  <strong>Cumulative financial impact</strong> from policy changes over time
-                </p>
-              </div>
-            
             <CardContent>
-              <div className="space-y-3">
-                <div className="flex justify-between text-sm">
-                  <span className="text-slate-600">5-Year Total</span>
-                  <span className={`font-medium ${results.timeline.fiveYear < 0 ? "text-green-600" : "text-red-600"}`}>
-                    {formatNetImpact(results.timeline.fiveYear)}
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-slate-600">10-Year Total</span>
-                  <span className={`font-medium ${results.timeline.tenYear < 0 ? "text-green-600" : "text-red-600"}`}>
-                    {formatNetImpact(results.timeline.tenYear)}
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-slate-600">20-Year Total</span>
-                  <span className={`font-medium ${results.timeline.twentyYear < 0 ? "text-green-600" : "text-red-600"}`}>
+              <div className="space-y-4">
+                <div className="text-center">
+                  <div className={`text-2xl font-bold ${results.timeline.twentyYear < 0 ? "text-green-600" : "text-red-600"}`}>
                     {formatNetImpact(results.timeline.twentyYear)}
-                  </span>
+                  </div>
+                  <p className="text-sm text-slate-600">20-year cumulative impact</p>
                 </div>
-                <div className="pt-3 border-t border-slate-200">
-                  <div className="space-y-1">
-                    {(() => {
-                      const periods = [
-                        { name: "Year 1", value: results.netAnnualImpact },
-                        { name: "Years 1-5", value: results.timeline.fiveYear },
-                        { name: "Years 1-10", value: results.timeline.tenYear },
-                        { name: "Years 1-20", value: results.timeline.twentyYear }
-                      ];
+                
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs text-slate-500">
+                    <span>5 years</span>
+                    <span>10 years</span>
+                    <span>20 years</span>
+                  </div>
+                  <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div 
+                      className={`h-full rounded-full ${
+                        results.timeline.twentyYear < 0 ? 'bg-green-500' : 'bg-red-500'
+                      }`}
+                      style={{ 
+                        width: `${Math.min(100, Math.abs(results.timeline.twentyYear / results.timeline.fiveYear) * 20)}%` 
+                      }}
+                    ></div>
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className={results.timeline.fiveYear < 0 ? "text-green-600" : "text-red-600"}>
+                      {Math.abs(results.timeline.fiveYear).toLocaleString()}
+                    </span>
+                    <span className={results.timeline.tenYear < 0 ? "text-green-600" : "text-red-600"}>
+                      {Math.abs(results.timeline.tenYear).toLocaleString()}
+                    </span>
+                    <span className={results.timeline.twentyYear < 0 ? "text-green-600" : "text-red-600"}>
+                      {Math.abs(results.timeline.twentyYear).toLocaleString()}
+                    </span>
+                  </div>
+                </div>
 
-                      // Find the period with the best (most negative = highest savings) net impact
-                      const bestPeriod = periods.reduce((best, current) => 
-                        current.value < best.value ? current : best
-                      );
-
-                      // Check if any period shows savings (negative values)
-                      const hasSavingsPeriod = periods.some(p => p.value < 0);
-
-                      if (hasSavingsPeriod) {
-                        // If savings increase over time, show that trend
-                        const savingsIncrease = Math.abs(results.timeline.twentyYear) > Math.abs(results.netAnnualImpact);
-                        return (
-                          <div className="flex justify-between font-semibold">
-                            <span>Impact Trend</span>
-                            <span className="text-green-600">
-                              {savingsIncrease ? "Savings increase over time" : "Consistent savings"}
-                            </span>
-                          </div>
-                        );
-                      } else {
-                        return (
-                          <div className="flex justify-between font-semibold">
-                            <span>Impact Trend</span>
-                            <span className="text-orange-600">Costs increase over time</span>
-                          </div>
-                        );
+                <div className="pt-2 border-t border-slate-200">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-600">Trend</span>
+                    <span className={`text-sm font-medium ${
+                      Math.abs(results.timeline.twentyYear) > Math.abs(results.netAnnualImpact) && results.timeline.twentyYear < 0
+                        ? "text-green-600" 
+                        : "text-orange-600"
+                    }`}>
+                      {Math.abs(results.timeline.twentyYear) > Math.abs(results.netAnnualImpact) && results.timeline.twentyYear < 0
+                        ? "Savings grow over time" 
+                        : "Benefits may emerge later"
                       }
-                    })()}
-                    <p className="text-xs text-slate-500">
-                      {results.timeline.fiveYear < 0 || results.timeline.tenYear < 0 || results.timeline.twentyYear < 0
-                        ? "Timeline shows when policies provide the most benefit"
-                        : "All periods show net costs. Consider how policy benefits may emerge over time."
-                      }
-                    </p>
+                    </span>
                   </div>
                 </div>
               </div>

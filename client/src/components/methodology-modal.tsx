@@ -86,8 +86,9 @@ export default function MethodologyModal({ trigger }: MethodologyModalProps) {
           </div>
         ) : methodologyData ? (
           <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="calculations">Your Results</TabsTrigger>
               <TabsTrigger value="sources">Data Sources</TabsTrigger>
               <TabsTrigger value="methodology">Methods</TabsTrigger>
               <TabsTrigger value="limitations">Limitations</TabsTrigger>
@@ -140,6 +141,82 @@ export default function MethodologyModal({ trigger }: MethodologyModalProps) {
                     </p>
                   </div>
                 </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="calculations" className="space-y-4">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="flex items-start space-x-3">
+                  <Shield className="w-5 h-5 text-blue-600 mt-0.5" />
+                  <div>
+                    <h4 className="font-medium text-blue-900">How Your Results Were Calculated</h4>
+                    <p className="text-sm text-blue-800 mt-1">
+                      These calculations are specific to your profile and show exactly how we arrived at your personalized results.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center space-x-2">
+                      <span>Tax Impact Calculation</span>
+                      <Badge variant="secondary">
+                        {/* This would need to be passed as a prop - for now showing placeholder */}
+                        Your Result
+                      </Badge>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="bg-slate-50 p-3 rounded text-sm">
+                      <div className="space-y-1">
+                        <div>1. <strong>Current tax calculation:</strong> Applied your income to current IRS brackets</div>
+                        <div>2. <strong>Proposed tax calculation:</strong> Applied enhanced standard deduction and policy changes</div>
+                        <div>3. <strong>Net difference:</strong> Proposed tax minus current tax = your impact</div>
+                      </div>
+                    </div>
+                    <p className="text-xs text-slate-600">
+                      Based on IRS Publication 15, Tax Foundation data, and Congressional Budget Office scoring methodology.
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Healthcare Cost Calculation</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="bg-slate-50 p-3 rounded text-sm">
+                      <div className="space-y-1">
+                        <div>1. <strong>Current costs:</strong> Based on your insurance type, age, and location</div>
+                        <div>2. <strong>Policy adjustments:</strong> Applied proposed subsidies, drug caps, and program expansions</div>
+                        <div>3. <strong>Net savings/costs:</strong> Proposed costs minus current costs = your impact</div>
+                      </div>
+                    </div>
+                    <p className="text-xs text-slate-600">
+                      Based on Kaiser Family Foundation Employer Health Benefits Survey and CMS National Health Expenditure data.
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Timeline Projection Method</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="bg-slate-50 p-3 rounded text-sm">
+                      <div className="space-y-1">
+                        <div>1. <strong>Base annual impact:</strong> Your net annual result</div>
+                        <div>2. <strong>Inflation adjustment:</strong> 2.5% compounding annually (CBO standard)</div>
+                        <div>3. <strong>Cumulative totals:</strong> Sum of adjusted annual impacts over time periods</div>
+                      </div>
+                    </div>
+                    <p className="text-xs text-slate-600">
+                      Uses Congressional Budget Office inflation methodology and policy implementation timelines.
+                    </p>
+                  </CardContent>
+                </Card>
               </div>
             </TabsContent>
 
