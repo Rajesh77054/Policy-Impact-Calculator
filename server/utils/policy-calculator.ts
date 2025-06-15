@@ -575,6 +575,11 @@ return {
       netAnnualImpact: Math.round(bigBillNetImpact),
       deficitImpact: bigBillDeficitImpact,
       recessionProbability: bigBillRecessionProbability,
+      communityImpact: {
+        schoolFunding: schoolFundingImpact + 3, // Additional 3% boost from expanded education funding
+        infrastructure: Math.round(infrastructureImpact * 1.4), // 40% more infrastructure investment
+        jobOpportunities: jobOpportunities + 120, // Additional jobs from expanded programs
+      },
       timeline: bigBillTimeline,
       breakdown: [
         {

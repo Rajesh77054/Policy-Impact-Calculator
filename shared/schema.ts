@@ -77,6 +77,11 @@ export const policyResultsSchema = z.object({
     netAnnualImpact: z.number(),
     deficitImpact: z.number(),
     recessionProbability: z.number(),
+    communityImpact: z.object({
+      schoolFunding: z.number(),
+      infrastructure: z.number(),
+      jobOpportunities: z.number(),
+    }),
     timeline: z.object({
       fiveYear: z.number(),
       tenYear: z.number(),

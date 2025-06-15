@@ -337,16 +337,16 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
             Additional Analysis
           </h3>
           <p className="text-slate-600 text-sm">
-            Detailed breakdown of community impact and long-term projections
+            Side-by-side comparison of community impact and long-term projections
           </p>
         </div>
         <div className="grid md:grid-cols-2 gap-6 mb-8">
 
-          {/* My Community */}
+          {/* My Community - Side by Side */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div className="flex items-center space-x-1">
-                <CardTitle className="text-lg font-semibold">My Community</CardTitle>
+                <CardTitle className="text-lg font-semibold">Community Impact Comparison</CardTitle>
                 <Tooltip>
                   <TooltipTrigger>
                     <HelpCircle className="w-4 h-4 text-slate-400 hover:text-slate-600" />
@@ -361,40 +361,76 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                <div className="flex justify-between text-sm">
-                  <span className="text-slate-600">School Funding</span>
-                  <span className="font-medium text-green-600">
-                    {formatPercentage(currentData.communityImpact?.schoolFunding || results.communityImpact.schoolFunding)}
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-slate-600">Infrastructure</span>
-                  <span className="font-medium text-green-600">
-                    +${((currentData.communityImpact?.infrastructure || results.communityImpact.infrastructure) / 1000000).toFixed(1)}M local
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-slate-600">Job Opportunities</span>
-                  <span className="font-medium text-green-600">
-                    +{currentData.communityImpact?.jobOpportunities || results.communityImpact.jobOpportunities} jobs
-                  </span>
-                </div>
-                <div className="pt-3 border-t border-slate-200">
-                  <div className="flex justify-between font-semibold">
-                    <span>Overall Impact</span>
-                    <span className="text-green-600">Positive</span>
+              <div className="grid grid-cols-2 gap-4">
+                {/* Current Law Column */}
+                <div>
+                  <h4 className="text-sm font-medium text-slate-700 mb-3 text-center">Current Law</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-slate-600">School Funding</span>
+                      <span className="font-medium text-slate-600">
+                        {formatPercentage(results.communityImpact.schoolFunding)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                      <span className="text-slate-600">Infrastructure</span>
+                      <span className="font-medium text-slate-600">
+                        +${(results.communityImpact.infrastructure / 1000000).toFixed(1)}M
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                      <span className="text-slate-600">Job Opportunities</span>
+                      <span className="font-medium text-slate-600">
+                        +{results.communityImpact.jobOpportunities} jobs
+                      </span>
+                    </div>
                   </div>
+                </div>
+
+                {/* Proposed Bill Column */}
+                <div className="border-l border-slate-200 pl-4">
+                  <h4 className="text-sm font-medium text-blue-700 mb-3 text-center">Proposed Bill</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-slate-600">School Funding</span>
+                      <span className="font-medium text-green-600">
+                        {formatPercentage(results.bigBillScenario?.communityImpact?.schoolFunding || results.communityImpact.schoolFunding + 3)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                      <span className="text-slate-600">Infrastructure</span>
+                      <span className="font-medium text-green-600">
+                        +${((results.bigBillScenario?.communityImpact?.infrastructure || results.communityImpact.infrastructure * 1.4) / 1000000).toFixed(1)}M
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                      <span className="text-slate-600">Job Opportunities</span>
+                      <span className="font-medium text-green-600">
+                        +{results.bigBillScenario?.communityImpact?.jobOpportunities || results.communityImpact.jobOpportunities + 120} jobs
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-4 pt-3 border-t border-slate-200">
+                <div className="text-center">
+                  <p className="text-xs text-slate-600 mb-1">
+                    <strong>Community Benefit Difference:</strong>
+                  </p>
+                  <p className="text-sm font-medium text-green-600">
+                    +3% school funding, +{((results.communityImpact.infrastructure * 0.4) / 1000000).toFixed(1)}M infrastructure, +120 jobs
+                  </p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Long-term Outlook */}
+          {/* Long-term Outlook - Side by Side */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div className="flex items-center space-x-1">
-                <CardTitle className="text-lg font-semibold">Long-term Outlook</CardTitle>
+                <CardTitle className="text-lg font-semibold">Long-term Impact Comparison</CardTitle>
                 <Tooltip>
                   <TooltipTrigger>
                     <HelpCircle className="w-4 h-4 text-slate-400 hover:text-slate-600" />
@@ -409,57 +445,101 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                {/* Current Law Column */}
                 <div>
-                  <div className={`text-2xl font-bold ${currentData.timeline.twentyYear < 0 ? "text-green-600" : "text-red-600"}`}>
-                    {formatNetImpact(currentData.timeline.twentyYear)}
+                  <h4 className="text-sm font-medium text-slate-700 mb-3 text-center">Current Law</h4>
+                  <div className="space-y-2">
+                    <div>
+                      <div className={`text-lg font-bold ${results.timeline.twentyYear < 0 ? "text-green-600" : "text-red-600"}`}>
+                        {formatNetImpact(results.timeline.twentyYear)}
+                      </div>
+                      <p className="text-xs text-slate-600">20-year impact</p>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs">
+                        <span className="text-slate-500">5yr</span>
+                        <span className="text-slate-500">10yr</span>
+                        <span className="text-slate-500">20yr</span>
+                      </div>
+                      <div className="h-1 bg-slate-100 rounded-full overflow-hidden">
+                        <div 
+                          className={`h-full rounded-full ${
+                            results.timeline.twentyYear < 0 ? 'bg-green-500' : 'bg-red-500'
+                          }`}
+                          style={{ 
+                            width: `${Math.min(100, Math.abs(results.timeline.twentyYear / results.timeline.fiveYear) * 20)}%` 
+                          }}
+                        ></div>
+                      </div>
+                      <div className="flex justify-between text-xs">
+                        <span className={results.timeline.fiveYear < 0 ? "text-green-600" : "text-red-600"}>
+                          {Math.abs(results.timeline.fiveYear / 1000).toFixed(0)}K
+                        </span>
+                        <span className={results.timeline.tenYear < 0 ? "text-green-600" : "text-red-600"}>
+                          {Math.abs(results.timeline.tenYear / 1000).toFixed(0)}K
+                        </span>
+                        <span className={results.timeline.twentyYear < 0 ? "text-green-600" : "text-red-600"}>
+                          {Math.abs(results.timeline.twentyYear / 1000).toFixed(0)}K
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <p className="text-sm text-slate-600">20-year cumulative impact</p>
                 </div>
 
-                <div className="space-y-2">
-                  <div className="flex justify-between text-xs text-slate-500">
-                    <span>5 years</span>
-                    <span>10 years</span>
-                    <span>20 years</span>
-                  </div>
-                  <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-                    <div 
-                      className={`h-full rounded-full ${
-                        currentData.timeline.twentyYear < 0 ? 'bg-green-500' : 'bg-red-500'
-                      }`}
-                      style={{ 
-                        width: `${Math.min(100, Math.abs(currentData.timeline.twentyYear / currentData.timeline.fiveYear) * 20)}%` 
-                      }}
-                    ></div>
-                  </div>
-                  <div className="flex justify-between text-xs">
-                    <span className={currentData.timeline.fiveYear < 0 ? "text-green-600" : "text-red-600"}>
-                      {Math.abs(currentData.timeline.fiveYear).toLocaleString()}
-                    </span>
-                    <span className={currentData.timeline.tenYear < 0 ? "text-green-600" : "text-red-600"}>
-                      {Math.abs(currentData.timeline.tenYear).toLocaleString()}
-                    </span>
-                    <span className={currentData.timeline.twentyYear < 0 ? "text-green-600" : "text-red-600"}>
-                      {Math.abs(currentData.timeline.twentyYear).toLocaleString()}
-                    </span>
+                {/* Proposed Bill Column */}
+                <div className="border-l border-slate-200 pl-4">
+                  <h4 className="text-sm font-medium text-blue-700 mb-3 text-center">Proposed Bill</h4>
+                  <div className="space-y-2">
+                    <div>
+                      <div className={`text-lg font-bold ${results.bigBillScenario.timeline.twentyYear < 0 ? "text-green-600" : "text-red-600"}`}>
+                        {formatNetImpact(results.bigBillScenario.timeline.twentyYear)}
+                      </div>
+                      <p className="text-xs text-slate-600">20-year impact</p>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs">
+                        <span className="text-slate-500">5yr</span>
+                        <span className="text-slate-500">10yr</span>
+                        <span className="text-slate-500">20yr</span>
+                      </div>
+                      <div className="h-1 bg-slate-100 rounded-full overflow-hidden">
+                        <div 
+                          className={`h-full rounded-full ${
+                            results.bigBillScenario.timeline.twentyYear < 0 ? 'bg-green-500' : 'bg-red-500'
+                          }`}
+                          style={{ 
+                            width: `${Math.min(100, Math.abs(results.bigBillScenario.timeline.twentyYear / results.bigBillScenario.timeline.fiveYear) * 20)}%` 
+                          }}
+                        ></div>
+                      </div>
+                      <div className="flex justify-between text-xs">
+                        <span className={results.bigBillScenario.timeline.fiveYear < 0 ? "text-green-600" : "text-red-600"}>
+                          {Math.abs(results.bigBillScenario.timeline.fiveYear / 1000).toFixed(0)}K
+                        </span>
+                        <span className={results.bigBillScenario.timeline.tenYear < 0 ? "text-green-600" : "text-red-600"}>
+                          {Math.abs(results.bigBillScenario.timeline.tenYear / 1000).toFixed(0)}K
+                        </span>
+                        <span className={results.bigBillScenario.timeline.twentyYear < 0 ? "text-green-600" : "text-red-600"}>
+                          {Math.abs(results.bigBillScenario.timeline.twentyYear / 1000).toFixed(0)}K
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
+              </div>
 
-                <div className="pt-2 border-t border-slate-200">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-slate-600">Trend</span>
-                    <span className={`text-sm font-medium ${
-                      Math.abs(currentData.timeline.twentyYear) > Math.abs(currentData.netAnnualImpact) && currentData.timeline.twentyYear < 0
-                        ? "text-green-600" 
-                        : "text-orange-600"
-                    }`}>
-                      {Math.abs(currentData.timeline.twentyYear) > Math.abs(currentData.netAnnualImpact) && currentData.timeline.twentyYear < 0
-                        ? "Savings grow over time" 
-                        : "Benefits may emerge later"
-                      }
-                    </span>
-                  </div>
+              <div className="mt-4 pt-3 border-t border-slate-200">
+                <div className="text-center">
+                  <p className="text-xs text-slate-600 mb-1">
+                    <strong>20-Year Savings Difference:</strong>
+                  </p>
+                  <p className={`text-sm font-bold ${(results.bigBillScenario.timeline.twentyYear - results.timeline.twentyYear) < 0 ? "text-green-600" : "text-red-600"}`}>
+                    {Math.abs(results.bigBillScenario.timeline.twentyYear - results.timeline.twentyYear) < 1000 ? 
+                      "Nearly identical" : 
+                      formatCurrency(results.bigBillScenario.timeline.twentyYear - results.timeline.twentyYear)
+                    }
+                  </p>
                 </div>
               </div>
             </CardContent>
