@@ -43,44 +43,62 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
       // Use appropriate scenario data based on toggle
       const currentData = showBigBillComparison ? results.bigBillScenario : results;
 
-      // Tax Impact Chart
+      // Create tax impact timeline comparison chart
       if (taxChartRef.current) {
         const taxCtx = taxChartRef.current.getContext('2d');
         if (taxCtx) {
+          const currentTimelineData = [
+            { year: 'Current', value: 0 },
+            { year: 'Year 1', value: results.annualTaxImpact },
+            { year: 'Year 3', value: results.annualTaxImpact * 3 * 1.025 },
+            { year: 'Year 5', value: results.timeline.fiveYear },
+            { year: 'Year 10', value: results.timeline.tenYear }
+          ];
+
+          const proposedTimelineData = [
+            { year: 'Current', value: 0 },
+            { year: 'Year 1', value: results.bigBillScenario.annualTaxImpact },
+            { year: 'Year 3', value: results.bigBillScenario.annualTaxImpact * 3 * 1.025 },
+            { year: 'Year 5', value: results.bigBillScenario.timeline.fiveYear },
+            { year: 'Year 10', value: results.bigBillScenario.timeline.tenYear }
+          ];
+
           taxChartInstance.current = new Chart(taxCtx, {
             type: 'line',
             data: {
-              labels: ['Current', 'Year 1', 'Year 3', 'Year 5', 'Year 10'],
-              datasets: [{
-                label: 'Tax Impact',
-                data: [
-                  0,
-                  currentData.annualTaxImpact,
-                  currentData.annualTaxImpact * 3,
-                  currentData.timeline.fiveYear / 5,
-                  currentData.timeline.tenYear / 10
-                ],
-                borderColor: 'hsl(217, 91%, 60%)',
-                backgroundColor: 'hsl(217, 91%, 60%, 0.1)',
-                fill: true,
-                tension: 0.4
-              }]
+              labels: currentTimelineData.map(d => d.year),
+              datasets: [
+                {
+                  label: 'Current Law',
+                  data: currentTimelineData.map(d => d.value),
+                  borderColor: 'hsl(215, 16%, 47%)',
+                  backgroundColor: 'hsla(215, 16%, 47%, 0.1)',
+                  fill: false,
+                  tension: 0.4
+                },
+                {
+                  label: 'Proposed Bill',
+                  data: proposedTimelineData.map(d => d.value),
+                  borderColor: 'hsl(215, 70%, 60%)',
+                  backgroundColor: 'hsla(215, 70%, 60%, 0.1)',
+                  fill: false,
+                  tension: 0.4
+                }
+              ]
             },
             options: {
               responsive: true,
               maintainAspectRatio: false,
               plugins: {
                 legend: {
-                  display: true,
-                  position: 'bottom'
+                  display: false
                 }
               },
               scales: {
                 y: {
-                  beginAtZero: false,
                   ticks: {
                     callback: function (value) {
-                      return (value >= 0 ? '+$' : '-$') + Math.abs(value).toLocaleString();
+                      return (value >= 0 ? '+' : '') + '$' + Math.abs(value).toLocaleString();
                     }
                   }
                 }
@@ -90,26 +108,23 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
         }
       }
 
-      // Healthcare Chart - using real calculated costs
+      // Create healthcare cost scenario comparison chart
       if (healthcareChartRef.current) {
         const healthCtx = healthcareChartRef.current.getContext('2d');
         if (healthCtx) {
-          // Use healthcare costs - for big bill scenario, calculate proposed cost
-          const currentCost = results.healthcareCosts?.current || 0;
-          const proposedCost = showBigBillComparison
-            ? currentCost + currentData.healthcareCostImpact
-            : results.healthcareCosts?.proposed || 0;
+          const currentLawCost = results.healthcareCosts.current;
+          const proposedBillCost = results.bigBillScenario.healthcareCosts?.proposed || results.healthcareCosts.proposed;
 
           healthcareChartInstance.current = new Chart(healthCtx, {
             type: 'bar',
             data: {
-              labels: ['Current Plan', 'Proposed Plan'],
+              labels: ['Current Law', 'Proposed Bill'],
               datasets: [{
-                label: 'Annual Cost',
-                data: [currentCost, proposedCost],
+                label: 'Annual Healthcare Cost',
+                data: [currentLawCost, proposedBillCost],
                 backgroundColor: [
                   'hsl(215, 16%, 47%)',
-                  proposedCost <= currentCost ? 'hsl(158, 64%, 52%)' : 'hsl(348, 83%, 47%)'
+                  'hsl(158, 64%, 52%)'
                 ],
                 borderRadius: 6
               }]
@@ -119,8 +134,7 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
               maintainAspectRatio: false,
               plugins: {
                 legend: {
-                  display: true,
-                  position: 'bottom'
+                  display: false
                 }
               },
               scales: {
@@ -156,109 +170,98 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
 
   return (
     <div className="grid lg:grid-cols-2 gap-8 mb-8">
-      {/* Tax Impact Chart */}
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0">
-          <CardTitle className="text-lg font-semibold">Tax Impact Over Time</CardTitle>
-          <Dialog open={openTaxModal} onOpenChange={setOpenTaxModal}>
-            <DialogTrigger asChild>
-              <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">
-                <Info className="w-4 h-4 mr-1" />
-                How we calculate this
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Tax Impact Calculation</DialogTitle>
-                <DialogDescription>
-                  This projection shows the potential tax impact if current policy proposals were to remain
-                  stable over time. It includes adjustments for inflation and income growth.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="space-y-3 text-sm">
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-                  <p className="font-medium text-amber-800 mb-1">Important Limitations:</p>
-                  <ul className="text-amber-700 space-y-1 text-xs">
-                    <li>• Tax laws frequently change with new legislation</li>
-                    <li>• Different administrations may reverse policies</li>
-                    <li>• Economic conditions affect policy implementation</li>
-                    <li>• This represents a baseline scenario only</li>
-                  </ul>
-                </div>
-                <p className="text-slate-600">
-                  Use this chart to understand the trajectory of specific proposals, not as a guarantee
-                  of future tax obligations. Real outcomes will depend on future political and economic developments.
+      {/* Charts Section */}
+        <div className="grid md:grid-cols-2 gap-6 mb-8">
+          {/* Tax Impact Over Time Comparison */}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <div className="flex items-center space-x-1">
+                <CardTitle className="text-lg font-semibold">Tax Impact Timeline Comparison</CardTitle>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="p-0 h-auto"
+                      onClick={() => setOpenTaxModal(true)}
+                    >
+                      <Info className="w-4 h-4 mr-1" />
+                      How we calculate this
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs">
+                    <p className="text-xs">Comparison of cumulative tax impact over time between Current Law and Proposed Bill scenarios</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+              <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
+                <TrendingUp className="w-5 h-5 text-indigo-600" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="h-64">
+                <canvas 
+                  ref={taxChartRef} 
+                  id="taxChart"
+                  className="w-full h-64"
+                />
+              </div>
+              <div className="mt-3 text-center">
+                <p className="text-xs text-slate-600">
+                  <span className="inline-block w-3 h-3 bg-slate-500 rounded mr-1"></span>
+                  Current Law
+                  <span className="inline-block w-3 h-3 bg-blue-500 rounded mr-1 ml-4"></span>
+                  Proposed Bill
                 </p>
               </div>
-            </DialogContent>
-          </Dialog>
-        </CardHeader>
-        <CardContent>
-          <div className="h-64">
-            <canvas 
-              ref={taxChartRef} 
-              id="taxChart"
-              className="w-full h-64"
-            />
-          </div>
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
 
-      {/* Healthcare Costs Chart */}
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0">
-          <CardTitle className="text-lg font-semibold">Healthcare Cost Comparison</CardTitle>
-          <Dialog open={openHealthcareModal} onOpenChange={setOpenHealthcareModal}>
-            <DialogTrigger asChild>
-              <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">
-                <Info className="w-4 h-4 mr-1" />
-                Learn more
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px]">
-              <DialogHeader>
-                <DialogTitle>Healthcare Cost Comparison</DialogTitle>
-                <DialogDescription>
-                  This chart compares the total annual healthcare costs between your current situation and the
-                  proposed policy changes.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="space-y-4 pt-4">
-                <div className="bg-slate-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-sm mb-2">How Current Plan Costs Are Calculated:</h4>
-                  <div className="space-y-2 text-sm text-slate-600">
-                    <div>• <strong>Uninsured:</strong> Estimated annual out-of-pocket costs for medical services ($1,800) plus prescription drugs ($1,480) = $3,280 total</div>
-                    <div>• <strong>Employer Insurance:</strong> Your share of premiums plus deductibles and copays</div>
-                    <div>• <strong>Marketplace Plans:</strong> Premiums after subsidies plus cost-sharing expenses</div>
-                    <div>• <strong>Medicare/Medicaid:</strong> Premiums, supplements, and out-of-pocket costs</div>
-                  </div>
-                </div>
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-sm mb-2">Proposed Plan Benefits:</h4>
-                  <div className="space-y-1 text-sm text-slate-600">
-                    <div>• Enhanced premium subsidies for marketplace plans</div>
-                    <div>• Prescription drug cost caps ($2,000 annually)</div>
-                    <div>• Expanded Medicaid eligibility for low-income individuals</div>
-                    <div>• Public option availability with lower premiums</div>
-                  </div>
-                </div>
-                <p className="text-xs text-slate-500 italic">
-                  Based on Kaiser Family Foundation employer survey data and CMS expenditure reports.
+          {/* Healthcare Cost Comparison */}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <div className="flex items-center space-x-1">
+                <CardTitle className="text-lg font-semibold">Healthcare Cost Scenario Comparison</CardTitle>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="p-0 h-auto"
+                      onClick={() => setOpenHealthcareModal(true)}
+                    >
+                      <Info className="w-4 h-4 mr-1" />
+                      Learn more
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs">
+                    <p className="text-xs">Annual healthcare costs under Current Law vs. Proposed Bill scenarios</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+              <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-between">
+                <Heart className="w-5 h-5 text-emerald-600" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="h-64">
+                <canvas 
+                  ref={healthcareChartRef} 
+                  id="healthcareChart"
+                  className="w-full h-64"
+                />
+              </div>
+              <div className="mt-3 text-center">
+                <p className="text-xs text-slate-600">
+                  <span className="inline-block w-3 h-3 bg-slate-500 rounded mr-1"></span>
+                  Current Law Healthcare Cost
+                  <span className="inline-block w-3 h-3 bg-green-500 rounded mr-1 ml-4"></span>
+                  Proposed Bill Healthcare Cost
                 </p>
               </div>
-            </DialogContent>
-          </Dialog>
-        </CardHeader>
-        <CardContent>
-          <div className="h-64">
-            <canvas 
-              ref={healthcareChartRef} 
-              id="healthcareChart"
-              className="w-full h-64"
-            />
-          </div>
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
+        </div>
     </div>
   );
 }
