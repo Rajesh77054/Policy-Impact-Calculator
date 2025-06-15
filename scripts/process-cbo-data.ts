@@ -1,12 +1,15 @@
 
-import * as XLSX from 'xlsx';
+import XLSX from 'xlsx';
 import * as path from 'path';
+import * as fs from 'fs';
 
 // Try to read the CBO file that's already uploaded
 const filePath = path.join(process.cwd(), 'attached_assets', 'HR1_HousePassed_6-4-2025_1749952389576.xlsx');
 
 try {
   console.log('Attempting to read CBO Excel file...');
+  console.log('File path:', filePath);
+  console.log('File exists:', fs.existsSync(filePath));
   
   const workbook = XLSX.readFile(filePath);
   console.log('Available sheets:', workbook.SheetNames);

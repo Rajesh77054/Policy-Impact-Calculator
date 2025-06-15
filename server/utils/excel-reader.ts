@@ -1,5 +1,5 @@
 
-import * as XLSX from 'xlsx';
+import XLSX from 'xlsx';
 import * as fs from 'fs';
 
 export interface ExcelData {
