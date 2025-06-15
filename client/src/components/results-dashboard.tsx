@@ -115,7 +115,17 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
           {/* My Wallet */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-lg font-semibold">My Wallet</CardTitle>
+              <div className="flex items-center space-x-1">
+                <CardTitle className="text-lg font-semibold">My Wallet</CardTitle>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <HelpCircle className="w-4 h-4 text-slate-400 hover:text-slate-600" />
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs">
+                    <p className="text-xs">{getCalculationExplanation('net', results)}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
               <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                 <Calculator className="w-5 h-5 text-green-600" />
               </div>
@@ -178,17 +188,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                 <div className="pt-3 border-t border-slate-200">
                   <div className="space-y-1">
                     <div className="flex justify-between font-semibold">
-                      <div className="flex items-center space-x-1">
-                        <span>Net Annual Impact</span>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <HelpCircle className="w-3 h-3 text-slate-400 hover:text-slate-600" />
-                          </TooltipTrigger>
-                          <TooltipContent className="max-w-xs">
-                            <p className="text-xs">{getCalculationExplanation('net', results)}</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </div>
+                      <span>Net Annual Impact</span>
                       <span className={results.netAnnualImpact < 0 ? "text-green-600" : "text-red-600"}>
                         {formatNetImpact(results.netAnnualImpact)}
                       </span>
@@ -208,7 +208,17 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
           {/* My Community */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-lg font-semibold">My Community</CardTitle>
+              <div className="flex items-center space-x-1">
+                <CardTitle className="text-lg font-semibold">My Community</CardTitle>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <HelpCircle className="w-4 h-4 text-slate-400 hover:text-slate-600" />
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs">
+                    <p className="text-xs">Community impact shows how proposed policies would affect public services and economic opportunities in your area. Based on Congressional Budget Office economic models and local demographic data.</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
               <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                 <Home className="w-5 h-5 text-blue-600" />
               </div>
