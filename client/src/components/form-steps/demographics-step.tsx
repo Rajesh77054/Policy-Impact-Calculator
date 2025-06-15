@@ -71,8 +71,8 @@ export default function DemographicsStep({ formData, onComplete }: DemographicsS
             What's your age range?
           </Label>
           <RadioGroup
-            value={formData.ageRange || ""}
-            onValueChange={(value) => setFormData({ ...formData, ageRange: value as FormData["ageRange"] })}
+            value={ageRange}
+            onValueChange={setAgeRange}
             className="grid grid-cols-2 gap-3"
           >
             {[
@@ -88,7 +88,6 @@ export default function DemographicsStep({ formData, onComplete }: DemographicsS
                   </Label>
                 </div>
               ))}
-            </div>
           </RadioGroup>
         </div>
 
