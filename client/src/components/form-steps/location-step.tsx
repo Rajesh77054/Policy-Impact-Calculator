@@ -141,15 +141,26 @@ export default function LocationStep({ formData, onComplete }: LocationStepProps
     }
   }, [formData.zipCode, formData.state, locationDetectionAttempted]);
 
+  // Auto-advance when state is detected via geolocation and ZIP is empty
+  useEffect(() => {
+    if (state && !zipCode && locationDetectionAttempted) {
+      // Auto-advance after a brief delay to show the user what was detected
+      const timer = setTimeout(() => {
+        handleNext();
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [state, zipCode, locationDetectionAttempted]);
+
   const handleNext = () => {
-    if (zipCode.length === 5 && state) {
-      const stepData = { zipCode, state };
+    if (state && (zipCode.length === 5 || zipCode.length === 0)) {
+      const stepData = { zipCode: zipCode || undefined, state };
       console.log("Location step completing with data:", stepData);
       onComplete(stepData);
     }
   };
 
-  const isValid = zipCode.length === 5 && state;
+  const isValid = state && (zipCode.length === 5 || zipCode.length === 0);
 
   return (
     <div>
@@ -189,6 +200,8 @@ export default function LocationStep({ formData, onComplete }: LocationStepProps
           <p className="text-xs text-slate-500 mt-2">
             {isDetectingLocation 
               ? "Attempting to detect your location automatically..."
+              : state
+              ? "ZIP code is optional since we detected your state"
               : "We'll automatically determine your state from your ZIP code"
             }
           </p>
@@ -196,13 +209,20 @@ export default function LocationStep({ formData, onComplete }: LocationStepProps
 
         {state && (
           <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-            <div className="flex items-center space-x-2">
-              <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
-                <span className="text-green-600 text-xs font-bold">{state}</span>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                  <span className="text-green-600 text-xs font-bold">{state}</span>
+                </div>
+                <span className="text-sm font-medium text-green-800">
+                  State detected: {state}
+                </span>
               </div>
-              <span className="text-sm font-medium text-green-800">
-                State detected: {state}
-              </span>
+              {!zipCode && locationDetectionAttempted && (
+                <span className="text-xs text-green-600">
+                  Auto-advancing...
+                </span>
+              )}
             </div>
           </div>
         )}
