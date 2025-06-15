@@ -33,6 +33,7 @@ export const formDataSchema = z.object({
   
   // Step 6: Priorities
   priorities: z.array(z.string()).optional(),
+  includeBigBill: z.boolean().optional(),
 });
 
 export const policyResultsSchema = z.object({

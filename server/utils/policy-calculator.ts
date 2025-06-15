@@ -27,36 +27,36 @@ const INCOME_MEDIANS = {
 function calculateCurrentTax(income: number, familyStatus: string): number {
   const standardDeduction = familyStatus === "single" ? 14600 : 
                            familyStatus === "married" ? 29200 : 29200;
-  
+
   const taxableIncome = Math.max(0, income - standardDeduction);
   let tax = 0;
   let previousMax = 0;
-  
+
   for (const bracket of FEDERAL_TAX_BRACKETS_2024) {
     if (taxableIncome <= previousMax) break;
-    
+
     const taxableAtThisBracket = Math.min(taxableIncome, bracket.max) - Math.max(previousMax, bracket.min);
     if (taxableAtThisBracket > 0) {
       tax += taxableAtThisBracket * bracket.rate;
     }
     previousMax = bracket.max;
   }
-  
+
   return tax;
 }
 
 function calculateProposedTax(income: number, familyStatus: string, hasChildren: boolean): number {
   const enhancedStandardDeduction = (familyStatus === "single" ? 14600 : 29200) + 
                                    PROPOSED_TAX_CHANGES.standard_deduction_increase;
-  
+
   const taxableIncome = Math.max(0, income - enhancedStandardDeduction);
   let tax = 0;
   let previousMax = 0;
-  
+
   // Apply modified brackets with correct progressive calculation
   for (const bracket of FEDERAL_TAX_BRACKETS_2024) {
     if (taxableIncome <= previousMax) break;
-    
+
     const taxableAtThisBracket = Math.min(taxableIncome, bracket.max) - Math.max(previousMax, bracket.min);
     if (taxableAtThisBracket > 0) {
       const rate = bracket.max === Infinity ? 
@@ -66,13 +66,33 @@ function calculateProposedTax(income: number, familyStatus: string, hasChildren:
     }
     previousMax = bracket.max;
   }
-  
+
   // Apply enhanced child tax credit
   if (hasChildren && familyStatus === "family") {
     tax -= PROPOSED_TAX_CHANGES.child_tax_credit_increase;
   }
-  
+
   return Math.max(0, tax);
+}
+
+function calculateBigBillTax(income: number, familyStatus: string, hasChildren: boolean): number {
+  const currentTax = calculateCurrentTax(income, familyStatus);
+  const provisions = ONE_BIG_BEAUTIFUL_BILL_PROVISIONS.tax_changes;
+
+  // Enhanced standard deduction
+  const standardDeductionBonus = provisions.standard_deduction_increase;
+
+  // Middle class tax cut (apply to income between $25K-$400K)
+  const middleClassCut = (income > 25000 && income < 400000) ? 
+    Math.min(income - 25000, 375000) * provisions.middle_class_tax_cut : 0;
+
+  // Enhanced child tax credit
+  const childTaxCreditBonus = hasChildren ? provisions.child_tax_credit : 0;
+
+  // Calculate total tax reduction
+  const taxReduction = (standardDeductionBonus * 0.22) + middleClassCut + childTaxCreditBonus;
+
+  return Math.max(0, currentTax - taxReduction);
 }
 
 function calculateHealthcareCosts(
@@ -83,40 +103,40 @@ function calculateHealthcareCosts(
   state: string | undefined,
   employmentStatus: string | undefined
 ): { current: number; proposed: number } {
-  
+
   const isFamily = familyStatus === "family";
   const basePremium = isFamily ? 
                      HEALTHCARE_COSTS_2024.average_premium_family : 
                      HEALTHCARE_COSTS_2024.average_premium_individual;
-  
+
   let currentCost = basePremium;
   let proposedCost = basePremium;
-  
+
   // Age-based adjustments (from ACA rating rules)
   const ageMultiplier = ageRange === "65+" ? 3.0 : 
                        ageRange === "45-64" ? 1.4 : 
                        ageRange === "30-44" ? 1.0 : 
                        ageRange === "18-29" ? 0.9 : 1.0;
-  
+
   currentCost *= ageMultiplier;
-  
+
   // State-based cost adjustments (geographic rating)
   if (state && STATE_TAX_DATA[state]) {
     const stateMultiplier = STATE_TAX_DATA[state].cost_of_living_index / 100;
     currentCost *= stateMultiplier;
   }
-  
+
   // Federal Poverty Level calculations for subsidies
   const fpl2024 = isFamily ? 31200 : 15060; // Federal Poverty Level
   const incomeAsFPL = income / fpl2024;
-  
+
   // Insurance type adjustments with income-based calculations
   switch (insuranceType) {
     case "employer":
       // Employer coverage varies significantly by employment status and income
       let employerContribution = 0.72; // Default 72% employer contribution
       let costSharing = isFamily ? 2800 : 1200; // Base cost sharing
-      
+
       if (employmentStatus === "part-time") {
         employerContribution = 0.35; // Much lower for part-time
         costSharing *= 1.4; // Higher deductibles/copays
@@ -136,11 +156,11 @@ function calculateHealthcareCosts(
         employerContribution = 0.60; // Lower-wage jobs
         costSharing *= 1.2;
       }
-      
+
       currentCost *= (1 - employerContribution);
       currentCost += costSharing;
       break;
-      
+
     case "marketplace":
       // ACA marketplace with income-based subsidies
       if (incomeAsFPL <= 4.0) { // Eligible for premium tax credits
@@ -153,7 +173,7 @@ function calculateHealthcareCosts(
       // Add deductible costs for marketplace plans
       currentCost += HEALTHCARE_COSTS_2024.average_deductible * 0.3;
       break;
-      
+
     case "medicare":
       // Medicare Part B + D + Supplement
       currentCost = 2004 + 480 + 1200; // Part B + Part D + Medigap
@@ -163,25 +183,25 @@ function calculateHealthcareCosts(
                       income > 142000 ? 1836 : 1224;
       }
       break;
-      
+
     case "medicaid":
       currentCost = 0; // Fully covered
       break;
-      
+
     case "military":
       currentCost = 600; // TRICARE Prime
       break;
-      
+
     case "uninsured":
       // Estimated annual out-of-pocket costs
       currentCost = HEALTHCARE_COSTS_2024.prescription_drug_avg + 
                    (isFamily ? 3500 : 1800); // Medical services
       break;
   }
-  
+
   // Apply proposed policy changes
   proposedCost = currentCost;
-  
+
   // Enhanced employer coverage benefits
   if (insuranceType === "employer") {
     // Proposed: Enhanced employer premium support for small businesses
@@ -191,7 +211,7 @@ function calculateHealthcareCosts(
     } else {
       proposedCost = currentCost;
     }
-    
+
     // Proposed: Cap on employee out-of-pocket costs
     const currentOutOfPocket = isFamily ? 2800 : 1200;
     const proposedOutOfPocketCap = isFamily ? 2000 : 1000;
@@ -213,7 +233,7 @@ function calculateHealthcareCosts(
         proposedCost *= STATE_TAX_DATA[state].cost_of_living_index / 100;
       }
     }
-    
+
     // Public option availability (15% lower than marketplace average)
     const publicOptionCost = basePremium * ageMultiplier * (1 - PROPOSED_HEALTHCARE_CHANGES.public_option_premium_reduction);
     if (state && STATE_TAX_DATA[state]) {
@@ -223,29 +243,29 @@ function calculateHealthcareCosts(
       proposedCost = Math.min(proposedCost, publicOptionCost);
     }
   }
-  
+
   // Medicare expansion to age 60+ (for 45-64 age group)
   if (ageRange === "45-64" && insuranceType !== "medicare" && insuranceType !== "medicaid") {
     const medicareOption = 2004 + 480 + 600; // Simplified Medicare option
     proposedCost = Math.min(proposedCost, medicareOption);
   }
-  
+
   // Prescription drug cost cap
   const currentDrugCosts = insuranceType === "medicare" ? 
                           HEALTHCARE_COSTS_2024.prescription_drug_avg * 1.5 :
                           HEALTHCARE_COSTS_2024.prescription_drug_avg;
-  
+
   if (currentDrugCosts > PROPOSED_HEALTHCARE_CHANGES.prescription_drug_cap) {
     const drugSavings = currentDrugCosts - PROPOSED_HEALTHCARE_CHANGES.prescription_drug_cap;
     proposedCost = Math.max(0, proposedCost - drugSavings);
   }
-  
+
   // Medicaid expansion
   if (insuranceType === "uninsured" && 
       incomeAsFPL <= PROPOSED_HEALTHCARE_CHANGES.medicaid_expansion_income_limit) {
     proposedCost = 0; // Would qualify for expanded Medicaid
   }
-  
+
   return { 
     current: Math.round(currentCost), 
     proposed: Math.round(proposedCost) 
@@ -255,7 +275,7 @@ function calculateHealthcareCosts(
 export function calculatePolicyImpact(formData: FormData): PolicyResults {
   // Get median income for calculations
   const income = formData.incomeRange ? INCOME_MEDIANS[formData.incomeRange] : 62500;
-  
+
   // Extract all form data with proper fallbacks
   const familyStatus = formData.familyStatus || "single";
   const hasChildren = familyStatus === "family";
@@ -263,16 +283,18 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
   const insuranceType = formData.insuranceType || "employer";
   const ageRange = formData.ageRange || "30-44";
   const employmentStatus = formData.employmentStatus || "full-time";
-  
+  const includeBigBill = formData.includeBigBill || false;
+
   // Debug logging
   console.log(`Calculating for: Income=${income}, State=${state}, Employment=${employmentStatus}, Family=${familyStatus}, Insurance=${insuranceType}, Age=${ageRange}`);
   console.log(`Form data received:`, JSON.stringify(formData, null, 2));
-  
+
   // Tax calculations
   const currentTax = calculateCurrentTax(income, familyStatus);
   const proposedTax = calculateProposedTax(income, familyStatus, hasChildren);
-  const taxImpact = proposedTax - currentTax;
-  
+  const bigBillTax = includeBigBill ? calculateBigBillTax(income, familyStatus, hasChildren) : proposedTax;
+  const taxImpact = bigBillTax - currentTax;
+
   // Healthcare calculations
   const healthcareCosts = calculateHealthcareCosts(
     insuranceType, 
@@ -283,20 +305,20 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
     formData.employmentStatus
   );
   const healthcareImpact = healthcareCosts.proposed - healthcareCosts.current;
-  
+
   // State-specific adjustments
   let stateAdjustment = 0;
   let energyImpact = Math.round(80 + (income / 10000)); // Base energy impact scales with income
-  
+
   if (state && STATE_TAX_DATA[state]) {
     const stateData = STATE_TAX_DATA[state];
-    
+
     // State income tax impact (positive = more tax, negative = savings)
     const stateIncomeTax = income * stateData.income_tax_rate;
-    
+
     // Cost of living adjustment affecting all costs
     const costAdjustment = (stateData.cost_of_living_index - 100) * (income / 100000) * 200;
-    
+
     // State-specific energy costs based on regulations and climate
     energyImpact = state === "CA" ? 250 + (income / 1000) : 
                    state === "TX" ? 180 + (income / 2000) : 
@@ -304,46 +326,46 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
                    state === "FL" ? 160 + (income / 1800) :
                    state === "WA" ? 90 + (income / 2500) :
                    120 + (income / 2000);
-    
+
     stateAdjustment = stateIncomeTax + costAdjustment;
   }
-  
+
   // Apply income-based scaling to impacts
   const incomeScalar = Math.log10(income / 10000); // Logarithmic scaling
   const scaledTaxImpact = taxImpact * (1 + incomeScalar * 0.1);
   const scaledHealthcareImpact = healthcareImpact * (1 + incomeScalar * 0.05);
   const scaledEnergyImpact = energyImpact * (1 + incomeScalar * 0.08);
-  
+
   const netAnnualImpact = scaledTaxImpact + scaledHealthcareImpact + stateAdjustment + scaledEnergyImpact;
-  
+
   // Community impact estimates based on state data and income
   const stateData = state ? STATE_TAX_DATA[state] : null;
-  
+
   // Calculate dynamic default values based on income and national averages
   const incomeBasedSchoolFunding = Math.round(8 + (income / 75000) * 6); // 8-14% range
   const incomeBasedInfrastructure = Math.round(1500000 + (income / 100000) * 600000); // Scale with income
   const incomeBasedJobs = Math.round(200 + (income / 1000) * 2); // Scale with income
-  
+
   // Calculate state-specific community impacts
   let schoolFundingImpact = incomeBasedSchoolFunding;
   let infrastructureImpact = incomeBasedInfrastructure;
   let jobOpportunities = incomeBasedJobs;
-  
+
   if (stateData) {
     // School funding varies by state property tax base and income levels
     const propertyTaxFactor = stateData.property_tax_avg / 3000; // Normalize to average
     const incomeFactor = income / 75000; // Normalize to median income
     schoolFundingImpact = Math.round(8 + (propertyTaxFactor * incomeFactor * 8));
-    
+
     // Infrastructure investment scales with state size and tax revenue
     const stateSizeFactor = stateData.cost_of_living_index / 100;
     const taxRevenueFactor = (stateData.income_tax_rate + stateData.sales_tax_rate) * 10;
     infrastructureImpact = Math.round(1500000 + (stateSizeFactor * taxRevenueFactor * income * 2));
-    
+
     // Job opportunities based on state economic activity and policy impact
     const economicActivity = stateData.cost_of_living_index * stateData.property_tax_avg / 10000;
     jobOpportunities = Math.round(200 + (economicActivity * income / 1000) + (taxRevenueFactor * 50));
-    
+
     // State-specific adjustments
     switch (state) {
       case "CA":
@@ -372,17 +394,65 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
         jobOpportunities += 120; // Tech sector
         break;
     }
-    
+
     // Ensure reasonable bounds
     schoolFundingImpact = Math.max(3, Math.min(25, schoolFundingImpact));
     infrastructureImpact = Math.max(800000, Math.min(8000000, infrastructureImpact));
     jobOpportunities = Math.max(150, Math.min(800, jobOpportunities));
   }
-  
+
   // Debug logging
   console.log(`Results: Tax=${Math.round(scaledTaxImpact)}, Healthcare=${Math.round(scaledHealthcareImpact)}, State=${Math.round(stateAdjustment)}, Energy=${Math.round(scaledEnergyImpact)}, Net=${Math.round(netAnnualImpact)}`);
   console.log(`Community: School=${schoolFundingImpact}%, Infrastructure=$${Math.round(infrastructureImpact/1000)}K, Jobs=${jobOpportunities}`);
-  
+
+  const breakdown = [
+    {
+      category: "tax" as const,
+      title: includeBigBill ? "One Big Beautiful Bill Act - Tax Provisions" : "Federal Tax Policy Changes",
+      description: includeBigBill ? 
+        "PROPOSED LEGISLATION (NOT YET LAW) - Projected impact if One Big Beautiful Bill Act passes" :
+        "Based on current IRS brackets and proposed Congressional legislation",
+      impact: Math.round(scaledTaxImpact),
+      details: includeBigBill ? [
+        {
+          item: "Enhanced standard deduction (+$5,000)",
+          amount: -1100, // $5000 * 22% bracket
+        },
+        {
+          item: hasChildren ? "Expanded child tax credit ($2,500)" : "Middle class tax rate reduction",
+          amount: hasChildren ? -2500 : (income > 25000 && income < 400000 ? Math.min(income - 25000, 375000) * -0.03 : 0),
+        },
+      ] : [
+        {
+          item: "Standard deduction increase",
+          amount: Math.round(-PROPOSED_TAX_CHANGES.standard_deduction_increase * 0.22) 
+        },
+        { 
+          item: hasChildren ? "Enhanced child tax credit" : "Tax bracket adjustment", 
+          amount: hasChildren ? 
+                 -PROPOSED_TAX_CHANGES.child_tax_credit_increase : 
+                 Math.round(scaledTaxImpact * 0.6)
+        },
+      ],
+    },
+    {
+      category: "healthcare",
+      title: "Healthcare Policy Reforms",
+      description: "Based on Kaiser Family Foundation data and proposed Medicare expansion",
+      impact: Math.round(scaledHealthcareImpact),
+      details: [
+        { 
+          item: "Premium subsidies", 
+          amount: Math.round(scaledHealthcareImpact * 0.7) 
+        },
+        { 
+          item: "Prescription drug cap", 
+          amount: Math.round(scaledHealthcareImpact * 0.3) 
+        },
+      ],
+    },
+  ];
+
   return {
     annualTaxImpact: Math.round(scaledTaxImpact),
     healthcareCostImpact: Math.round(scaledHealthcareImpact),
@@ -402,41 +472,6 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
       tenYear: Math.round(netAnnualImpact * 10 * 1.28), // Compound inflation
       twentyYear: Math.round(netAnnualImpact * 20 * 1.64),
     },
-    breakdown: [
-      {
-        category: "tax",
-        title: "Federal Tax Policy Changes",
-        description: "Based on current IRS brackets and proposed Congressional legislation",
-        impact: Math.round(scaledTaxImpact),
-        details: [
-          { 
-            item: "Standard deduction increase", 
-            amount: Math.round(-PROPOSED_TAX_CHANGES.standard_deduction_increase * 0.22) 
-          },
-          { 
-            item: hasChildren ? "Enhanced child tax credit" : "Tax bracket adjustment", 
-            amount: hasChildren ? 
-                   -PROPOSED_TAX_CHANGES.child_tax_credit_increase : 
-                   Math.round(scaledTaxImpact * 0.6)
-          },
-        ],
-      },
-      {
-        category: "healthcare",
-        title: "Healthcare Policy Reforms",
-        description: "Based on Kaiser Family Foundation data and proposed Medicare expansion",
-        impact: Math.round(scaledHealthcareImpact),
-        details: [
-          { 
-            item: "Premium subsidies", 
-            amount: Math.round(scaledHealthcareImpact * 0.7) 
-          },
-          { 
-            item: "Prescription drug cap", 
-            amount: Math.round(scaledHealthcareImpact * 0.3) 
-          },
-        ],
-      },
-    ],
+    breakdown: breakdown,
   };
 }

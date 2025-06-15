@@ -68,6 +68,32 @@ export const PROPOSED_HEALTHCARE_CHANGES = {
   public_option_premium_reduction: 0.15, // 15% lower than marketplace average
 };
 
+// "One Big Beautiful Bill Act" - Proposed legislation (NOT YET LAW)
+// Based on public statements and draft provisions
+export const ONE_BIG_BEAUTIFUL_BILL_PROVISIONS = {
+  tax_changes: {
+    standard_deduction_increase: 5000, // Additional $5K standard deduction
+    middle_class_tax_cut: 0.03, // 3% rate reduction for middle brackets
+    child_tax_credit: 2500, // Increase to $2500 per child
+    earned_income_credit_expansion: 0.25, // 25% expansion
+  },
+  healthcare_changes: {
+    prescription_drug_cap: 1200, // $1200 annual cap
+    premium_subsidies: 0.5, // 50% premium subsidies for qualifying families
+    medicare_expansion_age: 55, // Lower to age 55
+    dental_vision_coverage: true, // Include dental/vision in Medicare
+  },
+  infrastructure_investment: {
+    per_capita_investment: 2500, // $2500 per person in infrastructure
+    job_creation_multiplier: 1.5, // 1.5x job creation factor
+  },
+  timeline: {
+    phase_in_year_1: 0.4, // 40% of benefits start year 1
+    phase_in_year_2: 0.7, // 70% of benefits by year 2
+    phase_in_year_3: 1.0, // Full benefits by year 3
+  }
+};
+
 // State-specific data - sample from Tax Foundation and Census Bureau
 export const STATE_TAX_DATA: { [key: string]: StateTaxData } = {
   "AL": { state: "Alabama", income_tax_rate: 0.05, sales_tax_rate: 0.04, property_tax_avg: 1653, cost_of_living_index: 89.2 },
