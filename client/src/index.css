@@ -3,6 +3,44 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  /* Enhanced typography */
+  .form-step-title {
+    @apply text-2xl font-bold text-slate-800 mb-2;
+  }
+  
+  .form-step-subtitle {
+    @apply text-base text-slate-600 mb-6 leading-relaxed;
+  }
+  
+  .form-section {
+    @apply space-y-4 mb-6;
+  }
+  
+  .form-group {
+    @apply space-y-3;
+  }
+  
+  /* Improved form controls */
+  .form-option {
+    @apply p-4 rounded-lg border-2 border-slate-200 hover:border-blue-300 
+           transition-all duration-200 cursor-pointer bg-white;
+  }
+  
+  .form-option:hover {
+    @apply shadow-md;
+  }
+  
+  .form-option.selected {
+    @apply border-blue-500 bg-blue-50;
+  }
+  
+  /* Progress enhancements */
+  .progress-step {
+    @apply transition-all duration-300 ease-in-out;
+  }
+}
+
 :root {
   --background: hsl(0, 0%, 100%);
   --foreground: hsl(222, 84%, 4.9%);

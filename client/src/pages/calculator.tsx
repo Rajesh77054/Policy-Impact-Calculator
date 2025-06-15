@@ -112,7 +112,10 @@ export default function Calculator() {
       if (currentStep === steps.length) {
         calculateResults();
       } else {
-        setCurrentStep(currentStep + 1);
+        // Small delay for visual feedback before auto-advancing
+        setTimeout(() => {
+          setCurrentStep(currentStep + 1);
+        }, 300);
       }
     } catch (error) {
       console.error("Error saving form data:", error);
@@ -169,10 +172,10 @@ export default function Calculator() {
         </div>
       </header>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12">
         <ProgressBar currentStep={currentStep} totalSteps={steps.length} completedSteps={completedSteps} />
 
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8 mt-8">
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-8 mt-6 sm:mt-8">
           <CurrentStepComponent
             formData={formData}
             onComplete={handleStepComplete}
@@ -189,20 +192,27 @@ export default function Calculator() {
               Previous
             </Button>
 
-            <div className="flex space-x-3">
-              <Button
-                variant="ghost"
-                onClick={async () => {
-                  await handleSkip();
-                  if (currentStep < steps.length) {
-                    setCurrentStep(currentStep + 1);
-                  }
-                }}
-                disabled={isCalculating}
-              >
-                Skip
-              </Button>
+            <div className="flex items-center space-x-3">
+            {/* Form completeness indicator */}
+            <div className="flex items-center space-x-2 text-sm text-slate-500">
+              <div className="w-2 h-2 rounded-full bg-slate-300"></div>
+              <span>Optional step - you can skip or continue</span>
             </div>
+            
+            <Button
+              variant="ghost"
+              onClick={async () => {
+                await handleSkip();
+                if (currentStep < steps.length) {
+                  setCurrentStep(currentStep + 1);
+                }
+              }}
+              disabled={isCalculating}
+              className="text-slate-600 hover:text-slate-800"
+            >
+              Skip this step
+            </Button>
+          </div>
           </div>
         </div>
       </div>

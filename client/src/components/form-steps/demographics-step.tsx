@@ -25,7 +25,7 @@ export default function DemographicsStep({ formData, onComplete }: DemographicsS
 
   const handleSubmit = () => {
     if (!validateForm()) return;
-    
+
     onComplete({ 
       ageRange: ageRange as FormData["ageRange"], 
       familyStatus: familyStatus as FormData["familyStatus"],
@@ -58,14 +58,24 @@ export default function DemographicsStep({ formData, onComplete }: DemographicsS
         </div>
       )}
 
-      <div className="space-y-6">
-        <div>
-          <Label className="text-sm font-medium text-slate-700 mb-3 block">
-            Age Range <span className="text-red-500">*</span>
+      <div className="space-y-8">
+        <div className="form-section">
+          <h3 className="form-step-title">Tell us about yourself</h3>
+          <p className="form-step-subtitle">
+            This helps us provide accurate policy impact calculations based on your demographic profile.
+          </p>
+        </div>
+
+        <div className="form-group">
+          <Label className="text-lg font-semibold text-slate-800 mb-4 block">
+            What's your age range?
           </Label>
-          <RadioGroup value={ageRange} onValueChange={setAgeRange}>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {[
+          <RadioGroup
+            value={formData.ageRange || ""}
+            onValueChange={(value) => setFormData({ ...formData, ageRange: value as FormData["ageRange"] })}
+            className="grid grid-cols-2 gap-3"
+          >
+            {[
                 { value: "18-29", label: "18-29" },
                 { value: "30-44", label: "30-44" },
                 { value: "45-64", label: "45-64" },

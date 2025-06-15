@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -95,12 +94,12 @@ export default function ContextualHelp({ step, title, className }: ContextualHel
           </Button>
         </div>
       </CardHeader>
-      
+
       {isExpanded && (
         <CardContent className="pt-0">
           <div className="space-y-4">
             <p className="text-sm text-blue-800">{content.why}</p>
-            
+
             <div className="space-y-2">
               <div className="flex items-center space-x-1">
                 <Lightbulb className="w-4 h-4 text-amber-600" />
