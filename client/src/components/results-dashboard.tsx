@@ -349,8 +349,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="text-center">
-                  <div className={`text-2xl font-bold ${currentData.timeline.twentyYear < 0 ? "text-green-600" : "text-red-600"}`}>
+                <div className={`text-2xl font-bold ${currentData.timeline.twentyYear < 0 ? "text-green-600" : "text-red-600"}`}>
                     {formatNetImpact(currentData.timeline.twentyYear)}
                   </div>
                   <p className="text-sm text-slate-600">20-year cumulative impact</p>
@@ -365,22 +364,22 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                   <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
                     <div 
                       className={`h-full rounded-full ${
-                        results.timeline.twentyYear < 0 ? 'bg-green-500' : 'bg-red-500'
+                        currentData.timeline.twentyYear < 0 ? 'bg-green-500' : 'bg-red-500'
                       }`}
                       style={{ 
-                        width: `${Math.min(100, Math.abs(results.timeline.twentyYear / results.timeline.fiveYear) * 20)}%` 
+                        width: `${Math.min(100, Math.abs(currentData.timeline.twentyYear / currentData.timeline.fiveYear) * 20)}%` 
                       }}
                     ></div>
                   </div>
                   <div className="flex justify-between text-xs">
-                    <span className={results.timeline.fiveYear < 0 ? "text-green-600" : "text-red-600"}>
-                      {Math.abs(results.timeline.fiveYear).toLocaleString()}
+                    <span className={currentData.timeline.fiveYear < 0 ? "text-green-600" : "text-red-600"}>
+                      {Math.abs(currentData.timeline.fiveYear).toLocaleString()}
                     </span>
-                    <span className={results.timeline.tenYear < 0 ? "text-green-600" : "text-red-600"}>
-                      {Math.abs(results.timeline.tenYear).toLocaleString()}
+                    <span className={currentData.timeline.tenYear < 0 ? "text-green-600" : "text-red-600"}>
+                      {Math.abs(currentData.timeline.tenYear).toLocaleString()}
                     </span>
-                    <span className={results.timeline.twentyYear < 0 ? "text-green-600" : "text-red-600"}>
-                      {Math.abs(results.timeline.twentyYear).toLocaleString()}
+                    <span className={currentData.timeline.twentyYear < 0 ? "text-green-600" : "text-red-600"}>
+                      {Math.abs(currentData.timeline.twentyYear).toLocaleString()}
                     </span>
                   </div>
                 </div>
@@ -389,11 +388,11 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-slate-600">Trend</span>
                     <span className={`text-sm font-medium ${
-                      Math.abs(results.timeline.twentyYear) > Math.abs(results.netAnnualImpact) && results.timeline.twentyYear < 0
+                      Math.abs(currentData.timeline.twentyYear) > Math.abs(currentData.netAnnualImpact) && currentData.timeline.twentyYear < 0
                         ? "text-green-600" 
                         : "text-orange-600"
                     }`}>
-                      {Math.abs(results.timeline.twentyYear) > Math.abs(results.netAnnualImpact) && results.timeline.twentyYear < 0
+                      {Math.abs(currentData.timeline.twentyYear) > Math.abs(currentData.netAnnualImpact) && currentData.timeline.twentyYear < 0
                         ? "Savings grow over time" 
                         : "Benefits may emerge later"
                       }
