@@ -171,7 +171,11 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
         </CardHeader>
         <CardContent>
           <div className="h-64">
-            <canvas ref={taxChartRef}></canvas>
+            <canvas 
+              ref={taxChartRef} 
+              id="taxChart"
+              className="w-full h-64"
+            />
           </div>
         </CardContent>
       </Card>
@@ -223,7 +227,11 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
         </CardHeader>
         <CardContent>
           <div className="h-64">
-            <canvas ref={healthcareChartRef}></canvas>
+            <canvas 
+              ref={healthcareChartRef} 
+              id="healthcareChart"
+              className="w-full h-64"
+            />
           </div>
         </CardContent>
       </Card>
