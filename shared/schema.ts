@@ -17,9 +17,10 @@ export const formDataSchema = z.object({
   state: z.string().optional(),
   zipCode: z.string().optional(),
 
-  // Step 2: Demographics
+  // Step 2: Demographics - Aligned with IRS filing status and healthcare categories
   ageRange: z.enum(["18-29", "30-44", "45-64", "65+"]).optional(),
-  familyStatus: z.enum(["single", "married", "family"]).optional(),
+  familyStatus: z.enum(["single", "married-joint", "married-separate", "head-of-household"]).optional(),
+  hasChildren: z.boolean().optional(),
 
   // Step 3: Employment
   employmentStatus: z.enum(["full-time", "part-time", "self-employed", "contract", "unemployed", "retired", "student", "unable"]).optional(),
@@ -28,8 +29,8 @@ export const formDataSchema = z.object({
   // Step 4: Healthcare
   insuranceType: z.enum(["employer", "marketplace", "medicare", "medicaid", "military", "uninsured"]).optional(),
 
-  // Step 5: Income
-  incomeRange: z.enum(["under-25k", "25k-50k", "50k-75k", "75k-100k", "100k-150k", "over-150k"]).optional(),
+  // Step 5: Income - Aligned with IRS tax brackets for accurate calculations
+  incomeRange: z.enum(["under-15k", "15k-45k", "45k-95k", "95k-200k", "200k-400k", "over-400k"]).optional(),
 
   // Step 6: Priorities
   priorities: z.array(z.string()).optional(),

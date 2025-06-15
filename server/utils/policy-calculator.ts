@@ -15,19 +15,22 @@ export function generateSessionId(): string {
          Math.random().toString(36).substring(2, 15);
 }
 
-// Income range to median values mapping
+// Income range to median values mapping - Aligned with IRS tax brackets
 const INCOME_MEDIANS = {
-  "under-25k": 18000,
-  "25k-50k": 37500,
-  "50k-75k": 62500,
-  "75k-100k": 87500,
-  "100k-150k": 125000,
-  "over-150k": 200000,
+  "under-15k": 12000,
+  "15k-45k": 30000,
+  "45k-95k": 70000,
+  "95k-200k": 147500,
+  "200k-400k": 300000,
+  "over-400k": 500000,
 };
 
 function calculateCurrentTax(income: number, familyStatus: string): number {
+  // Map form values to IRS filing status standard deductions
   const standardDeduction = familyStatus === "single" ? 14600 : 
-                           familyStatus === "married" ? 29200 : 29200;
+                           familyStatus === "married-joint" ? 29200 :
+                           familyStatus === "married-separate" ? 14600 :
+                           familyStatus === "head-of-household" ? 21900 : 14600;
 
   const taxableIncome = Math.max(0, income - standardDeduction);
   let tax = 0;

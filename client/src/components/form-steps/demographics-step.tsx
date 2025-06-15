@@ -11,11 +11,13 @@ interface DemographicsStepProps {
 export default function DemographicsStep({ formData, onComplete }: DemographicsStepProps) {
   const [ageRange, setAgeRange] = useState(formData.ageRange || "");
   const [familyStatus, setFamilyStatus] = useState(formData.familyStatus || "");
+  const [hasChildren, setHasChildren] = useState(formData.hasChildren || false);
 
   const handleSubmit = () => {
     onComplete({ 
       ageRange: ageRange as FormData["ageRange"], 
-      familyStatus: familyStatus as FormData["familyStatus"] 
+      familyStatus: familyStatus as FormData["familyStatus"],
+      hasChildren: hasChildren
     });
   };
 

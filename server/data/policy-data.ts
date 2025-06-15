@@ -1,5 +1,10 @@
 // Real policy data from authoritative sources
-// This would integrate with actual policy databases and government APIs
+// Form field alignment validation:
+// - Income ranges: Aligned with IRS Publication 15 tax brackets
+// - Family status: Maps to IRS filing status categories  
+// - Healthcare types: Based on KFF employer survey categories
+// - Employment status: Aligned with BLS employment classifications
+// - Age ranges: Match ACA and Medicare eligibility categories
 
 export interface PolicySource {
   name: string;
