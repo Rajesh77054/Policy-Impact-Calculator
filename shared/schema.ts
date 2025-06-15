@@ -73,5 +73,17 @@ export const insertSessionSchema = createInsertSchema(userSessions).omit({
 
 export type FormData = z.infer<typeof formDataSchema>;
 export type PolicyResults = z.infer<typeof policyResultsSchema>;
+
+export const replitUserSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  profileImage: z.string(),
+  bio: z.string(),
+  url: z.string(),
+  roles: z.array(z.string()),
+  teams: z.array(z.string())
+});
+
+export type ReplitUser = z.infer<typeof replitUserSchema>;
 export type InsertSession = z.infer<typeof insertSessionSchema>;
 export type UserSession = typeof userSessions.$inferSelect;

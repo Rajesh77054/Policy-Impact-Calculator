@@ -11,6 +11,16 @@ declare module 'express-session' {
   }
 }
 
+interface ReplitUser {
+  id: string;
+  name: string;
+  profileImage: string;
+  bio: string;
+  url: string;
+  roles: string[];
+  teams: string[];
+}
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Session middleware
   app.use(session({
@@ -134,6 +144,104 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { DATA_SOURCES, METHODOLOGY } = await import("./data/sources");
       res.json({ sources: DATA_SOURCES, methodology: METHODOLOGY });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Get current authenticated user
+  app.get("/api/user", async (req, res) => {
+    try {
+      const userId = req.headers['x-replit-user-id'];
+      const userName = req.headers['x-replit-user-name'];
+      const userProfileImage = req.headers['x-replit-user-profile-image'];
+      const userBio = req.headers['x-replit-user-bio'];
+      const userUrl = req.headers['x-replit-user-url'];
+      const userRoles = req.headers['x-replit-user-roles'];
+      const userTeams = req.headers['x-replit-user-teams'];
+
+      if (!userId) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+
+      const user: ReplitUser = {
+        id: userId as string,
+        name: userName as string || 'Anonymous',
+        profileImage: userProfileImage as string || '',
+        bio: userBio as string || '',
+        url: userUrl as string || '',
+        roles: userRoles ? (userRoles as string).split(',') : [],
+        teams: userTeams ? (userTeams as string).split(',') : []
+      };
+
+      res.json(user);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Generate PDF report (requires authentication)
+  app.post("/api/download-pdf", async (req, res) => {
+    try {
+      const userId = req.headers['x-replit-user-id'];
+      const userName = req.headers['x-replit-user-name'];
+
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required for PDF download" });
+      }
+
+      const sessionId = req.session.policySessionId;
+      if (!sessionId) {
+        return res.status(404).json({ message: "No session found" });
+      }
+
+      const session = await storage.getSession(sessionId);
+      if (!session || !session.results) {
+        return res.status(404).json({ message: "Results not found" });
+      }
+
+      // Here you would implement actual PDF generation
+      // For now, return a success message with user info
+      res.json({
+        message: "PDF generation initiated",
+        fileName: `policy-report-${userName}-${Date.now()}.pdf`,
+        user: { id: userId, name: userName }
+      });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Share results (requires authentication)
+  app.post("/api/share-results", async (req, res) => {
+    try {
+      const userId = req.headers['x-replit-user-id'];
+      const userName = req.headers['x-replit-user-name'];
+
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required for sharing results" });
+      }
+
+      const sessionId = req.session.policySessionId;
+      if (!sessionId) {
+        return res.status(404).json({ message: "No session found" });
+      }
+
+      const session = await storage.getSession(sessionId);
+      if (!session || !session.results) {
+        return res.status(404).json({ message: "Results not found" });
+      }
+
+      // Generate a shareable link (you could store this in your database)
+      const shareId = `share-${sessionId}-${Date.now()}`;
+      const shareUrl = `${req.protocol}://${req.get('host')}/results?share=${shareId}`;
+
+      res.json({
+        message: "Share link generated",
+        shareUrl,
+        shareId,
+        user: { id: userId, name: userName }
+      });
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }

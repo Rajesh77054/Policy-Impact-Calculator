@@ -296,7 +296,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                   </div>
                   <p className="text-sm text-slate-600">20-year cumulative impact</p>
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs text-slate-500">
                     <span>5 years</span>
