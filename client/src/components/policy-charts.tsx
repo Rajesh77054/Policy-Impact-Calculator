@@ -20,6 +20,8 @@ interface PolicyChartsProps {
 export default function PolicyCharts({ results, showBigBillComparison }: PolicyChartsProps) {
   const taxChartRef = useRef<HTMLCanvasElement>(null);
   const healthcareChartRef = useRef<HTMLCanvasElement>(null);
+  const taxChartInstance = useRef<any>(null);
+  const healthcareChartInstance = useRef<any>(null);
   const [openTaxModal, setOpenTaxModal] = useState(false); // State for Tax Impact Modal
   const [openHealthcareModal, setOpenHealthcareModal] = useState(false); // State for Healthcare Modal
 
@@ -28,6 +30,16 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
     const loadChartJS = async () => {
       const { default: Chart } = await import('chart.js/auto');
 
+      // Destroy existing chart instances
+      if (taxChartInstance.current) {
+        taxChartInstance.current.destroy();
+        taxChartInstance.current = null;
+      }
+      if (healthcareChartInstance.current) {
+        healthcareChartInstance.current.destroy();
+        healthcareChartInstance.current = null;
+      }
+
       // Use appropriate scenario data based on toggle
       const currentData = showBigBillComparison ? results.bigBillScenario : results;
 
@@ -35,7 +47,7 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
       if (taxChartRef.current) {
         const taxCtx = taxChartRef.current.getContext('2d');
         if (taxCtx) {
-          new Chart(taxCtx, {
+          taxChartInstance.current = new Chart(taxCtx, {
             type: 'line',
             data: {
               labels: ['Current', 'Year 1', 'Year 3', 'Year 5', 'Year 10'],
@@ -88,7 +100,7 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
             ? currentCost + currentData.healthcareCostImpact
             : results.healthcareCosts?.proposed || 0;
 
-          new Chart(healthCtx, {
+          healthcareChartInstance.current = new Chart(healthCtx, {
             type: 'bar',
             data: {
               labels: ['Current Plan', 'Proposed Plan'],
@@ -128,6 +140,18 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
     };
 
     loadChartJS();
+
+    // Cleanup function
+    return () => {
+      if (taxChartInstance.current) {
+        taxChartInstance.current.destroy();
+        taxChartInstance.current = null;
+      }
+      if (healthcareChartInstance.current) {
+        healthcareChartInstance.current.destroy();
+        healthcareChartInstance.current = null;
+      }
+    };
   }, [results, showBigBillComparison]);
 
   return (
