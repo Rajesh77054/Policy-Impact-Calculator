@@ -186,7 +186,8 @@ function calculateHealthcareCosts(
       break;
 
     case "medicaid":
-      currentCost = 0; // Fully covered
+      // Medicaid has minimal costs but may have gaps in coverage
+      currentCost = isFamily ? 600 : 300; // Out-of-pocket for non-covered services
       break;
 
     case "military":
@@ -332,13 +333,26 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
     stateAdjustment = stateIncomeTax + costAdjustment;
   }
 
-  // Apply income-based scaling to impacts
-  const incomeScalar = Math.log10(income / 10000); // Logarithmic scaling
-  const scaledTaxImpact = taxImpact * (1 + incomeScalar * 0.1);
-  const scaledHealthcareImpact = healthcareImpact * (1 + incomeScalar * 0.05);
-  const scaledEnergyImpact = energyImpact * (1 + incomeScalar * 0.08);
+  // Apply income-based scaling to impacts with stronger differentiation
+  const incomeScalar = income / 75000; // Linear scaling around median household income
+  const scaledTaxImpact = taxImpact * (0.5 + incomeScalar * 0.8); // 50% to 130% scaling
+  const scaledHealthcareImpact = healthcareImpact * (0.6 + incomeScalar * 0.7); // 60% to 130% scaling
+  const scaledEnergyImpact = energyImpact * (0.7 + incomeScalar * 0.6); // 70% to 130% scaling
 
-  const netAnnualImpact = scaledTaxImpact + scaledHealthcareImpact + stateAdjustment + scaledEnergyImpact;
+  // Employment status adjustments for tax complexity
+  let employmentTaxAdjustment = 0;
+  if (employmentStatus === "self-employed") {
+    // Self-employed face additional self-employment tax (15.3%) and complexity
+    employmentTaxAdjustment = income * 0.153 * 0.5; // Half of SE tax as additional burden
+  } else if (employmentStatus === "contract") {
+    // Contract workers often face 1099 tax complications
+    employmentTaxAdjustment = income * 0.153 * 0.3; // 30% of SE tax burden
+  } else if (employmentStatus === "part-time") {
+    // Part-time workers may have less tax optimization opportunities
+    employmentTaxAdjustment = income * 0.02; // 2% additional burden
+  }
+
+  const netAnnualImpact = scaledTaxImpact + scaledHealthcareImpact + stateAdjustment + scaledEnergyImpact + employmentTaxAdjustment;
 
   // Community impact estimates based on state data and income
   const stateData = state ? STATE_TAX_DATA[state] : null;
@@ -468,7 +482,22 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
     twentyYear: Math.round(netAnnualImpact * 20 * 1.64),
   };
 
-  const bigBillNetImpact = bigBillTaxImpact + (healthcareImpact * 1.4) + stateAdjustment + scaledEnergyImpact;
+  // Apply family status multipliers for more realistic scaling
+  const familyMultipliers = {
+    "single": 1.0,
+    "married": 1.6,
+    "family": 2.2
+  };
+  const familyMultiplier = familyMultipliers[familyStatus] || 1.0;
+  
+  // Apply family scaling to healthcare and energy costs
+  const familyAdjustedHealthcare = scaledHealthcareImpact * familyMultiplier;
+  const familyAdjustedEnergy = scaledEnergyImpact * familyMultiplier;
+  
+  // Recalculate net impact with family adjustments
+  const adjustedNetAnnualImpact = scaledTaxImpact + familyAdjustedHealthcare + stateAdjustment + familyAdjustedEnergy + employmentTaxAdjustment;
+
+  const bigBillNetImpact = bigBillTaxImpact + (familyAdjustedHealthcare * 1.4) + stateAdjustment + familyAdjustedEnergy + employmentTaxAdjustment;
   const bigBillTimeline = {
     fiveYear: Math.round(bigBillNetImpact * 5 * 1.025), // 2.5% annual inflation
     tenYear: Math.round(bigBillNetImpact * 10 * 1.28), // Compound inflation
@@ -477,10 +506,10 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
 
 return {
     // Current law scenario (default)
-    annualTaxImpact: Math.round(taxImpact),
-    healthcareCostImpact: Math.round(healthcareImpact),
-    energyCostImpact: Math.round(scaledEnergyImpact),
-    netAnnualImpact: Math.round(netAnnualImpact),
+    annualTaxImpact: Math.round(scaledTaxImpact + employmentTaxAdjustment),
+    healthcareCostImpact: Math.round(familyAdjustedHealthcare),
+    energyCostImpact: Math.round(familyAdjustedEnergy),
+    netAnnualImpact: Math.round(adjustedNetAnnualImpact),
     healthcareCosts: {
       current: Math.round(healthcareCosts.current),
       proposed: Math.round(healthcareCosts.proposed),
@@ -490,7 +519,11 @@ return {
       infrastructure: infrastructureImpact,
       jobOpportunities: jobOpportunities,
     },
-    timeline: timeline,
+    timeline: {
+      fiveYear: Math.round(adjustedNetAnnualImpact * 5 * 1.025), // 2.5% annual inflation
+      tenYear: Math.round(adjustedNetAnnualImpact * 10 * 1.28), // Compound inflation
+      twentyYear: Math.round(adjustedNetAnnualImpact * 20 * 1.64),
+    },
     breakdown: breakdown,
     // Big Bill scenario
     bigBillScenario: {

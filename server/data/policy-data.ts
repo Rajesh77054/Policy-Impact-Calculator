@@ -126,6 +126,11 @@ export const STATE_TAX_DATA: { [key: string]: StateTaxData } = {
   "PA": { state: "Pennsylvania", income_tax_rate: 0.0307, sales_tax_rate: 0.06, property_tax_avg: 3159, cost_of_living_index: 96.9 },
   "IL": { state: "Illinois", income_tax_rate: 0.0495, sales_tax_rate: 0.0625, property_tax_avg: 4157, cost_of_living_index: 95.2 },
   "OH": { state: "Ohio", income_tax_rate: 0.0399, sales_tax_rate: 0.0575, property_tax_avg: 2076, cost_of_living_index: 90.8 },
+  "MN": { state: "Minnesota", income_tax_rate: 0.0985, sales_tax_rate: 0.0687, property_tax_avg: 2552, cost_of_living_index: 101.8 },
+  "MI": { state: "Michigan", income_tax_rate: 0.0425, sales_tax_rate: 0.06, property_tax_avg: 2029, cost_of_living_index: 92.1 },
+  "NC": { state: "North Carolina", income_tax_rate: 0.0499, sales_tax_rate: 0.0475, property_tax_avg: 1784, cost_of_living_index: 94.2 },
+  "VA": { state: "Virginia", income_tax_rate: 0.0575, sales_tax_rate: 0.043, property_tax_avg: 2890, cost_of_living_index: 103.7 },
+  "NJ": { state: "New Jersey", income_tax_rate: 0.1075, sales_tax_rate: 0.0663, property_tax_avg: 8104, cost_of_living_index: 115.2 },
 };
 
 // Data sources for transparency
