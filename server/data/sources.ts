@@ -74,6 +74,33 @@ export const DATA_SOURCES: DataSource[] = [
     lastUpdated: "2025-06-04",
     credibility: "government",
     description: "Official CBO cost estimate and policy analysis for HR1 (One Big Beautiful Bill Act) as passed by the House"
+  },
+  {
+    id: "fed-recession-indicators",
+    name: "Economic Research - Recession Probability Models",
+    organization: "Federal Reserve Bank of St. Louis (FRED)",
+    url: "https://fred.stlouisfed.org/series/RECPROUSM156N",
+    lastUpdated: "2024-01-01",
+    credibility: "government",
+    description: "Federal Reserve economic models and indicators for recession probability forecasting"
+  },
+  {
+    id: "cbo-deficit-projections",
+    name: "Federal Deficit and Debt Projections",
+    organization: "Congressional Budget Office",
+    url: "https://www.cbo.gov/publication/59946#section0",
+    lastUpdated: "2024-02-01",
+    credibility: "government", 
+    description: "Official federal budget deficit projections and per-taxpayer impact analysis"
+  },
+  {
+    id: "jct-tax-burden",
+    name: "Distribution of Federal Tax Burden",
+    organization: "Joint Committee on Taxation",
+    url: "https://www.jct.gov/publications/2023/jcx-59-23/",
+    lastUpdated: "2023-12-01",
+    credibility: "government",
+    description: "Official analysis of how federal tax changes and deficit impacts are distributed across income levels"
   }
 ];
 

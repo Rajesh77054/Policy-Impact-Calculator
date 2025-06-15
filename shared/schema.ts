@@ -53,6 +53,8 @@ export const policyResultsSchema = z.object({
   healthcareCostImpact: z.number(),
   energyCostImpact: z.number(),
   netAnnualImpact: z.number(),
+  deficitImpact: z.number(),
+  recessionProbability: z.number(),
   healthcareCosts: z.object({
     current: z.number(),
     proposed: z.number(),
@@ -73,6 +75,8 @@ export const policyResultsSchema = z.object({
     healthcareCostImpact: z.number(),
     energyCostImpact: z.number(),
     netAnnualImpact: z.number(),
+    deficitImpact: z.number(),
+    recessionProbability: z.number(),
     timeline: z.object({
       fiveYear: z.number(),
       tenYear: z.number(),
