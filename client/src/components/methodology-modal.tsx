@@ -188,10 +188,17 @@ export default function MethodologyModal({ trigger }: MethodologyModalProps) {
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <div className="bg-slate-50 p-3 rounded text-sm">
-                      <div className="space-y-1">
-                        <div>1. <strong>Current costs:</strong> Based on your insurance type, age, and location</div>
-                        <div>2. <strong>Policy adjustments:</strong> Applied proposed subsidies, drug caps, and program expansions</div>
-                        <div>3. <strong>Net savings/costs:</strong> Proposed costs minus current costs = your impact</div>
+                      <div className="space-y-2">
+                        <div><strong>1. Current costs calculation by insurance type:</strong></div>
+                        <div className="ml-4 space-y-1 text-xs">
+                          <div>• <strong>Uninsured:</strong> Estimated annual out-of-pocket costs including medical services ($1,800 individual, $3,500 family) plus prescription drugs ($1,480 average)</div>
+                          <div>• <strong>Employer insurance:</strong> Employee premium share plus deductibles and cost-sharing, adjusted for employer contribution rates</div>
+                          <div>• <strong>Marketplace plans:</strong> Premiums after ACA subsidies plus average deductible costs (about 30% of deductible)</div>
+                          <div>• <strong>Medicare:</strong> Part B + Part D premiums plus Medigap supplements, with IRMAA surcharges for higher incomes</div>
+                          <div>• <strong>Medicaid:</strong> Minimal out-of-pocket costs for non-covered services</div>
+                        </div>
+                        <div><strong>2. Policy adjustments:</strong> Applied proposed subsidies, prescription drug caps ($2,000 annually), Medicare expansion, and Medicaid expansion</div>
+                        <div><strong>3. Net impact:</strong> Proposed costs minus current costs = your annual savings or additional costs</div>
                       </div>
                     </div>
                     <p className="text-xs text-slate-600">

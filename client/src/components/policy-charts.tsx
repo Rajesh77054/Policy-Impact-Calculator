@@ -183,17 +183,37 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                 Learn more
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[500px]">
               <DialogHeader>
                 <DialogTitle>Healthcare Cost Comparison</DialogTitle>
                 <DialogDescription>
-                  This chart compares the total annual healthcare costs between your current plan and the
-                  proposed plan. Both bars show the total annual cost you would pay. The "Current Plan" shows
-                  your existing healthcare expenses. The "Proposed Plan" shows what you would pay under the new
-                  policy. A green bar indicates lower costs (savings), while a red bar indicates higher costs.
+                  This chart compares the total annual healthcare costs between your current situation and the
+                  proposed policy changes.
                 </DialogDescription>
               </DialogHeader>
-              {/* Add more detailed explanation here, including how the costs are determined */}
+              <div className="space-y-4 pt-4">
+                <div className="bg-slate-50 p-4 rounded-lg">
+                  <h4 className="font-semibold text-sm mb-2">How Current Plan Costs Are Calculated:</h4>
+                  <div className="space-y-2 text-sm text-slate-600">
+                    <div>• <strong>Uninsured:</strong> Estimated annual out-of-pocket costs for medical services ($1,800) plus prescription drugs ($1,480) = $3,280 total</div>
+                    <div>• <strong>Employer Insurance:</strong> Your share of premiums plus deductibles and copays</div>
+                    <div>• <strong>Marketplace Plans:</strong> Premiums after subsidies plus cost-sharing expenses</div>
+                    <div>• <strong>Medicare/Medicaid:</strong> Premiums, supplements, and out-of-pocket costs</div>
+                  </div>
+                </div>
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <h4 className="font-semibold text-sm mb-2">Proposed Plan Benefits:</h4>
+                  <div className="space-y-1 text-sm text-slate-600">
+                    <div>• Enhanced premium subsidies for marketplace plans</div>
+                    <div>• Prescription drug cost caps ($2,000 annually)</div>
+                    <div>• Expanded Medicaid eligibility for low-income individuals</div>
+                    <div>• Public option availability with lower premiums</div>
+                  </div>
+                </div>
+                <p className="text-xs text-slate-500 italic">
+                  Based on Kaiser Family Foundation employer survey data and CMS expenditure reports.
+                </p>
+              </div>
             </DialogContent>
           </Dialog>
         </CardHeader>

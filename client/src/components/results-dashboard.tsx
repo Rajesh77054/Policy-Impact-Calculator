@@ -227,8 +227,17 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                       <TooltipTrigger>
                         <HelpCircle className="w-3 h-3 text-slate-400 hover:text-slate-600" />
                       </TooltipTrigger>
-                      <TooltipContent className="max-w-xs">
-                        <p className="text-xs">{getCalculationExplanation('healthcare', results)}</p>
+                      <TooltipContent className="max-w-sm">
+                        <div className="space-y-2">
+                          <p className="text-xs font-medium">Healthcare Cost Calculation:</p>
+                          <p className="text-xs">Current costs: ${results.healthcareCosts.current.toLocaleString()} annually</p>
+                          <p className="text-xs">Proposed costs: ${results.healthcareCosts.proposed.toLocaleString()} annually</p>
+                          <p className="text-xs">Net impact: {formatCostImpact(results.healthcareCostImpact)}</p>
+                          <div className="pt-1 border-t border-slate-200">
+                            <p className="text-xs text-slate-500">For uninsured individuals, current costs include estimated out-of-pocket expenses for medical services and prescription drugs.</p>
+                            <p className="text-xs text-slate-400 italic mt-1">Based on Kaiser Family Foundation employer survey data and CMS expenditure reports.</p>
+                          </div>
+                        </div>
                       </TooltipContent>
                     </Tooltip>
                   </div>
