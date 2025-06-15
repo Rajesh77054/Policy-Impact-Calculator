@@ -65,6 +65,15 @@ export const DATA_SOURCES: DataSource[] = [
     lastUpdated: "2024-02-01",
     credibility: "government",
     description: "Official federal budget projections and economic forecasts used for policy scoring"
+  },
+  {
+    id: "cbo-hr1-analysis",
+    name: "HR1 House Passed Version - Cost Estimate",
+    organization: "Congressional Budget Office",
+    url: "https://www.cbo.gov/system/files/2025-06/HR1_HousePassed_6-4-2025.xlsx",
+    lastUpdated: "2025-06-04",
+    credibility: "government",
+    description: "Official CBO cost estimate and policy analysis for HR1 (One Big Beautiful Bill Act) as passed by the House"
   }
 ];
 

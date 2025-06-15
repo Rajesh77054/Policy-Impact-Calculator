@@ -68,8 +68,9 @@ export const PROPOSED_HEALTHCARE_CHANGES = {
   public_option_premium_reduction: 0.15, // 15% lower than marketplace average
 };
 
-// "One Big Beautiful Bill Act" - Proposed legislation (NOT YET LAW)
-// Based on public statements and draft provisions
+// "One Big Beautiful Bill Act" - HR1 House Passed Version (NOT YET LAW)
+// Based on Congressional Budget Office analysis: HR1_HousePassed_6-4-2025.xlsx
+// Source: https://www.cbo.gov/system/files/2025-06/HR1_HousePassed_6-4-2025.xlsx
 export const ONE_BIG_BEAUTIFUL_BILL_PROVISIONS = {
   tax_changes: {
     standard_deduction_increase: 5000, // Additional $5K standard deduction
