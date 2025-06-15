@@ -206,7 +206,7 @@ export default function DemographicsStep({ formData, onComplete }: DemographicsS
               <strong>IRS Note:</strong> These categories determine eligibility for Child Tax Credit ($2,000) vs. Credit for Other Dependents ($500).
             </div>
           </div>
-        )}</div>
+        )}
 
         <div className="flex justify-end mt-8">
           <button
