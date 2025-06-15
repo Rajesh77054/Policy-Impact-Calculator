@@ -94,20 +94,20 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
 
           {/* Quick Insights Banner */}
           <div className="mt-6 max-w-4xl mx-auto">
-            <div className={`p-4 rounded-lg border-2 ${results.netAnnualImpact < 0 ? 'bg-green-50 border-green-200' : 'bg-blue-50 border-blue-200'}`}>
+            <div className={`p-4 rounded-lg border-2 ${currentData.netAnnualImpact < 0 ? 'bg-green-50 border-green-200' : 'bg-blue-50 border-blue-200'}`}>
               <div className="flex items-center justify-center space-x-2 text-lg font-semibold">
-                <span className={results.netAnnualImpact < 0 ? 'text-green-700' : 'text-blue-700'}>
-                  {results.netAnnualImpact < 0 ? '💰' : '📊'} Quick Insight:
+                <span className={currentData.netAnnualImpact < 0 ? 'text-green-700' : 'text-blue-700'}>
+                  {currentData.netAnnualImpact < 0 ? '💰' : '📊'} Quick Insight:
                 </span>
-                <span className={results.netAnnualImpact < 0 ? 'text-green-700' : 'text-blue-700'}>
-                  {results.netAnnualImpact < 0 
-                    ? `You could save approximately $${Math.abs(results.netAnnualImpact).toLocaleString()} annually`
-                    : `Your costs could increase by approximately $${Math.abs(results.netAnnualImpact).toLocaleString()} annually`
+                <span className={currentData.netAnnualImpact < 0 ? 'text-green-700' : 'text-blue-700'}>
+                  {currentData.netAnnualImpact < 0 
+                    ? `You could save approximately $${Math.abs(currentData.netAnnualImpact).toLocaleString()} annually`
+                    : `Your costs could increase by approximately $${Math.abs(currentData.netAnnualImpact).toLocaleString()} annually`
                   }
                 </span>
               </div>
               <p className="text-sm mt-2 text-slate-600">
-                {results.netAnnualImpact < 0 
+                {currentData.netAnnualImpact < 0 
                   ? "These policies appear favorable for your financial situation, primarily through tax relief and healthcare cost reductions."
                   : "While these policies may increase some costs, they could provide community benefits and long-term economic improvements."
                 }
