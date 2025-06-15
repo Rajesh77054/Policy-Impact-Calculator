@@ -288,7 +288,8 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
   const includeBigBill = formData.includeBigBill || false;
 
   // Debug logging
-  console.log(`Calculating for: Income=${income}, State=${state}, Employment=${employmentStatus}, Family=${familyStatus}, Insurance=${insuranceType}, Age=${ageRange}`);
+  console.log(`=== CALCULATION DEBUG START ===`);
+  console.log(`Input: Income=${income}, State=${state}, Employment=${employmentStatus}, Family=${familyStatus}, Insurance=${insuranceType}, Age=${ageRange}`);
   console.log(`Form data received:`, JSON.stringify(formData, null, 2));
 
   // Tax calculations
@@ -334,22 +335,27 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
   }
 
   // Apply income-based scaling to impacts with stronger differentiation
-  const incomeScalar = income / 75000; // Linear scaling around median household income
-  const scaledTaxImpact = taxImpact; // Don't scale tax impact - it's already calculated correctly
-  const scaledHealthcareImpact = healthcareImpact; // Don't scale healthcare - preserve real differences
-  const scaledEnergyImpact = energyImpact * (0.8 + incomeScalar * 0.4); // 80% to 120% scaling
+  const incomeScalar = Math.max(0.3, Math.min(3.0, income / 75000)); // Scale from 30% to 300% of median
+  const scaledTaxImpact = taxImpact; // Tax impact is already income-dependent from calculations
+  const scaledHealthcareImpact = healthcareImpact; // Healthcare impact is already insurance-type dependent
+  const scaledEnergyImpact = energyImpact * incomeScalar; // Energy costs scale directly with income
 
-  // Employment status adjustments for tax complexity - scaled for low income
+  // Employment status adjustments for tax complexity - heavily income dependent
   let employmentTaxAdjustment = 0;
   if (employmentStatus === "self-employed") {
-    // Self-employed face additional self-employment tax (15.3%) but reduced at low income
-    employmentTaxAdjustment = Math.min(income * 0.153 * 0.4, 1200); // Capped burden
+    // Self-employed face additional self-employment tax (15.3%) and complexity
+    const selfEmploymentTax = income * 0.153 * 0.5; // Half of SE tax as additional burden
+    employmentTaxAdjustment = Math.min(selfEmploymentTax, income * 0.08); // Cap at 8% of income
   } else if (employmentStatus === "contract") {
-    // Contract workers often face 1099 tax complications
-    employmentTaxAdjustment = Math.min(income * 0.153 * 0.2, 800); // Reduced for low income
+    // Contract workers often face 1099 tax complications and higher burden
+    const contractorBurden = income * 0.12; // 12% additional burden for contractors
+    employmentTaxAdjustment = Math.min(contractorBurden, income * 0.06); // Cap at 6% of income
   } else if (employmentStatus === "part-time") {
     // Part-time workers may have less tax optimization opportunities  
-    employmentTaxAdjustment = Math.min(income * 0.015, 300); // 1.5% capped at $300
+    employmentTaxAdjustment = income * 0.02; // 2% additional burden
+  } else if (employmentStatus === "full-time") {
+    // Full-time employees have better optimization, slight reduction
+    employmentTaxAdjustment = -income * 0.01; // 1% benefit from employer tax advantages
   }
 
   const netAnnualImpact = scaledTaxImpact + scaledHealthcareImpact + stateAdjustment + scaledEnergyImpact + employmentTaxAdjustment;
@@ -420,9 +426,14 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
   // Calculate Big Bill specific impacts
   const bigBillTaxImpact = bigBillTax - currentTax;
 
-  // Debug logging
-  console.log(`Results: Tax=${Math.round(scaledTaxImpact)}, Healthcare=${Math.round(scaledHealthcareImpact)}, State=${Math.round(stateAdjustment)}, Energy=${Math.round(scaledEnergyImpact)}, Net=${Math.round(netAnnualImpact)}`);
+  // Debug logging with all intermediate steps
+  console.log(`Tax calculation: Current=${currentTax}, Proposed=${proposedTax}, BigBill=${bigBillTax}, Impact=${taxImpact}`);
+  console.log(`Healthcare calculation: Current=${healthcareCosts.current}, Proposed=${healthcareCosts.proposed}, Impact=${healthcareImpact}`);
+  console.log(`Employment adjustment: Status=${employmentStatus}, Adjustment=${employmentTaxAdjustment}`);
+  console.log(`Final scaled impacts: Tax=${Math.round(scaledTaxImpact)}, Healthcare=${Math.round(finalHealthcareImpact)}, Energy=${Math.round(finalEnergyImpact)}, Employment=${Math.round(employmentTaxAdjustment)}`);
+  console.log(`Final net impact: ${Math.round(adjustedNetAnnualImpact)}`);
   console.log(`Community: School=${schoolFundingImpact}%, Infrastructure=$${Math.round(infrastructureImpact/1000)}K, Jobs=${jobOpportunities}`);
+  console.log(`=== CALCULATION DEBUG END ===`);
 
   const breakdown = [
     {
@@ -482,22 +493,14 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
     twentyYear: Math.round(netAnnualImpact * 20 * 1.64),
   };
 
-  // Apply family status multipliers for more realistic scaling
-  const familyMultipliers = {
-    "single": 1.0,
-    "married": 1.4,
-    "family": 1.8
-  };
-  const familyMultiplier = familyMultipliers[familyStatus] || 1.0;
+  // Keep impacts differentiated - don't apply family multipliers that reduce differences
+  const finalHealthcareImpact = scaledHealthcareImpact;
+  const finalEnergyImpact = scaledEnergyImpact;
   
-  // Apply family scaling only to energy costs - healthcare differences should be preserved
-  const familyAdjustedHealthcare = scaledHealthcareImpact;
-  const familyAdjustedEnergy = scaledEnergyImpact * (familyStatus === "single" ? 1.0 : familyMultiplier);
-  
-  // Recalculate net impact with family adjustments
-  const adjustedNetAnnualImpact = scaledTaxImpact + familyAdjustedHealthcare + stateAdjustment + familyAdjustedEnergy + employmentTaxAdjustment;
+  // Calculate final net impact
+  const adjustedNetAnnualImpact = scaledTaxImpact + finalHealthcareImpact + stateAdjustment + finalEnergyImpact + employmentTaxAdjustment;
 
-  const bigBillNetImpact = bigBillTaxImpact + (familyAdjustedHealthcare * 1.4) + stateAdjustment + familyAdjustedEnergy + employmentTaxAdjustment;
+  const bigBillNetImpact = bigBillTaxImpact + (finalHealthcareImpact * 1.4) + stateAdjustment + finalEnergyImpact + employmentTaxAdjustment;
   const bigBillTimeline = {
     fiveYear: Math.round(bigBillNetImpact * 5 * 1.025), // 2.5% annual inflation
     tenYear: Math.round(bigBillNetImpact * 10 * 1.28), // Compound inflation
@@ -507,8 +510,8 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
 return {
     // Current law scenario (default)
     annualTaxImpact: Math.round(scaledTaxImpact + employmentTaxAdjustment),
-    healthcareCostImpact: Math.round(familyAdjustedHealthcare),
-    energyCostImpact: Math.round(familyAdjustedEnergy),
+    healthcareCostImpact: Math.round(finalHealthcareImpact),
+    energyCostImpact: Math.round(finalEnergyImpact),
     netAnnualImpact: Math.round(adjustedNetAnnualImpact),
     healthcareCosts: {
       current: Math.round(healthcareCosts.current),
@@ -529,7 +532,7 @@ return {
     bigBillScenario: {
       annualTaxImpact: Math.round(bigBillTaxImpact),
       healthcareCostImpact: Math.round(healthcareImpact * 1.4), 
-      energyCostImpact: Math.round(scaledEnergyImpact), // Same as current
+      energyCostImpact: Math.round(finalEnergyImpact), // Same as current
       netAnnualImpact: Math.round(bigBillNetImpact),
       timeline: bigBillTimeline,
       breakdown: [
