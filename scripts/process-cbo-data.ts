@@ -3,7 +3,7 @@ import { parseCBOCSV, extractRealCBOProvisions } from '../server/utils/csv-reade
 import * as path from 'path';
 
 // Process the CBO CSV file
-const csvPath = path.join(process.cwd(), 'attached_assets', 'One Big Beautiful Bill Act CBO Analysis - Summary_1749953405700.csv');
+const csvPath = path.join(process.cwd(), '..', 'attached_assets', 'One Big Beautiful Bill Act CBO Analysis - Summary_1749953405700.csv');
 
 try {
   console.log('Processing CBO CSV data...');
