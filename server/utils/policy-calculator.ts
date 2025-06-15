@@ -405,7 +405,6 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
 
   // Calculate Big Bill specific impacts
   const bigBillTaxImpact = bigBillTax - currentTax;
-  const bigBillHealthcareImpact = healthcareImpact * 1.4; // Big Bill provides more generous healthcare benefits
 
   // Debug logging
   console.log(`Results: Tax=${Math.round(scaledTaxImpact)}, Healthcare=${Math.round(scaledHealthcareImpact)}, State=${Math.round(stateAdjustment)}, Energy=${Math.round(scaledEnergyImpact)}, Net=${Math.round(netAnnualImpact)}`);
@@ -469,7 +468,7 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
     twentyYear: Math.round(netAnnualImpact * 20 * 1.64),
   };
 
-  const bigBillNetImpact = bigBillTaxImpact + bigBillHealthcareImpact + stateAdjustment + scaledEnergyImpact;
+  const bigBillNetImpact = bigBillTaxImpact + (healthcareImpact * 1.4) + stateAdjustment + scaledEnergyImpact;
   const bigBillTimeline = {
     fiveYear: Math.round(bigBillNetImpact * 5 * 1.025), // 2.5% annual inflation
     tenYear: Math.round(bigBillNetImpact * 10 * 1.28), // Compound inflation
@@ -496,7 +495,7 @@ return {
     // Big Bill scenario
     bigBillScenario: {
       annualTaxImpact: Math.round(bigBillTaxImpact),
-      healthcareCostImpact: Math.round(bigBillHealthcareImpact), 
+      healthcareCostImpact: Math.round(healthcareImpact * 1.4), 
       energyCostImpact: Math.round(scaledEnergyImpact), // Same as current
       netAnnualImpact: Math.round(bigBillNetImpact),
       timeline: bigBillTimeline,
@@ -515,10 +514,10 @@ return {
           category: "healthcare" as const,
           title: "One Big Beautiful Bill - Healthcare",
           description: "Expanded Medicare and enhanced ACA subsidies",
-          impact: Math.round(bigBillHealthcareImpact),
+          impact: Math.round(healthcareImpact * 1.4),
           details: [
-            { item: "Enhanced premium subsidies", amount: Math.round(bigBillHealthcareImpact * 0.7) },
-            { item: "Expanded prescription coverage", amount: Math.round(bigBillHealthcareImpact * 0.3) }
+            { item: "Enhanced premium subsidies", amount: Math.round(healthcareImpact * 1.4 * 0.7) },
+            { item: "Expanded prescription coverage", amount: Math.round(healthcareImpact * 1.4 * 0.3) }
           ]
         }
       ]
