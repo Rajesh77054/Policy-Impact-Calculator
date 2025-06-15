@@ -335,21 +335,21 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
 
   // Apply income-based scaling to impacts with stronger differentiation
   const incomeScalar = income / 75000; // Linear scaling around median household income
-  const scaledTaxImpact = taxImpact * (0.5 + incomeScalar * 0.8); // 50% to 130% scaling
-  const scaledHealthcareImpact = healthcareImpact * (0.6 + incomeScalar * 0.7); // 60% to 130% scaling
-  const scaledEnergyImpact = energyImpact * (0.7 + incomeScalar * 0.6); // 70% to 130% scaling
+  const scaledTaxImpact = taxImpact; // Don't scale tax impact - it's already calculated correctly
+  const scaledHealthcareImpact = healthcareImpact; // Don't scale healthcare - preserve real differences
+  const scaledEnergyImpact = energyImpact * (0.8 + incomeScalar * 0.4); // 80% to 120% scaling
 
-  // Employment status adjustments for tax complexity
+  // Employment status adjustments for tax complexity - scaled for low income
   let employmentTaxAdjustment = 0;
   if (employmentStatus === "self-employed") {
-    // Self-employed face additional self-employment tax (15.3%) and complexity
-    employmentTaxAdjustment = income * 0.153 * 0.5; // Half of SE tax as additional burden
+    // Self-employed face additional self-employment tax (15.3%) but reduced at low income
+    employmentTaxAdjustment = Math.min(income * 0.153 * 0.4, 1200); // Capped burden
   } else if (employmentStatus === "contract") {
     // Contract workers often face 1099 tax complications
-    employmentTaxAdjustment = income * 0.153 * 0.3; // 30% of SE tax burden
+    employmentTaxAdjustment = Math.min(income * 0.153 * 0.2, 800); // Reduced for low income
   } else if (employmentStatus === "part-time") {
-    // Part-time workers may have less tax optimization opportunities
-    employmentTaxAdjustment = income * 0.02; // 2% additional burden
+    // Part-time workers may have less tax optimization opportunities  
+    employmentTaxAdjustment = Math.min(income * 0.015, 300); // 1.5% capped at $300
   }
 
   const netAnnualImpact = scaledTaxImpact + scaledHealthcareImpact + stateAdjustment + scaledEnergyImpact + employmentTaxAdjustment;
@@ -485,14 +485,14 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
   // Apply family status multipliers for more realistic scaling
   const familyMultipliers = {
     "single": 1.0,
-    "married": 1.6,
-    "family": 2.2
+    "married": 1.4,
+    "family": 1.8
   };
   const familyMultiplier = familyMultipliers[familyStatus] || 1.0;
   
-  // Apply family scaling to healthcare and energy costs
-  const familyAdjustedHealthcare = scaledHealthcareImpact * familyMultiplier;
-  const familyAdjustedEnergy = scaledEnergyImpact * familyMultiplier;
+  // Apply family scaling only to energy costs - healthcare differences should be preserved
+  const familyAdjustedHealthcare = scaledHealthcareImpact;
+  const familyAdjustedEnergy = scaledEnergyImpact * (familyStatus === "single" ? 1.0 : familyMultiplier);
   
   // Recalculate net impact with family adjustments
   const adjustedNetAnnualImpact = scaledTaxImpact + familyAdjustedHealthcare + stateAdjustment + familyAdjustedEnergy + employmentTaxAdjustment;
