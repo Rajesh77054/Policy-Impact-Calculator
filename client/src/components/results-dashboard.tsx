@@ -349,7 +349,8 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className={`text-2xl font-bold ${currentData.timeline.twentyYear < 0 ? "text-green-600" : "text-red-600"}`}>
+                <div>
+                  <div className={`text-2xl font-bold ${currentData.timeline.twentyYear < 0 ? "text-green-600" : "text-red-600"}`}>
                     {formatNetImpact(currentData.timeline.twentyYear)}
                   </div>
                   <p className="text-sm text-slate-600">20-year cumulative impact</p>
