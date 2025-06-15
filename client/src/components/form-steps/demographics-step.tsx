@@ -141,7 +141,10 @@ export default function DemographicsStep({ formData, onComplete }: DemographicsS
         </div>
 
         <div>
-          <Label className="text-sm font-medium text-slate-700 mb-3 block">Do you have children or dependents?</Label>
+          <div className="flex items-center space-x-2 mb-3">
+            <Label className="text-sm font-medium text-slate-700">Do you have children or dependents?</Label>
+            <TooltipHelp content="The IRS distinguishes between qualifying children (under 17) and other dependents (17+, elderly parents, etc.) for tax credit calculations." />
+          </div>
           <RadioGroup value={hasChildren ? "yes" : "no"} onValueChange={(value) => setHasChildren(value === "yes")}>
             <div className="grid grid-cols-2 gap-3">
               <div className="flex items-center space-x-2 p-3 border border-slate-300 rounded-lg hover:border-primary transition-colors">
@@ -159,6 +162,51 @@ export default function DemographicsStep({ formData, onComplete }: DemographicsS
             </div>
           </RadioGroup>
         </div>
+
+        {/* IRS-aligned dependent specification */}
+        {hasChildren && (
+          <div className="space-y-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="text-sm font-medium text-blue-900 mb-3">
+              Please specify your dependents (for accurate tax calculations):
+            </div>
+            
+            <div>
+              <div className="flex items-center space-x-2 mb-2">
+                <Label className="text-sm font-medium text-slate-700">Qualifying children (under 17)</Label>
+                <TooltipHelp content="Children under 17 at the end of the tax year who qualify for the Child Tax Credit ($2,000 per child)." />
+              </div>
+              <select 
+                value={numberOfQualifyingChildren} 
+                onChange={(e) => setNumberOfQualifyingChildren(Number(e.target.value))}
+                className="w-full p-2 border border-slate-300 rounded-lg text-sm"
+              >
+                {[0,1,2,3,4,5,6,7,8,9,10].map(num => (
+                  <option key={num} value={num}>{num}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <div className="flex items-center space-x-2 mb-2">
+                <Label className="text-sm font-medium text-slate-700">Other dependents (17+)</Label>
+                <TooltipHelp content="Dependents 17 or older (including adult children, elderly parents) who qualify for the Credit for Other Dependents ($500 per dependent)." />
+              </div>
+              <select 
+                value={numberOfOtherDependents} 
+                onChange={(e) => setNumberOfOtherDependents(Number(e.target.value))}
+                className="w-full p-2 border border-slate-300 rounded-lg text-sm"
+              >
+                {[0,1,2,3,4,5,6,7,8,9,10].map(num => (
+                  <option key={num} value={num}>{num}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="text-xs text-blue-700 bg-blue-100 p-2 rounded">
+              <strong>IRS Note:</strong> These categories determine eligibility for Child Tax Credit ($2,000) vs. Credit for Other Dependents ($500).
+            </div>
+          </div>
+        )}</div>
 
         <div className="flex justify-end mt-8">
           <button
