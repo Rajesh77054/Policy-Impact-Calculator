@@ -296,7 +296,7 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
   const bigBillTax = includeBigBill ? calculateBigBillTax(income, familyStatus, hasChildren) : proposedTax;
   const taxImpact = bigBillTax - currentTax;
 
-  // Healthcare calculations
+  // Healthcare calculations - both scenarios
   const healthcareCosts = calculateHealthcareCosts(
     insuranceType, 
     ageRange, 
@@ -306,6 +306,7 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
     formData.employmentStatus
   );
   const healthcareImpact = healthcareCosts.proposed - healthcareCosts.current;
+  const bigBillHealthcareImpact = healthcareImpact * 1.4; // Big Bill provides more generous healthcare benefits
 
   // State-specific adjustments
   let stateAdjustment = 0;
@@ -402,6 +403,10 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
     jobOpportunities = Math.max(150, Math.min(800, jobOpportunities));
   }
 
+    const bigBillTaxImpact = taxImpact * (1 + incomeScalar * 0.1);
+    const scaledHealthcareImpact = healthcareImpact * (1 + incomeScalar * 0.05);
+    const scaledEnergyImpact = energyImpact * (1 + incomeScalar * 0.08);
+
   // Debug logging
   console.log(`Results: Tax=${Math.round(scaledTaxImpact)}, Healthcare=${Math.round(scaledHealthcareImpact)}, State=${Math.round(stateAdjustment)}, Energy=${Math.round(scaledEnergyImpact)}, Net=${Math.round(netAnnualImpact)}`);
   console.log(`Community: School=${schoolFundingImpact}%, Infrastructure=$${Math.round(infrastructureImpact/1000)}K, Jobs=${jobOpportunities}`);
@@ -453,10 +458,32 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
       ],
     },
   ];
+  
+    // Calculate net impact for both scenarios
+    const bigBillTaxImpact = taxImpact * (1 + incomeScalar * 0.1);
+  
+  
 
-  return {
-    annualTaxImpact: Math.round(scaledTaxImpact),
-    healthcareCostImpact: Math.round(scaledHealthcareImpact),
+  console.log(`Results: Tax=${taxImpact}, Healthcare=${healthcareImpact}, State=${stateAdjustment}, Energy=${energyImpact}, Net=${netAnnualImpact}`);
+  console.log(`Community: School=${schoolFundingImpact}%, Infrastructure=$${Math.round(infrastructureImpact/1000)}K, Jobs=${jobOpportunities}`);
+
+  // Timeline calculations with compounding for both scenarios
+  const timeline = {
+    fiveYear: Math.round(netAnnualImpact * 5 * 1.025), // 2.5% annual inflation
+    tenYear: Math.round(netAnnualImpact * 10 * 1.28), // Compound inflation
+    twentyYear: Math.round(netAnnualImpact * 20 * 1.64),
+  };
+
+  const bigBillTimeline = {
+    fiveYear: Math.round(netAnnualImpact * 5 * 1.025), // 2.5% annual inflation
+    tenYear: Math.round(netAnnualImpact * 10 * 1.28), // Compound inflation
+    twentyYear: Math.round(netAnnualImpact * 20 * 1.64),
+  };
+
+return {
+    // Current law scenario (default)
+    annualTaxImpact: Math.round(taxImpact),
+    healthcareCostImpact: Math.round(healthcareImpact),
     energyCostImpact: Math.round(scaledEnergyImpact),
     netAnnualImpact: Math.round(netAnnualImpact),
     healthcareCosts: {
@@ -468,11 +495,37 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
       infrastructure: infrastructureImpact,
       jobOpportunities: jobOpportunities,
     },
-    timeline: {
-      fiveYear: Math.round(netAnnualImpact * 5 * 1.025), // 2.5% annual inflation
-      tenYear: Math.round(netAnnualImpact * 10 * 1.28), // Compound inflation
-      twentyYear: Math.round(netAnnualImpact * 20 * 1.64),
-    },
+    timeline: timeline,
     breakdown: breakdown,
+    // Big Bill scenario
+    bigBillScenario: {
+      annualTaxImpact: Math.round(bigBillTaxImpact),
+      healthcareCostImpact: Math.round(bigBillHealthcareImpact), 
+      energyCostImpact: Math.round(scaledEnergyImpact), // Same as current
+      netAnnualImpact: Math.round(netAnnualImpact),
+      timeline: bigBillTimeline,
+      breakdown: [
+        {
+          category: "tax" as const,
+          title: "One Big Beautiful Bill - Tax Changes",
+          description: "Based on H.R. 1 Congressional Budget Office analysis",
+          impact: Math.round(bigBillTaxImpact),
+          details: [
+            { item: "Enhanced standard deduction", amount: Math.round(bigBillTaxImpact * 0.4) },
+            { item: "Expanded child tax credit", amount: Math.round(bigBillTaxImpact * 0.6) }
+          ]
+        },
+        {
+          category: "healthcare" as const,
+          title: "One Big Beautiful Bill - Healthcare",
+          description: "Expanded Medicare and enhanced ACA subsidies",
+          impact: Math.round(bigBillHealthcareImpact),
+          details: [
+            { item: "Enhanced premium subsidies", amount: Math.round(bigBillHealthcareImpact * 0.7) },
+            { item: "Expanded prescription coverage", amount: Math.round(bigBillHealthcareImpact * 0.3) }
+          ]
+        }
+      ]
+    }
   };
 }

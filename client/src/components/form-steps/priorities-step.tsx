@@ -22,7 +22,7 @@ const PRIORITY_OPTIONS = [
 
 export default function PrioritiesStep({ formData, onComplete }: PrioritiesStepProps) {
   const [priorities, setPriorities] = useState<string[]>(formData.priorities || []);
-  const [includeBigBill, setIncludeBigBill] = useState<boolean>(formData.includeBigBill || false);
+  
 
   const handlePriorityChange = (priorityId: string, checked: boolean) => {
     if (checked) {
@@ -35,7 +35,7 @@ export default function PrioritiesStep({ formData, onComplete }: PrioritiesStepP
   };
 
   const handleSubmit = () => {
-    onComplete({ priorities, includeBigBill });
+    onComplete({ priorities });
   };
 
   return (
@@ -84,27 +84,7 @@ export default function PrioritiesStep({ formData, onComplete }: PrioritiesStepP
           </div>
         </div>
 
-        {/* One Big Beautiful Bill Act Option */}
-        <div className="border-t border-slate-200 pt-6">
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <div className="flex items-start space-x-3">
-              <Checkbox
-                id="big-bill"
-                checked={includeBigBill}
-                onCheckedChange={(checked) => setIncludeBigBill(checked as boolean)}
-              />
-              <div className="flex-1">
-                <Label htmlFor="big-bill" className="text-sm font-medium text-blue-900 cursor-pointer">
-                  Include "One Big Beautiful Bill Act" projections
-                </Label>
-                <p className="text-xs text-blue-700 mt-1">
-                  <strong>Note:</strong> This is proposed legislation that has not yet become law. 
-                  Results show projected personal impact if this bill were to pass.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+        
 
         {priorities.length > 0 && (
           <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
@@ -115,9 +95,7 @@ export default function PrioritiesStep({ formData, onComplete }: PrioritiesStepP
                 return <li key={priorityId}>• {option?.label}</li>;
               })}
             </ul>
-            {includeBigBill && (
-              <li className="text-sm text-blue-600 mt-2">• One Big Beautiful Bill Act impact analysis (proposed legislation)</li>
-            )}
+            
           </div>
         )}
 

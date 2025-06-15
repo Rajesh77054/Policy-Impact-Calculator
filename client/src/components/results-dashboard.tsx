@@ -1,18 +1,26 @@
-import { Shield, Download, Share2, Calculator, Home, Clock, BookOpen, Info, HelpCircle } from "lucide-react";
+import { Shield, Download, Share2, Calculator, Home, Clock, BookOpen, Info, HelpCircle, ToggleLeft, ToggleRight } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { PolicyResults } from "@shared/schema";
 import PolicyCharts from "@/components/policy-charts";
 import MethodologyModal from "@/components/methodology-modal";
 import DataDisclaimer from "@/components/data-disclaimer";
+import { useState } from "react";
 
 interface ResultsDashboardProps {
   results: PolicyResults;
 }
 
 export default function ResultsDashboard({ results }: ResultsDashboardProps) {
+  const [showBigBillComparison, setShowBigBillComparison] = useState(false);
+
+  // Use appropriate scenario data based on toggle
+  const currentData = showBigBillComparison ? results.bigBillScenario : results;
+
   const formatCurrency = (amount: number) => {
     const sign = amount >= 0 ? "+" : "";
     return `${sign}$${Math.abs(amount).toLocaleString()}`;
@@ -123,10 +131,52 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
 
         <DataDisclaimer />
 
+        {/* Policy Scenario Toggle */}
+        <div className="mb-8">
+          <Card className="border-blue-200 bg-blue-50">
+            <CardHeader className="pb-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="text-lg font-semibold text-blue-900">Policy Scenario Comparison</CardTitle>
+                  <p className="text-sm text-blue-700 mt-1">
+                    Compare your results under current law vs. proposed "One Big Beautiful Bill Act"
+                  </p>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Label htmlFor="bill-toggle" className="text-sm font-medium text-blue-900">
+                    {showBigBillComparison ? "Proposed Bill" : "Current Law"}
+                  </Label>
+                  <Switch
+                    id="bill-toggle"
+                    checked={showBigBillComparison}
+                    onCheckedChange={setShowBigBillComparison}
+                    className="data-[state=checked]:bg-blue-600"
+                  />
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="bg-white rounded-md p-3 border border-blue-200">
+                <p className="text-xs text-slate-600">
+                  <strong>Current Law:</strong> Shows impact based on existing federal and state policies.
+                </p>
+                <p className="text-xs text-slate-600 mt-1">
+                  <strong>Proposed Bill:</strong> Shows projected impact if H.R. 1 "One Big Beautiful Bill Act" becomes law. 
+                  <span className="text-amber-600 font-medium"> This is proposed legislation that has not yet been enacted.</span>
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Summary Cards Row */}
         <div className="mb-4">
-          <h3 className="text-xl font-semibold text-slate-900 mb-2">Your Personal Impact</h3>
-          <p className="text-slate-600 text-sm">How the proposed policies would affect your finances and community</p>
+          <h3 className="text-xl font-semibold text-slate-900 mb-2">
+            Your Personal Impact {showBigBillComparison && <span className="text-blue-600">- Proposed Legislation Scenario</span>}
+          </h3>
+          <p className="text-slate-600 text-sm">
+            How {showBigBillComparison ? "the proposed One Big Beautiful Bill Act" : "current policies"} would affect your finances and community
+          </p>
         </div>
         <div className="grid md:grid-cols-3 gap-6 mb-8">
           {/* My Wallet */}
@@ -166,8 +216,8 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                       </TooltipContent>
                     </Tooltip>
                   </div>
-                  <span className={`font-medium ${results.annualTaxImpact < 0 ? "text-green-600" : "text-red-600"}`}>
-                    {formatTaxImpact(results.annualTaxImpact)}
+                  <span className={`font-medium ${currentData.annualTaxImpact < 0 ? "text-green-600" : "text-red-600"}`}>
+                    {formatTaxImpact(currentData.annualTaxImpact)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
@@ -182,8 +232,8 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                       </TooltipContent>
                     </Tooltip>
                   </div>
-                  <span className={`font-medium ${results.healthcareCostImpact < 0 ? "text-green-600" : "text-red-600"}`}>
-                    {formatCostImpact(results.healthcareCostImpact)}
+                  <span className={`font-medium ${currentData.healthcareCostImpact < 0 ? "text-green-600" : "text-red-600"}`}>
+                    {formatCostImpact(currentData.healthcareCostImpact)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
@@ -198,16 +248,16 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                       </TooltipContent>
                     </Tooltip>
                   </div>
-                  <span className={`font-medium ${results.energyCostImpact < 0 ? "text-green-600" : "text-red-600"}`}>
-                    {formatCostImpact(results.energyCostImpact)}
+                  <span className={`font-medium ${currentData.energyCostImpact < 0 ? "text-green-600" : "text-red-600"}`}>
+                    {formatCostImpact(currentData.energyCostImpact)}
                   </span>
                 </div>
                 <div className="pt-3 border-t border-slate-200">
                   <div className="space-y-1">
                     <div className="flex justify-between font-semibold">
                       <span>Net Annual Impact</span>
-                      <span className={results.netAnnualImpact < 0 ? "text-green-600" : "text-red-600"}>
-                        {formatNetImpact(results.netAnnualImpact)}
+                      <span className={currentData.netAnnualImpact < 0 ? "text-green-600" : "text-red-600"}>
+                        {formatNetImpact(currentData.netAnnualImpact)}
                       </span>
                     </div>
                     <p className="text-xs text-slate-500">
@@ -291,8 +341,8 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
             <CardContent>
               <div className="space-y-4">
                 <div className="text-center">
-                  <div className={`text-2xl font-bold ${results.timeline.twentyYear < 0 ? "text-green-600" : "text-red-600"}`}>
-                    {formatNetImpact(results.timeline.twentyYear)}
+                  <div className={`text-2xl font-bold ${currentData.timeline.twentyYear < 0 ? "text-green-600" : "text-red-600"}`}>
+                    {formatNetImpact(currentData.timeline.twentyYear)}
                   </div>
                   <p className="text-sm text-slate-600">20-year cumulative impact</p>
                 </div>
