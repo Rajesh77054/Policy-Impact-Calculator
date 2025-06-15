@@ -75,6 +75,7 @@ export default function LocationStep({ formData, onComplete }: LocationStepProps
   const [zipCode, setZipCode] = useState(formData.zipCode || "");
   const [state, setState] = useState(formData.state || "");
   const [isDetectingLocation, setIsDetectingLocation] = useState(false);
+  const [locationDetectionAttempted, setLocationDetectionAttempted] = useState(false);
 
   // Auto-detect state from ZIP code
   const handleZipCodeChange = (value: string) => {
@@ -118,17 +119,27 @@ export default function LocationStep({ formData, onComplete }: LocationStepProps
             console.log("Could not detect location");
           } finally {
             setIsDetectingLocation(false);
+            setLocationDetectionAttempted(true);
           }
         },
         () => {
           setIsDetectingLocation(false);
+          setLocationDetectionAttempted(true);
         },
         { timeout: 5000 }
       );
     } else {
       setIsDetectingLocation(false);
+      setLocationDetectionAttempted(true);
     }
   };
+
+  // Auto-detect location on component mount if not already provided
+  useEffect(() => {
+    if (!formData.zipCode && !formData.state && !locationDetectionAttempted) {
+      detectLocation();
+    }
+  }, [formData.zipCode, formData.state, locationDetectionAttempted]);
 
   const handleNext = () => {
     if (zipCode.length === 5 && state) {
@@ -151,29 +162,35 @@ export default function LocationStep({ formData, onComplete }: LocationStepProps
         <div>
           <div className="flex items-center justify-between mb-2">
             <Label htmlFor="zipCode" className="text-sm font-medium text-slate-700">ZIP Code</Label>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={detectLocation}
-              disabled={isDetectingLocation}
-              className="text-primary hover:text-primary/80 text-sm"
-            >
-              <MapPin className="w-4 h-4 mr-1" />
-              {isDetectingLocation ? "Detecting..." : "Use my location"}
-            </Button>
+            {locationDetectionAttempted && !state && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={detectLocation}
+                disabled={isDetectingLocation}
+                className="text-primary hover:text-primary/80 text-sm"
+              >
+                <MapPin className="w-4 h-4 mr-1" />
+                {isDetectingLocation ? "Detecting..." : "Try location again"}
+              </Button>
+            )}
           </div>
           <Input
             id="zipCode"
             type="text"
-            placeholder="Enter your ZIP code"
+            placeholder={isDetectingLocation ? "Detecting your location..." : "Enter your ZIP code"}
             value={zipCode}
             onChange={(e) => handleZipCodeChange(e.target.value)}
             maxLength={5}
             className="text-lg"
+            disabled={isDetectingLocation}
           />
           <p className="text-xs text-slate-500 mt-2">
-            We'll automatically determine your state from your ZIP code
+            {isDetectingLocation 
+              ? "Attempting to detect your location automatically..."
+              : "We'll automatically determine your state from your ZIP code"
+            }
           </p>
         </div>
 
