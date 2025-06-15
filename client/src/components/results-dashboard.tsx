@@ -401,7 +401,6 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                 </div>
               </div>
             </CardContent>
-            </CardContent>
           </Card>
         </div>
 
