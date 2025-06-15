@@ -91,7 +91,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
           <p className="text-sm text-slate-500 mt-2">
             Calculations use current IRS tax brackets, Kaiser Family Foundation healthcare data, and Congressional Budget Office methodology.
           </p>
-          
+
           {/* Quick Insights Banner */}
           <div className="mt-6 max-w-4xl mx-auto">
             <div className={`p-4 rounded-lg border-2 ${results.netAnnualImpact < 0 ? 'bg-green-50 border-green-200' : 'bg-blue-50 border-blue-200'}`}>
@@ -114,39 +114,36 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
               </p>
             </div>
           </div>
-          <div className="flex justify-center items-center space-x-6 mt-6">
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 mt-6 px-4">
             <div className="flex items-center space-x-2 text-emerald-600">
               <Shield className="w-5 h-5" />
               <span className="text-sm font-medium">Anonymous & Secure</span>
             </div>
-            <MethodologyModal 
-              trigger={
-                <Button variant="outline" size="sm" className="flex items-center space-x-2">
-                  <BookOpen className="w-4 h-4" />
-                  <span>View Sources & Methods</span>
-                </Button>
-              }
-            />
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
+              <MethodologyModal 
+                trigger={
+                  <Button variant="outline" size="sm" className="flex items-center justify-center space-x-2 w-full sm:w-auto">
+                    <BookOpen className="w-4 h-4" />
+                    <span className="text-sm">View Sources & Methods</span>
+                  </Button>
+                }
+              />
               <Button 
                 variant="outline" 
-                size="sm" 
-                className="flex items-center space-x-2"
+                size="sm"
                 onClick={() => {
-                  if (navigator.share) {
-                    navigator.share({
-                      title: 'My Policy Impact Report',
-                      text: 'Check out my personalized policy impact analysis',
-                      url: window.location.href
-                    });
-                  } else {
+                  navigator.share({
+                    title: 'Policy Impact Calculator Results',
+                    text: `My policy impact analysis shows ${results.netAnnualImpact < 0 ? 'potential savings' : 'estimated costs'} of $${Math.abs(results.netAnnualImpact).toLocaleString()} annually.`,
+                    url: window.location.href
+                  }).catch(() => {
                     navigator.clipboard.writeText(window.location.href);
-                    alert('Link copied to clipboard!');
-                  }
+                  });
                 }}
+                className="flex items-center justify-center space-x-2 w-full sm:w-auto"
               >
                 <Share2 className="w-4 h-4" />
-                <span>Share Report</span>
+                <span className="text-sm">Share Results</span>
               </Button>
             </div>
           </div>
