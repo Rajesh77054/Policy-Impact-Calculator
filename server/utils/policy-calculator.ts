@@ -426,6 +426,13 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
   // Calculate Big Bill specific impacts
   const bigBillTaxImpact = bigBillTax - currentTax;
 
+  // Keep impacts differentiated - don't apply family multipliers that reduce differences
+  const finalHealthcareImpact = scaledHealthcareImpact;
+  const finalEnergyImpact = scaledEnergyImpact;
+  
+  // Calculate final net impact
+  const adjustedNetAnnualImpact = scaledTaxImpact + finalHealthcareImpact + stateAdjustment + finalEnergyImpact + employmentTaxAdjustment;
+
   // Debug logging with all intermediate steps
   console.log(`Tax calculation: Current=${currentTax}, Proposed=${proposedTax}, BigBill=${bigBillTax}, Impact=${taxImpact}`);
   console.log(`Healthcare calculation: Current=${healthcareCosts.current}, Proposed=${healthcareCosts.proposed}, Impact=${healthcareImpact}`);
@@ -488,17 +495,10 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
 
   // Timeline calculations with compounding for both scenarios
   const timeline = {
-    fiveYear: Math.round(netAnnualImpact * 5 * 1.025), // 2.5% annual inflation
-    tenYear: Math.round(netAnnualImpact * 10 * 1.28), // Compound inflation
-    twentyYear: Math.round(netAnnualImpact * 20 * 1.64),
+    fiveYear: Math.round(adjustedNetAnnualImpact * 5 * 1.025), // 2.5% annual inflation
+    tenYear: Math.round(adjustedNetAnnualImpact * 10 * 1.28), // Compound inflation
+    twentyYear: Math.round(adjustedNetAnnualImpact * 20 * 1.64),
   };
-
-  // Keep impacts differentiated - don't apply family multipliers that reduce differences
-  const finalHealthcareImpact = scaledHealthcareImpact;
-  const finalEnergyImpact = scaledEnergyImpact;
-  
-  // Calculate final net impact
-  const adjustedNetAnnualImpact = scaledTaxImpact + finalHealthcareImpact + stateAdjustment + finalEnergyImpact + employmentTaxAdjustment;
 
   const bigBillNetImpact = bigBillTaxImpact + (finalHealthcareImpact * 1.4) + stateAdjustment + finalEnergyImpact + employmentTaxAdjustment;
   const bigBillTimeline = {
@@ -522,11 +522,7 @@ return {
       infrastructure: infrastructureImpact,
       jobOpportunities: jobOpportunities,
     },
-    timeline: {
-      fiveYear: Math.round(adjustedNetAnnualImpact * 5 * 1.025), // 2.5% annual inflation
-      tenYear: Math.round(adjustedNetAnnualImpact * 10 * 1.28), // Compound inflation
-      twentyYear: Math.round(adjustedNetAnnualImpact * 20 * 1.64),
-    },
+    timeline: timeline,
     breakdown: breakdown,
     // Big Bill scenario
     bigBillScenario: {
