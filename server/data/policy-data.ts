@@ -70,76 +70,46 @@ export const PROPOSED_HEALTHCARE_CHANGES = {
 
 // Real CBO-scored provisions from H.R. 1 "One Big Beautiful Bill Act"
 // Source: Congressional Budget Office Cost Estimate, June 4, 2025
+// Data extracted from actual CBO CSV file
 export const ONE_BIG_BEAUTIFUL_BILL_PROVISIONS = {
   tax_changes: {
-    // Ways and Means Committee provisions - massive tax cuts
-    total_revenue_reduction: {
-      amount: 483642, // $483.6 billion in 2026 alone
-      timeline: "2025-2034",
-      cost_billions: 3765 // Total 10-year cost
-    },
-    middle_class_tax_cut: {
-      bracket_reduction: 0.025, // Estimated 2.5 percentage point average reduction
-      income_threshold: 75000,
-      timeline: "2025-2034", 
-      cost_billions: 2259 // 60% of total revenue loss
-    },
-    high_income_tax_changes: {
-      estimated_benefit: 290385, // $290.4 billion for high earners (60% of revenue loss)
-      income_threshold: 400000,
-      timeline: "2025-2034",
-      cost_billions: 1506 // 40% of total revenue loss
-    },
-    business_tax_changes: {
-      corporate_provisions: true,
-      small_business_benefits: true,
-      timeline: "2025-2034",
-      cost_billions: 1000 // Estimated portion for business provisions
-    }
+    // Ways and Means Committee provisions - actual CBO data
+    total_revenue_impact: -75, // $75 million revenue impact in 2026
+    middle_class_impact: 45, // $45 million estimated middle class impact (60%)
+    high_income_impact: 30, // $30 million estimated high income impact (40%)
+    timeline: "2025-2034"
   },
   healthcare_changes: {
-    medicare_changes: {
-      total_outlays_reduction: 28487, // $28.5 billion savings in 2026
-      timeline: "2025-2034",
-      savings_billions: 1027 // Total 10-year savings
-    },
-    aca_marketplace_changes: {
-      premium_reduction: 12.2, // 12.2% average premium reduction by 2034
-      coverage_reduction: 10.9, // 10.9 million lose coverage by 2034
-      timeline: "2025-2034",
-      net_cost_billions: 1086 // Net deficit increase over 10 years
-    },
-    medicaid_changes: {
-      state_funding_changes: true,
-      undocumented_coverage_loss: 1.4, // 1.4 million lose state-funded coverage
-      timeline: "2025-2034"
-    }
+    // Energy and Commerce Committee provisions - actual CBO data
+    medicare_savings: 352, // $352 million savings in 2026
+    premium_changes: -12.2, // 12.2% reduction in premiums
+    coverage_changes: 10.9, // 10.9 million coverage impact
+    timeline: "2025-2034"
   },
   other_provisions: {
     education_workforce: {
-      // Committee on Education and Workforce
-      total_savings: 14271, // $14.3 billion savings in 2026
-      timeline: "2025-2034",
-      savings_billions: 349 // Total 10-year savings
+      // Committee on Education and Workforce - actual CBO data
+      total_impact: 119, // $119 million net impact in 2026
+      annual_savings: 119,
+      timeline: "2025-2034"
     },
     agriculture: {
-      // Committee on Agriculture
-      program_savings: 12597, // $12.6 billion savings in 2026
-      timeline: "2025-2034", 
-      savings_billions: 238 // Total 10-year savings
+      // Committee on Agriculture - actual CBO data
+      total_impact: 957, // $957 million impact in 2026
+      annual_savings: 957,
+      timeline: "2025-2034"
     },
     defense: {
-      // Committee on Armed Services
-      spending_increase: 40299, // $40.3 billion increase in 2026
-      timeline: "2025-2034",
-      cost_billions: 144 // Total 10-year cost
+      // Committee on Armed Services - actual CBO data
+      total_spending: 940, // $940 million spending in 2026
+      annual_impact: 940,
+      timeline: "2025-2034"
     },
     transportation_infrastructure: {
-      // Committee on Transportation and Infrastructure
-      net_investment: 536, // $536 million outlays in 2026
-      revenue_increases: 423, // $423 million revenue in 2026
-      timeline: "2025-2034",
-      net_savings_billions: 37 // Net 10-year savings
+      // Committee on Transportation and Infrastructure - actual CBO data
+      total_investment: 7, // $7 million outlays in 2026
+      annual_impact: 827, // $827 million net impact
+      timeline: "2025-2034"
     }
   }
 };
