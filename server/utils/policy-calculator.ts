@@ -459,12 +459,7 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
     },
   ];
   
-    // Calculate net impact for both scenarios
-    const bigBillTaxImpact = taxImpact * (1 + incomeScalar * 0.1);
-  
-  
-
-  console.log(`Results: Tax=${taxImpact}, Healthcare=${healthcareImpact}, State=${stateAdjustment}, Energy=${energyImpact}, Net=${netAnnualImpact}`);
+    console.log(`Results: Tax=${taxImpact}, Healthcare=${healthcareImpact}, State=${stateAdjustment}, Energy=${energyImpact}, Net=${netAnnualImpact}`);
   console.log(`Community: School=${schoolFundingImpact}%, Infrastructure=$${Math.round(infrastructureImpact/1000)}K, Jobs=${jobOpportunities}`);
 
   // Timeline calculations with compounding for both scenarios
