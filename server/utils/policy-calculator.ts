@@ -403,9 +403,9 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
     jobOpportunities = Math.max(150, Math.min(800, jobOpportunities));
   }
 
-    const bigBillTaxImpact = taxImpact * (1 + incomeScalar * 0.1);
-    const scaledHealthcareImpact = healthcareImpact * (1 + incomeScalar * 0.05);
-    const scaledEnergyImpact = energyImpact * (1 + incomeScalar * 0.08);
+  // Calculate Big Bill specific impacts
+  const bigBillTaxImpact = bigBillTax - currentTax;
+  const bigBillHealthcareImpact = healthcareImpact * 1.4; // Big Bill provides more generous healthcare benefits
 
   // Debug logging
   console.log(`Results: Tax=${Math.round(scaledTaxImpact)}, Healthcare=${Math.round(scaledHealthcareImpact)}, State=${Math.round(stateAdjustment)}, Energy=${Math.round(scaledEnergyImpact)}, Net=${Math.round(netAnnualImpact)}`);
@@ -474,10 +474,11 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
     twentyYear: Math.round(netAnnualImpact * 20 * 1.64),
   };
 
+  const bigBillNetImpact = bigBillTaxImpact + bigBillHealthcareImpact + stateAdjustment + scaledEnergyImpact;
   const bigBillTimeline = {
-    fiveYear: Math.round(netAnnualImpact * 5 * 1.025), // 2.5% annual inflation
-    tenYear: Math.round(netAnnualImpact * 10 * 1.28), // Compound inflation
-    twentyYear: Math.round(netAnnualImpact * 20 * 1.64),
+    fiveYear: Math.round(bigBillNetImpact * 5 * 1.025), // 2.5% annual inflation
+    tenYear: Math.round(bigBillNetImpact * 10 * 1.28), // Compound inflation
+    twentyYear: Math.round(bigBillNetImpact * 20 * 1.64),
   };
 
 return {
@@ -502,7 +503,7 @@ return {
       annualTaxImpact: Math.round(bigBillTaxImpact),
       healthcareCostImpact: Math.round(bigBillHealthcareImpact), 
       energyCostImpact: Math.round(scaledEnergyImpact), // Same as current
-      netAnnualImpact: Math.round(netAnnualImpact),
+      netAnnualImpact: Math.round(bigBillNetImpact),
       timeline: bigBillTimeline,
       breakdown: [
         {
