@@ -406,7 +406,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
         </div>
 
         {/* Charts Section */}
-        <PolicyCharts results={results} />
+        <PolicyCharts results={results} showBigBillComparison={showBigBillComparison} />
 
         {/* Policy Breakdown */}
         <Card className="mb-8">

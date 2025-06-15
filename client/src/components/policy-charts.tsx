@@ -14,9 +14,10 @@ import {
 
 interface PolicyChartsProps {
   results: PolicyResults;
+  showBigBillComparison: boolean;
 }
 
-export default function PolicyCharts({ results }: PolicyChartsProps) {
+export default function PolicyCharts({ results, showBigBillComparison }: PolicyChartsProps) {
   const taxChartRef = useRef<HTMLCanvasElement>(null);
   const healthcareChartRef = useRef<HTMLCanvasElement>(null);
   const [openTaxModal, setOpenTaxModal] = useState(false); // State for Tax Impact Modal
@@ -24,9 +25,11 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
 
 
   useEffect(() => {
-    // Load Chart.js dynamically
     const loadChartJS = async () => {
       const { default: Chart } = await import('chart.js/auto');
+
+      // Use appropriate scenario data based on toggle
+      const currentData = showBigBillComparison ? results.bigBillScenario : results;
 
       // Tax Impact Chart
       if (taxChartRef.current) {
@@ -40,15 +43,15 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                 label: 'Tax Impact',
                 data: [
                   0,
-                  results.annualTaxImpact,
-                  results.annualTaxImpact * 1.05,
-                  results.annualTaxImpact * 1.15,
-                  results.annualTaxImpact * 1.35
+                  currentData.annualTaxImpact,
+                  currentData.annualTaxImpact * 3,
+                  currentData.timeline.fiveYear / 5,
+                  currentData.timeline.tenYear / 10
                 ],
-                borderColor: 'hsl(221, 83%, 53%)',
-                backgroundColor: 'hsla(221, 83%, 53%, 0.1)',
-                tension: 0.4,
-                fill: true
+                borderColor: 'hsl(217, 91%, 60%)',
+                backgroundColor: 'hsl(217, 91%, 60%, 0.1)',
+                fill: true,
+                tension: 0.4
               }]
             },
             options: {
@@ -65,8 +68,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                   beginAtZero: false,
                   ticks: {
                     callback: function (value) {
-                      const sign = value >= 0 ? '+' : '';
-                      return sign + '$' + Math.abs(value);
+                      return (value >= 0 ? '+$' : '-$') + Math.abs(value).toLocaleString();
                     }
                   }
                 }
@@ -80,9 +82,11 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
       if (healthcareChartRef.current) {
         const healthCtx = healthcareChartRef.current.getContext('2d');
         if (healthCtx) {
-          // Use actual healthcare costs from calculations
+          // Use healthcare costs - for big bill scenario, calculate proposed cost
           const currentCost = results.healthcareCosts?.current || 0;
-          const proposedCost = results.healthcareCosts?.proposed || 0;
+          const proposedCost = showBigBillComparison
+            ? currentCost + currentData.healthcareCostImpact
+            : results.healthcareCosts?.proposed || 0;
 
           new Chart(healthCtx, {
             type: 'bar',
@@ -124,7 +128,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
     };
 
     loadChartJS();
-  }, [results]);
+  }, [results, showBigBillComparison]);
 
   return (
     <div className="grid lg:grid-cols-2 gap-8 mb-8">
@@ -143,7 +147,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
               <DialogHeader>
                 <DialogTitle>Tax Impact Calculation</DialogTitle>
                 <DialogDescription>
-                  This projection shows the potential tax impact if current policy proposals were to remain 
+                  This projection shows the potential tax impact if current policy proposals were to remain
                   stable over time. It includes adjustments for inflation and income growth.
                 </DialogDescription>
               </DialogHeader>
@@ -158,7 +162,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                   </ul>
                 </div>
                 <p className="text-slate-600">
-                  Use this chart to understand the trajectory of specific proposals, not as a guarantee 
+                  Use this chart to understand the trajectory of specific proposals, not as a guarantee
                   of future tax obligations. Real outcomes will depend on future political and economic developments.
                 </p>
               </div>
