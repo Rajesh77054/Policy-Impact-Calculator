@@ -51,24 +51,29 @@ export default function DemographicsStep({ formData, onComplete }: DemographicsS
         </div>
 
         <div>
-          <Label className="text-sm font-medium text-slate-700 mb-3 block">Family Status</Label>
+          <Label className="text-sm font-medium text-slate-700 mb-3 block">Filing Status</Label>
           <RadioGroup value={familyStatus} onValueChange={setFamilyStatus}>
             <div className="space-y-3">
               {[
                 {
                   value: "single",
-                  title: "Single, no dependents",
-                  description: "Living independently",
+                  title: "Single",
+                  description: "Unmarried and not head of household",
                 },
                 {
-                  value: "married",
-                  title: "Married, no children",
-                  description: "Two-person household",
+                  value: "married-joint",
+                  title: "Married Filing Jointly",
+                  description: "Married couple filing together",
                 },
                 {
-                  value: "family",
-                  title: "Have children or dependents",
-                  description: "Family with dependents",
+                  value: "married-separate",
+                  title: "Married Filing Separately",
+                  description: "Married but filing separate returns",
+                },
+                {
+                  value: "head-of-household",
+                  title: "Head of Household",
+                  description: "Unmarried with qualifying dependents",
                 },
               ].map((option) => (
                 <div key={option.value} className="flex items-center space-x-4 p-4 border border-slate-300 rounded-lg hover:border-primary transition-colors">
@@ -81,6 +86,26 @@ export default function DemographicsStep({ formData, onComplete }: DemographicsS
                   </div>
                 </div>
               ))}
+            </div>
+          </RadioGroup>
+        </div>
+
+        <div>
+          <Label className="text-sm font-medium text-slate-700 mb-3 block">Do you have children or dependents?</Label>
+          <RadioGroup value={hasChildren ? "yes" : "no"} onValueChange={(value) => setHasChildren(value === "yes")}>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex items-center space-x-2 p-3 border border-slate-300 rounded-lg hover:border-primary transition-colors">
+                <RadioGroupItem value="yes" id="has-children-yes" />
+                <Label htmlFor="has-children-yes" className="text-sm cursor-pointer">
+                  Yes
+                </Label>
+              </div>
+              <div className="flex items-center space-x-2 p-3 border border-slate-300 rounded-lg hover:border-primary transition-colors">
+                <RadioGroupItem value="no" id="has-children-no" />
+                <Label htmlFor="has-children-no" className="text-sm cursor-pointer">
+                  No
+                </Label>
+              </div>
             </div>
           </RadioGroup>
         </div>

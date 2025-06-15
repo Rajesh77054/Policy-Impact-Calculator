@@ -31,12 +31,12 @@ export default function IncomeStep({ formData, onComplete }: IncomeStepProps) {
           <RadioGroup value={incomeRange} onValueChange={setIncomeRange}>
             <div className="grid md:grid-cols-2 gap-3">
               {[
-                { value: "under-25k", label: "Under $25,000" },
-                { value: "25k-50k", label: "$25,000 - $50,000" },
-                { value: "50k-75k", label: "$50,000 - $75,000" },
-                { value: "75k-100k", label: "$75,000 - $100,000" },
-                { value: "100k-150k", label: "$100,000 - $150,000" },
-                { value: "over-150k", label: "Over $150,000" },
+                { value: "under-15k", label: "Under $15,000" },
+                { value: "15k-45k", label: "$15,000 - $45,000" },
+                { value: "45k-95k", label: "$45,000 - $95,000" },
+                { value: "95k-200k", label: "$95,000 - $200,000" },
+                { value: "200k-400k", label: "$200,000 - $400,000" },
+                { value: "over-400k", label: "Over $400,000" },
               ].map((option) => (
                 <div key={option.value} className="flex items-center space-x-4 p-4 border border-slate-300 rounded-lg hover:border-primary transition-colors">
                   <RadioGroupItem value={option.value} id={option.value} />
