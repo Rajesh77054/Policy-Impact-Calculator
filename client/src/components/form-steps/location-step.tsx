@@ -122,11 +122,16 @@ export default function LocationStep({ formData, onComplete }: LocationStepProps
             setLocationDetectionAttempted(true);
           }
         },
-        () => {
+        (error) => {
+          console.log("Geolocation error:", error.message);
           setIsDetectingLocation(false);
           setLocationDetectionAttempted(true);
         },
-        { timeout: 5000 }
+        { 
+          timeout: 3000, // Reduced timeout for mobile
+          enableHighAccuracy: false, // Faster on mobile
+          maximumAge: 300000 // 5 minutes cache
+        }
       );
     } else {
       setIsDetectingLocation(false);
@@ -134,12 +139,33 @@ export default function LocationStep({ formData, onComplete }: LocationStepProps
     }
   };
 
+  // Allow manual input override
+  const enableManualInput = () => {
+    setIsDetectingLocation(false);
+    setLocationDetectionAttempted(true);
+  };
+
   // Auto-detect location on component mount if not already provided
   useEffect(() => {
     if (!formData.zipCode && !formData.state && !locationDetectionAttempted) {
-      detectLocation();
+      // Add a small delay for mobile browsers
+      const timer = setTimeout(() => {
+        detectLocation();
+      }, 500);
+      return () => clearTimeout(timer);
     }
   }, [formData.zipCode, formData.state, locationDetectionAttempted]);
+
+  // Auto-timeout location detection after 4 seconds to prevent getting stuck
+  useEffect(() => {
+    if (isDetectingLocation) {
+      const timer = setTimeout(() => {
+        setIsDetectingLocation(false);
+        setLocationDetectionAttempted(true);
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [isDetectingLocation]);
 
   // Auto-advance when state is detected via geolocation and ZIP is empty
   useEffect(() => {
@@ -187,19 +213,31 @@ export default function LocationStep({ formData, onComplete }: LocationStepProps
               </Button>
             )}
           </div>
-          <Input
-            id="zipCode"
-            type="text"
-            placeholder={isDetectingLocation ? "Detecting your location..." : "Enter your ZIP code"}
-            value={zipCode}
-            onChange={(e) => handleZipCodeChange(e.target.value)}
-            maxLength={5}
-            className="text-lg"
-            disabled={isDetectingLocation}
-          />
+          <div className="relative">
+            <Input
+              id="zipCode"
+              type="text"
+              inputMode="numeric"
+              placeholder={isDetectingLocation ? "Detecting your location..." : "Enter your ZIP code"}
+              value={zipCode}
+              onChange={(e) => handleZipCodeChange(e.target.value)}
+              maxLength={5}
+              className="text-lg"
+              disabled={isDetectingLocation}
+            />
+            {isDetectingLocation && (
+              <button
+                type="button"
+                onClick={enableManualInput}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-primary hover:text-primary/80 font-medium"
+              >
+                Enter manually
+              </button>
+            )}
+          </div>
           <p className="text-xs text-slate-500 mt-2">
             {isDetectingLocation 
-              ? "Attempting to detect your location automatically..."
+              ? "Detecting location... Tap 'Enter manually' to skip and enter ZIP code directly"
               : state
               ? "ZIP code is optional since we detected your state"
               : "We'll automatically determine your state from your ZIP code"
