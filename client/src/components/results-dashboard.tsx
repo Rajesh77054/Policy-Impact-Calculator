@@ -1,4 +1,5 @@
 import { Shield, Download, Share2, Calculator, Home, Clock, BookOpen, Info, HelpCircle } from "lucide-react";
+import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -96,7 +97,23 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
               }
             />
             <div className="flex items-center space-x-2">
-              <Button variant="outline" size="sm" className="flex items-center space-x-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="flex items-center space-x-2"
+                onClick={() => {
+                  if (navigator.share) {
+                    navigator.share({
+                      title: 'My Policy Impact Report',
+                      text: 'Check out my personalized policy impact analysis',
+                      url: window.location.href
+                    });
+                  } else {
+                    navigator.clipboard.writeText(window.location.href);
+                    alert('Link copied to clipboard!');
+                  }
+                }}
+              >
                 <Share2 className="w-4 h-4" />
                 <span>Share Report</span>
               </Button>
@@ -381,14 +398,37 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" className="px-8 py-3">
+          <Button 
+            size="lg" 
+            className="px-8 py-3"
+            onClick={() => window.print()}
+          >
             <Download className="w-4 h-4 mr-2" />
             Download PDF Report
           </Button>
-          <Button variant="outline" size="lg" className="px-8 py-3">
-            Start New Analysis
-          </Button>
-          <Button variant="outline" size="lg" className="px-8 py-3">
+          <Link href="/calculator">
+            <Button variant="outline" size="lg" className="px-8 py-3 w-full">
+              Start New Analysis
+            </Button>
+          </Link>
+          <Button 
+            variant="outline" 
+            size="lg" 
+            className="px-8 py-3"
+            onClick={() => {
+              if (navigator.share) {
+                navigator.share({
+                  title: 'My Policy Impact Report',
+                  text: 'Check out my personalized policy impact analysis',
+                  url: window.location.href
+                });
+              } else {
+                navigator.clipboard.writeText(window.location.href);
+                // You could add a toast notification here
+                alert('Link copied to clipboard!');
+              }
+            }}
+          >
             <Share2 className="w-4 h-4 mr-2" />
             Share Results
           </Button>
