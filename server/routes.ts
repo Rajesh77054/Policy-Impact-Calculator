@@ -4,6 +4,9 @@ import session from "express-session";
 import { storage } from "./storage";
 import { formDataSchema, policyResultsSchema } from "@shared/schema";
 import { generateSessionId, calculatePolicyImpact } from "./utils/policy-calculator";
+import { readExcelFile, extractCBOData } from "./utils/excel-reader";
+import multer from 'multer';
+import path from 'path';
 
 declare module 'express-session' {
   interface SessionData {
@@ -72,14 +75,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const sessionId = req.session.policySessionId;
       console.log("Form data update - Session ID:", sessionId);
       console.log("Form data update - Raw body:", JSON.stringify(req.body, null, 2));
-      
+
       if (!sessionId) {
         return res.status(404).json({ message: "No session found" });
       }
 
       const validatedData = formDataSchema.parse(req.body);
       console.log("Form data update - Validated data:", JSON.stringify(validatedData, null, 2));
-      
+
       const session = await storage.updateSessionFormData(sessionId, validatedData);
       console.log("Form data update - Updated session:", JSON.stringify(session.formData, null, 2));
 
@@ -95,14 +98,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const sessionId = req.session.policySessionId;
       console.log("Calculate request - Session ID:", sessionId);
-      
+
       if (!sessionId) {
         return res.status(404).json({ message: "No session found" });
       }
 
       const session = await storage.getSession(sessionId);
       console.log("Calculate request - Session data:", JSON.stringify(session, null, 2));
-      
+
       if (!session || !session.formData) {
         return res.status(400).json({ message: "Form data not found" });
       }
@@ -110,7 +113,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log("Calculating for form data:", JSON.stringify(session.formData, null, 2));
       const results = calculatePolicyImpact(session.formData);
       console.log("Calculation results:", JSON.stringify(results, null, 2));
-      
+
       const updatedSession = await storage.updateSessionResults(sessionId, results);
 
       res.json(updatedSession);
@@ -244,6 +247,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error: any) {
       res.status(500).json({ message: error.message });
+    }
+  });
+
+    // Configure multer for file uploads
+  const upload = multer({ 
+    dest: 'uploads/',
+    fileFilter: (req, file, cb) => {
+      const allowedTypes = ['.xlsx', '.xls'];
+      const fileExt = path.extname(file.originalname).toLowerCase();
+      if (allowedTypes.includes(fileExt)) {
+        cb(null, true);
+      } else {
+        cb(new Error('Only Excel files (.xlsx, .xls) are allowed'));
+      }
+    }
+  });
+
+  // Excel file upload endpoint
+  app.post("/api/upload-cbo-data", upload.single('excelFile'), (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: "No file uploaded" });
+      }
+
+      console.log("Processing uploaded Excel file:", req.file.originalname);
+
+      // Read the Excel file
+      const excelData = readExcelFile(req.file.path);
+
+      // Extract CBO-specific data
+      const cboProvisions = extractCBOData(excelData);
+
+      // Clean up uploaded file
+      require('fs').unlinkSync(req.file.path);
+
+      res.json({
+        success: true,
+        message: "CBO data processed successfully",
+        sheets: Object.keys(excelData),
+        provisions: cboProvisions
+      });
+
+    } catch (error) {
+      console.error("Error processing Excel file:", error);
+      res.status(500).json({ 
+        error: "Failed to process Excel file",
+        details: error.message 
+      });
     }
   });
 
