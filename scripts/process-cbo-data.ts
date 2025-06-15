@@ -1,43 +1,34 @@
 
-import XLSX from 'xlsx';
+import { parseCBOCSV, extractRealCBOProvisions } from '../server/utils/csv-reader';
 import * as path from 'path';
-import * as fs from 'fs';
 
-// Try to read the CBO file that's already uploaded
-const filePath = path.join(process.cwd(), 'attached_assets', 'HR1_HousePassed_6-4-2025_1749952389576.xlsx');
+// Process the CBO CSV file
+const csvPath = path.join(process.cwd(), 'attached_assets', 'One Big Beautiful Bill Act CBO Analysis - Summary_1749953405700.csv');
 
 try {
-  console.log('Attempting to read CBO Excel file...');
-  console.log('File path:', filePath);
-  console.log('File exists:', fs.existsSync(filePath));
+  console.log('Processing CBO CSV data...');
+  console.log('File path:', csvPath);
   
-  const workbook = XLSX.readFile(filePath);
-  console.log('Available sheets:', workbook.SheetNames);
+  const cboData = parseCBOCSV(csvPath);
+  console.log('\n=== CBO Data Summary ===');
   
-  // Process each sheet
-  workbook.SheetNames.forEach(sheetName => {
-    console.log(`\n=== Sheet: ${sheetName} ===`);
-    const worksheet = workbook.Sheets[sheetName];
-    
-    // Convert to JSON to see the structure
-    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-    
-    // Show first 10 rows to understand structure
-    console.log('First 10 rows:');
-    jsonData.slice(0, 10).forEach((row, index) => {
-      console.log(`Row ${index + 1}:`, row);
-    });
+  cboData.forEach(titleData => {
+    console.log(`\nTitle: ${titleData.title}`);
+    console.log(`2026 Outlays: $${titleData.outlays['2026']?.toLocaleString() || 0} million`);
+    console.log(`2026 Revenues: $${titleData.revenues['2026']?.toLocaleString() || 0} million`);
+    console.log(`2026 Net Deficit Impact: $${titleData.netDeficit['2026']?.toLocaleString() || 0} million`);
   });
   
-} catch (error) {
-  console.error('Error reading file:', error.message);
-  console.log('Available files in attached_assets:');
+  console.log('\n=== Extracted Policy Provisions ===');
+  const provisions = extractRealCBOProvisions(cboData);
+  console.log(JSON.stringify(provisions, null, 2));
   
-  try {
-    const fs = require('fs');
-    const files = fs.readdirSync('attached_assets');
-    files.forEach(file => console.log(' -', file));
-  } catch (e) {
-    console.log('Could not list files');
-  }
+  console.log('\n=== Key Findings ===');
+  console.log(`Tax Revenue Impact (2026): $${provisions.tax_changes.total_revenue_impact.toLocaleString()} million`);
+  console.log(`Healthcare Savings (2026): $${provisions.healthcare_changes.medicare_savings.toLocaleString()} million`);
+  console.log(`Defense Spending (2026): $${provisions.defense.total_spending.toLocaleString()} million`);
+  console.log(`Education Savings (2026): $${provisions.education_workforce.annual_savings.toLocaleString()} million`);
+  
+} catch (error) {
+  console.error('Error processing CBO data:', error.message);
 }
