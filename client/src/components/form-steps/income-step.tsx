@@ -8,18 +8,53 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Slider } from "@/components/ui/slider";
 import { TooltipHelp } from "@/components/ui/tooltip-help";
-import { TrendingUp, DollarSign } from "lucide-react";
+import { TrendingUp, DollarSign, Calculator, Info } from "lucide-react";
 
+// IRS-aligned income ranges matching server calculation brackets
 const incomeRanges = [
-  { value: "under-25k", label: "Under $25,000", median: 20000, min: 0, max: 25000 },
-  { value: "25k-50k", label: "$25,000 - $50,000", median: 37500, min: 25000, max: 50000 },
-  { value: "50k-75k", label: "$50,000 - $75,000", median: 62500, min: 50000, max: 75000 },
-  { value: "75k-100k", label: "$75,000 - $100,000", median: 87500, min: 75000, max: 100000 },
-  { value: "100k-150k", label: "$100,000 - $150,000", median: 125000, min: 100000, max: 150000 },
-  { value: "150k-250k", label: "$150,000 - $250,000", median: 200000, min: 150000, max: 250000 },
-  { value: "over-250k", label: "Over $250,000", median: 300000, min: 250000, max: 500000 },
+  { 
+    value: "under-15k", 
+    label: "Under $15,000", 
+    median: 12000,
+    taxBracket: "10%",
+    description: "Lowest tax bracket, maximum benefits eligibility"
+  },
+  { 
+    value: "15k-45k", 
+    label: "$15,000 - $45,000", 
+    median: 30000,
+    taxBracket: "10-12%",
+    description: "Low-middle income, some benefit eligibility"
+  },
+  { 
+    value: "45k-95k", 
+    label: "$45,000 - $95,000", 
+    median: 70000,
+    taxBracket: "12-22%",
+    description: "Middle income, standard tax treatment"
+  },
+  { 
+    value: "95k-200k", 
+    label: "$95,000 - $200,000", 
+    median: 147500,
+    taxBracket: "22-24%",
+    description: "Upper-middle income, reduced benefits"
+  },
+  { 
+    value: "200k-400k", 
+    label: "$200,000 - $400,000", 
+    median: 300000,
+    taxBracket: "24-32%",
+    description: "High income, minimal benefits"
+  },
+  { 
+    value: "over-400k", 
+    label: "Over $400,000", 
+    median: 500000,
+    taxBracket: "32-37%",
+    description: "Highest tax bracket, no income-based benefits"
+  },
 ];
 
 interface IncomeStepProps {
@@ -29,23 +64,10 @@ interface IncomeStepProps {
 
 export default function IncomeStep({ formData, onComplete }: IncomeStepProps) {
   const [incomeRange, setIncomeRange] = useState<string>(formData.incomeRange || "");
-  const [showSlider, setShowSlider] = useState(false);
-  const [sliderValue, setSliderValue] = useState([75000]);
 
   const handleNext = () => {
     if (incomeRange) {
       onComplete({ incomeRange });
-    }
-  };
-
-  const handleSliderChange = (value: number[]) => {
-    setSliderValue(value);
-    // Auto-select appropriate range based on slider value
-    const selectedRange = incomeRanges.find(range => 
-      value[0] >= range.min && value[0] <= range.max
-    );
-    if (selectedRange) {
-      setIncomeRange(selectedRange.value);
     }
   };
 
@@ -58,107 +80,99 @@ export default function IncomeStep({ formData, onComplete }: IncomeStepProps) {
         <h2 className="text-2xl font-bold text-slate-900 mb-2">What's your household income?</h2>
         <div className="flex items-center space-x-2">
           <p className="text-slate-600">
-            This helps us calculate tax impacts and benefit eligibility accurately.
+            These ranges align with IRS tax brackets for accurate policy impact calculations.
           </p>
-          <TooltipHelp content="We use household income ranges to estimate federal and state tax impacts, healthcare subsidies, and other income-based policy effects. This information is kept completely anonymous." />
+          <TooltipHelp content="We use IRS-defined income brackets to ensure calculations match federal tax methodology. Each range corresponds to specific tax rates, deduction limits, and benefit eligibility thresholds used by the government." />
         </div>
       </div>
 
-      {/* Quick Stats */}
-      <div className="grid md:grid-cols-2 gap-4 p-4 bg-slate-50 rounded-lg">
+      {/* Context Cards */}
+      <div className="grid md:grid-cols-3 gap-4 p-4 bg-gradient-to-r from-blue-50 to-green-50 rounded-lg">
         <div className="flex items-center space-x-2">
           <TrendingUp className="w-4 h-4 text-blue-600" />
           <span className="text-sm text-slate-600">US Median: $70,784</span>
         </div>
         <div className="flex items-center space-x-2">
-          <DollarSign className="w-4 h-4 text-green-600" />
-          <span className="text-sm text-slate-600">Your selection affects tax brackets</span>
+          <Calculator className="w-4 h-4 text-green-600" />
+          <span className="text-sm text-slate-600">IRS Tax Brackets</span>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Info className="w-4 h-4 text-purple-600" />
+          <span className="text-sm text-slate-600">Benefits Eligibility</span>
         </div>
       </div>
 
-      <div className="space-y-4">
-        {/* Toggle between selection methods */}
-        <div className="flex justify-center">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowSlider(!showSlider)}
-            className="text-xs"
-          >
-            {showSlider ? "Use Range Selection" : "Use Precise Slider"}
-          </Button>
-        </div>
-
-        {showSlider ? (
-          /* Slider Method */
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Select Your Approximate Income</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-4">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-primary">
-                    ${sliderValue[0].toLocaleString()}
-                  </div>
-                  <div className="text-sm text-slate-600">Annual Household Income</div>
-                </div>
-                <Slider
-                  value={sliderValue}
-                  onValueChange={handleSliderChange}
-                  max={300000}
-                  min={10000}
-                  step={5000}
-                  className="w-full"
-                />
-                <div className="flex justify-between text-xs text-slate-500">
-                  <span>$10k</span>
-                  <span>$150k</span>
-                  <span>$300k+</span>
+      {/* Enhanced Range Selection */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center space-x-2">
+            <span>Annual Household Income Range</span>
+            <span className="text-sm font-normal text-slate-500">(Select your bracket)</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <RadioGroup value={incomeRange} onValueChange={setIncomeRange} className="grid gap-4">
+            {incomeRanges.map((range) => (
+              <div 
+                key={range.value} 
+                className={`relative p-4 rounded-lg border-2 transition-all duration-200 cursor-pointer ${
+                  incomeRange === range.value 
+                    ? "border-primary bg-primary/5 shadow-md" 
+                    : "border-slate-200 hover:border-primary/30 hover:bg-slate-50"
+                }`}
+                onClick={() => setIncomeRange(range.value)}
+              >
+                <div className="flex items-start space-x-3">
+                  <RadioGroupItem value={range.value} id={range.value} className="mt-1" />
+                  <Label htmlFor={range.value} className="flex-1 cursor-pointer">
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium text-slate-900">{range.label}</span>
+                        <div className="flex items-center space-x-3 text-xs">
+                          <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                            {range.taxBracket}
+                          </span>
+                          <span className="text-slate-500">
+                            ~{((range.median / 70784) * 100).toFixed(0)}% of median
+                          </span>
+                        </div>
+                      </div>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        {range.description}
+                      </p>
+                    </div>
+                  </Label>
                 </div>
               </div>
-              {selectedRange && (
-                <div className="p-3 bg-blue-50 rounded border border-blue-200">
-                  <div className="text-sm font-medium text-blue-900">
-                    Selected Range: {selectedRange.label}
-                  </div>
-                  <div className="text-xs text-blue-700 mt-1">
-                    This places you in the {selectedRange.value.replace('-', ' to ')} bracket for policy calculations
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        ) : (
-          /* Traditional Range Selection */
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Annual Household Income Range</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <RadioGroup value={incomeRange} onValueChange={setIncomeRange} className="grid gap-3">
-                {incomeRanges.map((range) => (
-                  <div key={range.value} className="flex items-center space-x-3 p-3 rounded-lg border hover:border-primary/50 transition-colors">
-                    <RadioGroupItem value={range.value} id={range.value} />
-                    <Label htmlFor={range.value} className="flex-1 cursor-pointer">
-                      <div className="flex justify-between items-center">
-                        <span>{range.label}</span>
-                        <span className="text-xs text-slate-500">
-                          ~{((range.median / 70784) * 100).toFixed(0)}% of median
-                        </span>
-                      </div>
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
-            </CardContent>
-          </Card>
-        )}
-      </div>
+            ))}
+          </RadioGroup>
+        </CardContent>
+      </Card>
 
-      {/* Privacy reminder */}
-      <div className="text-xs text-slate-500 text-center p-3 bg-slate-50 rounded">
-        🔒 Your income information is used only for calculations and never stored or shared
+      {/* Selected Range Summary */}
+      {selectedRange && (
+        <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+          <div className="flex items-start space-x-3">
+            <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+            <div>
+              <div className="font-medium text-green-900">
+                Selected: {selectedRange.label}
+              </div>
+              <div className="text-sm text-green-700 mt-1">
+                Tax bracket: {selectedRange.taxBracket} • {selectedRange.description}
+              </div>
+              <div className="text-xs text-green-600 mt-2">
+                ✓ Calculations will use IRS methodologies for this income bracket
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Methodology Note */}
+      <div className="text-xs text-slate-500 text-center p-3 bg-slate-50 rounded border-l-4 border-blue-400">
+        <div className="font-medium mb-1">🔒 Privacy & Accuracy</div>
+        <div>Your income range aligns with official IRS brackets to ensure accurate tax calculations. No personal data is stored.</div>
       </div>
 
       <div className="flex justify-end">
