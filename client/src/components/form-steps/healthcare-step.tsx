@@ -10,10 +10,22 @@ interface HealthcareStepProps {
 
 export default function HealthcareStep({ formData, onComplete }: HealthcareStepProps) {
   const [insuranceType, setInsuranceType] = useState(formData.insuranceType || "");
+  const [errors, setErrors] = useState<string[]>([]);
+
+  const validateForm = () => {
+    const newErrors: string[] = [];
+    if (!insuranceType) newErrors.push("Please select your insurance type");
+    setErrors(newErrors);
+    return newErrors.length === 0;
+  };
 
   const handleSubmit = () => {
+    if (!validateForm()) return;
+    
     onComplete({ insuranceType: insuranceType as FormData["insuranceType"] });
   };
+
+  const isComplete = insuranceType;
 
   return (
     <div>
@@ -22,9 +34,27 @@ export default function HealthcareStep({ formData, onComplete }: HealthcareStepP
         <p className="text-slate-600">Healthcare policies affect people differently based on their current coverage.</p>
       </div>
 
+      {errors.length > 0 && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+          <div className="flex items-start space-x-3">
+            <div className="text-red-500 mt-0.5">⚠</div>
+            <div>
+              <h4 className="text-sm font-medium text-red-800">Please complete required fields:</h4>
+              <ul className="text-sm text-red-700 mt-1 space-y-1">
+                {errors.map((error, index) => (
+                  <li key={index}>• {error}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="space-y-6">
         <div>
-          <Label className="text-sm font-medium text-slate-700 mb-3 block">Current Insurance Type</Label>
+          <Label className="text-sm font-medium text-slate-700 mb-3 block">
+            Current Insurance Type <span className="text-red-500">*</span>
+          </Label>
           <RadioGroup value={insuranceType} onValueChange={setInsuranceType}>
             <div className="space-y-3">
               {[
@@ -76,7 +106,12 @@ export default function HealthcareStep({ formData, onComplete }: HealthcareStepP
         <div className="flex justify-end mt-8">
           <button
             onClick={handleSubmit}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+            disabled={!isComplete}
+            className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+              isComplete
+                ? "bg-blue-600 text-white hover:bg-blue-700"
+                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+            }`}
           >
             Next Step
           </button>

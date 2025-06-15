@@ -27,6 +27,7 @@ export default function Calculator() {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({});
   const { toast } = useToast();
+  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
 
   // Initialize session
   const { mutate: createSession } = useMutation({
@@ -102,6 +103,11 @@ export default function Calculator() {
       const session = await response.json();
       console.log("Server response:", session);
 
+      // Mark current step as completed
+      if (!completedSteps.includes(currentStep)) {
+        setCompletedSteps([...completedSteps, currentStep]);
+      }
+
       // Move to next step or calculate results
       if (currentStep === steps.length) {
         calculateResults();
@@ -164,7 +170,7 @@ export default function Calculator() {
       </header>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <ProgressBar currentStep={currentStep} totalSteps={steps.length} />
+        <ProgressBar currentStep={currentStep} totalSteps={steps.length} completedSteps={completedSteps} />
 
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8 mt-8">
           <CurrentStepComponent

@@ -1,46 +1,66 @@
 interface ProgressBarProps {
   currentStep: number;
   totalSteps: number;
+  completedSteps?: number[];
 }
 
-const stepNames = ["Location", "Demographics", "Employment", "Healthcare", "Income", "Priorities"];
-
-export default function ProgressBar({ currentStep, totalSteps }: ProgressBarProps) {
+export default function ProgressBar({ currentStep, totalSteps, completedSteps = [] }: ProgressBarProps) {
   const progress = (currentStep / totalSteps) * 100;
 
+  const steps = [
+    { number: 1, name: "Location" },
+    { number: 2, name: "Demographics" },
+    { number: 3, name: "Employment" },
+    { number: 4, name: "Healthcare" },
+    { number: 5, name: "Income" },
+    { number: 6, name: "Priorities" },
+  ];
+
   return (
-    <div className="mb-8">
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-sm font-medium text-slate-700">Step {currentStep} of {totalSteps}</span>
-        <span className="text-sm text-slate-500">{Math.round(progress)}% Complete</span>
+    <div className="w-full max-w-4xl mx-auto mb-8">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-sm font-medium text-slate-600">
+          Step {currentStep} of {totalSteps}
+        </h3>
+        <span className="text-sm font-medium text-slate-600">
+          {Math.round(progress)}% Complete
+        </span>
       </div>
-      <div className="w-full bg-slate-200 rounded-full h-2">
+
+      <div className="w-full bg-slate-200 rounded-full h-2 mb-6">
         <div 
-          className="bg-primary h-2 rounded-full transition-all duration-500 ease-out" 
+          className="bg-blue-600 h-2 rounded-full transition-all duration-300 ease-in-out"
           style={{ width: `${progress}%` }}
         />
       </div>
-      
-      {/* Step Indicators */}
-      <div className="flex justify-between mt-4">
-        {stepNames.map((name, index) => {
-          const stepNumber = index + 1;
-          const isCompleted = stepNumber < currentStep;
-          const isCurrent = stepNumber === currentStep;
-          
+
+      <div className="flex items-center justify-between">
+        {steps.map((step, index) => {
+          const isCompleted = completedSteps.includes(step.number);
+          const isCurrent = step.number === currentStep;
+          const isPast = step.number < currentStep;
+
           return (
-            <div key={stepNumber} className="flex flex-col items-center space-y-2">
-              <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                  isCompleted || isCurrent
-                    ? "bg-primary text-white"
-                    : "bg-slate-200 text-slate-500"
-                }`}
-              >
-                {stepNumber}
+            <div key={step.number} className="flex flex-col items-center">
+              <div className={`
+                w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium mb-2 transition-colors
+                ${isCurrent 
+                  ? 'bg-blue-600 text-white ring-2 ring-blue-300' 
+                  : isCompleted 
+                    ? 'bg-green-600 text-white' 
+                    : isPast 
+                      ? 'bg-slate-400 text-white' 
+                      : 'bg-slate-200 text-slate-500'
+                }
+              `}>
+                {isCompleted ? '✓' : step.number}
               </div>
-              <span className={`text-xs ${isCurrent ? "text-slate-600" : "text-slate-500"}`}>
-                {name}
+              <span className={`text-xs ${
+                isCurrent ? 'text-blue-600 font-medium' : 
+                isCompleted ? 'text-green-600 font-medium' : 
+                'text-slate-500'
+              }`}>
+                {step.name}
               </span>
             </div>
           );
