@@ -304,19 +304,19 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-600">School Funding</span>
                   <span className="font-medium text-green-600">
-                    {formatPercentage(results.communityImpact.schoolFunding)}
+                    {formatPercentage(currentData.communityImpact?.schoolFunding || results.communityImpact.schoolFunding)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-600">Infrastructure</span>
                   <span className="font-medium text-green-600">
-                    +${(results.communityImpact.infrastructure / 1000000).toFixed(1)}M local
+                    +${((currentData.communityImpact?.infrastructure || results.communityImpact.infrastructure) / 1000000).toFixed(1)}M local
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-600">Job Opportunities</span>
                   <span className="font-medium text-green-600">
-                    +{results.communityImpact.jobOpportunities} jobs
+                    +{currentData.communityImpact?.jobOpportunities || results.communityImpact.jobOpportunities} jobs
                   </span>
                 </div>
                 <div className="pt-3 border-t border-slate-200">
