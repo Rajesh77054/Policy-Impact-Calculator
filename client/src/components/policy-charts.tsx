@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Info, ExternalLink } from "lucide-react";
+import { Info, ExternalLink, TrendingUp, Heart } from "lucide-react";
 import { PolicyResults } from "@shared/schema";
 import {
   Dialog,
@@ -11,6 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface PolicyChartsProps {
   results: PolicyResults;
