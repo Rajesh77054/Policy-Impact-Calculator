@@ -272,19 +272,19 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-600">5-Year Total</span>
-                  <span className={`font-medium ${results.timeline.fiveYear > 0 ? "text-green-600" : "text-red-600"}`}>
+                  <span className={`font-medium ${results.timeline.fiveYear < 0 ? "text-green-600" : "text-red-600"}`}>
                     {formatNetImpact(results.timeline.fiveYear)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-600">10-Year Total</span>
-                  <span className={`font-medium ${results.timeline.tenYear > 0 ? "text-green-600" : "text-red-600"}`}>
+                  <span className={`font-medium ${results.timeline.tenYear < 0 ? "text-green-600" : "text-red-600"}`}>
                     {formatNetImpact(results.timeline.tenYear)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-600">20-Year Total</span>
-                  <span className={`font-medium ${results.timeline.twentyYear > 0 ? "text-green-600" : "text-red-600"}`}>
+                  <span className={`font-medium ${results.timeline.twentyYear < 0 ? "text-green-600" : "text-red-600"}`}>
                     {formatNetImpact(results.timeline.twentyYear)}
                   </span>
                 </div>
@@ -298,19 +298,23 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                         { name: "Years 1-20", value: results.timeline.twentyYear }
                       ];
 
-                      // Find the period with the best (highest) net impact
+                      // Find the period with the best (most negative = highest savings) net impact
                       const bestPeriod = periods.reduce((best, current) => 
-                        current.value > best.value ? current : best
+                        current.value < best.value ? current : best
                       );
 
-                      // Check if any period is actually beneficial (positive)
-                      const hasBeneficialPeriod = periods.some(p => p.value > 0);
+                      // Check if any period shows savings (negative values)
+                      const hasSavingsPeriod = periods.some(p => p.value < 0);
 
-                      if (hasBeneficialPeriod) {
+                      if (hasSavingsPeriod) {
+                        // If savings increase over time, show that trend
+                        const savingsIncrease = Math.abs(results.timeline.twentyYear) > Math.abs(results.netAnnualImpact);
                         return (
                           <div className="flex justify-between font-semibold">
-                            <span>Best Period</span>
-                            <span className="text-green-600">{bestPeriod.name}</span>
+                            <span>Impact Trend</span>
+                            <span className="text-green-600">
+                              {savingsIncrease ? "Savings increase over time" : "Consistent savings"}
+                            </span>
                           </div>
                         );
                       } else {
@@ -323,7 +327,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                       }
                     })()}
                     <p className="text-xs text-slate-500">
-                      {results.timeline.fiveYear > 0 || results.timeline.tenYear > 0 || results.timeline.twentyYear > 0
+                      {results.timeline.fiveYear < 0 || results.timeline.tenYear < 0 || results.timeline.twentyYear < 0
                         ? "Timeline shows when policies provide the most benefit"
                         : "All periods show net costs. Consider how policy benefits may emerge over time."
                       }
