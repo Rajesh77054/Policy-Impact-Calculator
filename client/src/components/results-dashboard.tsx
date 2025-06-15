@@ -415,7 +415,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
           </CardHeader>
           <CardContent>
             <div className="space-y-6">
-              {results.breakdown.map((policy, index) => (
+              {(showBigBillComparison ? results.bigBillScenario?.breakdown || results.breakdown : results.breakdown).map((policy, index) => (
                 <div key={index} className="border border-slate-200 rounded-lg p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div>
