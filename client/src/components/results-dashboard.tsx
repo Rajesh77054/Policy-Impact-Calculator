@@ -424,7 +424,6 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
             </CardContent>
           </Card>
         </div>
-        )}
 
         {/* Community Impact Comparison for Side-by-Side View */}
         {showBigBillComparison && (
