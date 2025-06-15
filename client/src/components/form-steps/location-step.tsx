@@ -190,14 +190,14 @@ export default function LocationStep({ formData, onComplete }: LocationStepProps
 
   return (
     <div>
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-slate-900 mb-2">Where do you live?</h2>
-        <p className="text-slate-600">This helps us calculate location-specific impacts like taxes and cost of living.</p>
+      <div className="mb-4 sm:mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2">Where do you live?</h2>
+        <p className="text-sm sm:text-base text-slate-600">This helps us calculate location-specific impacts like taxes and cost of living.</p>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         <div>
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 gap-2">
             <Label htmlFor="zipCode" className="text-sm font-medium text-slate-700">ZIP Code</Label>
             {locationDetectionAttempted && !state && (
               <Button
@@ -206,7 +206,7 @@ export default function LocationStep({ formData, onComplete }: LocationStepProps
                 size="sm"
                 onClick={detectLocation}
                 disabled={isDetectingLocation}
-                className="text-primary hover:text-primary/80 text-sm"
+                className="text-primary hover:text-primary/80 text-sm self-start sm:self-auto"
               >
                 <MapPin className="w-4 h-4 mr-1" />
                 {isDetectingLocation ? "Detecting..." : "Try location again"}
@@ -222,20 +222,20 @@ export default function LocationStep({ formData, onComplete }: LocationStepProps
               value={zipCode}
               onChange={(e) => handleZipCodeChange(e.target.value)}
               maxLength={5}
-              className="text-lg"
+              className="text-base sm:text-lg h-12 sm:h-auto bg-white border-slate-300 focus:border-primary focus:ring-primary"
               disabled={isDetectingLocation}
             />
             {isDetectingLocation && (
               <button
                 type="button"
                 onClick={enableManualInput}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-primary hover:text-primary/80 font-medium"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-primary hover:text-primary/80 font-medium bg-white px-2 py-1 rounded border"
               >
                 Enter manually
               </button>
             )}
           </div>
-          <p className="text-xs text-slate-500 mt-2">
+          <p className="text-xs sm:text-sm text-slate-500 mt-2 leading-relaxed">
             {isDetectingLocation 
               ? "Detecting location... Tap 'Enter manually' to skip and enter ZIP code directly"
               : state
@@ -265,25 +265,27 @@ export default function LocationStep({ formData, onComplete }: LocationStepProps
           </div>
         )}
 
-        <div className="bg-primary/5 border border-primary/20 rounded-lg p-4">
-          <div className="flex items-start space-x-3">
-            <Info className="w-5 h-5 text-primary mt-0.5" />
-            <div>
-              <h4 className="text-sm font-medium text-primary">Why we need this</h4>
-              <p className="text-sm text-primary/80 mt-1">
-                Your ZIP code helps us provide accurate estimates for local tax rates, 
-                cost of living, and regional policy impacts. We automatically determine 
-                your state from this information.
-              </p>
+        <details className="bg-primary/5 border border-primary/20 rounded-lg">
+          <summary className="p-3 sm:p-4 cursor-pointer">
+            <div className="flex items-center space-x-3">
+              <Info className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+              <h4 className="text-sm font-medium text-primary">Why we need this information</h4>
             </div>
+          </summary>
+          <div className="px-3 pb-3 sm:px-4 sm:pb-4">
+            <p className="text-xs sm:text-sm text-primary/80 ml-7 sm:ml-8">
+              Your ZIP code helps us provide accurate estimates for local tax rates, 
+              cost of living, and regional policy impacts. We automatically determine 
+              your state from this information.
+            </p>
           </div>
-        </div>
+        </details>
 
-        <div className="flex justify-end mt-8">
+        <div className="flex justify-end mt-6 sm:mt-8">
           <button
             onClick={handleNext}
             disabled={!isValid}
-            className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+            className={`px-4 sm:px-6 py-3 sm:py-2 text-sm sm:text-base rounded-lg font-medium transition-colors w-full sm:w-auto ${
               isValid
                 ? "bg-blue-600 text-white hover:bg-blue-700"
                 : "bg-gray-200 text-gray-400 cursor-not-allowed"

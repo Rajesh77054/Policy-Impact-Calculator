@@ -33,10 +33,10 @@ export default function Calculator() {
   const { mutate: createSession } = useMutation({
     mutationFn: () => apiRequest("POST", "/api/session"),
     onSuccess: () => {
-      toast({
-        title: "Session started",
-        description: "Your anonymous session has been created.",
-      });
+      // toast({
+      //   title: "Session started",
+      //   description: "Your anonymous session has been created.",
+      // });
     },
   });
 
@@ -198,7 +198,7 @@ export default function Calculator() {
               <div className="w-2 h-2 rounded-full bg-slate-300"></div>
               <span>Optional step - you can skip or continue</span>
             </div>
-            
+
             <Button
               variant="ghost"
               onClick={async () => {
