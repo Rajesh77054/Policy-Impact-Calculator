@@ -1,13 +1,33 @@
-import { Shield, Download, Share2, Calculator, Home, Clock, BookOpen, Info, HelpCircle, ToggleLeft, ToggleRight } from "lucide-react";
-import { Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Progress } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
+import { 
+  TrendingDown, 
+  TrendingUp, 
+  DollarSign, 
+  Heart, 
+  Zap, 
+  Users, 
+  Building, 
+  GraduationCap,
+  HelpCircle,
+  Download,
+  Share2,
+  Calendar,
+  Calculator
+} from "lucide-react";
+import PolicyCharts from "./policy-charts";
+import MethodologyModal from "./methodology-modal";
+import { PolicyResults } from "@shared/types";
+import { Shield, Home, Clock, BookOpen, Info, ToggleLeft, ToggleRight } from "lucide-react";
+import { Link } from "wouter";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { PolicyResults } from "@shared/schema";
-import PolicyCharts from "@/components/policy-charts";
-import MethodologyModal from "@/components/methodology-modal";
 import DataDisclaimer from "@/components/data-disclaimer";
 import { useState } from "react";
 

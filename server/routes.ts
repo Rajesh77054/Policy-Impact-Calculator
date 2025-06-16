@@ -27,12 +27,14 @@ interface ReplitUser {
 export async function registerRoutes(app: Express): Promise<Server> {
   // Session middleware
   app.use(session({
-    secret: process.env.SESSION_SECRET || 'policy-calculator-secret',
+    secret: process.env.SESSION_SECRET || 'policy-calculator-secret-' + Math.random().toString(36),
     resave: false,
     saveUninitialized: true,
     cookie: { 
-      secure: false, // Set to true in production with HTTPS
-      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      httpOnly: true,
+      sameSite: 'strict'
     }
   }));
 
