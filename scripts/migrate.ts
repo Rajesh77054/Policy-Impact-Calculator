@@ -1,7 +1,10 @@
 
-import { drizzle } from "drizzle-orm/node-postgres";
-import { migrate } from "drizzle-orm/node-postgres/migrator";
-import { Pool } from "pg";
+import { Pool, neonConfig } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-serverless';
+import { migrate } from 'drizzle-orm/neon-serverless/migrator';
+import ws from "ws";
+
+neonConfig.webSocketConstructor = ws;
 
 async function runMigration() {
   if (!process.env.DATABASE_URL) {
@@ -11,11 +14,8 @@ async function runMigration() {
 
   console.log("🚀 Running database migrations...");
 
-  const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-  });
-
-  const db = drizzle(pool);
+  const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+  const db = drizzle({ client: pool });
 
   try {
     await migrate(db, { migrationsFolder: "./migrations" });
