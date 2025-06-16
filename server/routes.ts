@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import session from "express-session";
 import { storage } from "./storage";
-import { formDataSchema, policyResultsSchema } from "@shared/schema";
+import { formDataSchema } from "@shared/schema";
 import { generateSessionId, calculatePolicyImpact } from "./utils/policy-calculator";
 import { readExcelFile, extractCBOData } from "./utils/excel-reader";
 import multer from 'multer';
