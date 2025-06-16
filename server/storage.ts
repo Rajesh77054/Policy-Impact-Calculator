@@ -1,7 +1,6 @@
-import { drizzle } from "drizzle-orm/node-postgres";
-import { Pool } from "pg";
 import { eq } from "drizzle-orm";
 import { userSessions, type UserSession, type InsertSession, type FormData, type PolicyResults } from "@shared/schema";
+import { db } from "./db";
 
 export interface IStorage {
   createSession(sessionId: string): Promise<UserSession>;
@@ -12,25 +11,9 @@ export interface IStorage {
 }
 
 export class DatabaseStorage implements IStorage {
-  private db: ReturnType<typeof drizzle>;
-
-  constructor() {
-    if (!process.env.DATABASE_URL) {
-      throw new Error("DATABASE_URL environment variable is required");
-    }
-
-    // Use connection pooling for better performance
-    const poolUrl = process.env.DATABASE_URL.replace('.us-east-2', '-pooler.us-east-2');
-    const pool = new Pool({
-      connectionString: poolUrl,
-      max: 10,
-    });
-
-    this.db = drizzle(pool);
-  }
 
   async createSession(sessionId: string): Promise<UserSession> {
-    const [session] = await this.db
+    const [session] = await db
       .insert(userSessions)
       .values({
         sessionId,
@@ -44,7 +27,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getSession(sessionId: string): Promise<UserSession | undefined> {
-    const [session] = await this.db
+    const [session] = await db
       .select()
       .from(userSessions)
       .where(eq(userSessions.sessionId, sessionId))
@@ -54,7 +37,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async updateSessionFormData(sessionId: string, formData: FormData): Promise<UserSession> {
-    const [session] = await this.db
+    const [session] = await db
       .update(userSessions)
       .set({ formData })
       .where(eq(userSessions.sessionId, sessionId))
@@ -68,7 +51,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async updateSessionResults(sessionId: string, results: PolicyResults): Promise<UserSession> {
-    const [session] = await this.db
+    const [session] = await db
       .update(userSessions)
       .set({ results })
       .where(eq(userSessions.sessionId, sessionId))
@@ -82,7 +65,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async deleteSession(sessionId: string): Promise<void> {
-    await this.db
+    await db
       .delete(userSessions)
       .where(eq(userSessions.sessionId, sessionId));
   }
