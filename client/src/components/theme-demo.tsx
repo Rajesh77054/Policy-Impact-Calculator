@@ -142,44 +142,116 @@ export default function ThemeDemo() {
         </Card>
       </div>
 
-      {/* Interactive Buttons Section */}
-      <div className="space-y-6">
-        <h2 className="text-2xl font-semibold text-center gradient-text">Interactive Elements</h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Button 
-            className="glass-button glow-on-hover" 
-            onClick={handleRippleClick}
-          >
-            <Sparkles className="w-4 h-4 mr-2" />
-            Glass Button
-          </Button>
-          
-          <Button 
-            variant="outline" 
-            className="glow-on-hover"
-            onClick={handleRippleClick}
-          >
-            <Zap className="w-4 h-4 mr-2" />
-            Outline Style
-          </Button>
-          
-          <Button 
-            variant="secondary" 
-            className="glass-button glow-on-hover"
-            onClick={handleRippleClick}
-          >
-            <Heart className="w-4 h-4 mr-2" />
-            Secondary
-          </Button>
-          
-          <Button 
-            variant="ghost" 
-            className="glow-on-hover"
-            onClick={handleRippleClick}
-          >
-            <Palette className="w-4 h-4 mr-2" />
-            Ghost Style
-          </Button>
+      {/* Comprehensive Interactive Elements */}
+      <div className="space-y-8">
+        <h2 className="text-2xl font-semibold text-center gradient-text">Interactive UI Elements</h2>
+        
+        {/* Buttons */}
+        <div>
+          <h3 className="text-lg font-medium mb-4 gradient-text">Buttons</h3>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Button 
+              className="glass-button glow-on-hover" 
+              onClick={handleRippleClick}
+            >
+              <Sparkles className="w-4 h-4 mr-2" />
+              Glass Button
+            </Button>
+            
+            <Button 
+              variant="outline" 
+              className="glow-on-hover"
+              onClick={handleRippleClick}
+            >
+              <Zap className="w-4 h-4 mr-2" />
+              Outline Style
+            </Button>
+            
+            <Button 
+              variant="secondary" 
+              className="glass-button glow-on-hover"
+              onClick={handleRippleClick}
+            >
+              <Heart className="w-4 h-4 mr-2" />
+              Secondary
+            </Button>
+            
+            <Button 
+              variant="ghost" 
+              className="glow-on-hover"
+              onClick={handleRippleClick}
+            >
+              <Palette className="w-4 h-4 mr-2" />
+              Ghost Style
+            </Button>
+          </div>
+        </div>
+
+        {/* Input Fields */}
+        <div>
+          <h3 className="text-lg font-medium mb-4 gradient-text">Input Fields</h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-card-foreground">Text Input</label>
+              <input 
+                type="text" 
+                placeholder="Enter text here..." 
+                className="w-full px-4 py-2 rounded-lg text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-card-foreground">Select Dropdown</label>
+              <select className="w-full px-4 py-2 rounded-lg text-foreground">
+                <option>Option 1</option>
+                <option>Option 2</option>
+                <option>Option 3</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Icons and Badges */}
+        <div>
+          <h3 className="text-lg font-medium mb-4 gradient-text">Icons & Badges</h3>
+          <div className="flex flex-wrap gap-4 items-center">
+            <div className="glass-icon p-3 rounded-lg">
+              <Sparkles className="w-6 h-6 text-primary" />
+            </div>
+            <div className="glass-icon p-3 rounded-lg">
+              <Zap className="w-6 h-6 text-emerald-500" />
+            </div>
+            <div className="glass-icon p-3 rounded-lg">
+              <Heart className="w-6 h-6 text-pink-500" />
+            </div>
+            <Badge className="badge">Glass Badge</Badge>
+            <Badge variant="secondary" className="badge">Secondary</Badge>
+            <Badge variant="outline" className="badge">Outline</Badge>
+          </div>
+        </div>
+
+        {/* Progress Elements */}
+        <div>
+          <h3 className="text-lg font-medium mb-4 gradient-text">Progress Elements</h3>
+          <div className="space-y-4">
+            <div>
+              <div className="flex justify-between text-sm mb-2">
+                <span>Loading Progress</span>
+                <span>75%</span>
+              </div>
+              <div className="progress-bar h-3 rounded-full overflow-hidden">
+                <div className="progress-fill h-full w-3/4 rounded-full"></div>
+              </div>
+            </div>
+            <div>
+              <div className="flex justify-between text-sm mb-2">
+                <span>Upload Progress</span>
+                <span>45%</span>
+              </div>
+              <div className="progress-bar h-2 rounded-full overflow-hidden">
+                <div className="progress-fill h-full" style={{ width: '45%' }}></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
