@@ -976,6 +976,152 @@
     inset 0 1px 0 0 hsla(255, 255%, 255%, 0.3);
 }
 
+/* Comprehensive Apple-Style Liquid Glass System */
+.liquid-glass-theme .apple-glass,
+.liquid-glass-theme [role="button"],
+.liquid-glass-theme button,
+.liquid-glass-theme .card,
+.liquid-glass-theme [data-testid*="card"],
+.liquid-glass-theme .glass-morphism {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(220, 230, 255, 0.38) 25%,
+    rgba(240, 235, 255, 0.42) 50%,
+    rgba(235, 245, 255, 0.40) 75%,
+    rgba(255, 255, 255, 0.35) 100%) !important;
+  backdrop-filter: blur(24px) saturate(1.8) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(1.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.7) !important;
+  box-shadow: 
+    0 8px 32px 0 rgba(31, 38, 135, 0.37),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 0 rgba(220, 220, 240, 0.4) !important;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.liquid-glass-theme input,
+.liquid-glass-theme textarea,
+.liquid-glass-theme select {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(220, 230, 255, 0.28) 25%,
+    rgba(240, 235, 255, 0.32) 50%,
+    rgba(235, 245, 255, 0.30) 75%,
+    rgba(255, 255, 255, 0.25) 100%) !important;
+  backdrop-filter: blur(20px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  box-shadow: 
+    0 4px 16px 0 rgba(31, 38, 135, 0.25),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 0 0 rgba(220, 220, 240, 0.25) !important;
+}
+
+/* Specular Highlights for All Glass Elements */
+.liquid-glass-theme .apple-glass::before,
+.liquid-glass-theme [role="button"]::before,
+.liquid-glass-theme button::before,
+.liquid-glass-theme .card::before,
+.liquid-glass-theme [data-testid*="card"]::before,
+.liquid-glass-theme .glass-morphism::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 35%;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(200, 180, 255, 0.12) 50%,
+    transparent 100%);
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Iridescent Surface Effects */
+.liquid-glass-theme .apple-glass::after,
+.liquid-glass-theme [role="button"]::after,
+.liquid-glass-theme button::after,
+.liquid-glass-theme .card::after,
+.liquid-glass-theme [data-testid*="card"]::after,
+.liquid-glass-theme .glass-morphism::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 30% 20%, rgba(200, 180, 255, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 70% 80%, rgba(180, 220, 255, 0.06) 0%, transparent 45%),
+    radial-gradient(circle at 90% 30%, rgba(255, 180, 220, 0.05) 0%, transparent 35%);
+  border-radius: inherit;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+  animation: subtleShimmer 12s ease-in-out infinite;
+  z-index: 0;
+}
+
+/* Enhanced Hover States */
+.liquid-glass-theme .apple-glass:hover,
+.liquid-glass-theme [role="button"]:hover,
+.liquid-glass-theme button:hover,
+.liquid-glass-theme .card:hover,
+.liquid-glass-theme [data-testid*="card"]:hover,
+.liquid-glass-theme .glass-morphism:hover {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(220, 230, 255, 0.48) 25%,
+    rgba(240, 235, 255, 0.52) 50%,
+    rgba(235, 245, 255, 0.50) 75%,
+    rgba(255, 255, 255, 0.45) 100%) !important;
+  transform: translateY(-1px);
+  box-shadow: 
+    0 12px 40px 0 rgba(31, 38, 135, 0.45),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 0 rgba(220, 220, 240, 0.5) !important;
+}
+
+.liquid-glass-theme input:focus,
+.liquid-glass-theme textarea:focus,
+.liquid-glass-theme select:focus {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(220, 230, 255, 0.38) 25%,
+    rgba(240, 235, 255, 0.42) 50%,
+    rgba(235, 245, 255, 0.40) 75%,
+    rgba(255, 255, 255, 0.35) 100%) !important;
+  border-color: rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 
+    0 6px 24px 0 rgba(31, 38, 135, 0.35),
+    0 0 20px rgba(120, 80, 200, 0.15),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 0 0 rgba(220, 220, 240, 0.35) !important;
+  outline: none !important;
+}
+
+/* Ensure text remains highly legible */
+.liquid-glass-theme .apple-glass,
+.liquid-glass-theme [role="button"],
+.liquid-glass-theme button,
+.liquid-glass-theme .card,
+.liquid-glass-theme [data-testid*="card"],
+.liquid-glass-theme .glass-morphism {
+  color: hsl(220, 40%, 15%) !important;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+/* Text content positioning */
+.liquid-glass-theme .apple-glass > *,
+.liquid-glass-theme [role="button"] > *,
+.liquid-glass-theme button > *,
+.liquid-glass-theme .card > *,
+.liquid-glass-theme [data-testid*="card"] > *,
+.liquid-glass-theme .glass-morphism > * {
+  position: relative;
+  z-index: 2;
+}
+
 @layer utilities {
   .gradient-primary {
     background: linear-gradient(135deg, hsl(221, 83%, 53%) 0%, hsl(210, 40%, 98%) 100%);
