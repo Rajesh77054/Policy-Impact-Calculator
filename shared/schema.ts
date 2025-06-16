@@ -8,7 +8,7 @@ export const userSessions = pgTable("user_sessions", {
   sessionId: text("session_id").notNull().unique(),
   formData: json("form_data").$type<FormData>(),
   results: json("results").$type<PolicyResults>(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
+  createdAt: integer("created_at").notNull(),
 });
 
 // Form data structure

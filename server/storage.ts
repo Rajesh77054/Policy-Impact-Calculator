@@ -19,7 +19,7 @@ export class DatabaseStorage implements IStorage {
         sessionId,
         formData: null,
         results: null,
-        createdAt: new Date(),
+        createdAt: Math.floor(Date.now() / 1000), // Unix timestamp in seconds
       })
       .returning();
 
@@ -88,7 +88,7 @@ export class MemStorage implements IStorage {
       sessionId,
       formData: null,
       results: null,
-      createdAt: Date.now(),
+      createdAt: Math.floor(Date.now() / 1000), // Unix timestamp in seconds
     };
     this.sessions.set(sessionId, session);
     return session;
