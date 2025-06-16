@@ -170,14 +170,11 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
   }, [results, showBigBillComparison]);
 
   return (
-    <div className="grid lg:grid-cols-2 gap-8 mb-8">
-      {/* Charts Section */}
-        <div className="mb-8">
-          <h3 className="text-xl font-semibold text-slate-900 mb-6">
-            Visual Analysis
-          </h3>
-          <div className="grid lg:grid-cols-2 gap-6">
-          {/* Tax Impact Timeline - Side by Side */}
+    <div className="mb-8">
+      <h3 className="text-xl font-semibold text-slate-900 mb-6">
+        Visual Analysis
+      </h3>
+      <div className="grid lg:grid-cols-2 gap-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div className="flex items-center space-x-1">
@@ -391,7 +388,7 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
               </div>
             </CardContent>
           </Card>
-        </div>
+      </div>
     </div>
   );
 }
