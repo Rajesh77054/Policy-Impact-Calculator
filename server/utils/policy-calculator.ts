@@ -281,6 +281,22 @@ function calculateHealthcareCosts(
 
   // Enhanced marketplace subsidies and public option
   if (insuranceType === "marketplace") {
+    let costSharing = isFamily ? 2800 : 1200; // Base cost sharing
+
+    // HSA-eligible marketplace plans
+    if (hasHSA) {
+      // HSA marketplace plans typically have lower premiums but higher deductibles
+      currentCost *= 0.88; // 12% lower premiums than non-HSA marketplace plans
+      costSharing = isFamily ? 4000 : 2000; // Higher deductibles typical of HDHP
+      
+      // HSA tax advantages - annual contribution limits for 2024
+      const hsaContributionLimit = isFamily ? 4150 : 3300;
+      const hsaTaxSavings = hsaContributionLimit * 0.22; // Assume 22% tax bracket savings
+      costSharing -= hsaTaxSavings; // Reduce effective cost sharing by tax savings
+    }
+
+    currentCost += costSharing * 0.3; // Add 30% of deductible as expected annual cost sharing
+
     if (incomeAsFPL <= 6.0) { // Expanded eligibility
       const enhancedSubsidy = incomeAsFPL <= 1.5 ? 0.95 :
                              incomeAsFPL <= 2.0 ? 0.80 :
@@ -291,6 +307,17 @@ function calculateHealthcareCosts(
       if (state && STATE_TAX_DATA[state]) {
         proposedCost *= STATE_TAX_DATA[state].cost_of_living_index / 100;
       }
+    }
+
+    // HSA-specific proposed benefits for marketplace plans
+    if (hasHSA) {
+      // Proposed: Enhanced HSA contribution limits (+$500)
+      const enhancedHSALimit = isFamily ? 500 : 350; // Additional contribution room
+      const additionalTaxSavings = enhancedHSALimit * 0.22; // 22% tax savings
+      proposedCost -= additionalTaxSavings;
+      
+      // Proposed: Slower premium growth for HSA plans
+      proposedCost *= 0.95; // 5% slower premium growth for marketplace HSA plans
     }
 
     // Public option availability (15% lower than marketplace average)
