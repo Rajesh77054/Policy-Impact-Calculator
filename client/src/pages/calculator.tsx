@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import ProgressBar from "@/components/progress-bar";
+import ThemeSelector from "@/components/theme-selector";
 import LocationStep from "@/components/form-steps/location-step";
 import DemographicsStep from "@/components/form-steps/demographics-step";
 import EmploymentStep from "@/components/form-steps/employment-step";
@@ -202,17 +203,18 @@ export default function Calculator() {
   const CurrentStepComponent = steps[currentStep - 1].component;
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-50">
+      <header className="bg-background/80 backdrop-blur-md border-b border-border sticky top-0 z-50 glass-morphism">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">PC</span>
+                <span className="text-primary-foreground font-bold text-sm">PC</span>
               </div>
-              <h1 className="text-xl font-semibold text-slate-900">Policy Impact Calculator</h1>
+              <h1 className="text-xl font-semibold text-foreground">Policy Impact Calculator</h1>
             </div>
+            <ThemeSelector />
           </div>
         </div>
       </header>
@@ -220,7 +222,7 @@ export default function Calculator() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12">
         <ProgressBar currentStep={currentStep} totalSteps={steps.length} completedSteps={completedSteps} />
 
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-8 mt-6 sm:mt-8">
+        <div className="bg-card/80 backdrop-blur-sm rounded-xl border border-border enhanced-card p-4 sm:p-8 mt-6 sm:mt-8">
           <CurrentStepComponent
             formData={formData}
             onComplete={handleStepComplete}
