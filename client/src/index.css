@@ -976,25 +976,25 @@
     inset 0 1px 0 0 hsla(255, 255%, 255%, 0.3);
 }
 
-/* Authentic Glassmorphism Based on Visual Reference */
+/* True Glassmorphism - Transparent Glass Effect */
 .liquid-glass-theme .apple-glass,
 .liquid-glass-theme [role="button"],
 .liquid-glass-theme button,
 .liquid-glass-theme .card,
 .liquid-glass-theme [data-testid*="card"],
 .liquid-glass-theme .glass-morphism {
-  /* High transparency showing background clearly */
+  /* Very transparent background - pure white glass */
   background: rgba(255, 255, 255, 0.15) !important;
   
-  /* Strong backdrop blur for visible background distortion */
-  backdrop-filter: blur(16px) saturate(170%) !important;
-  -webkit-backdrop-filter: blur(16px) saturate(170%) !important;
+  /* Strong backdrop blur to show background through glass */
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
   
-  /* Bright glass edge border */
-  border: 1.8px solid rgba(255, 255, 255, 0.45) !important;
+  /* High-contrast glass edge border */
+  border: 1.5px solid rgba(255, 255, 255, 0.45) !important;
   
-  /* Clean floating shadow */
-  box-shadow: 0 2px 22px 0 rgba(50, 70, 120, 0.19) !important;
+  /* Soft realistic shadow */
+  box-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.12) !important;
   
   position: relative;
   overflow: hidden;
@@ -1019,7 +1019,7 @@
     inset 0 -1px 0 0 rgba(220, 220, 240, 0.25) !important;
 }
 
-/* Reference-Based Glass Highlight Arc */
+/* Glass Surface Reflection Band */
 .liquid-glass-theme .apple-glass::before,
 .liquid-glass-theme [role="button"]::before,
 .liquid-glass-theme button::before,
@@ -1031,11 +1031,11 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 54%;
+  height: 56%;
   border-radius: inherit;
   background: linear-gradient(180deg, 
-    rgba(255, 255, 255, 0.29) 18%, 
-    rgba(255, 255, 255, 0.04) 100%);
+    rgba(255, 255, 255, 0.21) 10%, 
+    rgba(255, 255, 255, 0.01) 100%);
   pointer-events: none;
   z-index: 1;
 }
@@ -1096,18 +1096,17 @@
   outline: none !important;
 }
 
-/* Ensure text remains highly legible */
+/* Sharp, high-contrast text for glass cards */
 .liquid-glass-theme .apple-glass,
 .liquid-glass-theme [role="button"],
 .liquid-glass-theme button,
 .liquid-glass-theme .card,
 .liquid-glass-theme [data-testid*="card"],
 .liquid-glass-theme .glass-morphism {
-  color: hsl(220, 40%, 15%) !important;
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+  color: hsl(220, 40%, 20%) !important;
 }
 
-/* Text content positioning */
+/* Ensure content appears above glass effects */
 .liquid-glass-theme .apple-glass > *,
 .liquid-glass-theme [role="button"] > *,
 .liquid-glass-theme button > *,
@@ -1116,6 +1115,28 @@
 .liquid-glass-theme .glass-morphism > * {
   position: relative;
   z-index: 2;
+}
+
+/* Icons and key text should be sharp and clear */
+.liquid-glass-theme .apple-glass h1,
+.liquid-glass-theme .apple-glass h2,
+.liquid-glass-theme .apple-glass h3,
+.liquid-glass-theme .card h1,
+.liquid-glass-theme .card h2,
+.liquid-glass-theme .card h3,
+.liquid-glass-theme [data-testid*="card"] h1,
+.liquid-glass-theme [data-testid*="card"] h2,
+.liquid-glass-theme [data-testid*="card"] h3 {
+  color: hsl(220, 40%, 15%) !important;
+  font-weight: 600;
+}
+
+.liquid-glass-theme .apple-glass svg,
+.liquid-glass-theme .card svg,
+.liquid-glass-theme [data-testid*="card"] svg,
+.liquid-glass-theme [role="button"] svg,
+.liquid-glass-theme button svg {
+  color: hsl(220, 40%, 25%) !important;
 }
 
 @layer utilities {
