@@ -976,29 +976,44 @@
     inset 0 1px 0 0 hsla(255, 255%, 255%, 0.3);
 }
 
-/* Comprehensive Apple-Style Liquid Glass System */
+/* Authentic Apple Liquid Glass System - Real Frosted Glass Effect */
 .liquid-glass-theme .apple-glass,
 .liquid-glass-theme [role="button"],
 .liquid-glass-theme button,
 .liquid-glass-theme .card,
 .liquid-glass-theme [data-testid*="card"],
 .liquid-glass-theme .glass-morphism {
-  background: linear-gradient(135deg,
-    rgba(255, 255, 255, 0.45) 0%,
-    rgba(220, 230, 255, 0.38) 25%,
-    rgba(240, 235, 255, 0.42) 50%,
-    rgba(235, 245, 255, 0.40) 75%,
-    rgba(255, 255, 255, 0.35) 100%) !important;
-  backdrop-filter: blur(24px) saturate(1.8) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(1.8) !important;
-  border: 1px solid rgba(255, 255, 255, 0.7) !important;
+  /* Strong frosted glass background with minimal opacity for true transparency */
+  background: rgba(255, 255, 255, 0.15) !important;
+  
+  /* Intense backdrop blur to create convincing frosted glass effect */
+  backdrop-filter: blur(40px) saturate(2.5) brightness(1.1) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(2.5) brightness(1.1) !important;
+  
+  /* Subtle border with glass-like edge glow */
+  border: 1px solid transparent !important;
+  border-image: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0.8) 100%) 1 !important;
+  
+  /* Deep floating shadows + inner edge highlights + outer glow */
   box-shadow: 
-    0 8px 32px 0 rgba(31, 38, 135, 0.37),
+    /* Deep floating shadow for dimensional depth */
+    0 16px 48px 0 rgba(31, 38, 135, 0.25),
+    0 8px 24px 0 rgba(120, 80, 200, 0.15),
+    /* Outer edge glow simulating light catching glass */
+    0 0 0 1px rgba(255, 255, 255, 0.4),
+    0 0 20px 0 rgba(255, 255, 255, 0.2),
+    /* Inner edge highlights simulating glass surface */
     inset 0 1px 0 0 rgba(255, 255, 255, 0.9),
-    inset 0 -1px 0 0 rgba(220, 220, 240, 0.4) !important;
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.3),
+    inset 1px 0 0 0 rgba(255, 255, 255, 0.5),
+    inset -1px 0 0 0 rgba(255, 255, 255, 0.5) !important;
+  
   position: relative;
   overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .liquid-glass-theme input,
@@ -1019,7 +1034,7 @@
     inset 0 -1px 0 0 rgba(220, 220, 240, 0.25) !important;
 }
 
-/* Specular Highlights for All Glass Elements */
+/* Curved Specular Light Sweep - Simulates Real Glass Surface Reflection */
 .liquid-glass-theme .apple-glass::before,
 .liquid-glass-theme [role="button"]::before,
 .liquid-glass-theme button::before,
@@ -1028,20 +1043,29 @@
 .liquid-glass-theme .glass-morphism::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 35%;
-  background: linear-gradient(135deg,
-    rgba(255, 255, 255, 0.5) 0%,
-    rgba(200, 180, 255, 0.12) 50%,
-    transparent 100%);
+  top: -10%;
+  left: -10%;
+  right: -10%;
+  height: 60%;
+  background: 
+    /* Primary curved light sweep across surface */
+    radial-gradient(ellipse 120% 50% at 50% 0%, 
+      rgba(255, 255, 255, 0.8) 0%, 
+      rgba(255, 255, 255, 0.4) 30%, 
+      transparent 70%),
+    /* Secondary arc light reflection */
+    linear-gradient(135deg,
+      rgba(255, 255, 255, 0.6) 0%,
+      rgba(255, 255, 255, 0.2) 25%,
+      transparent 50%);
   border-radius: inherit;
   pointer-events: none;
   z-index: 1;
+  transform: rotate(-5deg);
+  filter: blur(1px);
 }
 
-/* Iridescent Surface Effects */
+/* Liquid Iridescent Surface Effects - Color Shifting Shimmer */
 .liquid-glass-theme .apple-glass::after,
 .liquid-glass-theme [role="button"]::after,
 .liquid-glass-theme button::after,
@@ -1052,34 +1076,130 @@
   position: absolute;
   inset: 0;
   background: 
-    radial-gradient(circle at 30% 20%, rgba(200, 180, 255, 0.08) 0%, transparent 45%),
-    radial-gradient(circle at 70% 80%, rgba(180, 220, 255, 0.06) 0%, transparent 45%),
-    radial-gradient(circle at 90% 30%, rgba(255, 180, 220, 0.05) 0%, transparent 35%);
+    /* Shifting color pools that create iridescent effect */
+    radial-gradient(circle at 25% 15%, rgba(138, 43, 226, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 75% 25%, rgba(0, 191, 255, 0.10) 0%, transparent 45%),
+    radial-gradient(circle at 20% 80%, rgba(255, 20, 147, 0.08) 0%, transparent 35%),
+    radial-gradient(circle at 80% 75%, rgba(50, 205, 50, 0.09) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.06) 0%, transparent 50%),
+    /* Subtle overall color wash */
+    linear-gradient(135deg,
+      rgba(138, 43, 226, 0.03) 0%,
+      rgba(0, 191, 255, 0.02) 25%,
+      rgba(255, 20, 147, 0.03) 50%,
+      rgba(50, 205, 50, 0.02) 75%,
+      transparent 100%);
   border-radius: inherit;
   pointer-events: none;
-  mix-blend-mode: soft-light;
-  animation: subtleShimmer 12s ease-in-out infinite;
+  mix-blend-mode: color-dodge;
+  animation: liquidShimmer 15s ease-in-out infinite;
   z-index: 0;
 }
 
-/* Enhanced Hover States */
+@keyframes liquidShimmer {
+  0%, 100% {
+    opacity: 0.2;
+    filter: hue-rotate(0deg) saturate(1.2);
+    transform: scale(1);
+  }
+  25% {
+    opacity: 0.35;
+    filter: hue-rotate(15deg) saturate(1.5);
+    transform: scale(1.02);
+  }
+  50% {
+    opacity: 0.4;
+    filter: hue-rotate(30deg) saturate(1.8);
+    transform: scale(1.01);
+  }
+  75% {
+    opacity: 0.3;
+    filter: hue-rotate(20deg) saturate(1.4);
+    transform: scale(1.015);
+  }
+}
+
+/* Interactive Liquid Glass Hover Effects with Ripples */
 .liquid-glass-theme .apple-glass:hover,
 .liquid-glass-theme [role="button"]:hover,
 .liquid-glass-theme button:hover,
 .liquid-glass-theme .card:hover,
 .liquid-glass-theme [data-testid*="card"]:hover,
 .liquid-glass-theme .glass-morphism:hover {
-  background: linear-gradient(135deg,
-    rgba(255, 255, 255, 0.55) 0%,
-    rgba(220, 230, 255, 0.48) 25%,
-    rgba(240, 235, 255, 0.52) 50%,
-    rgba(235, 245, 255, 0.50) 75%,
-    rgba(255, 255, 255, 0.45) 100%) !important;
-  transform: translateY(-1px);
+  /* Increased transparency for stronger frosted effect */
+  background: rgba(255, 255, 255, 0.25) !important;
+  
+  /* Enhanced backdrop blur for more pronounced glass distortion */
+  backdrop-filter: blur(50px) saturate(3.0) brightness(1.2) !important;
+  -webkit-backdrop-filter: blur(50px) saturate(3.0) brightness(1.2) !important;
+  
+  /* Floating lift animation */
+  transform: translateY(-2px) scale(1.005);
+  
+  /* Enhanced floating shadows + brighter edge glow */
   box-shadow: 
-    0 12px 40px 0 rgba(31, 38, 135, 0.45),
+    /* Deeper floating shadows */
+    0 20px 60px 0 rgba(31, 38, 135, 0.4),
+    0 12px 32px 0 rgba(120, 80, 200, 0.25),
+    /* Brighter outer glow simulating light interaction */
+    0 0 0 1px rgba(255, 255, 255, 0.6),
+    0 0 40px 0 rgba(255, 255, 255, 0.3),
+    0 0 80px 0 rgba(138, 43, 226, 0.1),
+    /* Enhanced inner highlights */
     inset 0 1px 0 0 rgba(255, 255, 255, 0.95),
-    inset 0 -1px 0 0 rgba(220, 220, 240, 0.5) !important;
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.4),
+    inset 1px 0 0 0 rgba(255, 255, 255, 0.6),
+    inset -1px 0 0 0 rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Ripple Effect on Click/Tap */
+.liquid-glass-theme .apple-glass:active,
+.liquid-glass-theme [role="button"]:active,
+.liquid-glass-theme button:active,
+.liquid-glass-theme .card:active,
+.liquid-glass-theme [data-testid*="card"]:active,
+.liquid-glass-theme .glass-morphism:active {
+  transform: translateY(-1px) scale(0.998);
+  transition: all 0.1s ease-out;
+}
+
+/* Ripple Animation Overlay */
+.liquid-glass-theme .apple-glass:active::before,
+.liquid-glass-theme [role="button"]:active::before,
+.liquid-glass-theme button:active::before,
+.liquid-glass-theme .card:active::before,
+.liquid-glass-theme [data-testid*="card"]:active::before,
+.liquid-glass-theme .glass-morphism:active::before {
+  animation: rippleExpand 0.6s ease-out;
+}
+
+@keyframes rippleExpand {
+  0% {
+    background: 
+      radial-gradient(circle at 50% 50%, 
+        rgba(255, 255, 255, 0.6) 0%, 
+        rgba(255, 255, 255, 0.3) 30%, 
+        transparent 70%),
+      radial-gradient(ellipse 120% 50% at 50% 0%, 
+        rgba(255, 255, 255, 0.8) 0%, 
+        rgba(255, 255, 255, 0.4) 30%, 
+        transparent 70%);
+    transform: rotate(-5deg) scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    background: 
+      radial-gradient(circle at 50% 50%, 
+        rgba(255, 255, 255, 0.2) 0%, 
+        rgba(255, 255, 255, 0.1) 50%, 
+        transparent 100%),
+      radial-gradient(ellipse 120% 50% at 50% 0%, 
+        rgba(255, 255, 255, 0.4) 0%, 
+        rgba(255, 255, 255, 0.2) 50%, 
+        transparent 100%);
+    transform: rotate(-5deg) scale(1.2);
+    opacity: 0;
+  }
 }
 
 .liquid-glass-theme input:focus,
