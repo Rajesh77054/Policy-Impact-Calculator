@@ -619,12 +619,12 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                     <p className="text-xs text-slate-600 mb-1">
                       <strong>Tax Impact Difference (Proposed vs Current):</strong>
                     </p>
-                    <p className={`text-sm font-medium ${(results.bigBillScenario.annualTaxImpact - results.annualTaxImpact) < 0 ? "text-green-600" : "text-red-600"}`}>
+                    <p className={`text-sm font-medium ${(results.bigBillScenario.annualTaxImpact - results.annualTaxImpact) > 0 ? "text-green-600" : "text-red-600"}`}>
                       {Math.abs(results.bigBillScenario.annualTaxImpact - results.annualTaxImpact) < 100 ? 
                         "Nearly identical impact" : 
-                        (results.bigBillScenario.annualTaxImpact - results.annualTaxImpact) < 0 ?
-                          `$${Math.abs(results.bigBillScenario.annualTaxImpact - results.annualTaxImpact).toLocaleString()} less in taxes` :
-                          `$${Math.abs(results.bigBillScenario.annualTaxImpact - results.annualTaxImpact).toLocaleString()} more in taxes`
+                        (results.bigBillScenario.annualTaxImpact - results.annualTaxImpact) > 0 ?
+                          `$${Math.abs(results.bigBillScenario.annualTaxImpact - results.annualTaxImpact).toLocaleString()} more in savings` :
+                          `$${Math.abs(results.bigBillScenario.annualTaxImpact - results.annualTaxImpact).toLocaleString()} less savings`
                       }
                     </p>
                   </div>
