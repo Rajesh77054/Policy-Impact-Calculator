@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import LandingHero from "@/components/landing-hero";
+import ThemeSelector from "@/components/theme-selector";
 import { Shield, CheckCircle, BookOpen } from "lucide-react";
 
 export default function Home() {
