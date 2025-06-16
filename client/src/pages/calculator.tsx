@@ -29,14 +29,22 @@ export default function Calculator() {
   const { toast } = useToast();
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
 
+  const [sessionReady, setSessionReady] = useState(false);
+
   // Initialize session
   const { mutate: createSession } = useMutation({
     mutationFn: () => apiRequest("POST", "/api/session"),
     onSuccess: () => {
-      // toast({
-      //   title: "Session started",
-      //   description: "Your anonymous session has been created.",
-      // });
+      setSessionReady(true);
+      console.log("Session created successfully");
+    },
+    onError: (error) => {
+      console.error("Failed to create session:", error);
+      toast({
+        title: "Session Error",
+        description: "Failed to initialize session. Please refresh the page.",
+        variant: "destructive",
+      });
     },
   });
 
@@ -76,6 +84,17 @@ export default function Calculator() {
   const handleStepComplete = async (stepData: Partial<FormData>) => {
     console.log("Step completed with data:", stepData);
     console.log("Current form data before update:", formData);
+    console.log("Session ready status:", sessionReady);
+
+    if (!sessionReady) {
+      console.error("Session not ready, cannot save form data");
+      toast({
+        title: "Session Error",
+        description: "Session is not ready. Please wait a moment and try again.",
+        variant: "destructive",
+      });
+      return;
+    }
 
     // Ensure we're properly merging the data
     const updatedData = { ...formData, ...stepData };
@@ -119,6 +138,11 @@ export default function Calculator() {
       }
     } catch (error) {
       console.error("Error saving form data:", error);
+      toast({
+        title: "Save Error",
+        description: "Failed to save form data. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -130,6 +154,12 @@ export default function Calculator() {
 
   const handleSkip = async () => {
     console.log("Skipping step, preserving current form data:", formData);
+    console.log("Session ready status on skip:", sessionReady);
+
+    if (!sessionReady) {
+      console.log("Session not ready, skipping without saving");
+      return;
+    }
 
     try {
       console.log("Skip - Sending form data to server:", JSON.stringify(formData, null, 2));

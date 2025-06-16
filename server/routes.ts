@@ -41,13 +41,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create new session
   app.post("/api/session", async (req, res) => {
     try {
+      console.log("Creating new session...");
       const sessionId = generateSessionId();
+      console.log("Generated session ID:", sessionId);
+      
       const session = await storage.createSession(sessionId);
+      console.log("Session created in storage:", session);
 
       req.session.policySessionId = sessionId;
+      console.log("Session ID stored in express session");
 
       res.json({ sessionId });
     } catch (error: any) {
+      console.error("Session creation error:", error.message, error.stack);
       res.status(500).json({ message: error.message });
     }
   });
