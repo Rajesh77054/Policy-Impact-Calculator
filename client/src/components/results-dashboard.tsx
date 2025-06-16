@@ -549,49 +549,171 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
         {/* Charts Section */}
         <PolicyCharts results={results} showBigBillComparison={showBigBillComparison} />
 
-        {/* Policy Breakdown */}
+        {/* Policy Breakdown - Side by Side */}
         <Card className="mb-8">
           <CardHeader>
             <CardTitle className="text-2xl font-bold">Policy Breakdown</CardTitle>
+            <p className="text-slate-600">
+              Detailed breakdown of how each policy area affects you under both scenarios
+            </p>
           </CardHeader>
           <CardContent>
             <div className="space-y-6">
-              {(showBigBillComparison ? results.bigBillScenario?.breakdown || results.breakdown : results.breakdown).map((policy, index) => (
-                <div key={index} className="border border-slate-200 rounded-lg p-6">
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <h4 className="text-lg font-semibold text-slate-900">{policy.title}</h4>
-                      <p className="text-slate-600 mt-1">{policy.description}</p>
-                    </div>
-                    <span 
-                      className={`px-3 py-1 rounded-full text-sm font-medium ${
-                        policy.impact < 0
-                          ? "bg-green-100 text-green-800" 
-                          : "bg-red-100 text-red-800"
-                      }`}
-                    >
-                      {policy.category === "tax" ? formatTaxImpact(policy.impact) : formatCostImpact(policy.impact)} annually
-                    </span>
-                  </div>
-                  <div className="space-y-3">
-                    {policy.details.map((detail, detailIndex) => (
-                      <div key={detailIndex} className="flex justify-between text-sm">
-                        <span className="text-slate-600">{detail.item}</span>
-                        <span className={`font-medium ${detail.amount < 0 ? "text-green-600" : "text-red-600"}`}>
-                          {policy.category === "tax" ? formatTaxImpact(detail.amount) : formatCostImpact(detail.amount)}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                  <MethodologyModal 
-                    trigger={
-                      <Button variant="link" className="mt-4 p-0 h-auto text-sm text-primary">
-                        Read detailed explanation →
-                      </Button>
-                    }
-                  />
+              {/* Tax Policy Comparison */}
+              <div className="border border-slate-200 rounded-lg p-6">
+                <div className="mb-6">
+                  <h4 className="text-lg font-semibold text-slate-900 mb-2">Tax Policy Changes</h4>
+                  <p className="text-slate-600 text-sm">Impact of federal tax policy modifications on your household</p>
                 </div>
-              ))}
+                
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Current Law Tax Details */}
+                  <div className="bg-slate-50 rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-4">
+                      <h5 className="font-medium text-slate-900">Current Law</h5>
+                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                        results.annualTaxImpact < 0 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                      }`}>
+                        {formatTaxImpact(results.annualTaxImpact)} annually
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-600 mb-3">Based on current IRS brackets and proposed Congressional legislation</p>
+                    <div className="space-y-2">
+                      {results.breakdown[0]?.details.map((detail, index) => (
+                        <div key={index} className="flex justify-between text-sm">
+                          <span className="text-slate-600">{detail.item}</span>
+                          <span className={`font-medium ${detail.amount < 0 ? "text-green-600" : "text-red-600"}`}>
+                            {formatTaxImpact(detail.amount)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Proposed Bill Tax Details */}
+                  <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                    <div className="flex items-center justify-between mb-4">
+                      <h5 className="font-medium text-blue-900">Proposed Bill</h5>
+                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                        results.bigBillScenario.annualTaxImpact < 0 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                      }`}>
+                        {formatTaxImpact(results.bigBillScenario.annualTaxImpact)} annually
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-600 mb-3">PROPOSED LEGISLATION (NOT YET LAW) - Based on H.R. 1 Congressional Budget Office analysis</p>
+                    <div className="space-y-2">
+                      {results.bigBillScenario.breakdown[0]?.details.map((detail, index) => (
+                        <div key={index} className="flex justify-between text-sm">
+                          <span className="text-slate-600">{detail.item}</span>
+                          <span className={`font-medium ${detail.amount < 0 ? "text-green-600" : "text-red-600"}`}>
+                            {formatTaxImpact(detail.amount)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="mt-4 pt-3 border-t border-slate-200">
+                  <div className="text-center">
+                    <p className="text-xs text-slate-600 mb-1">
+                      <strong>Tax Savings Difference:</strong>
+                    </p>
+                    <p className={`text-sm font-medium ${(results.bigBillScenario.annualTaxImpact - results.annualTaxImpact) < 0 ? "text-green-600" : "text-red-600"}`}>
+                      {Math.abs(results.bigBillScenario.annualTaxImpact - results.annualTaxImpact) < 100 ? 
+                        "Nearly identical impact" : 
+                        formatCurrency(results.bigBillScenario.annualTaxImpact - results.annualTaxImpact)
+                      }
+                    </p>
+                  </div>
+                </div>
+
+                <MethodologyModal 
+                  trigger={
+                    <Button variant="link" className="mt-4 p-0 h-auto text-sm text-primary">
+                      Read detailed explanation →
+                    </Button>
+                  }
+                />
+              </div>
+
+              {/* Healthcare Policy Comparison */}
+              <div className="border border-slate-200 rounded-lg p-6">
+                <div className="mb-6">
+                  <h4 className="text-lg font-semibold text-slate-900 mb-2">Healthcare Policy Reforms</h4>
+                  <p className="text-slate-600 text-sm">Impact of healthcare cost changes and coverage improvements</p>
+                </div>
+                
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Current Law Healthcare Details */}
+                  <div className="bg-slate-50 rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-4">
+                      <h5 className="font-medium text-slate-900">Current Law</h5>
+                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                        results.healthcareCostImpact < 0 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                      }`}>
+                        {formatCostImpact(results.healthcareCostImpact)} annually
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-600 mb-3">Based on Kaiser Family Foundation data and proposed Medicare expansion</p>
+                    <div className="space-y-2">
+                      {results.breakdown[1]?.details.map((detail, index) => (
+                        <div key={index} className="flex justify-between text-sm">
+                          <span className="text-slate-600">{detail.item}</span>
+                          <span className={`font-medium ${detail.amount < 0 ? "text-green-600" : "text-red-600"}`}>
+                            {formatCostImpact(detail.amount)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Proposed Bill Healthcare Details */}
+                  <div className="bg-emerald-50 rounded-lg p-4 border border-emerald-200">
+                    <div className="flex items-center justify-between mb-4">
+                      <h5 className="font-medium text-emerald-900">Proposed Bill</h5>
+                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                        results.bigBillScenario.healthcareCostImpact < 0 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                      }`}>
+                        {formatCostImpact(results.bigBillScenario.healthcareCostImpact)} annually
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-600 mb-3">Expanded Medicare and enhanced ACA subsidies</p>
+                    <div className="space-y-2">
+                      {results.bigBillScenario.breakdown[1]?.details.map((detail, index) => (
+                        <div key={index} className="flex justify-between text-sm">
+                          <span className="text-slate-600">{detail.item}</span>
+                          <span className={`font-medium ${detail.amount < 0 ? "text-green-600" : "text-red-600"}`}>
+                            {formatCostImpact(detail.amount)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="mt-4 pt-3 border-t border-slate-200">
+                  <div className="text-center">
+                    <p className="text-xs text-slate-600 mb-1">
+                      <strong>Healthcare Savings Difference:</strong>
+                    </p>
+                    <p className={`text-sm font-medium ${(results.bigBillScenario.healthcareCostImpact - results.healthcareCostImpact) < 0 ? "text-green-600" : "text-red-600"}`}>
+                      {Math.abs(results.bigBillScenario.healthcareCostImpact - results.healthcareCostImpact) < 50 ? 
+                        "Nearly identical impact" : 
+                        formatCurrency(results.bigBillScenario.healthcareCostImpact - results.healthcareCostImpact)
+                      }
+                    </p>
+                  </div>
+                </div>
+
+                <MethodologyModal 
+                  trigger={
+                    <Button variant="link" className="mt-4 p-0 h-auto text-sm text-primary">
+                      Read detailed explanation →
+                    </Button>
+                  }
+                />
+              </div>
             </div>
           </CardContent>
         </Card>
