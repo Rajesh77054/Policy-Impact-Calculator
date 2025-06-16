@@ -336,8 +336,8 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
           <h3 className="text-xl font-semibold text-slate-900 mb-2">
             Additional Analysis
           </h3>
-          <p className="text-slate-600 text-sm">
-            Side-by-side comparison of community impact and long-term projections
+          <p className="text-slate-600">
+            Side-by-side comparison of community impact and long-term projections with phase-in timelines
           </p>
         </div>
         <div className="grid md:grid-cols-2 gap-6 mb-8">
@@ -412,7 +412,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                   </div>
                 </div>
               </div>
-              
+
               <div className="mt-4 pt-3 border-t border-slate-200">
                 <div className="text-center">
                   <p className="text-xs text-slate-600 mb-1">
@@ -565,7 +565,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                   <h4 className="text-lg font-semibold text-slate-900 mb-2">Tax Policy Changes</h4>
                   <p className="text-slate-600 text-sm">Impact of federal tax policy modifications on your household</p>
                 </div>
-                
+
                 <div className="grid md:grid-cols-2 gap-6">
                   {/* Current Law Tax Details */}
                   <div className="bg-slate-50 rounded-lg p-4">
@@ -613,7 +613,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="mt-4 pt-3 border-t border-slate-200">
                   <div className="text-center">
                     <p className="text-xs text-slate-600 mb-1">
@@ -645,7 +645,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                   <h4 className="text-lg font-semibold text-slate-900 mb-2">Healthcare Policy Reforms</h4>
                   <p className="text-slate-600 text-sm">Impact of healthcare cost changes and coverage improvements</p>
                 </div>
-                
+
                 <div className="grid md:grid-cols-2 gap-6">
                   {/* Current Law Healthcare Details */}
                   <div className="bg-slate-50 rounded-lg p-4">
@@ -693,7 +693,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="mt-4 pt-3 border-t border-slate-200">
                   <div className="text-center">
                     <p className="text-xs text-slate-600 mb-1">
