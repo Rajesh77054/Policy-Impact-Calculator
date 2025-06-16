@@ -976,35 +976,29 @@
     inset 0 1px 0 0 hsla(255, 255%, 255%, 0.3);
 }
 
-/* Apple Reference-Based Liquid Glass System */
+/* Authentic Glassmorphism Based on Visual Reference */
 .liquid-glass-theme .apple-glass,
 .liquid-glass-theme [role="button"],
 .liquid-glass-theme button,
 .liquid-glass-theme .card,
 .liquid-glass-theme [data-testid*="card"],
 .liquid-glass-theme .glass-morphism {
-  /* Apple-style glass background with optimal transparency */
-  background: rgba(255, 255, 255, 0.36) !important;
+  /* High transparency showing background clearly */
+  background: rgba(255, 255, 255, 0.15) !important;
   
-  /* Exact Apple backdrop blur with saturation boost */
-  backdrop-filter: blur(23px) saturate(169%) !important;
-  -webkit-backdrop-filter: blur(23px) saturate(169%) !important;
+  /* Strong backdrop blur for visible background distortion */
+  backdrop-filter: blur(16px) saturate(170%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(170%) !important;
   
-  /* Apple-style border with proper glass edge treatment */
-  border: 1.5px solid rgba(255, 255, 255, 0.28) !important;
+  /* Bright glass edge border */
+  border: 1.8px solid rgba(255, 255, 255, 0.45) !important;
   
-  /* Apple-matched shadow system with inset highlights */
-  box-shadow:
-    /* Primary floating shadow */
-    0 8px 32px 0 rgba(31, 38, 135, 0.34),
-    /* Inner light reflection */
-    0 1.5px 18px 0 rgba(134, 180, 255, 0.18) inset,
-    /* Inner edge glow */
-    0 0 0 2px rgba(255, 255, 255, 0.14) inset !important;
+  /* Clean floating shadow */
+  box-shadow: 0 2px 22px 0 rgba(50, 70, 120, 0.19) !important;
   
   position: relative;
   overflow: hidden;
-  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: background 0.2s, box-shadow 0.2s;
 }
 
 .liquid-glass-theme input,
@@ -1025,7 +1019,7 @@
     inset 0 -1px 0 0 rgba(220, 220, 240, 0.25) !important;
 }
 
-/* Apple Reference Reflection Arc - Exact Specular Highlight */
+/* Reference-Based Glass Highlight Arc */
 .liquid-glass-theme .apple-glass::before,
 .liquid-glass-theme [role="button"]::before,
 .liquid-glass-theme button::before,
@@ -1034,42 +1028,19 @@
 .liquid-glass-theme .glass-morphism::before {
   content: '';
   position: absolute;
-  top: -14%;
-  left: -18%;
-  width: 120%;
-  height: 42%;
-  background: linear-gradient(120deg, 
-    rgba(255, 255, 255, 0.22) 10%, 
-    rgba(255, 255, 255, 0.08) 71%);
-  border-radius: 55%;
-  filter: blur(4px);
-  opacity: 0.9;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 54%;
+  border-radius: inherit;
+  background: linear-gradient(180deg, 
+    rgba(255, 255, 255, 0.29) 18%, 
+    rgba(255, 255, 255, 0.04) 100%);
   pointer-events: none;
   z-index: 1;
 }
 
-/* Apple Reference Iridescent Flare - Bottom Right Color Accent */
-.liquid-glass-theme .apple-glass::after,
-.liquid-glass-theme [role="button"]::after,
-.liquid-glass-theme button::after,
-.liquid-glass-theme .card::after,
-.liquid-glass-theme [data-testid*="card"]::after,
-.liquid-glass-theme .glass-morphism::after {
-  content: '';
-  position: absolute;
-  bottom: -12%;
-  right: -10%;
-  width: 50%;
-  height: 32%;
-  background: radial-gradient(ellipse at bottom right, 
-    #bdb3ff88 10%, 
-    #9be0ff44 55%, 
-    transparent 90%);
-  filter: blur(8px);
-  opacity: 0.85;
-  pointer-events: none;
-  z-index: 0;
-}
+/* Clean glassmorphism - no additional color flares needed */
 
 @keyframes liquidShimmer {
   0%, 100% {
@@ -1094,91 +1065,18 @@
   }
 }
 
-/* Apple Reference Hover Effects */
-.liquid-glass-theme .apple-glass:hover,
-.liquid-glass-theme [role="button"]:hover,
-.liquid-glass-theme button:hover,
-.liquid-glass-theme .card:hover,
-.liquid-glass-theme [data-testid*="card"]:hover,
-.liquid-glass-theme .glass-morphism:hover {
-  /* Maintain consistent glass background */
-  background: rgba(255, 255, 255, 0.36) !important;
-  
-  /* Keep Apple-standard backdrop blur */
-  backdrop-filter: blur(23px) saturate(169%) !important;
-  -webkit-backdrop-filter: blur(23px) saturate(169%) !important;
-  
-  /* Subtle lift effect */
-  transform: translateY(-1px);
-}
-
-/* Enhanced reflection and flare on hover - matches Apple reference */
-.liquid-glass-theme .apple-glass:hover::after,
-.liquid-glass-theme [role="button"]:hover::after,
-.liquid-glass-theme button:hover::after,
-.liquid-glass-theme .card:hover::after,
-.liquid-glass-theme [data-testid*="card"]:hover::after,
-.liquid-glass-theme .glass-morphism:hover::after,
-.liquid-glass-theme .apple-glass:hover::before,
-.liquid-glass-theme [role="button"]:hover::before,
-.liquid-glass-theme button:hover::before,
-.liquid-glass-theme .card:hover::before,
-.liquid-glass-theme [data-testid*="card"]:hover::before,
-.liquid-glass-theme .glass-morphism:hover::before {
-  opacity: 1;
-  filter: blur(3px) brightness(1.12);
-  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* Ripple Effect on Click/Tap */
+/* Reference-Based Active/Pressed State */
 .liquid-glass-theme .apple-glass:active,
 .liquid-glass-theme [role="button"]:active,
 .liquid-glass-theme button:active,
 .liquid-glass-theme .card:active,
 .liquid-glass-theme [data-testid*="card"]:active,
 .liquid-glass-theme .glass-morphism:active {
-  transform: translateY(-1px) scale(0.998);
-  transition: all 0.1s ease-out;
+  background: rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 4px 32px 0 rgba(120, 200, 250, 0.23) !important;
 }
 
-/* Ripple Animation Overlay */
-.liquid-glass-theme .apple-glass:active::before,
-.liquid-glass-theme [role="button"]:active::before,
-.liquid-glass-theme button:active::before,
-.liquid-glass-theme .card:active::before,
-.liquid-glass-theme [data-testid*="card"]:active::before,
-.liquid-glass-theme .glass-morphism:active::before {
-  animation: rippleExpand 0.6s ease-out;
-}
-
-@keyframes rippleExpand {
-  0% {
-    background: 
-      radial-gradient(circle at 50% 50%, 
-        rgba(255, 255, 255, 0.6) 0%, 
-        rgba(255, 255, 255, 0.3) 30%, 
-        transparent 70%),
-      radial-gradient(ellipse 120% 50% at 50% 0%, 
-        rgba(255, 255, 255, 0.8) 0%, 
-        rgba(255, 255, 255, 0.4) 30%, 
-        transparent 70%);
-    transform: rotate(-5deg) scale(0.8);
-    opacity: 1;
-  }
-  100% {
-    background: 
-      radial-gradient(circle at 50% 50%, 
-        rgba(255, 255, 255, 0.2) 0%, 
-        rgba(255, 255, 255, 0.1) 50%, 
-        transparent 100%),
-      radial-gradient(ellipse 120% 50% at 50% 0%, 
-        rgba(255, 255, 255, 0.4) 0%, 
-        rgba(255, 255, 255, 0.2) 50%, 
-        transparent 100%);
-    transform: rotate(-5deg) scale(1.2);
-    opacity: 0;
-  }
-}
+/* Clean glassmorphism - simple interactions */
 
 .liquid-glass-theme input:focus,
 .liquid-glass-theme textarea:focus,
