@@ -7,6 +7,7 @@ import ErrorBoundary from "./components/error-boundary";
 import Home from "./pages/home";
 import Calculator from "./pages/calculator";
 import Results from "./pages/results";
+import ThemeDemoPage from "./pages/theme-demo";
 import NotFound from "./pages/not-found";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
             <Route path="/" component={Home} />
             <Route path="/calculator" component={Calculator} />
             <Route path="/results" component={Results} />
+            <Route path="/theme-demo" component={ThemeDemoPage} />
             <Route component={NotFound} />
           </Switch>
           <Toaster />

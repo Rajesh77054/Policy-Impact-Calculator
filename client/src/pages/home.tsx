@@ -58,6 +58,7 @@ export default function Home() {
                 <li><a href="#" className="hover:text-white transition-colors">How it works</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Methodology</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Sources</a></li>
+                <li><Link href="/theme-demo" className="hover:text-white transition-colors">Theme Demo</Link></li>
               </ul>
             </div>
             
