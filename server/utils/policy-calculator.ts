@@ -135,7 +135,8 @@ function calculateHealthcareCosts(
   familyStatus: string,
   income: number,
   state: string | undefined,
-  employmentStatus: string | undefined
+  employmentStatus: string | undefined,
+  hasHSA: boolean = false
 ): { current: number; proposed: number } {
 
   const isFamily = familyStatus === "family";
@@ -170,6 +171,18 @@ function calculateHealthcareCosts(
       // Employer coverage varies significantly by employment status and income
       let employerContribution = 0.72; // Default 72% employer contribution
       let costSharing = isFamily ? 2800 : 1200; // Base cost sharing
+
+      // HSA-eligible plans have different cost structures
+      if (hasHSA) {
+        // HSA plans typically have lower premiums but higher deductibles
+        currentCost *= 0.85; // 15% lower premiums
+        costSharing = isFamily ? 4200 : 2100; // Higher deductibles typical of HDHP
+        
+        // HSA tax advantages - annual contribution limits for 2024
+        const hsaContributionLimit = isFamily ? 4150 : 3300;
+        const hsaTaxSavings = hsaContributionLimit * 0.22; // Assume 22% tax bracket savings
+        costSharing -= hsaTaxSavings; // Reduce effective cost sharing by tax savings
+      }
 
       if (employmentStatus === "part-time") {
         employerContribution = 0.35; // Much lower for part-time
@@ -247,9 +260,20 @@ function calculateHealthcareCosts(
       proposedCost = currentCost;
     }
 
+    // HSA-specific proposed benefits
+    if (hasHSA) {
+      // Proposed: Enhanced HSA contribution limits (+$500)
+      const enhancedHSALimit = isFamily ? 500 : 350; // Additional contribution room
+      const additionalTaxSavings = enhancedHSALimit * 0.22; // 22% tax savings
+      proposedCost -= additionalTaxSavings;
+      
+      // Proposed: Slower premium growth for HSA plans (GPT analysis point)
+      proposedCost *= 0.97; // 3% slower premium growth
+    }
+
     // Proposed: Cap on employee out-of-pocket costs
-    const currentOutOfPocket = isFamily ? 2800 : 1200;
-    const proposedOutOfPocketCap = isFamily ? 2000 : 1000;
+    const currentOutOfPocket = hasHSA ? (isFamily ? 4200 : 2100) : (isFamily ? 2800 : 1200);
+    const proposedOutOfPocketCap = hasHSA ? (isFamily ? 3500 : 1800) : (isFamily ? 2000 : 1000);
     if (currentOutOfPocket > proposedOutOfPocketCap) {
       proposedCost -= (currentOutOfPocket - proposedOutOfPocketCap);
     }
@@ -340,7 +364,8 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
     familyStatus, 
     income, 
     state, 
-    formData.employmentStatus
+    formData.employmentStatus,
+    formData.hasHSA || false
   );
   const healthcareImpact = healthcareCosts.proposed - healthcareCosts.current;
   const bigBillHealthcareImpact = healthcareImpact * 1.4; // Big Bill provides more generous healthcare benefits

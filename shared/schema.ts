@@ -30,7 +30,7 @@ export const formDataSchema = z.object({
 
   // Step 4: Healthcare
   insuranceType: z.enum(["employer", "marketplace", "medicare", "medicaid", "military", "uninsured"]).optional(),
-
+  hasHSA: z.boolean().optional(),
   // Step 5: Income - Aligned with IRS tax brackets for accurate calculations
   incomeRange: z.enum(["under-15k", "15k-45k", "45k-95k", "95k-200k", "200k-400k", "over-400k"]).optional(),
 
