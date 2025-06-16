@@ -222,7 +222,7 @@ export default function Calculator() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12">
         <ProgressBar currentStep={currentStep} totalSteps={steps.length} completedSteps={completedSteps} />
 
-        <div className="bg-card/80 backdrop-blur-sm rounded-xl border border-border enhanced-card p-4 sm:p-8 mt-6 sm:mt-8">
+        <div className="glass-surface rounded-xl p-4 sm:p-8 mt-6 sm:mt-8 floating-content">
           <CurrentStepComponent
             formData={formData}
             onComplete={handleStepComplete}

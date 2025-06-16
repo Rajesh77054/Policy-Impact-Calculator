@@ -15,7 +15,7 @@ export default function LandingHero() {
         
         {/* Key Features Grid */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
-          <div className="bg-card/80 backdrop-blur-sm p-6 rounded-xl border border-border enhanced-card glow-on-hover">
+          <div className="glass-droplet glow-on-hover floating-content p-6 rounded-xl">
             <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4 floating">
               <Calculator className="w-6 h-6 text-primary" />
             </div>
@@ -23,7 +23,7 @@ export default function LandingHero() {
             <p className="text-sm text-muted-foreground">See exactly how new policies might affect your taxes, healthcare costs, energy bills, and job opportunities in 3 minutes.</p>
           </div>
           
-          <div className="bg-card/80 backdrop-blur-sm p-6 rounded-xl border border-border enhanced-card glow-on-hover">
+          <div className="glass-droplet glow-on-hover floating-content p-6 rounded-xl" style={{ animationDelay: '1s' }}>
             <div className="w-12 h-12 bg-emerald-500/10 rounded-lg flex items-center justify-center mx-auto mb-4 floating" style={{ animationDelay: '2s' }}>
               <Shield className="w-6 h-6 text-emerald-500" />
             </div>
@@ -31,7 +31,7 @@ export default function LandingHero() {
             <p className="text-sm text-muted-foreground">Your information stays with you. No accounts, no tracking, no data storage.</p>
           </div>
           
-          <div className="bg-card/80 backdrop-blur-sm p-6 rounded-xl border border-border enhanced-card glow-on-hover">
+          <div className="glass-droplet glow-on-hover floating-content p-6 rounded-xl" style={{ animationDelay: '2s' }}>
             <div className="w-12 h-12 bg-amber-500/10 rounded-lg flex items-center justify-center mx-auto mb-4 floating" style={{ animationDelay: '4s' }}>
               <BookOpen className="w-6 h-6 text-amber-500" />
             </div>

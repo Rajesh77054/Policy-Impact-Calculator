@@ -35,43 +35,83 @@ export default function ThemeDemo() {
         </p>
       </div>
 
-      {/* Interactive Cards Grid */}
+      {/* Layered Glass Demonstration */}
+      <div className="space-y-8">
+        <div className="text-center">
+          <h2 className="text-2xl font-semibold gradient-text mb-2">Layered Glass Effects</h2>
+          <p className="text-muted-foreground">Different layers create depth and floating droplet appearance</p>
+        </div>
+        
+        <div className="grid md:grid-cols-3 gap-6">
+          <div className="glass-layer-1 p-6 rounded-2xl floating-content">
+            <div className="text-center">
+              <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center floating">
+                <Sparkles className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="font-semibold mb-2 gradient-text">Layer 1</h3>
+              <p className="text-sm text-muted-foreground">Base glass surface with subtle transparency</p>
+            </div>
+          </div>
+
+          <div className="glass-layer-2 p-6 rounded-2xl floating-content" style={{ animationDelay: '1s' }}>
+            <div className="text-center">
+              <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-emerald-500/20 flex items-center justify-center floating" style={{ animationDelay: '2s' }}>
+                <Zap className="w-6 h-6 text-emerald-500" />
+              </div>
+              <h3 className="font-semibold mb-2 gradient-text">Layer 2</h3>
+              <p className="text-sm text-muted-foreground">Enhanced blur with inner glow effects</p>
+            </div>
+          </div>
+
+          <div className="glass-layer-3 p-6 rounded-2xl floating-content" style={{ animationDelay: '2s' }}>
+            <div className="text-center">
+              <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-purple-500/20 flex items-center justify-center floating" style={{ animationDelay: '4s' }}>
+                <Palette className="w-6 h-6 text-purple-500" />
+              </div>
+              <h3 className="font-semibold mb-2 gradient-text">Layer 3</h3>
+              <p className="text-sm text-muted-foreground">Maximum depth with complex shadows</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Floating Droplet Cards */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card className="enhanced-card glow-on-hover">
+        <Card className="glass-droplet glow-on-hover floating-content">
           <CardHeader>
             <div className="flex items-center space-x-2">
               <div className="p-2 rounded-lg bg-primary/10 floating">
                 <Sparkles className="w-5 h-5 text-primary" />
               </div>
-              <CardTitle className="gradient-text">Glass Panel</CardTitle>
+              <CardTitle className="gradient-text">Floating Droplet</CardTitle>
             </div>
           </CardHeader>
           <CardContent>
             <CardDescription>
-              Transparent background with backdrop blur effects and dynamic hover states.
+              Like water droplets on glass - hovering above the surface with realistic depth.
             </CardDescription>
             <div className="mt-4 space-y-2">
-              <Progress value={75} className="h-2" />
+              <Progress value={85} className="h-2" />
               <div className="flex justify-between text-sm text-muted-foreground">
-                <span>Visual Impact</span>
-                <span>75%</span>
+                <span>Depth Effect</span>
+                <span>85%</span>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="enhanced-card glow-on-hover">
+        <Card className="enhanced-card glow-on-hover floating-content" style={{ animationDelay: '1s' }}>
           <CardHeader>
             <div className="flex items-center space-x-2">
               <div className="p-2 rounded-lg bg-emerald-500/10 floating" style={{ animationDelay: '2s' }}>
                 <Zap className="w-5 h-5 text-emerald-500" />
               </div>
-              <CardTitle>Interactive Effects</CardTitle>
+              <CardTitle>Interactive Surface</CardTitle>
             </div>
           </CardHeader>
           <CardContent>
             <CardDescription>
-              Hover and click effects with smooth animations and ripple interactions.
+              Multi-layered shadows create natural floating appearance with hover enhancement.
             </CardDescription>
             <div className="mt-4 flex flex-wrap gap-2">
               <Badge variant="secondary" className="glow-on-hover">Animated</Badge>
@@ -80,23 +120,23 @@ export default function ThemeDemo() {
           </CardContent>
         </Card>
 
-        <Card className="enhanced-card glow-on-hover md:col-span-2 lg:col-span-1">
+        <Card className="glass-droplet glow-on-hover floating-content md:col-span-2 lg:col-span-1" style={{ animationDelay: '2s' }}>
           <CardHeader>
             <div className="flex items-center space-x-2">
               <div className="p-2 rounded-lg bg-purple-500/10 floating" style={{ animationDelay: '4s' }}>
-                <Palette className="w-5 h-5 text-purple-500" />
+                <Heart className="w-5 h-5 text-purple-500" />
               </div>
-              <CardTitle>Color Harmony</CardTitle>
+              <CardTitle>Layered Shadows</CardTitle>
             </div>
           </CardHeader>
           <CardContent>
             <CardDescription>
-              Dynamic gradients and color transitions that adapt to theme changes.
+              Complex shadow system mimics real glass droplets with multiple light sources.
             </CardDescription>
             <div className="mt-4 flex space-x-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-400 to-pink-400"></div>
-              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-400 to-cyan-400"></div>
-              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400"></div>
+              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 floating" style={{ animationDelay: '1s' }}></div>
+              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-400 to-cyan-400 floating" style={{ animationDelay: '2s' }}></div>
+              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 floating" style={{ animationDelay: '3s' }}></div>
             </div>
           </CardContent>
         </Card>
@@ -143,31 +183,55 @@ export default function ThemeDemo() {
         </div>
       </div>
 
-      {/* Glass Panel Demo */}
-      <div className="glass-panel p-6 rounded-2xl">
-        <h3 className="text-xl font-semibold mb-4 gradient-text">Glass Panel Effect</h3>
-        <p className="text-muted-foreground mb-4">
-          This panel demonstrates the core liquid glass effect with semi-transparent backgrounds, 
-          backdrop blur, and subtle border highlights.
-        </p>
-        <div className="grid md:grid-cols-3 gap-4">
-          <div className="glass-panel p-4 rounded-lg text-center">
-            <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-primary/20 flex items-center justify-center floating">
-              <Sparkles className="w-6 h-6 text-primary" />
+      {/* Advanced Glass Surface Demo */}
+      <div className="relative">
+        {/* Background glass layers for depth */}
+        <div className="absolute inset-0 glass-layer-1 rounded-3xl transform rotate-1 scale-105 opacity-30"></div>
+        <div className="absolute inset-0 glass-layer-2 rounded-3xl transform -rotate-1 scale-102 opacity-50"></div>
+        
+        {/* Main glass surface */}
+        <div className="glass-surface p-8 rounded-3xl relative floating-content">
+          <h3 className="text-2xl font-semibold mb-6 gradient-text text-center">Advanced Glass Surface</h3>
+          <p className="text-muted-foreground mb-6 text-center max-w-2xl mx-auto">
+            Multi-layered glass effect with background depth layers creating a sophisticated floating windshield appearance. 
+            Each layer adds visual complexity and realistic light refraction.
+          </p>
+          
+          {/* Floating glass droplets grid */}
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="glass-droplet p-6 rounded-2xl text-center floating-content">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center floating">
+                <Sparkles className="w-8 h-8 text-primary" />
+              </div>
+              <h4 className="font-semibold mb-2 gradient-text">Droplet Physics</h4>
+              <p className="text-sm text-muted-foreground">Surface tension simulation with realistic floating behavior</p>
             </div>
-            <p className="text-sm font-medium">Floating Icons</p>
+            
+            <div className="glass-droplet p-6 rounded-2xl text-center floating-content" style={{ animationDelay: '1s' }}>
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-emerald-500/20 flex items-center justify-center floating" style={{ animationDelay: '2s' }}>
+                <Zap className="w-8 h-8 text-emerald-500" />
+              </div>
+              <h4 className="font-semibold mb-2 gradient-text">Light Refraction</h4>
+              <p className="text-sm text-muted-foreground">Multi-directional shadows mimicking real glass properties</p>
+            </div>
+            
+            <div className="glass-droplet p-6 rounded-2xl text-center floating-content" style={{ animationDelay: '2s' }}>
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-purple-500/20 flex items-center justify-center floating" style={{ animationDelay: '3s' }}>
+                <Heart className="w-8 h-8 text-purple-500" />
+              </div>
+              <h4 className="font-semibold mb-2 gradient-text">Depth Perception</h4>
+              <p className="text-sm text-muted-foreground">Layered shadows create natural 3D floating illusion</p>
+            </div>
           </div>
-          <div className="glass-panel p-4 rounded-lg text-center">
-            <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-emerald-500/20 flex items-center justify-center floating" style={{ animationDelay: '1s' }}>
-              <Zap className="w-6 h-6 text-emerald-500" />
+          
+          {/* Interactive demonstration */}
+          <div className="mt-8 text-center">
+            <p className="text-sm text-muted-foreground mb-4">Hover over elements to see enhanced floating effects</p>
+            <div className="flex justify-center space-x-4">
+              <div className="w-4 h-4 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 floating glow-on-hover cursor-pointer"></div>
+              <div className="w-4 h-4 rounded-full bg-gradient-to-r from-blue-400 to-cyan-400 floating glow-on-hover cursor-pointer" style={{ animationDelay: '1s' }}></div>
+              <div className="w-4 h-4 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 floating glow-on-hover cursor-pointer" style={{ animationDelay: '2s' }}></div>
             </div>
-            <p className="text-sm font-medium">Smooth Motion</p>
-          </div>
-          <div className="glass-panel p-4 rounded-lg text-center">
-            <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-purple-500/20 flex items-center justify-center floating" style={{ animationDelay: '2s' }}>
-              <Heart className="w-6 h-6 text-purple-500" />
-            </div>
-            <p className="text-sm font-medium">Visual Depth</p>
           </div>
         </div>
       </div>
