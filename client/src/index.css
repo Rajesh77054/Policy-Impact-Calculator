@@ -1,3 +1,69 @@
+
+/* Enhanced Liquid Glass Refractive Edge Effects */
+.liquid-glass-theme .glass-edge-glow {
+  position: relative;
+}
+
+.liquid-glass-theme .glass-edge-glow::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg,
+    hsla(255, 255%, 255%, 0.3) 0%,
+    hsla(270, 80%, 65%, 0.2) 25%,
+    hsla(195, 80%, 60%, 0.15) 50%,
+    hsla(320, 70%, 55%, 0.12) 75%,
+    hsla(255, 255%, 255%, 0.25) 100%);
+  border-radius: inherit;
+  filter: blur(3px);
+  opacity: 0.6;
+  z-index: -1;
+}
+
+.liquid-glass-theme .glass-refractive-border {
+  border: 2px solid transparent;
+  background: 
+    linear-gradient(var(--background), var(--background)) padding-box,
+    linear-gradient(135deg,
+      hsla(255, 255%, 255%, 0.4) 0%,
+      hsla(270, 80%, 65%, 0.3) 20%,
+      hsla(195, 80%, 60%, 0.25) 40%,
+      hsla(320, 70%, 55%, 0.2) 60%,
+      hsla(45, 90%, 65%, 0.15) 80%,
+      hsla(255, 255%, 255%, 0.35) 100%) border-box;
+  position: relative;
+}
+
+.liquid-glass-theme .glass-chromatic-edge {
+  position: relative;
+  overflow: hidden;
+}
+
+.liquid-glass-theme .glass-chromatic-edge::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: conic-gradient(from 0deg,
+    hsla(0, 100%, 50%, 0.1) 0deg,
+    hsla(60, 100%, 50%, 0.08) 60deg,
+    hsla(120, 100%, 50%, 0.1) 120deg,
+    hsla(180, 100%, 50%, 0.08) 180deg,
+    hsla(240, 100%, 50%, 0.1) 240deg,
+    hsla(300, 100%, 50%, 0.08) 300deg,
+    hsla(0, 100%, 50%, 0.1) 360deg);
+  border-radius: inherit;
+  filter: blur(1px);
+  opacity: 0.3;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
@@ -214,7 +280,7 @@
     hsla(195, 80%, 60%, 0.3) 100%);
 }
 
-/* Advanced Liquid Glass Effects with Natural Boundaries */
+/* Advanced Liquid Glass Effects with Enhanced Refractive Boundaries */
 .liquid-glass-theme .glass-panel {
   background: linear-gradient(145deg,
     hsla(255, 255%, 255%, 0.06) 0%,
@@ -224,14 +290,21 @@
     hsla(255, 255%, 255%, 0.04) 100%);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: none;
+  border: 1px solid transparent;
+  border-image: linear-gradient(135deg,
+    hsla(255, 255%, 255%, 0.4) 0%,
+    hsla(270, 80%, 65%, 0.2) 25%,
+    hsla(195, 80%, 60%, 0.15) 50%,
+    hsla(320, 70%, 55%, 0.1) 75%,
+    hsla(255, 255%, 255%, 0.3) 100%) 1;
   box-shadow: 
     0 8px 32px 0 hsla(270, 80%, 30%, 0.3),
     0 2px 8px 0 hsla(270, 80%, 30%, 0.15),
-    inset 0 1px 0 0 hsla(255, 255%, 255%, 0.08),
-    inset 0 -1px 0 0 hsla(220, 40%, 8%, 0.06),
-    inset 1px 0 0 0 hsla(270, 80%, 65%, 0.025),
-    inset -1px 0 0 0 hsla(195, 80%, 60%, 0.02);
+    inset 0 1px 0 0 hsla(255, 255%, 255%, 0.2),
+    inset 0 -1px 0 0 hsla(220, 40%, 8%, 0.1),
+    inset 1px 0 0 0 hsla(270, 80%, 65%, 0.05),
+    inset -1px 0 0 0 hsla(195, 80%, 60%, 0.04),
+    inset 0 0 0 1px hsla(255, 255%, 255%, 0.12);
   position: relative;
   overflow: hidden;
   transform: translateZ(0);
@@ -363,7 +436,7 @@
   pointer-events: none;
 }
 
-/* Comprehensive Liquid Glass Button System */
+/* Comprehensive Liquid Glass Button System with Enhanced Refraction */
 .liquid-glass-theme .glass-button {
   background: linear-gradient(145deg,
     hsla(255, 255%, 255%, 0.1) 0%,
@@ -373,14 +446,20 @@
     hsla(255, 255%, 255%, 0.08) 100%);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: none;
+  border: 1px solid transparent;
+  border-image: linear-gradient(145deg,
+    hsla(255, 255%, 255%, 0.3) 0%,
+    hsla(270, 80%, 65%, 0.15) 30%,
+    hsla(195, 80%, 60%, 0.1) 70%,
+    hsla(255, 255%, 255%, 0.25) 100%) 1;
   box-shadow: 
     0 8px 24px 0 hsla(270, 80%, 30%, 0.2),
     0 2px 8px 0 hsla(270, 80%, 30%, 0.1),
-    inset 0 1px 0 0 hsla(255, 255%, 255%, 0.15),
-    inset 0 -1px 0 0 hsla(220, 40%, 8%, 0.08),
-    inset 1px 0 0 0 hsla(270, 80%, 65%, 0.05),
-    inset -1px 0 0 0 hsla(195, 80%, 60%, 0.04);
+    inset 0 1px 0 0 hsla(255, 255%, 255%, 0.25),
+    inset 0 -1px 0 0 hsla(220, 40%, 8%, 0.12),
+    inset 1px 0 0 0 hsla(270, 80%, 65%, 0.08),
+    inset -1px 0 0 0 hsla(195, 80%, 60%, 0.06),
+    inset 0 0 0 1px hsla(255, 255%, 255%, 0.15);
   position: relative;
   overflow: hidden;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -424,7 +503,7 @@
   transform: translateY(-1px) scale(0.98) translateZ(0);
 }
 
-/* Apply glass effect to all buttons in liquid glass theme */
+/* Apply enhanced glass effect to all buttons in liquid glass theme */
 .liquid-glass-theme button:not(.glass-button) {
   background: linear-gradient(145deg,
     hsla(255, 255%, 255%, 0.08) 0%,
@@ -433,11 +512,16 @@
     hsla(255, 255%, 255%, 0.06) 100%);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: none;
+  border: 1px solid transparent;
+  border-image: linear-gradient(145deg,
+    hsla(255, 255%, 255%, 0.2) 0%,
+    hsla(270, 80%, 65%, 0.1) 50%,
+    hsla(255, 255%, 255%, 0.15) 100%) 1;
   box-shadow: 
     0 4px 16px 0 hsla(270, 80%, 30%, 0.15),
-    inset 0 1px 0 0 hsla(255, 255%, 255%, 0.1),
-    inset 0 -1px 0 0 hsla(220, 40%, 8%, 0.05);
+    inset 0 1px 0 0 hsla(255, 255%, 255%, 0.15),
+    inset 0 -1px 0 0 hsla(220, 40%, 8%, 0.08),
+    inset 0 0 0 1px hsla(255, 255%, 255%, 0.08);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -634,7 +718,7 @@
     inset 0 0 30px 0 hsla(270, 80%, 65%, 0.05);
 }
 
-/* Input Fields with Liquid Glass Effect */
+/* Input Fields with Enhanced Liquid Glass Borders */
 .liquid-glass-theme input,
 .liquid-glass-theme textarea,
 .liquid-glass-theme select {
@@ -644,12 +728,17 @@
     hsla(255, 255%, 255%, 0.03) 100%);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: none;
+  border: 1px solid transparent;
+  border-image: linear-gradient(145deg,
+    hsla(255, 255%, 255%, 0.25) 0%,
+    hsla(270, 80%, 65%, 0.12) 50%,
+    hsla(255, 255%, 255%, 0.2) 100%) 1;
   box-shadow: 
     0 4px 16px 0 hsla(270, 80%, 30%, 0.1),
-    inset 0 1px 0 0 hsla(255, 255%, 255%, 0.08),
-    inset 0 -1px 0 0 hsla(220, 40%, 8%, 0.05),
-    inset 2px 0 0 0 hsla(270, 80%, 65%, 0.03);
+    inset 0 1px 0 0 hsla(255, 255%, 255%, 0.15),
+    inset 0 -1px 0 0 hsla(220, 40%, 8%, 0.08),
+    inset 2px 0 0 0 hsla(270, 80%, 65%, 0.05),
+    inset 0 0 0 1px hsla(255, 255%, 255%, 0.1);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
