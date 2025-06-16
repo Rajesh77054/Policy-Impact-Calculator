@@ -4,6 +4,6 @@ CREATE TABLE IF NOT EXISTS "user_sessions" (
 	"session_id" text NOT NULL,
 	"form_data" json,
 	"results" json,
-	"created_at" integer NOT NULL,
+	"created_at" bigint NOT NULL,
 	CONSTRAINT "user_sessions_session_id_unique" UNIQUE("session_id")
 );

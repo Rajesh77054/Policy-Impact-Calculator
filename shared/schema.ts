@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, json } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, json, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -8,7 +8,7 @@ export const userSessions = pgTable("user_sessions", {
   sessionId: text("session_id").notNull().unique(),
   formData: json("form_data").$type<FormData>(),
   results: json("results").$type<PolicyResults>(),
-  createdAt: integer("created_at").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
 // Form data structure

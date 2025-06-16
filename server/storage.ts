@@ -19,7 +19,7 @@ export class DatabaseStorage implements IStorage {
         sessionId,
         formData: null,
         results: null,
-        createdAt: Math.floor(Date.now() / 1000), // Use seconds instead of milliseconds
+        createdAt: new Date(),
       })
       .returning();
 
