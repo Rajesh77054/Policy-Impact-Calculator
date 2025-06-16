@@ -617,12 +617,14 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                 <div className="mt-4 pt-3 border-t border-slate-200">
                   <div className="text-center">
                     <p className="text-xs text-slate-600 mb-1">
-                      <strong>Tax Savings Difference:</strong>
+                      <strong>Tax Impact Difference (Proposed vs Current):</strong>
                     </p>
                     <p className={`text-sm font-medium ${(results.bigBillScenario.annualTaxImpact - results.annualTaxImpact) < 0 ? "text-green-600" : "text-red-600"}`}>
                       {Math.abs(results.bigBillScenario.annualTaxImpact - results.annualTaxImpact) < 100 ? 
                         "Nearly identical impact" : 
-                        formatCurrency(results.bigBillScenario.annualTaxImpact - results.annualTaxImpact)
+                        (results.bigBillScenario.annualTaxImpact - results.annualTaxImpact) < 0 ?
+                          `$${Math.abs(results.bigBillScenario.annualTaxImpact - results.annualTaxImpact).toLocaleString()} less in taxes` :
+                          `$${Math.abs(results.bigBillScenario.annualTaxImpact - results.annualTaxImpact).toLocaleString()} more in taxes`
                       }
                     </p>
                   </div>
@@ -695,12 +697,14 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                 <div className="mt-4 pt-3 border-t border-slate-200">
                   <div className="text-center">
                     <p className="text-xs text-slate-600 mb-1">
-                      <strong>Healthcare Savings Difference:</strong>
+                      <strong>Healthcare Cost Difference (Proposed vs Current):</strong>
                     </p>
                     <p className={`text-sm font-medium ${(results.bigBillScenario.healthcareCostImpact - results.healthcareCostImpact) < 0 ? "text-green-600" : "text-red-600"}`}>
                       {Math.abs(results.bigBillScenario.healthcareCostImpact - results.healthcareCostImpact) < 50 ? 
                         "Nearly identical impact" : 
-                        formatCurrency(results.bigBillScenario.healthcareCostImpact - results.healthcareCostImpact)
+                        (results.bigBillScenario.healthcareCostImpact - results.healthcareCostImpact) < 0 ?
+                          `$${Math.abs(results.bigBillScenario.healthcareCostImpact - results.healthcareCostImpact).toLocaleString()} more savings` :
+                          `$${Math.abs(results.bigBillScenario.healthcareCostImpact - results.healthcareCostImpact).toLocaleString()} less savings`
                       }
                     </p>
                   </div>
