@@ -31,10 +31,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     resave: false,
     saveUninitialized: true,
     cookie: { 
-      secure: process.env.NODE_ENV === 'production',
+      secure: false, // Set to false for Replit deployment
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
       httpOnly: true,
-      sameSite: 'strict'
+      sameSite: 'lax' // Changed from 'strict' to 'lax' for better compatibility
     }
   }));
 
@@ -82,10 +82,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const sessionId = req.session.policySessionId;
       console.log("Form data update - Session ID:", sessionId);
+      console.log("Form data update - Full session object:", req.session);
       console.log("Form data update - Raw body:", JSON.stringify(req.body, null, 2));
 
       if (!sessionId) {
-        return res.status(404).json({ message: "No session found" });
+        console.error("No session ID found in request.session:", req.session);
+        // Try to create a new session if none exists
+        const newSessionId = generateSessionId();
+        console.log("Creating emergency session with ID:", newSessionId);
+        
+        const newSession = await storage.createSession(newSessionId);
+        req.session.policySessionId = newSessionId;
+        
+        const validatedData = formDataSchema.parse(req.body);
+        const updatedSession = await storage.updateSessionFormData(newSessionId, validatedData);
+        
+        return res.json(updatedSession);
       }
 
       const validatedData = formDataSchema.parse(req.body);
@@ -96,7 +108,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.json(session);
     } catch (error: any) {
-      console.error("Form data update error:", error.message);
+      console.error("Form data update error:", error.message, error.stack);
       res.status(400).json({ message: error.message });
     }
   });

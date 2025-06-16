@@ -40,11 +40,11 @@ export default function Calculator() {
     },
     onError: (error) => {
       console.error("Failed to create session:", error);
-      toast({
-        title: "Session Error",
-        description: "Failed to initialize session. Please refresh the page.",
-        variant: "destructive",
-      });
+      // Retry session creation after a short delay
+      setTimeout(() => {
+        console.log("Retrying session creation...");
+        createSession();
+      }, 2000);
     },
   });
 
@@ -110,12 +110,27 @@ export default function Calculator() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: 'same-origin', // Ensure cookies are sent
         body: JSON.stringify(updatedData),
       });
 
       if (!response.ok) {
         const errorText = await response.text();
         console.error("Server error response:", errorText);
+        
+        // If it's a session error, try to reinitialize session
+        if (response.status === 404) {
+          console.log("Session not found, reinitializing...");
+          setSessionReady(false);
+          createSession();
+          toast({
+            title: "Session Reinitialized",
+            description: "Please try your action again.",
+            variant: "default",
+          });
+          return;
+        }
+        
         throw new Error(`Failed to save form data: ${response.status}`);
       }
 
