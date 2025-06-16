@@ -132,7 +132,7 @@ export default function HealthcareStep({ formData, onComplete }: HealthcareStepP
           </div>
         )}
 
-        <div className="flex justify-end mt-8"></div>
+        <div className="flex justify-end mt-8">
           <button
             onClick={handleSubmit}
             disabled={!isComplete}
