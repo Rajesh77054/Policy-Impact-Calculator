@@ -16,7 +16,7 @@ export const themes = [
 ];
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('liquid-glass');
+  const [theme, setTheme] = useState<Theme>('default');
 
   useEffect(() => {
     // Load theme from localStorage on mount
