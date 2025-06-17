@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 export default function LandingHero() {
   return (
-    <section className="bg-gradient-to-br from-primary/5 to-background py-16 relative overflow-hidden">
+    <section className="py-16 relative overflow-hidden">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
         <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6 gradient-text">
           Discover How Trump's Policies Impact Your <span className="text-primary">Finances, Work & Future</span>
@@ -16,7 +16,7 @@ export default function LandingHero() {
         {/* Key Features Grid */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           <div className="glass-droplet glow-on-hover floating-content p-6 rounded-xl">
-            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4 floating">
+            <div className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4 floating">
               <Calculator className="w-6 h-6 text-primary" />
             </div>
             <h3 className="font-semibold text-card-foreground mb-2">Your Personal Impact</h3>
@@ -24,7 +24,7 @@ export default function LandingHero() {
           </div>
           
           <div className="glass-droplet glow-on-hover floating-content p-6 rounded-xl" style={{ animationDelay: '1s' }}>
-            <div className="w-12 h-12 bg-emerald-500/10 rounded-lg flex items-center justify-center mx-auto mb-4 floating" style={{ animationDelay: '2s' }}>
+            <div className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4 floating" style={{ animationDelay: '2s' }}>
               <Shield className="w-6 h-6 text-emerald-500" />
             </div>
             <h3 className="font-semibold text-card-foreground mb-2">100% Private</h3>
@@ -32,7 +32,7 @@ export default function LandingHero() {
           </div>
           
           <div className="glass-droplet glow-on-hover floating-content p-6 rounded-xl" style={{ animationDelay: '2s' }}>
-            <div className="w-12 h-12 bg-amber-500/10 rounded-lg flex items-center justify-center mx-auto mb-4 floating" style={{ animationDelay: '4s' }}>
+            <div className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4 floating" style={{ animationDelay: '4s' }}>
               <BookOpen className="w-6 h-6 text-amber-500" />
             </div>
             <h3 className="font-semibold text-card-foreground mb-2">Educational</h3>
