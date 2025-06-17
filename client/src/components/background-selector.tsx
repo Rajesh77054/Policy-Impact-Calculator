@@ -25,23 +25,12 @@ export default function BackgroundSelector() {
 
 
 
-  const handleBackgroundSelect = async (background: BackgroundAsset) => {
+  const handleBackgroundSelect = (background: BackgroundAsset) => {
     if (background.id === currentBackground.id) return;
     
-    setLoadingBackground(background.id);
-    
-    try {
-      // Preload the image to ensure smooth transition
-      await preloadBackground(background);
-      setBackground(background);
-      setPreviewBackground(background);
-      setIsOpen(false);
-    } catch (error) {
-      console.error('Failed to load background:', error);
-      // Could show toast notification here if needed
-    } finally {
-      setLoadingBackground(null);
-    }
+    setBackground(background);
+    setPreviewBackground(background);
+    setIsOpen(false);
   };
 
   const handlePreview = (background: BackgroundAsset) => {

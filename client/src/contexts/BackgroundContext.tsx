@@ -53,7 +53,10 @@ export function BackgroundProvider({ children, defaultBackground = DEFAULT_BACKG
     return new Promise((resolve, reject) => {
       const img = new Image();
       img.onload = () => resolve();
-      img.onerror = () => reject(new Error(`Failed to load background: ${background.name}`));
+      img.onerror = () => {
+        console.warn(`Could not preload background: ${background.name}. Continuing anyway.`);
+        resolve(); // Resolve instead of reject to prevent blocking
+      };
       
       img.src = getImagePath(background.path);
     });
