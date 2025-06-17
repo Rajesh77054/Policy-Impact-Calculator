@@ -659,6 +659,10 @@ return {
       netAnnualImpact: Math.round(bigBillNetImpact),
       deficitImpact: bigBillDeficitImpact,
       recessionProbability: bigBillRecessionProbability,
+      healthcareCosts: {
+        current: Math.round(healthcareCosts.current),
+        proposed: Math.round(healthcareCosts.proposed * 0.8), // Big Bill provides better healthcare costs
+      },
       communityImpact: {
         schoolFunding: schoolFundingImpact + 3, // Additional 3% boost from expanded education funding
         infrastructure: Math.round(infrastructureImpact * 1.4), // 40% more infrastructure investment

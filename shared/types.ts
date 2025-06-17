@@ -37,6 +37,10 @@ export interface PolicyResults {
     netAnnualImpact: number;
     deficitImpact: number;
     recessionProbability: number;
+    healthcareCosts: {
+      current: number;
+      proposed: number;
+    };
     communityImpact: {
       schoolFunding: number;
       infrastructure: number;
