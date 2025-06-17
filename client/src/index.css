@@ -139,10 +139,23 @@
 
 /* ULTRA SIMPLE LIQUID GLASS THEME - Canyon Background Only */
 .liquid-glass-theme body {
-  background: url('/canyon-background.jpg') center center / cover fixed;
+  background: url('/canyon-background.jpg') center center / cover fixed !important;
   margin: 0;
   padding: 0;
   min-height: 100vh;
+}
+
+/* Override ALL background layers to be transparent */
+.liquid-glass-theme * {
+  background: transparent !important;
+}
+
+.liquid-glass-theme section,
+.liquid-glass-theme main,
+.liquid-glass-theme div,
+.liquid-glass-theme header,
+.liquid-glass-theme footer {
+  background: transparent !important;
 }
 
 /* Ultra Transparent Glass Elements */
