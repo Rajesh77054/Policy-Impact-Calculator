@@ -6,6 +6,7 @@ import { Badge } from './ui/badge';
 import { ScrollArea } from './ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { ImageIcon, Palette, Eye, Download } from 'lucide-react';
+import type { BackgroundAsset } from '../config/backgrounds';
 
 export default function BackgroundSelector() {
   const { 
@@ -21,7 +22,7 @@ export default function BackgroundSelector() {
   const [previewBackground, setPreviewBackground] = useState(currentBackground);
   const [loadingBackground, setLoadingBackground] = useState<string | null>(null);
 
-  const handleBackgroundSelect = async (background: typeof currentBackground) => {
+  const handleBackgroundSelect = async (background: BackgroundAsset) => {
     if (background.id === currentBackground.id) return;
     
     setLoadingBackground(background.id);
@@ -40,7 +41,7 @@ export default function BackgroundSelector() {
     }
   };
 
-  const handlePreview = (background: typeof currentBackground) => {
+  const handlePreview = (background: BackgroundAsset) => {
     setPreviewBackground(background);
   };
 
@@ -73,9 +74,7 @@ export default function BackgroundSelector() {
               <div 
                 className="aspect-video rounded-lg border-2 border-white/20 bg-cover bg-center bg-no-repeat"
                 style={{
-                  backgroundImage: `url('${previewBackground.path.startsWith('@assets/') 
-                    ? `/attached_assets/${previewBackground.path.replace('@assets/', '')}` 
-                    : previewBackground.path}')`
+                  backgroundImage: `url('${previewBackground.path}')`
                 }}
               />
               <div className="space-y-2">
@@ -148,7 +147,7 @@ export default function BackgroundSelector() {
 }
 
 interface BackgroundCardProps {
-  background: ReturnType<typeof useBackground>['currentBackground'];
+  background: BackgroundAsset;
   isSelected: boolean;
   isLoading: boolean;
   onSelect: () => void;
@@ -156,9 +155,7 @@ interface BackgroundCardProps {
 }
 
 function BackgroundCard({ background, isSelected, isLoading, onSelect, onPreview }: BackgroundCardProps) {
-  const imagePath = background.path.startsWith('@assets/') 
-    ? `/attached_assets/${background.path.replace('@assets/', '')}` 
-    : background.path;
+  const imagePath = background.path;
 
   return (
     <div 
