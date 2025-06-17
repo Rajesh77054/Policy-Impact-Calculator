@@ -1,33 +1,38 @@
-/* TARGETED GLASSMORPHISM - PRESERVE GLASS EFFECTS */
+/* AUTHENTIC GLASSMORPHISM EFFECTS */
 
-/* Apply glassmorphism to specific card elements */
-.glass-droplet {
+/* Core glass card styling with maximum specificity */
+.hero-glass-card,
+.glass-droplet,
+.liquid-glass-theme .hero-glass-card,
+.liquid-glass-theme .glass-droplet {
+  background: rgba(255, 255, 255, 0.09) !important;
+  backdrop-filter: blur(25px) saturate(200%) brightness(115%) !important;
+  -webkit-backdrop-filter: blur(25px) saturate(200%) brightness(115%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border-radius: 20px !important;
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* Glass button with transparency */
+.glass-button,
+.liquid-glass-theme .glass-button {
   background: rgba(255, 255, 255, 0.12) !important;
   backdrop-filter: blur(20px) saturate(180%) brightness(110%) !important;
   -webkit-backdrop-filter: blur(20px) saturate(180%) brightness(110%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  border-radius: 16px !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: 12px !important;
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.1),
+    0 8px 25px rgba(0, 0, 0, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
 }
 
-.glass-button {
-  background: rgba(255, 255, 255, 0.15) !important;
-  backdrop-filter: blur(15px) saturate(160%) brightness(105%) !important;
-  -webkit-backdrop-filter: blur(15px) saturate(160%) brightness(105%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
-  border-radius: 12px !important;
-}
-
-/* Hero section cards specifically */
-.hero-glass-card {
-  background: rgba(255, 255, 255, 0.08) !important;
-  backdrop-filter: blur(25px) saturate(200%) brightness(115%) !important;
-  -webkit-backdrop-filter: blur(25px) saturate(200%) brightness(115%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-  border-radius: 20px !important;
-  box-shadow: 
-    0 12px 40px rgba(0, 0, 0, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+/* Force removal of solid backgrounds on glass elements */
+.hero-glass-card *,
+.glass-droplet *,
+.glass-button * {
+  background-color: transparent !important;
 }

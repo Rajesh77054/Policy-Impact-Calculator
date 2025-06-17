@@ -5,41 +5,12 @@
 @tailwind components;
 @tailwind utilities;
 
-/* NUCLEAR BACKGROUND OVERRIDE FOR GLASSMORPHISM */
-.liquid-glass-theme *:not(body):not(html),
-.liquid-glass-theme .glass-surface,
-.liquid-glass-theme .glass-layer-1,
-.liquid-glass-theme .glass-layer-2,
-.liquid-glass-theme .enhanced-card,
-.liquid-glass-theme [role="menu"],
-.liquid-glass-theme [role="listbox"],
-.liquid-glass-theme .dropdown-content,
-.liquid-glass-theme .progress-bar,
-.liquid-glass-theme .progress-fill,
-.liquid-glass-theme input:focus,
-.liquid-glass-theme textarea:focus,
-.liquid-glass-theme select:focus {
+/* Remove only specific problematic backgrounds */
+.liquid-glass-theme .bg-background,
+.liquid-glass-theme .bg-card,
+.liquid-glass-theme .bg-primary,
+.liquid-glass-theme .bg-muted {
   background: transparent !important;
-  background-color: transparent !important;
-  background-image: none !important;
-  background-attachment: initial !important;
-  background-blend-mode: initial !important;
-  background-clip: initial !important;
-  background-origin: initial !important;
-  background-position: initial !important;
-  background-repeat: initial !important;
-  background-size: initial !important;
-}
-
-/* Force canyon background on all containers */
-.liquid-glass-theme html,
-.liquid-glass-theme #root,
-.liquid-glass-theme main,
-.liquid-glass-theme section,
-.liquid-glass-theme div:not(.glass-droplet):not(.glass-button) {
-  background: url('@assets/image_1750119494024.png') center center / cover fixed !important;
-  background-attachment: fixed !important;
-  background-color: transparent !important;
 }
 
 /* TAILWIND UTILITY CLASS OVERRIDES */
