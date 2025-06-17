@@ -266,20 +266,20 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                   <div className="space-y-3">
                     <div className="flex justify-between text-sm">
                       <span className="text-slate-600">Tax Changes</span>
-                      <span className={`font-medium ${results.bigBillScenario.annualTaxImpact < 0 ? "text-green-600" : "text-red-600"}`}>
-                        {formatTaxImpact(results.bigBillScenario.annualTaxImpact)}
+                      <span className={`font-medium ${(results.bigBillScenario?.annualTaxImpact || 0) < 0 ? "text-green-600" : "text-red-600"}`}>
+                        {formatTaxImpact(results.bigBillScenario?.annualTaxImpact || 0)}
                       </span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-slate-600">Healthcare Costs</span>
-                      <span className={`font-medium ${results.bigBillScenario.healthcareCostImpact < 0 ? "text-green-600" : "text-red-600"}`}>
-                        {formatCostImpact(results.bigBillScenario.healthcareCostImpact)}
+                      <span className={`font-medium ${(results.bigBillScenario?.healthcareCostImpact || 0) < 0 ? "text-green-600" : "text-red-600"}`}>
+                        {formatCostImpact(results.bigBillScenario?.healthcareCostImpact || 0)}
                       </span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-slate-600">Energy Costs</span>
-                      <span className={`font-medium ${results.bigBillScenario.energyCostImpact < 0 ? "text-green-600" : "text-red-600"}`}>
-                        {formatCostImpact(results.bigBillScenario.energyCostImpact)}
+                      <span className={`font-medium ${(results.bigBillScenario?.energyCostImpact || 0) < 0 ? "text-green-600" : "text-red-600"}`}>
+                        {formatCostImpact(results.bigBillScenario?.energyCostImpact || 0)}
                       </span>
                     </div>
                     <div className="flex justify-between text-sm">
@@ -313,8 +313,8 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                     <div className="pt-3 border-t border-slate-200">
                       <div className="flex justify-between font-semibold text-lg">
                         <span>Net Annual Impact</span>
-                        <span className={results.bigBillScenario.netAnnualImpact < 0 ? "text-green-600" : "text-red-600"}>
-                          {formatNetImpact(results.bigBillScenario.netAnnualImpact)}
+                        <span className={(results.bigBillScenario?.netAnnualImpact || 0) < 0 ? "text-green-600" : "text-red-600"}>
+                          {formatNetImpact(results.bigBillScenario?.netAnnualImpact || 0)}
                         </span>
                       </div>
                     </div>
@@ -331,10 +331,10 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                       <p className="text-slate-600">
                         <strong>Your Annual Savings Difference:</strong>
                       </p>
-                      <p className={`text-lg font-bold ${(results.bigBillScenario.netAnnualImpact - results.netAnnualImpact) < 0 ? "text-green-600" : "text-red-600"}`}>
-                        {Math.abs(results.bigBillScenario.netAnnualImpact - results.netAnnualImpact) < 100 ? 
+                      <p className={`text-lg font-bold ${((results.bigBillScenario?.netAnnualImpact || 0) - results.netAnnualImpact) < 0 ? "text-green-600" : "text-red-600"}`}>
+                        {Math.abs((results.bigBillScenario?.netAnnualImpact || 0) - results.netAnnualImpact) < 100 ? 
                           "Nearly identical impact" : 
-                          formatCurrency(results.bigBillScenario.netAnnualImpact - results.netAnnualImpact)
+                          formatCurrency((results.bigBillScenario?.netAnnualImpact || 0) - results.netAnnualImpact)
                         }
                       </p>
                     </div>
@@ -514,8 +514,8 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                   <h4 className="text-sm font-medium text-blue-700 mb-3 text-center">Proposed Bill</h4>
                   <div className="space-y-2">
                     <div>
-                      <div className={`text-lg font-bold ${results.bigBillScenario.timeline.twentyYear < 0 ? "text-green-600" : "text-red-600"}`}>
-                        {formatNetImpact(results.bigBillScenario.timeline.twentyYear)}
+                      <div className={`text-lg font-bold ${(results.bigBillScenario?.timeline.twentyYear || 0) < 0 ? "text-green-600" : "text-red-600"}`}>
+                        {formatNetImpact(results.bigBillScenario?.timeline.twentyYear || 0)}
                       </div>
                       <p className="text-xs text-slate-600">20-year impact</p>
                     </div>

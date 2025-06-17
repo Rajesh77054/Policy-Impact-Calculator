@@ -60,7 +60,7 @@ interface IncomeStepProps {
 }
 
 export default function IncomeStep({ formData, onComplete }: IncomeStepProps) {
-  const [incomeRange, setIncomeRange] = useState<"under-15k" | "15k-45k" | "45k-95k" | "95k-200k" | "200k-400k" | "over-400k" | "">(formData.incomeRange || "");
+  const [incomeRange, setIncomeRange] = useState<string>(formData.incomeRange || "");
 
   const handleNext = () => {
     if (incomeRange && incomeRange !== "") {
@@ -108,7 +108,7 @@ export default function IncomeStep({ formData, onComplete }: IncomeStepProps) {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <RadioGroup value={incomeRange} onValueChange={setIncomeRange} className="grid gap-4">
+          <RadioGroup value={incomeRange} onValueChange={(value) => setIncomeRange(value)} className="grid gap-4">
             {incomeRanges.map((range) => (
               <div 
                 key={range.value} 
