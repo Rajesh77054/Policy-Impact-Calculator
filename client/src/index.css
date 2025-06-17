@@ -207,11 +207,18 @@
   --chart-5: hsl(280, 65%, 60%);
 }
 
-/* ULTIMATE BACKGROUND OVERRIDE - Nuclear Option */
-.liquid-glass-theme,
-.liquid-glass-theme *,
-.liquid-glass-theme *::before,
-.liquid-glass-theme *::after {
+/* SELECTIVE BACKGROUND OVERRIDE - Preserve Glass Effects */
+.liquid-glass-theme *:not(.glass-droplet):not(.glass-morphism):not(.apple-glass):not(.card):not([role="button"]):not(button) {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* Override common problem classes */
+.liquid-glass-theme .bg-white,
+.liquid-glass-theme .bg-card,
+.liquid-glass-theme .bg-background,
+.liquid-glass-theme [class*="bg-gradient"] {
   background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
@@ -232,30 +239,92 @@
   overflow-x: hidden;
 }
 
-/* Background handled by root element - pseudo-element removed */
+/* GLASSMORPHISM EFFECTS */
+.liquid-glass-theme .glass-droplet {
+  background: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(40px) saturate(200%) brightness(110%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(110%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: 20px !important;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  position: relative;
+  overflow: hidden;
+}
 
-/* Dynamic color overlay for living canyon effect */
-.liquid-glass-theme body::after {
+.liquid-glass-theme .glass-button {
+  background: rgba(255, 255, 255, 0.10) !important;
+  backdrop-filter: blur(30px) saturate(180%) brightness(110%) !important;
+  -webkit-backdrop-filter: blur(30px) saturate(180%) brightness(110%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 15px !important;
+  box-shadow: 
+    0 6px 24px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+}
+
+/* TEXT VISIBILITY */
+.liquid-glass-theme h1,
+.liquid-glass-theme h2,
+.liquid-glass-theme h3,
+.liquid-glass-theme p,
+.liquid-glass-theme span {
+  color: white !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8) !important;
+}
+
+.liquid-glass-theme .gradient-text {
+  background: linear-gradient(135deg, #ffffff, #e6e6ff, #ffcccc) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow: none !important;
+}
+
+/* Glass reflection effects */
+.liquid-glass-theme .glass-droplet::before {
   content: '';
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 25% 75%, hsla(15, 100%, 60%, 0.12) 0%, transparent 45%),
-    radial-gradient(circle at 75% 25%, hsla(280, 100%, 70%, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 50% 50%, hsla(35, 100%, 65%, 0.10) 0%, transparent 50%),
-    radial-gradient(circle at 90% 70%, hsla(320, 80%, 60%, 0.06) 0%, transparent 35%),
-    linear-gradient(45deg, 
-      hsla(0, 0%, 0%, 0.15) 0%,
-      transparent 25%,
-      hsla(45, 30%, 80%, 0.05) 50%,
-      transparent 75%,
-      hsla(0, 0%, 0%, 0.10) 100%);
+  height: 50%;
+  background: linear-gradient(180deg, 
+    rgba(255, 255, 255, 0.3) 0%, 
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.05) 100%);
+  border-radius: inherit;
   pointer-events: none;
-  z-index: -1;
-  animation: canyonShimmer 20s ease-in-out infinite;
+  z-index: 1;
+}
+
+/* Hover effects for glass elements */
+.liquid-glass-theme .glass-droplet:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(50px) saturate(220%) brightness(115%) !important;
+  -webkit-backdrop-filter: blur(50px) saturate(220%) brightness(115%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  transform: translateY(-3px) scale(1.02) !important;
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 2px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+.liquid-glass-theme .glass-button:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(40px) saturate(200%) brightness(120%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(120%) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Content positioning above glass effects */
+.liquid-glass-theme .glass-droplet > *,
+.liquid-glass-theme .glass-button > * {
+  position: relative;
+  z-index: 2;
 }
 
 @keyframes canyonFlow {
