@@ -5,7 +5,7 @@ export interface BackgroundAsset {
   id: string;
   name: string;
   path: string;
-  category: 'cyberpunk' | 'nature' | 'abstract' | 'space' | 'minimal';
+  category: 'cyberpunk' | 'abstract' | 'space' | 'minimal';
   description?: string;
   tags?: string[];
   featured?: boolean;
@@ -25,67 +25,7 @@ export const BACKGROUND_REGISTRY: BackgroundAsset[] = [
     featured: true
   },
 
-  // Nature Collection
-  {
-    id: 'canyon-vista',
-    name: 'Canyon Vista',
-    path: '/attached_assets/IMG_9246_1749918203092.png',
-    category: 'nature',
-    description: 'Majestic desert canyon with dramatic rock formations',
-    tags: ['desert', 'rocks', 'canyon', 'landscape']
-  },
-  {
-    id: 'mountain-range',
-    name: 'Mountain Range',
-    path: '/attached_assets/IMG_9247_1749920069951.png',
-    category: 'nature',
-    description: 'Snow-capped mountain peaks against blue sky',
-    tags: ['mountains', 'snow', 'peaks', 'scenic']
-  },
-  {
-    id: 'coastal-cliffs',
-    name: 'Coastal Cliffs',
-    path: '/attached_assets/IMG_9248_1749920940698.png',
-    category: 'nature', 
-    description: 'Dramatic ocean cliffs with crashing waves',
-    tags: ['ocean', 'cliffs', 'waves', 'coastal']
-  },
-  {
-    id: 'forest-path',
-    name: 'Forest Path',
-    path: '/attached_assets/IMG_9249_1749923572023.png',
-    category: 'nature',
-    description: 'Serene woodland path through tall trees',
-    tags: ['forest', 'trees', 'path', 'woodland']
-  },
-  {
-    id: 'golden-hour',
-    name: 'Golden Hour',
-    path: '/attached_assets/IMG_9255_1750005438271.png',
-    category: 'nature',
-    description: 'Warm sunset light over landscape',
-    tags: ['sunset', 'golden', 'warm', 'scenic']
-  },
-
-  // Space Collection
-  {
-    id: 'aurora-sky',
-    name: 'Aurora Sky',
-    path: '/attached_assets/IMG_9250_1749936642340.png',
-    category: 'space',
-    description: 'Northern lights dancing across night sky',
-    tags: ['aurora', 'lights', 'night', 'cosmic']
-  },
-
-  // Abstract/Tech Collection
-  {
-    id: 'city-lights',
-    name: 'City Lights',
-    path: '/attached_assets/IMG_9254_1750004329663.png',
-    category: 'abstract',
-    description: 'Urban nighttime glow with abstract patterns',
-    tags: ['urban', 'night', 'lights', 'abstract']
-  },
+  // Cyberpunk Collection
   {
     id: 'tech-grid',
     name: 'Tech Grid',
@@ -93,24 +33,6 @@ export const BACKGROUND_REGISTRY: BackgroundAsset[] = [
     category: 'cyberpunk',
     description: 'Digital grid pattern with tech aesthetics',
     tags: ['grid', 'digital', 'tech', 'pattern']
-  },
-
-  // Additional Scenic Backgrounds
-  {
-    id: 'scenic-view-1',
-    name: 'Mountain Lake',
-    path: '/attached_assets/IMG_9258_1750016770262.png',
-    category: 'nature',
-    description: 'Pristine mountain lake reflection',
-    tags: ['lake', 'reflection', 'pristine', 'calm']
-  },
-  {
-    id: 'scenic-view-2',
-    name: 'Valley Vista',
-    path: '/attached_assets/IMG_9260_1750104534422.png',
-    category: 'nature',
-    description: 'Wide valley view with rolling hills',
-    tags: ['valley', 'hills', 'vista', 'expansive']
   },
 
   // Abstract/Gradient Collection
@@ -154,6 +76,16 @@ export const BACKGROUND_REGISTRY: BackgroundAsset[] = [
     category: 'abstract',
     description: 'Warm orange and coral flowing shapes',
     tags: ['orange', 'coral', 'warm', 'flowing', 'energetic']
+  },
+
+  // Minimal Collection
+  {
+    id: 'minimal-dark',
+    name: 'Dark Minimal',
+    path: '/cyberpunk-dream.png',
+    category: 'minimal',
+    description: 'Clean dark background for minimal aesthetics',
+    tags: ['dark', 'clean', 'minimal', 'simple']
   }
 ];
 
@@ -175,7 +107,7 @@ export const getBackgroundsByTag = (tag: string): BackgroundAsset[] => {
 };
 
 export const getAllCategories = (): BackgroundAsset['category'][] => {
-  return ['cyberpunk', 'nature', 'abstract', 'space', 'minimal'];
+  return ['cyberpunk', 'abstract', 'space', 'minimal'];
 };
 
 export const getAllTags = (): string[] => {
