@@ -6,14 +6,7 @@ import { Shield, CheckCircle, BookOpen } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="min-h-screen" style={{
-      backgroundImage: `url(/cyberpunk-dream.png?v=${Date.now()})`,
-      backgroundPosition: 'center center',
-      backgroundSize: 'cover',
-      backgroundRepeat: 'no-repeat',
-      backgroundAttachment: 'fixed',
-      backgroundColor: '#1a0a2e'
-    }}>
+    <div className="min-h-screen cyberpunk-bg">
       {/* Navigation Header */}
       <header className="backdrop-blur-md border-b border-white/20 sticky top-0 z-50 glass-droplet">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

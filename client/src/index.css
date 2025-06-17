@@ -5,6 +5,15 @@
 @tailwind components;
 @tailwind utilities;
 
+.cyberpunk-bg {
+  background-image: url('/cyberpunk-dream.png');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-color: #1a0a2e;
+}
+
 /* Nuclear override for glass elements */
 .hero-glass-card,
 .glass-droplet,
