@@ -245,12 +245,38 @@
   background-image: none !important;
 }
 
-/* Cyberpunk Background Only on Root Element */
+/* Dynamic Background System */
+:root {
+  --background-image: url('/cyberpunk-dream.png');
+  --background-name: "Cyberpunk Dream";
+}
+
 .liquid-glass-theme {
-  background: url('/cyberpunk-dream.png') center center / cover fixed !important;
+  background: var(--background-image) center center / cover fixed !important;
   min-height: 100vh !important;
   position: relative;
   overflow-x: hidden;
+}
+
+/* Category-specific background styling */
+.bg-cyberpunk {
+  background-color: #1a0a2e !important;
+}
+
+.bg-nature {
+  background-color: #2d3748 !important;
+}
+
+.bg-abstract {
+  background-color: #1a202c !important;
+}
+
+.bg-space {
+  background-color: #0f0f23 !important;
+}
+
+.bg-minimal {
+  background-color: #f7fafc !important;
 }
 
 /* Body stays transparent */
