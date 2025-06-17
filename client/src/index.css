@@ -54,6 +54,38 @@ button.apple-glass-card:hover {
   border: 1px solid rgba(255, 255, 255, 0.18) !important;
 }
 
+/* Exception for background thumbnails - exclude from glass overrides */
+.liquid-glass-theme [data-background-thumbnail="true"],
+.liquid-glass-theme .background-thumbnail,
+.liquid-glass-theme div.background-thumbnail,
+.liquid-glass-theme div[data-background-thumbnail="true"] {
+  background: unset !important;
+  background-color: unset !important;
+  background-image: unset !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: unset !important;
+}
+
+/* Super specific override for background thumbnails */
+.liquid-glass-theme div[data-background-thumbnail="true"] {
+  background: inherit !important;
+  background-color: inherit !important;
+  background-image: inherit !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Maximum specificity override for background thumbnails */
+body .liquid-glass-theme div.background-thumbnail[data-background-thumbnail="true"] {
+  background: inherit !important;
+  background-color: inherit !important;
+  background-image: inherit !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 2px solid rgba(100, 116, 139, 1) !important;
+}
+
 /* TAILWIND UTILITY CLASS OVERRIDES - Match Default theme's crisp glass effect */
 .liquid-glass-theme .bg-red-50,
 .liquid-glass-theme .bg-red-100,
@@ -67,7 +99,8 @@ button.apple-glass-card:hover {
 .liquid-glass-theme .bg-green-50,
 .liquid-glass-theme .bg-green-100,
 .liquid-glass-theme .bg-green-500,
-.liquid-glass-theme .bg-red-500 {
+.liquid-glass-theme .bg-red-500,
+.liquid-glass-theme .bg-slate-700:not(.background-thumbnail) {
   background: rgba(255, 255, 255, 0.12) !important;
   background-color: rgba(255, 255, 255, 0.12) !important;
   backdrop-filter: blur(16px) saturate(120%) !important;
