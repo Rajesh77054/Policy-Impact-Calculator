@@ -79,6 +79,10 @@ export const policyResultsSchema = z.object({
     netAnnualImpact: z.number(),
     deficitImpact: z.number(),
     recessionProbability: z.number(),
+    healthcareCosts: z.object({
+      current: z.number(),
+      proposed: z.number(),
+    }),
     communityImpact: z.object({
       schoolFunding: z.number(),
       infrastructure: z.number(),
@@ -90,7 +94,7 @@ export const policyResultsSchema = z.object({
       twentyYear: z.number(),
     }),
     breakdown: z.array(policyBreakdownSchema),
-  }),
+  }).optional(),
 });
 
 export const insertSessionSchema = createInsertSchema(userSessions).omit({
