@@ -528,22 +528,22 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                       <div className="h-1 bg-slate-100 rounded-full overflow-hidden">
                         <div 
                           className={`h-full rounded-full ${
-                            results.bigBillScenario.timeline.twentyYear < 0 ? 'bg-green-500' : 'bg-red-500'
+                            (results.bigBillScenario?.timeline.twentyYear || 0) < 0 ? 'bg-green-500' : 'bg-red-500'
                           }`}
                           style={{ 
-                            width: `${Math.min(100, Math.abs(results.bigBillScenario.timeline.twentyYear / results.bigBillScenario.timeline.fiveYear) * 20)}%` 
+                            width: `${Math.min(100, Math.abs((results.bigBillScenario?.timeline.twentyYear || 0) / (results.bigBillScenario?.timeline.fiveYear || 1)) * 20)}%` 
                           }}
                         ></div>
                       </div>
                       <div className="flex justify-between text-xs">
-                        <span className={results.bigBillScenario.timeline.fiveYear < 0 ? "text-green-600" : "text-red-600"}>
-                          {Math.abs(results.bigBillScenario.timeline.fiveYear / 1000).toFixed(0)}K
+                        <span className={(results.bigBillScenario?.timeline.fiveYear || 0) < 0 ? "text-green-600" : "text-red-600"}>
+                          {Math.abs((results.bigBillScenario?.timeline.fiveYear || 0) / 1000).toFixed(0)}K
                         </span>
-                        <span className={results.bigBillScenario.timeline.tenYear < 0 ? "text-green-600" : "text-red-600"}>
-                          {Math.abs(results.bigBillScenario.timeline.tenYear / 1000).toFixed(0)}K
+                        <span className={(results.bigBillScenario?.timeline.tenYear || 0) < 0 ? "text-green-600" : "text-red-600"}>
+                          {Math.abs((results.bigBillScenario?.timeline.tenYear || 0) / 1000).toFixed(0)}K
                         </span>
-                        <span className={results.bigBillScenario.timeline.twentyYear < 0 ? "text-green-600" : "text-red-600"}>
-                          {Math.abs(results.bigBillScenario.timeline.twentyYear / 1000).toFixed(0)}K
+                        <span className={(results.bigBillScenario?.timeline.twentyYear || 0) < 0 ? "text-green-600" : "text-red-600"}>
+                          {Math.abs((results.bigBillScenario?.timeline.twentyYear || 0) / 1000).toFixed(0)}K
                         </span>
                       </div>
                     </div>
@@ -556,10 +556,10 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                   <p className="text-xs text-slate-600 mb-1">
                     <strong>20-Year Savings Difference:</strong>
                   </p>
-                  <p className={`text-sm font-bold ${(results.bigBillScenario.timeline.twentyYear - results.timeline.twentyYear) < 0 ? "text-green-600" : "text-red-600"}`}>
-                    {Math.abs(results.bigBillScenario.timeline.twentyYear - results.timeline.twentyYear) < 1000 ? 
+                  <p className={`text-sm font-bold ${((results.bigBillScenario?.timeline.twentyYear || 0) - results.timeline.twentyYear) < 0 ? "text-green-600" : "text-red-600"}`}>
+                    {Math.abs((results.bigBillScenario?.timeline.twentyYear || 0) - results.timeline.twentyYear) < 1000 ? 
                       "Nearly identical" : 
-                      formatCurrency(results.bigBillScenario.timeline.twentyYear - results.timeline.twentyYear)
+                      formatCurrency((results.bigBillScenario?.timeline.twentyYear || 0) - results.timeline.twentyYear)
                     }
                   </p>
                 </div>
@@ -617,14 +617,14 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                     <div className="flex items-center justify-between mb-4">
                       <h5 className="font-medium text-blue-900">Proposed Bill</h5>
                       <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                        results.bigBillScenario.annualTaxImpact < 0 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                        (results.bigBillScenario?.annualTaxImpact || 0) < 0 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
                       }`}>
-                        {formatTaxImpact(results.bigBillScenario.annualTaxImpact)} annually
+                        {formatTaxImpact(results.bigBillScenario?.annualTaxImpact || 0)} annually
                       </span>
                     </div>
                     <p className="text-xs text-slate-600 mb-3">PROPOSED LEGISLATION (NOT YET LAW) - Based on H.R. 1 Congressional Budget Office analysis</p>
                     <div className="space-y-2">
-                      {results.bigBillScenario.breakdown[0]?.details.map((detail, index) => (
+                      {results.bigBillScenario?.breakdown[0]?.details.map((detail, index) => (
                         <div key={index} className="flex justify-between text-sm">
                           <span className="text-slate-600">{detail.item}</span>
                           <span className={`font-medium ${detail.amount < 0 ? "text-green-600" : "text-red-600"}`}>
@@ -641,12 +641,12 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                     <p className="text-xs text-slate-600 mb-1">
                       <strong>Tax Impact Difference (Proposed vs Current):</strong>
                     </p>
-                    <p className={`text-sm font-medium ${(results.bigBillScenario.annualTaxImpact - results.annualTaxImpact) > 0 ? "text-green-600" : "text-red-600"}`}>
-                      {Math.abs(results.bigBillScenario.annualTaxImpact - results.annualTaxImpact) < 100 ? 
+                    <p className={`text-sm font-medium ${((results.bigBillScenario?.annualTaxImpact || 0) - results.annualTaxImpact) > 0 ? "text-green-600" : "text-red-600"}`}>
+                      {Math.abs((results.bigBillScenario?.annualTaxImpact || 0) - results.annualTaxImpact) < 100 ? 
                         "Nearly identical impact" : 
-                        (results.bigBillScenario.annualTaxImpact - results.annualTaxImpact) > 0 ?
-                          `$${Math.abs(results.bigBillScenario.annualTaxImpact - results.annualTaxImpact).toLocaleString()} more in savings` :
-                          `$${Math.abs(results.bigBillScenario.annualTaxImpact - results.annualTaxImpact).toLocaleString()} less savings`
+                        ((results.bigBillScenario?.annualTaxImpact || 0) - results.annualTaxImpact) > 0 ?
+                          `$${Math.abs((results.bigBillScenario?.annualTaxImpact || 0) - results.annualTaxImpact).toLocaleString()} more in savings` :
+                          `$${Math.abs((results.bigBillScenario?.annualTaxImpact || 0) - results.annualTaxImpact).toLocaleString()} less savings`
                       }
                     </p>
                   </div>
@@ -697,9 +697,9 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                     <div className="flex items-center justify-between mb-4">
                       <h5 className="font-medium text-emerald-900">Proposed Bill</h5>
                       <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                        results.bigBillScenario.healthcareCostImpact < 0 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                        (results.bigBillScenario?.healthcareCostImpact || 0) < 0 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
                       }`}>
-                        {formatCostImpact(results.bigBillScenario.healthcareCostImpact)} annually
+                        {formatCostImpact(results.bigBillScenario?.healthcareCostImpact || 0)} annually
                       </span>
                     </div>
                     <p className="text-xs text-slate-600 mb-3">Expanded Medicare and enhanced ACA subsidies</p>
