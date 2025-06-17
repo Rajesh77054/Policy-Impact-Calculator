@@ -15,35 +15,35 @@ export default function LandingHero() {
         
         {/* Key Features Grid */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
-          <div className="glass-droplet p-6 rounded-xl">
+          <div className="hero-glass-card p-6 rounded-xl">
             <div className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <Calculator className="w-6 h-6 text-primary" />
+              <Calculator className="w-6 h-6 text-blue-400" />
             </div>
-            <h3 className="font-semibold text-card-foreground mb-2">Your Personal Impact</h3>
-            <p className="text-sm text-muted-foreground">See exactly how new policies might affect your taxes, healthcare costs, energy bills, and job opportunities in 3 minutes.</p>
+            <h3 className="font-semibold text-white mb-2">Your Personal Impact</h3>
+            <p className="text-sm text-white/80">See exactly how new policies might affect your taxes, healthcare costs, energy bills, and job opportunities in 3 minutes.</p>
           </div>
           
-          <div className="glass-droplet p-6 rounded-xl">
+          <div className="hero-glass-card p-6 rounded-xl">
             <div className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <Shield className="w-6 h-6 text-emerald-500" />
+              <Shield className="w-6 h-6 text-emerald-400" />
             </div>
-            <h3 className="font-semibold text-card-foreground mb-2">100% Private</h3>
-            <p className="text-sm text-muted-foreground">Your information stays with you. No accounts, no tracking, no data storage.</p>
+            <h3 className="font-semibold text-white mb-2">100% Private</h3>
+            <p className="text-sm text-white/80">Your information stays with you. No accounts, no tracking, no data storage.</p>
           </div>
           
-          <div className="glass-droplet p-6 rounded-xl">
+          <div className="hero-glass-card p-6 rounded-xl">
             <div className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <BookOpen className="w-6 h-6 text-amber-500" />
+              <BookOpen className="w-6 h-6 text-amber-400" />
             </div>
-            <h3 className="font-semibold text-card-foreground mb-2">Educational</h3>
-            <p className="text-sm text-muted-foreground">Learn how policies work with clear explanations and reliable sources.</p>
+            <h3 className="font-semibold text-white mb-2">Educational</h3>
+            <p className="text-sm text-white/80">Learn how policies work with clear explanations and reliable sources.</p>
           </div>
         </div>
 
         <Link href="/calculator">
           <Button 
             size="lg" 
-            className="glass-button text-lg px-8 py-4"
+            className="glass-button text-lg px-8 py-4 text-white hover:text-white border-white/30 hover:border-white/50"
           >
             Start Your Analysis
           </Button>
