@@ -202,7 +202,7 @@
   --chart-5: hsl(280, 65%, 60%);
 }
 
-/* Canyon-Inspired Abstract Art Background for Glassmorphism */
+/* Simplified Canyon Background for Maximum Transparency */
 .liquid-glass-theme body {
   background: #1a0f1a;
   position: relative;
@@ -217,63 +217,36 @@
   right: 0;
   bottom: 0;
   background: 
-    /* Deep canyon base layers */
-    radial-gradient(ellipse at 20% 90%, hsl(14, 85%, 25%) 0%, transparent 45%),
-    radial-gradient(ellipse at 80% 80%, hsl(25, 75%, 35%) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 95%, hsl(5, 90%, 30%) 0%, transparent 40%),
+    /* Single dominant canyon formation */
+    radial-gradient(ellipse at 30% 80%, hsl(25, 90%, 45%) 0%, transparent 60%),
     
-    /* Mid-layer flowing formations */
-    radial-gradient(ellipse at 15% 60%, hsl(30, 80%, 45%) 0%, transparent 55%),
-    radial-gradient(ellipse at 85% 50%, hsl(20, 85%, 40%) 0%, transparent 60%),
-    radial-gradient(ellipse at 60% 70%, hsl(35, 75%, 50%) 0%, transparent 45%),
+    /* Base canyon gradient */
+    linear-gradient(135deg, 
+      hsl(15, 80%, 35%) 0%,
+      hsl(35, 85%, 50%) 40%,
+      hsl(45, 90%, 60%) 70%,
+      hsl(30, 85%, 45%) 100%),
     
-    /* Upper flowing waves */
-    radial-gradient(ellipse at 30% 30%, hsl(45, 70%, 60%) 0%, transparent 50%),
-    radial-gradient(ellipse at 70% 20%, hsl(40, 80%, 55%) 0%, transparent 55%),
-    radial-gradient(ellipse at 90% 40%, hsl(50, 75%, 65%) 0%, transparent 40%),
-    
-    /* Purple-red canyon shadows */
-    radial-gradient(ellipse at 10% 40%, hsl(300, 60%, 30%) 0%, transparent 35%),
-    radial-gradient(ellipse at 40% 15%, hsl(280, 70%, 35%) 0%, transparent 45%),
-    radial-gradient(ellipse at 75% 60%, hsl(320, 55%, 40%) 0%, transparent 40%),
-    
-    /* Flowing directional gradients */
-    linear-gradient(125deg, 
-      hsl(15, 85%, 20%) 0%,
-      hsl(25, 80%, 35%) 15%,
-      hsl(35, 75%, 45%) 30%,
-      hsl(45, 70%, 55%) 45%,
-      hsl(50, 75%, 60%) 60%,
-      hsl(40, 80%, 50%) 75%,
-      hsl(30, 85%, 40%) 90%,
-      hsl(20, 90%, 30%) 100%),
-    
-    /* Base gradient for depth */
+    /* Deep base color */
     linear-gradient(180deg, 
-      hsl(280, 40%, 15%) 0%,
-      hsl(15, 70%, 25%) 100%);
+      hsl(280, 50%, 20%) 0%,
+      hsl(20, 70%, 25%) 100%);
       
   background-size: 
-    120% 80%, 130% 90%, 110% 70%,
-    140% 85%, 125% 95%, 135% 75%,
-    150% 80%, 120% 85%, 115% 70%,
-    130% 60%, 140% 75%, 125% 65%,
+    150% 100%,
     100% 100%,
     100% 100%;
   background-position: 
-    0% 100%, 100% 80%, 50% 90%,
-    -20% 60%, 120% 50%, 40% 70%,
-    -30% 30%, 130% 20%, 80% 40%,
-    -10% 40%, 40% 0%, 60% 60%,
+    20% 100%,
     0% 0%,
     0% 0%;
   background-attachment: fixed;
   pointer-events: none;
   z-index: -2;
-  animation: canyonFlow 30s ease-in-out infinite;
+  animation: canyonFlow 25s ease-in-out infinite;
 }
 
-/* Dynamic color overlay for living canyon effect */
+/* Minimal shimmer overlay */
 .liquid-glass-theme body::after {
   content: '';
   position: fixed;
@@ -282,106 +255,51 @@
   right: 0;
   bottom: 0;
   background: 
-    radial-gradient(circle at 25% 75%, hsla(15, 100%, 60%, 0.12) 0%, transparent 45%),
-    radial-gradient(circle at 75% 25%, hsla(280, 100%, 70%, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 50% 50%, hsla(35, 100%, 65%, 0.10) 0%, transparent 50%),
-    radial-gradient(circle at 90% 70%, hsla(320, 80%, 60%, 0.06) 0%, transparent 35%),
+    radial-gradient(circle at 50% 70%, hsla(35, 100%, 60%, 0.08) 0%, transparent 50%),
     linear-gradient(45deg, 
-      hsla(0, 0%, 0%, 0.15) 0%,
-      transparent 25%,
-      hsla(45, 30%, 80%, 0.05) 50%,
-      transparent 75%,
-      hsla(0, 0%, 0%, 0.10) 100%);
+      hsla(0, 0%, 0%, 0.05) 0%,
+      transparent 50%,
+      hsla(45, 40%, 80%, 0.03) 100%);
   pointer-events: none;
   z-index: -1;
-  animation: canyonShimmer 20s ease-in-out infinite;
+  animation: canyonShimmer 15s ease-in-out infinite;
 }
 
 @keyframes canyonFlow {
   0%, 100% {
     background-position: 
-      0% 100%, 100% 80%, 50% 90%,
-      -20% 60%, 120% 50%, 40% 70%,
-      -30% 30%, 130% 20%, 80% 40%,
-      -10% 40%, 40% 0%, 60% 60%,
+      20% 100%,
       0% 0%,
       0% 0%;
-    filter: hue-rotate(0deg) saturate(1) brightness(1);
-  }
-  25% {
-    background-position: 
-      -10% 95%, 110% 75%, 60% 85%,
-      -30% 55%, 130% 45%, 50% 65%,
-      -40% 25%, 140% 15%, 90% 35%,
-      -20% 35%, 50% -5%, 70% 55%,
-      5% -5%,
-      -2% 2%;
-    filter: hue-rotate(5deg) saturate(1.1) brightness(1.05);
+    filter: hue-rotate(0deg) saturate(1.1) brightness(1);
   }
   50% {
     background-position: 
-      -20% 90%, 120% 70%, 70% 80%,
-      -40% 50%, 140% 40%, 60% 60%,
-      -50% 20%, 150% 10%, 100% 30%,
-      -30% 30%, 60% -10%, 80% 50%,
-      10% -10%,
-      -5% 5%;
-    filter: hue-rotate(10deg) saturate(1.2) brightness(1.1);
-  }
-  75% {
-    background-position: 
-      -10% 95%, 110% 75%, 55% 85%,
-      -25% 55%, 125% 45%, 45% 65%,
-      -35% 25%, 135% 15%, 85% 35%,
-      -15% 35%, 45% -5%, 65% 55%,
-      5% -5%,
-      -2% 2%;
-    filter: hue-rotate(7deg) saturate(1.15) brightness(1.07);
+      40% 90%,
+      0% 0%,
+      0% 0%;
+    filter: hue-rotate(8deg) saturate(1.2) brightness(1.1);
   }
 }
 
 @keyframes canyonShimmer {
   0%, 100% {
     background: 
-      radial-gradient(circle at 25% 75%, hsla(15, 100%, 60%, 0.12) 0%, transparent 45%),
-      radial-gradient(circle at 75% 25%, hsla(280, 100%, 70%, 0.08) 0%, transparent 40%),
-      radial-gradient(circle at 50% 50%, hsla(35, 100%, 65%, 0.10) 0%, transparent 50%),
-      radial-gradient(circle at 90% 70%, hsla(320, 80%, 60%, 0.06) 0%, transparent 35%),
+      radial-gradient(circle at 50% 70%, hsla(35, 100%, 60%, 0.08) 0%, transparent 50%),
       linear-gradient(45deg, 
-        hsla(0, 0%, 0%, 0.15) 0%,
-        transparent 25%,
-        hsla(45, 30%, 80%, 0.05) 50%,
-        transparent 75%,
-        hsla(0, 0%, 0%, 0.10) 100%);
+        hsla(0, 0%, 0%, 0.05) 0%,
+        transparent 50%,
+        hsla(45, 40%, 80%, 0.03) 100%);
     opacity: 1;
   }
-  33% {
+  50% {
     background: 
-      radial-gradient(circle at 75% 25%, hsla(35, 100%, 65%, 0.14) 0%, transparent 48%),
-      radial-gradient(circle at 25% 75%, hsla(320, 100%, 60%, 0.10) 0%, transparent 42%),
-      radial-gradient(circle at 80% 80%, hsla(15, 100%, 70%, 0.12) 0%, transparent 52%),
-      radial-gradient(circle at 20% 30%, hsla(280, 80%, 65%, 0.08) 0%, transparent 38%),
+      radial-gradient(circle at 60% 60%, hsla(25, 100%, 55%, 0.10) 0%, transparent 55%),
       linear-gradient(135deg, 
-        hsla(15, 20%, 40%, 0.08) 0%,
-        transparent 25%,
-        hsla(35, 40%, 60%, 0.06) 50%,
-        transparent 75%,
-        hsla(0, 0%, 0%, 0.12) 100%);
+        hsla(15, 20%, 30%, 0.04) 0%,
+        transparent 50%,
+        hsla(35, 50%, 70%, 0.04) 100%);
     opacity: 0.9;
-  }
-  66% {
-    background: 
-      radial-gradient(circle at 30% 30%, hsla(280, 100%, 65%, 0.16) 0%, transparent 50%),
-      radial-gradient(circle at 70% 70%, hsla(15, 100%, 55%, 0.12) 0%, transparent 44%),
-      radial-gradient(circle at 20% 80%, hsla(320, 100%, 70%, 0.14) 0%, transparent 54%),
-      radial-gradient(circle at 80% 20%, hsla(35, 80%, 60%, 0.10) 0%, transparent 40%),
-      linear-gradient(225deg, 
-        hsla(280, 30%, 50%, 0.10) 0%,
-        transparent 25%,
-        hsla(20, 50%, 70%, 0.07) 50%,
-        transparent 75%,
-        hsla(0, 0%, 0%, 0.14) 100%);
-    opacity: 0.8;
   }
 }
 
