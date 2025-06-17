@@ -134,9 +134,9 @@ export default function ThemeDemo() {
               Complex shadow system mimics real glass droplets with multiple light sources.
             </CardDescription>
             <div className="mt-4 flex space-x-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 floating" style={{ animationDelay: '1s' }}></div>
-              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-400 to-cyan-400 floating" style={{ animationDelay: '2s' }}></div>
-              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 floating" style={{ animationDelay: '3s' }}></div>
+              <div className="w-8 h-8 rounded-full glass-droplet floating" style={{ animationDelay: '1s' }}></div>
+              <div className="w-8 h-8 rounded-full glass-droplet floating" style={{ animationDelay: '2s' }}></div>
+              <div className="w-8 h-8 rounded-full glass-droplet floating" style={{ animationDelay: '3s' }}></div>
             </div>
           </CardContent>
         </Card>
@@ -300,9 +300,9 @@ export default function ThemeDemo() {
           <div className="mt-8 text-center">
             <p className="text-sm text-muted-foreground mb-4">Hover over elements to see enhanced floating effects</p>
             <div className="flex justify-center space-x-4">
-              <div className="w-4 h-4 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 floating glow-on-hover cursor-pointer"></div>
-              <div className="w-4 h-4 rounded-full bg-gradient-to-r from-blue-400 to-cyan-400 floating glow-on-hover cursor-pointer" style={{ animationDelay: '1s' }}></div>
-              <div className="w-4 h-4 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 floating glow-on-hover cursor-pointer" style={{ animationDelay: '2s' }}></div>
+              <div className="w-4 h-4 rounded-full glass-droplet floating glow-on-hover cursor-pointer"></div>
+              <div className="w-4 h-4 rounded-full glass-droplet floating glow-on-hover cursor-pointer" style={{ animationDelay: '1s' }}></div>
+              <div className="w-4 h-4 rounded-full glass-droplet floating glow-on-hover cursor-pointer" style={{ animationDelay: '2s' }}></div>
             </div>
           </div>
         </div>

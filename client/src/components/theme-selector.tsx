@@ -36,7 +36,7 @@ export default function ThemeSelector() {
                 className={`w-3 h-3 rounded-full ${
                   themeOption.value === 'default'
                     ? 'bg-blue-500 glass-icon'
-                    : 'bg-gradient-to-br from-purple-400 via-pink-500 to-blue-500 glass-icon'
+                    : 'glass-droplet glass-icon'
                 }`}
               />
               {themeOption.label}

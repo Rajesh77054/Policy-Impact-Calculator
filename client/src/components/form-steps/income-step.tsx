@@ -84,7 +84,7 @@ export default function IncomeStep({ formData, onComplete }: IncomeStepProps) {
       </div>
 
       {/* Context Cards */}
-      <div className="grid md:grid-cols-3 gap-4 p-4 bg-gradient-to-r from-blue-50 to-green-50 rounded-lg">
+      <div className="grid md:grid-cols-3 gap-4 p-4 glass-droplet rounded-lg">
         <div className="flex items-center space-x-2">
           <TrendingUp className="w-4 h-4 text-blue-600" />
           <span className="text-sm text-slate-600">US Median: $70,784</span>

@@ -253,7 +253,7 @@
 }
 
 .liquid-glass-theme .gradient-text {
-  background: linear-gradient(135deg, #ffffff, #e6e6ff, #ffcccc) !important;
+  background: transparent !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
@@ -997,37 +997,16 @@
 
 @layer utilities {
   .gradient-primary {
-    background: linear-gradient(135deg, hsl(221, 83%, 53%) 0%, hsl(210, 40%, 98%) 100%);
-  }
-
-  /* Liquid Glass Utilities - Transparent Override */
-  .liquid-glass-theme .gradient-primary {
     background: transparent !important;
   }
 
   .glass-morphism {
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    background: linear-gradient(145deg,
-      hsla(255, 255%, 255%, 0.06) 0%,
-      hsla(220, 40%, 8%, 0.02) 50%,
-      hsla(255, 255%, 255%, 0.04) 100%);
-    border: none;
+    backdrop-filter: blur(40px) saturate(200%) brightness(120%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(120%);
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
     box-shadow: 
-      0 8px 32px 0 hsla(270, 80%, 30%, 0.15),
-      inset 0 1px 0 0 hsla(255, 255%, 255%, 0.08),
-      inset 0 -1px 0 0 hsla(220, 40%, 8%, 0.05);
-  }
-
-  .liquid-glass-theme .glass-morphism {
-    background: linear-gradient(145deg,
-      hsla(255, 255%, 255%, 0.06) 0%,
-      hsla(220, 40%, 8%, 0.02) 50%,
-      hsla(255, 255%, 255%, 0.04) 100%);
-    border: none;
-    box-shadow: 
-      0 8px 32px 0 hsla(270, 80%, 30%, 0.15),
-      inset 0 1px 0 0 hsla(255, 255%, 255%, 0.08),
-      inset 0 -1px 0 0 hsla(220, 40%, 8%, 0.05);
+      0 8px 32px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
   }
 }
