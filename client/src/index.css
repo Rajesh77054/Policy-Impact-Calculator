@@ -277,15 +277,8 @@
   --glass-border: hsla(255, 255%, 255%, 0.4);
   --glass-shadow: 0 8px 32px 0 hsla(220, 40%, 20%, 0.15);
   --glass-blur: blur(20px);
-  --gradient-primary: linear-gradient(135deg, 
-    hsla(270, 80%, 65%, 0.7) 0%, 
-    hsla(320, 70%, 55%, 0.5) 35%, 
-    hsla(195, 80%, 60%, 0.6) 70%, 
-    hsla(45, 90%, 65%, 0.4) 100%);
-  --gradient-accent: linear-gradient(45deg, 
-    hsla(270, 80%, 65%, 0.2) 0%, 
-    hsla(320, 70%, 55%, 0.15) 50%, 
-    hsla(195, 80%, 60%, 0.2) 100%);
+  --gradient-primary: transparent;
+  --gradient-accent: transparent;
 }
 
 /* Advanced Liquid Glass Effects with Enhanced Refractive Boundaries */
@@ -391,11 +384,9 @@
     transparent 70%);
 }
 
-/* ULTRA-AGGRESSIVE GLASSMORPHISM OVERRIDE */
-.liquid-glass-theme .glass-droplet,
-.liquid-glass-theme .glass-button,
-.liquid-glass-theme div.glass-droplet,
-.liquid-glass-theme button.glass-button {
+/* FINAL NUCLEAR OVERRIDE - TARGET EXACT ELEMENTS */
+.liquid-glass-theme div.glass-droplet.p-6.rounded-xl,
+.liquid-glass-theme .glass-droplet {
   background: rgba(255, 255, 255, 0.01) !important;
   background-color: rgba(255, 255, 255, 0.01) !important;
   background-image: none !important;
@@ -407,23 +398,27 @@
     0 8px 32px rgba(0, 0, 0, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.05),
     0 1px 0 rgba(255, 255, 255, 0.02) !important;
-  position: relative !important;
-  overflow: hidden !important;
 }
 
-/* Remove all pseudo-elements that add opacity */
-.liquid-glass-theme .glass-droplet::before,
-.liquid-glass-theme .glass-droplet::after,
-.liquid-glass-theme .glass-button::before,
-.liquid-glass-theme .glass-button::after {
+.liquid-glass-theme button.glass-button {
+  background: rgba(255, 255, 255, 0.01) !important;
+  background-color: rgba(255, 255, 255, 0.01) !important;
+  background-image: none !important;
+  backdrop-filter: blur(50px) saturate(250%) brightness(125%) !important;
+  -webkit-backdrop-filter: blur(50px) saturate(250%) brightness(125%) !important;
+}
+
+/* Block ALL pseudo-elements */
+.liquid-glass-theme *::before,
+.liquid-glass-theme *::after {
   display: none !important;
 }
 
-/* Override hover states */
-.liquid-glass-theme .glass-droplet:hover,
-.liquid-glass-theme .glass-button:hover {
-  background: rgba(255, 255, 255, 0.02) !important;
-  background-color: rgba(255, 255, 255, 0.02) !important;
+/* Override any potential Tailwind background classes */
+.liquid-glass-theme [class*="bg-"],
+.liquid-glass-theme [class*="gradient"] {
+  background: rgba(255, 255, 255, 0.01) !important;
+  background-image: none !important;
 }
 
 /* Pseudo-element removed */
@@ -816,33 +811,7 @@
     inset 0 1px 0 0 hsla(255, 255%, 255%, 0.3);
 }
 
-/* True Glassmorphism - Transparent Glass Effect for Canyon Background */
-.liquid-glass-theme .apple-glass,
-.liquid-glass-theme [role="button"],
-.liquid-glass-theme button,
-.liquid-glass-theme .card,
-.liquid-glass-theme [data-testid*="card"],
-.liquid-glass-theme .glass-morphism {
-  /* Ultra transparent background to showcase canyon colors through glass */
-  background: rgba(255, 255, 255, 0.03) !important;
-  
-  /* Light backdrop blur to show colorful canyon background through glass */
-  backdrop-filter: blur(8px) saturate(140%) brightness(105%) !important;
-  -webkit-backdrop-filter: blur(8px) saturate(140%) brightness(105%) !important;
-  
-  /* Minimal glass edge border */
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  
-  /* Subtle shadow to maintain depth without blocking colors */
-  box-shadow: 
-    0 8px 32px 0 rgba(0, 0, 0, 0.08),
-    0 2px 8px 0 rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.12) !important;
-  
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* COMPLETELY TRANSPARENT GLASSMORPHISM */
 
 .liquid-glass-theme input,
 .liquid-glass-theme textarea,
@@ -856,28 +825,7 @@
     inset 0 1px 0 0 rgba(255, 255, 255, 0.15) !important;
 }
 
-/* Minimal Glass Surface Reflection */
-.liquid-glass-theme .apple-glass::before,
-.liquid-glass-theme [role="button"]::before,
-.liquid-glass-theme button::before,
-.liquid-glass-theme .card::before,
-.liquid-glass-theme [data-testid*="card"]::before,
-.liquid-glass-theme .glass-morphism::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 30%;
-  border-radius: inherit;
-  background: linear-gradient(180deg, 
-    rgba(255, 255, 255, 0.08) 0%, 
-    rgba(255, 255, 255, 0.02) 60%,
-    transparent 100%);
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.4;
-}
+/* All pseudo-elements removed for pure glassmorphism */
 
 /* Clean glassmorphism - no additional color flares needed */
 
@@ -1012,9 +960,9 @@
     background: linear-gradient(135deg, hsl(221, 83%, 53%) 0%, hsl(210, 40%, 98%) 100%);
   }
 
-  /* Liquid Glass Utilities */
+  /* Liquid Glass Utilities - Transparent Override */
   .liquid-glass-theme .gradient-primary {
-    background: var(--gradient-primary);
+    background: transparent !important;
   }
 
   .glass-morphism {
