@@ -217,8 +217,8 @@
   right: 0;
   bottom: 0;
   background: 
-    /* Subtle overlay for glass effect visibility */
-    linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)),
+    /* Very light overlay to maintain glass visibility */
+    linear-gradient(rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.05)),
     /* Canyon image */
     url('/canyon-background.jpg');
       
@@ -228,6 +228,7 @@
   background-repeat: no-repeat;
   pointer-events: none;
   z-index: -2;
+  filter: brightness(1.1) contrast(1.1);
 }
 
 /* Minimal shimmer overlay */
