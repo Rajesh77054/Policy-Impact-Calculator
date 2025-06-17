@@ -35,11 +35,11 @@ export default function ThemeDemo() {
         </p>
       </div>
 
-      {/* Layered Glass Demonstration */}
+      {/* Apple Liquid Glass Material System */}
       <div className="space-y-8">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold gradient-text mb-2">Layered Glass Effects</h2>
-          <p className="text-muted-foreground">Different layers create depth and floating droplet appearance</p>
+          <h2 className="text-2xl font-semibold gradient-text mb-2">Apple Liquid Glass Material System</h2>
+          <p className="text-muted-foreground">Hierarchical glass layers with dynamic material response and contextual adaptation</p>
         </div>
         
         <div className="grid md:grid-cols-3 gap-6">
@@ -53,29 +53,83 @@ export default function ThemeDemo() {
             </div>
           </div>
 
-          <div className="glass-layer-2 p-6 rounded-2xl floating-content" style={{ animationDelay: '1s' }}>
+          <div className="apple-glass-secondary p-6 rounded-2xl">
             <div className="text-center">
-              <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-emerald-500/20 flex items-center justify-center floating" style={{ animationDelay: '2s' }}>
+              <div className="w-12 h-12 mx-auto mb-4 rounded-full apple-glass-tertiary flex items-center justify-center">
                 <Zap className="w-6 h-6 text-emerald-500" />
               </div>
-              <h3 className="font-semibold mb-2 gradient-text">Layer 2</h3>
-              <p className="text-sm text-muted-foreground">Enhanced blur with inner glow effects</p>
+              <h3 className="font-semibold mb-2 gradient-text">Secondary Layer</h3>
+              <p className="text-sm text-muted-foreground">Mid-level hierarchy with balanced blur and transparency</p>
             </div>
           </div>
 
-          <div className="glass-layer-3 p-6 rounded-2xl floating-content" style={{ animationDelay: '2s' }}>
+          <div className="apple-glass-tertiary p-6 rounded-2xl">
             <div className="text-center">
-              <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-purple-500/20 flex items-center justify-center floating" style={{ animationDelay: '4s' }}>
+              <div className="w-12 h-12 mx-auto mb-4 rounded-full apple-glass flex items-center justify-center">
                 <Palette className="w-6 h-6 text-purple-500" />
               </div>
-              <h3 className="font-semibold mb-2 gradient-text">Layer 3</h3>
-              <p className="text-sm text-muted-foreground">Maximum depth with complex shadows</p>
+              <h3 className="font-semibold mb-2 gradient-text">Tertiary Layer</h3>
+              <p className="text-sm text-muted-foreground">Subtle background layer with minimal blur effects</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Contextual Material Adaptation */}
+        <div className="space-y-6">
+          <h3 className="text-lg font-medium mb-4 gradient-text text-center">Contextual Material Adaptation</h3>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="apple-glass-adaptive apple-glass-content-light p-6 rounded-2xl">
+              <h4 className="font-semibold mb-2">Light Content Adaptation</h4>
+              <p className="text-sm opacity-80">Material automatically adapts to light backgrounds with darker glass tinting and enhanced contrast for optimal readability.</p>
+              <div className="mt-4 flex space-x-2">
+                <div className="apple-glass-button px-4 py-2 text-sm">Adaptive Button</div>
+                <div className="apple-glass-secondary px-4 py-2 text-sm rounded-lg">Secondary</div>
+              </div>
+            </div>
+            
+            <div className="apple-glass-adaptive apple-glass-content-dark p-6 rounded-2xl">
+              <h4 className="font-semibold mb-2">Dark Content Adaptation</h4>
+              <p className="text-sm opacity-80">Material responds to dark backgrounds with lighter glass effects and increased blur for natural depth perception.</p>
+              <div className="mt-4 flex space-x-2">
+                <div className="apple-glass-button px-4 py-2 text-sm">Adaptive Button</div>
+                <div className="apple-glass-secondary px-4 py-2 text-sm rounded-lg">Secondary</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Material Hierarchy Demonstration */}
+        <div className="apple-glass-primary p-8 rounded-2xl">
+          <h3 className="text-lg font-medium mb-6 gradient-text text-center">Material Hierarchy & Light Refraction</h3>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div className="apple-glass-secondary p-4 rounded-xl">
+              <div className="apple-glass-tertiary p-3 rounded-lg mb-3">
+                <Sparkles className="w-5 h-5 text-blue-400 mx-auto" />
+              </div>
+              <h5 className="font-medium text-sm mb-2">Natural Depth</h5>
+              <p className="text-xs opacity-75">Multiple glass layers create authentic depth perception with realistic light refraction.</p>
+            </div>
+            
+            <div className="apple-glass-secondary p-4 rounded-xl">
+              <div className="apple-glass-tertiary p-3 rounded-lg mb-3">
+                <Zap className="w-5 h-5 text-emerald-400 mx-auto" />
+              </div>
+              <h5 className="font-medium text-sm mb-2">Smooth Transitions</h5>
+              <p className="text-xs opacity-75">Fluid state changes between hover, active, and focus states with cubic-bezier easing.</p>
+            </div>
+            
+            <div className="apple-glass-secondary p-4 rounded-xl">
+              <div className="apple-glass-tertiary p-3 rounded-lg mb-3">
+                <Heart className="w-5 h-5 text-pink-400 mx-auto" />
+              </div>
+              <h5 className="font-medium text-sm mb-2">Accessibility Ready</h5>
+              <p className="text-xs opacity-75">Respects user preferences for reduced motion and high contrast modes.</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Floating Droplet Cards */}
+      {/* Enhanced Glass Cards */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card className="glass-droplet glow-on-hover floating-content">
           <CardHeader>
