@@ -43,13 +43,13 @@ export default function ThemeDemo() {
         </div>
         
         <div className="grid md:grid-cols-3 gap-6">
-          <div className="glass-layer-1 p-6 rounded-2xl floating-content">
+          <div className="apple-glass-primary p-6 rounded-2xl">
             <div className="text-center">
-              <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center floating">
+              <div className="w-12 h-12 mx-auto mb-4 rounded-full apple-glass-secondary flex items-center justify-center">
                 <Sparkles className="w-6 h-6 text-primary" />
               </div>
-              <h3 className="font-semibold mb-2 gradient-text">Layer 1</h3>
-              <p className="text-sm text-muted-foreground">Base glass surface with subtle transparency</p>
+              <h3 className="font-semibold mb-2 gradient-text">Primary Layer</h3>
+              <p className="text-sm text-muted-foreground">Highest hierarchy glass with maximum depth and blur</p>
             </div>
           </div>
 
@@ -148,41 +148,41 @@ export default function ThemeDemo() {
         
         {/* Buttons */}
         <div>
-          <h3 className="text-lg font-medium mb-4 gradient-text">Buttons</h3>
+          <h3 className="text-lg font-medium mb-4 gradient-text">Apple Liquid Glass Buttons</h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Button 
-              className="glass-button glow-on-hover" 
+              className="apple-glass-button" 
               onClick={handleRippleClick}
             >
               <Sparkles className="w-4 h-4 mr-2" />
-              Glass Button
+              Primary Glass
             </Button>
             
             <Button 
               variant="outline" 
-              className="glow-on-hover"
+              className="apple-glass apple-glass-secondary"
               onClick={handleRippleClick}
             >
               <Zap className="w-4 h-4 mr-2" />
-              Outline Style
+              Secondary Glass
             </Button>
             
             <Button 
               variant="secondary" 
-              className="glass-button glow-on-hover"
+              className="apple-glass apple-glass-tertiary"
               onClick={handleRippleClick}
             >
               <Heart className="w-4 h-4 mr-2" />
-              Secondary
+              Tertiary Glass
             </Button>
             
             <Button 
               variant="ghost" 
-              className="glow-on-hover"
+              className="apple-glass-adaptive apple-glass-content-dark"
               onClick={handleRippleClick}
             >
               <Palette className="w-4 h-4 mr-2" />
-              Ghost Style
+              Adaptive Glass
             </Button>
           </div>
         </div>
