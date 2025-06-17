@@ -17,8 +17,8 @@ export default function LandingHero() {
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           <div className="p-6 rounded-xl" style={{
             background: 'rgba(255, 255, 255, 0.03)',
-            backdropFilter: 'blur(15px) saturate(140%) brightness(105%)',
-            WebkitBackdropFilter: 'blur(15px) saturate(140%) brightness(105%)',
+            backdropFilter: 'blur(6px) saturate(140%) brightness(105%)',
+            WebkitBackdropFilter: 'blur(6px) saturate(140%) brightness(105%)',
             border: '1px solid rgba(255, 255, 255, 0.08)',
             borderRadius: '20px',
             boxShadow: '0 6px 24px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
@@ -32,8 +32,8 @@ export default function LandingHero() {
           
           <div className="p-6 rounded-xl" style={{
             background: 'rgba(255, 255, 255, 0.03)',
-            backdropFilter: 'blur(15px) saturate(140%) brightness(105%)',
-            WebkitBackdropFilter: 'blur(15px) saturate(140%) brightness(105%)',
+            backdropFilter: 'blur(6px) saturate(140%) brightness(105%)',
+            WebkitBackdropFilter: 'blur(6px) saturate(140%) brightness(105%)',
             border: '1px solid rgba(255, 255, 255, 0.08)',
             borderRadius: '20px',
             boxShadow: '0 6px 24px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
@@ -47,8 +47,8 @@ export default function LandingHero() {
           
           <div className="p-6 rounded-xl" style={{
             background: 'rgba(255, 255, 255, 0.03)',
-            backdropFilter: 'blur(15px) saturate(140%) brightness(105%)',
-            WebkitBackdropFilter: 'blur(15px) saturate(140%) brightness(105%)',
+            backdropFilter: 'blur(6px) saturate(140%) brightness(105%)',
+            WebkitBackdropFilter: 'blur(6px) saturate(140%) brightness(105%)',
             border: '1px solid rgba(255, 255, 255, 0.08)',
             borderRadius: '20px',
             boxShadow: '0 6px 24px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
@@ -67,8 +67,8 @@ export default function LandingHero() {
             className="text-lg px-8 py-4 text-white hover:text-white drop-shadow-lg"
             style={{
               background: 'rgba(255, 255, 255, 0.05)',
-              backdropFilter: 'blur(12px) saturate(130%) brightness(108%)',
-              WebkitBackdropFilter: 'blur(12px) saturate(130%) brightness(108%)',
+              backdropFilter: 'blur(6px) saturate(130%) brightness(108%)',
+              WebkitBackdropFilter: 'blur(6px) saturate(130%) brightness(108%)',
               border: '1px solid rgba(255, 255, 255, 0.15)',
               borderRadius: '12px',
               boxShadow: '0 6px 20px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.12)'
