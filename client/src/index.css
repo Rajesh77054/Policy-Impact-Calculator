@@ -202,9 +202,9 @@
   --chart-5: hsl(280, 65%, 60%);
 }
 
-/* Vibrant Abstract Art Background for Glassmorphism */
+/* Canyon-Inspired Abstract Art Background for Glassmorphism */
 .liquid-glass-theme body {
-  background: #000;
+  background: #1a0f1a;
   position: relative;
   overflow-x: hidden;
 }
@@ -216,16 +216,64 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url('@assets/image_1750112869851.png');
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
+  background: 
+    /* Deep canyon base layers */
+    radial-gradient(ellipse at 20% 90%, hsl(14, 85%, 25%) 0%, transparent 45%),
+    radial-gradient(ellipse at 80% 80%, hsl(25, 75%, 35%) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 95%, hsl(5, 90%, 30%) 0%, transparent 40%),
+    
+    /* Mid-layer flowing formations */
+    radial-gradient(ellipse at 15% 60%, hsl(30, 80%, 45%) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 50%, hsl(20, 85%, 40%) 0%, transparent 60%),
+    radial-gradient(ellipse at 60% 70%, hsl(35, 75%, 50%) 0%, transparent 45%),
+    
+    /* Upper flowing waves */
+    radial-gradient(ellipse at 30% 30%, hsl(45, 70%, 60%) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 20%, hsl(40, 80%, 55%) 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 40%, hsl(50, 75%, 65%) 0%, transparent 40%),
+    
+    /* Purple-red canyon shadows */
+    radial-gradient(ellipse at 10% 40%, hsl(300, 60%, 30%) 0%, transparent 35%),
+    radial-gradient(ellipse at 40% 15%, hsl(280, 70%, 35%) 0%, transparent 45%),
+    radial-gradient(ellipse at 75% 60%, hsl(320, 55%, 40%) 0%, transparent 40%),
+    
+    /* Flowing directional gradients */
+    linear-gradient(125deg, 
+      hsl(15, 85%, 20%) 0%,
+      hsl(25, 80%, 35%) 15%,
+      hsl(35, 75%, 45%) 30%,
+      hsl(45, 70%, 55%) 45%,
+      hsl(50, 75%, 60%) 60%,
+      hsl(40, 80%, 50%) 75%,
+      hsl(30, 85%, 40%) 90%,
+      hsl(20, 90%, 30%) 100%),
+    
+    /* Base gradient for depth */
+    linear-gradient(180deg, 
+      hsl(280, 40%, 15%) 0%,
+      hsl(15, 70%, 25%) 100%);
+      
+  background-size: 
+    120% 80%, 130% 90%, 110% 70%,
+    140% 85%, 125% 95%, 135% 75%,
+    150% 80%, 120% 85%, 115% 70%,
+    130% 60%, 140% 75%, 125% 65%,
+    100% 100%,
+    100% 100%;
+  background-position: 
+    0% 100%, 100% 80%, 50% 90%,
+    -20% 60%, 120% 50%, 40% 70%,
+    -30% 30%, 130% 20%, 80% 40%,
+    -10% 40%, 40% 0%, 60% 60%,
+    0% 0%,
+    0% 0%;
   background-attachment: fixed;
   pointer-events: none;
   z-index: -2;
+  animation: canyonFlow 30s ease-in-out infinite;
 }
 
-/* Add subtle overlay for better contrast and animated movement */
+/* Dynamic color overlay for living canyon effect */
 .liquid-glass-theme body::after {
   content: '';
   position: fixed;
@@ -234,47 +282,106 @@
   right: 0;
   bottom: 0;
   background: 
-    radial-gradient(circle at 30% 40%, hsla(270, 100%, 50%, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 70% 60%, hsla(195, 100%, 50%, 0.06) 0%, transparent 35%),
-    radial-gradient(circle at 50% 80%, hsla(320, 100%, 50%, 0.07) 0%, transparent 38%),
-    radial-gradient(circle at 20% 20%, hsla(60, 100%, 50%, 0.05) 0%, transparent 32%),
+    radial-gradient(circle at 25% 75%, hsla(15, 100%, 60%, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 75% 25%, hsla(280, 100%, 70%, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, hsla(35, 100%, 65%, 0.10) 0%, transparent 50%),
+    radial-gradient(circle at 90% 70%, hsla(320, 80%, 60%, 0.06) 0%, transparent 35%),
     linear-gradient(45deg, 
-      hsla(0, 0%, 0%, 0.02) 0%,
+      hsla(0, 0%, 0%, 0.15) 0%,
       transparent 25%,
-      hsla(0, 0%, 100%, 0.02) 50%,
+      hsla(45, 30%, 80%, 0.05) 50%,
       transparent 75%,
-      hsla(0, 0%, 0%, 0.02) 100%);
+      hsla(0, 0%, 0%, 0.10) 100%);
   pointer-events: none;
   z-index: -1;
-  animation: overlayShift 25s ease-in-out infinite;
+  animation: canyonShimmer 20s ease-in-out infinite;
 }
 
-@keyframes overlayShift {
+@keyframes canyonFlow {
   0%, 100% {
-    background: 
-      radial-gradient(circle at 30% 40%, hsla(270, 100%, 50%, 0.08) 0%, transparent 40%),
-      radial-gradient(circle at 70% 60%, hsla(195, 100%, 50%, 0.06) 0%, transparent 35%),
-      radial-gradient(circle at 50% 80%, hsla(320, 100%, 50%, 0.07) 0%, transparent 38%),
-      radial-gradient(circle at 20% 20%, hsla(60, 100%, 50%, 0.05) 0%, transparent 32%),
-      linear-gradient(45deg, 
-        hsla(0, 0%, 0%, 0.02) 0%,
-        transparent 25%,
-        hsla(0, 0%, 100%, 0.02) 50%,
-        transparent 75%,
-        hsla(0, 0%, 0%, 0.02) 100%);
+    background-position: 
+      0% 100%, 100% 80%, 50% 90%,
+      -20% 60%, 120% 50%, 40% 70%,
+      -30% 30%, 130% 20%, 80% 40%,
+      -10% 40%, 40% 0%, 60% 60%,
+      0% 0%,
+      0% 0%;
+    filter: hue-rotate(0deg) saturate(1) brightness(1);
+  }
+  25% {
+    background-position: 
+      -10% 95%, 110% 75%, 60% 85%,
+      -30% 55%, 130% 45%, 50% 65%,
+      -40% 25%, 140% 15%, 90% 35%,
+      -20% 35%, 50% -5%, 70% 55%,
+      5% -5%,
+      -2% 2%;
+    filter: hue-rotate(5deg) saturate(1.1) brightness(1.05);
   }
   50% {
+    background-position: 
+      -20% 90%, 120% 70%, 70% 80%,
+      -40% 50%, 140% 40%, 60% 60%,
+      -50% 20%, 150% 10%, 100% 30%,
+      -30% 30%, 60% -10%, 80% 50%,
+      10% -10%,
+      -5% 5%;
+    filter: hue-rotate(10deg) saturate(1.2) brightness(1.1);
+  }
+  75% {
+    background-position: 
+      -10% 95%, 110% 75%, 55% 85%,
+      -25% 55%, 125% 45%, 45% 65%,
+      -35% 25%, 135% 15%, 85% 35%,
+      -15% 35%, 45% -5%, 65% 55%,
+      5% -5%,
+      -2% 2%;
+    filter: hue-rotate(7deg) saturate(1.15) brightness(1.07);
+  }
+}
+
+@keyframes canyonShimmer {
+  0%, 100% {
     background: 
-      radial-gradient(circle at 70% 30%, hsla(195, 100%, 50%, 0.09) 0%, transparent 42%),
-      radial-gradient(circle at 30% 70%, hsla(320, 100%, 50%, 0.07) 0%, transparent 37%),
-      radial-gradient(circle at 80% 20%, hsla(270, 100%, 50%, 0.08) 0%, transparent 40%),
-      radial-gradient(circle at 40% 80%, hsla(60, 100%, 50%, 0.06) 0%, transparent 34%),
-      linear-gradient(135deg, 
-        hsla(0, 0%, 100%, 0.02) 0%,
+      radial-gradient(circle at 25% 75%, hsla(15, 100%, 60%, 0.12) 0%, transparent 45%),
+      radial-gradient(circle at 75% 25%, hsla(280, 100%, 70%, 0.08) 0%, transparent 40%),
+      radial-gradient(circle at 50% 50%, hsla(35, 100%, 65%, 0.10) 0%, transparent 50%),
+      radial-gradient(circle at 90% 70%, hsla(320, 80%, 60%, 0.06) 0%, transparent 35%),
+      linear-gradient(45deg, 
+        hsla(0, 0%, 0%, 0.15) 0%,
         transparent 25%,
-        hsla(0, 0%, 0%, 0.02) 50%,
+        hsla(45, 30%, 80%, 0.05) 50%,
         transparent 75%,
-        hsla(0, 0%, 100%, 0.02) 100%);
+        hsla(0, 0%, 0%, 0.10) 100%);
+    opacity: 1;
+  }
+  33% {
+    background: 
+      radial-gradient(circle at 75% 25%, hsla(35, 100%, 65%, 0.14) 0%, transparent 48%),
+      radial-gradient(circle at 25% 75%, hsla(320, 100%, 60%, 0.10) 0%, transparent 42%),
+      radial-gradient(circle at 80% 80%, hsla(15, 100%, 70%, 0.12) 0%, transparent 52%),
+      radial-gradient(circle at 20% 30%, hsla(280, 80%, 65%, 0.08) 0%, transparent 38%),
+      linear-gradient(135deg, 
+        hsla(15, 20%, 40%, 0.08) 0%,
+        transparent 25%,
+        hsla(35, 40%, 60%, 0.06) 50%,
+        transparent 75%,
+        hsla(0, 0%, 0%, 0.12) 100%);
+    opacity: 0.9;
+  }
+  66% {
+    background: 
+      radial-gradient(circle at 30% 30%, hsla(280, 100%, 65%, 0.16) 0%, transparent 50%),
+      radial-gradient(circle at 70% 70%, hsla(15, 100%, 55%, 0.12) 0%, transparent 44%),
+      radial-gradient(circle at 20% 80%, hsla(320, 100%, 70%, 0.14) 0%, transparent 54%),
+      radial-gradient(circle at 80% 20%, hsla(35, 80%, 60%, 0.10) 0%, transparent 40%),
+      linear-gradient(225deg, 
+        hsla(280, 30%, 50%, 0.10) 0%,
+        transparent 25%,
+        hsla(20, 50%, 70%, 0.07) 50%,
+        transparent 75%,
+        hsla(0, 0%, 0%, 0.14) 100%);
+    opacity: 0.8;
   }
 }
 
@@ -1026,28 +1133,30 @@
     inset 0 1px 0 0 hsla(255, 255%, 255%, 0.3);
 }
 
-/* True Glassmorphism - Transparent Glass Effect */
+/* True Glassmorphism - Transparent Glass Effect for Canyon Background */
 .liquid-glass-theme .apple-glass,
 .liquid-glass-theme [role="button"],
 .liquid-glass-theme button,
 .liquid-glass-theme .card,
 .liquid-glass-theme [data-testid*="card"],
 .liquid-glass-theme .glass-morphism {
-  /* Ultra transparent background to showcase blur effect */
-  background: rgba(255, 255, 255, 0.08) !important;
+  /* Ultra transparent background to showcase canyon colors through glass */
+  background: rgba(255, 255, 255, 0.10) !important;
   
-  /* Enhanced backdrop blur to show colorful background through glass */
-  backdrop-filter: blur(24px) saturate(200%) brightness(110%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(200%) brightness(110%) !important;
+  /* Enhanced backdrop blur to show colorful canyon background through glass */
+  backdrop-filter: blur(28px) saturate(180%) brightness(120%) contrast(110%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(180%) brightness(120%) contrast(110%) !important;
   
-  /* Subtle glass edge border with slight iridescence */
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  /* Warm glass edge border with canyon-inspired iridescence */
+  border: 1px solid rgba(255, 245, 235, 0.30) !important;
   
-  /* Enhanced shadow with color hints */
+  /* Enhanced shadow with warm canyon color hints */
   box-shadow: 
-    0 8px 32px 0 rgba(31, 38, 135, 0.18),
-    0 4px 16px 0 rgba(120, 80, 200, 0.08),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.3) !important;
+    0 12px 40px 0 rgba(15, 10, 25, 0.25),
+    0 6px 20px 0 rgba(120, 60, 30, 0.12),
+    0 2px 8px 0 rgba(200, 150, 100, 0.08),
+    inset 0 1px 0 0 rgba(255, 245, 235, 0.35),
+    inset 0 -1px 0 0 rgba(150, 100, 80, 0.15) !important;
   
   position: relative;
   overflow: hidden;
@@ -1115,38 +1224,44 @@
   }
 }
 
-/* Enhanced Hover State for Glass Elements */
+/* Enhanced Hover State for Glass Elements with Canyon Colors */
 .liquid-glass-theme .apple-glass:hover,
 .liquid-glass-theme [role="button"]:hover,
 .liquid-glass-theme button:hover,
 .liquid-glass-theme .card:hover,
 .liquid-glass-theme [data-testid*="card"]:hover,
 .liquid-glass-theme .glass-morphism:hover {
-  background: rgba(255, 255, 255, 0.15) !important;
-  backdrop-filter: blur(28px) saturate(220%) brightness(115%) !important;
-  -webkit-backdrop-filter: blur(28px) saturate(220%) brightness(115%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  background: rgba(255, 250, 240, 0.18) !important;
+  backdrop-filter: blur(32px) saturate(200%) brightness(130%) contrast(115%) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(200%) brightness(130%) contrast(115%) !important;
+  border: 1px solid rgba(255, 240, 220, 0.45) !important;
   box-shadow: 
-    0 12px 40px 0 rgba(31, 38, 135, 0.25),
-    0 6px 20px 0 rgba(120, 80, 200, 0.12),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.5) !important;
-  transform: translateY(-2px);
+    0 16px 48px 0 rgba(15, 10, 25, 0.35),
+    0 8px 24px 0 rgba(120, 60, 30, 0.18),
+    0 4px 12px 0 rgba(200, 150, 100, 0.15),
+    inset 0 1px 0 0 rgba(255, 240, 220, 0.50),
+    inset 0 -1px 0 0 rgba(150, 100, 80, 0.20),
+    0 0 20px rgba(255, 200, 150, 0.12) !important;
+  transform: translateY(-3px) scale(1.02);
 }
 
-/* Reference-Based Active/Pressed State */
+/* Canyon-Inspired Active/Pressed State */
 .liquid-glass-theme .apple-glass:active,
 .liquid-glass-theme [role="button"]:active,
 .liquid-glass-theme button:active,
 .liquid-glass-theme .card:active,
 .liquid-glass-theme [data-testid*="card"]:active,
 .liquid-glass-theme .glass-morphism:active {
-  background: rgba(255, 255, 255, 0.22) !important;
-  backdrop-filter: blur(32px) saturate(240%) brightness(120%) !important;
-  -webkit-backdrop-filter: blur(32px) saturate(240%) brightness(120%) !important;
+  background: rgba(255, 245, 230, 0.25) !important;
+  backdrop-filter: blur(36px) saturate(240%) brightness(135%) contrast(120%) !important;
+  -webkit-backdrop-filter: blur(36px) saturate(240%) brightness(135%) contrast(120%) !important;
+  border: 1px solid rgba(255, 230, 200, 0.60) !important;
   box-shadow: 
-    0 8px 24px 0 rgba(120, 200, 250, 0.23),
-    0 4px 12px 0 rgba(31, 38, 135, 0.18) !important;
-  transform: translateY(0px);
+    0 8px 24px 0 rgba(200, 120, 60, 0.25),
+    0 4px 12px 0 rgba(15, 10, 25, 0.20),
+    inset 0 2px 0 0 rgba(255, 240, 220, 0.60),
+    inset 0 -2px 0 0 rgba(120, 80, 60, 0.25) !important;
+  transform: translateY(-1px) scale(0.98);
 }
 
 /* Clean glassmorphism - simple interactions */
@@ -1169,14 +1284,15 @@
   outline: none !important;
 }
 
-/* Sharp, high-contrast text for glass cards */
+/* High-contrast text for glass cards against canyon background */
 .liquid-glass-theme .apple-glass,
 .liquid-glass-theme [role="button"],
 .liquid-glass-theme button,
 .liquid-glass-theme .card,
 .liquid-glass-theme [data-testid*="card"],
 .liquid-glass-theme .glass-morphism {
-  color: hsl(220, 40%, 20%) !important;
+  color: hsl(35, 15%, 10%) !important;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8), 0 0 8px rgba(255, 245, 235, 0.4) !important;
 }
 
 /* Ensure content appears above glass effects */
@@ -1200,8 +1316,9 @@
 .liquid-glass-theme [data-testid*="card"] h1,
 .liquid-glass-theme [data-testid*="card"] h2,
 .liquid-glass-theme [data-testid*="card"] h3 {
-  color: hsl(220, 40%, 15%) !important;
+  color: hsl(25, 20%, 8%) !important;
   font-weight: 600;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9), 0 0 10px rgba(255, 245, 235, 0.5) !important;
 }
 
 .liquid-glass-theme .apple-glass svg,
@@ -1209,7 +1326,8 @@
 .liquid-glass-theme [data-testid*="card"] svg,
 .liquid-glass-theme [role="button"] svg,
 .liquid-glass-theme button svg {
-  color: hsl(220, 40%, 25%) !important;
+  color: hsl(30, 25%, 15%) !important;
+  filter: drop-shadow(0 1px 2px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 6px rgba(255, 245, 235, 0.4)) !important;
 }
 
 @layer utilities {
