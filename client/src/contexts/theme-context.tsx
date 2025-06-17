@@ -16,7 +16,7 @@ export const themes = [
 ];
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('liquid-glass');
+  const [theme, setTheme] = useState<Theme>('default');
 
   useEffect(() => {
     // Load theme from localStorage on mount
@@ -29,12 +29,20 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Apply theme classes to document
     const root = document.documentElement;
+    const body = document.body;
     
     // Remove all theme classes
     root.classList.remove('default-theme', 'liquid-glass-theme');
     
     // Add current theme class
     root.classList.add(`${theme}-theme`);
+    
+    // Handle background overrides for default theme
+    if (theme === 'default') {
+      // Remove any background classes when default theme is selected
+      body.className = body.className.replace(/\b\w+-bg\b/g, '').trim();
+      body.classList.add('default-theme-bg');
+    }
     
     // Save to localStorage
     localStorage.setItem('ui-theme', theme);

@@ -188,6 +188,29 @@
   }
   
   /* Dynamic Background System */
+  .default-theme-bg {
+    background: hsl(0, 0%, 100%) !important;
+    background-image: none !important;
+    background-attachment: initial !important;
+  }
+
+  .dark .default-theme-bg {
+    background: hsl(222, 84%, 4.9%) !important;
+    background-image: none !important;
+  }
+
+  /* Default theme overrides any background when active */
+  .default-theme body {
+    background: hsl(0, 0%, 100%) !important;
+    background-image: none !important;
+    background-attachment: initial !important;
+  }
+
+  .default-theme.dark body {
+    background: hsl(222, 84%, 4.9%) !important;
+    background-image: none !important;
+  }
+
   .cyberpunk-bg {
     background: 
       linear-gradient(135deg, rgba(147, 51, 234, 0.03) 0%, rgba(79, 70, 229, 0.03) 50%, rgba(236, 72, 153, 0.03) 100%),
