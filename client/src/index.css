@@ -34,6 +34,12 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.18) !important;
 }
 
+/* Exception for background selector thumbnails - allow background images */
+.liquid-glass-theme [data-background-thumbnail],
+.liquid-glass-theme .background-thumbnail {
+  background-image: unset !important;
+}
+
 /* Override any Tailwind background utilities on glass elements */
 .hero-glass-card[class*="bg-"],
 .glass-droplet[class*="bg-"],

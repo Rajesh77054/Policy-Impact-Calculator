@@ -151,11 +151,12 @@ function BackgroundCard({ background, isSelected, isLoading, onSelect, onPreview
 
   return (
     <div 
-      className={`group relative aspect-video rounded-lg overflow-hidden cursor-pointer border-2 transition-all duration-200 hover:scale-[1.02] bg-slate-700 ${
+      className={`group relative aspect-video rounded-lg overflow-hidden cursor-pointer border-2 transition-all duration-200 hover:scale-[1.02] bg-slate-700 background-thumbnail ${
         isSelected ? 'border-blue-400 shadow-lg shadow-blue-400/30' : 'border-slate-600 hover:border-slate-500'
       }`}
       onClick={onSelect}
       onMouseEnter={onPreview}
+      data-background-thumbnail="true"
       style={{
         backgroundImage: `url('${imagePath}')`,
         backgroundSize: 'cover',
