@@ -15,16 +15,18 @@ function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider>
-        <QueryClientProvider client={queryClient}>
-          <Switch>
-            <Route path="/" component={Home} />
-            <Route path="/calculator" component={Calculator} />
-            <Route path="/results" component={Results} />
-            <Route path="/theme-demo" component={ThemeDemoPage} />
-            <Route component={NotFound} />
-          </Switch>
-          <Toaster />
-        </QueryClientProvider>
+        <BackgroundProvider>
+          <QueryClientProvider client={queryClient}>
+            <Switch>
+              <Route path="/" component={Home} />
+              <Route path="/calculator" component={Calculator} />
+              <Route path="/results" component={Results} />
+              <Route path="/theme-demo" component={ThemeDemoPage} />
+              <Route component={NotFound} />
+            </Switch>
+            <Toaster />
+          </QueryClientProvider>
+        </BackgroundProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );
