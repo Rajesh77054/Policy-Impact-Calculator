@@ -106,9 +106,9 @@ export default function EmploymentStep({ formData, onComplete }: EmploymentStepP
               <SelectValue placeholder="Select your industry" />
             </SelectTrigger>
             <SelectContent>
-              {INDUSTRIES.map((industry) => (
-                <SelectItem key={industry.value} value={industry.value}>
-                  {industry.label}
+              {INDUSTRIES.map((industryOption) => (
+                <SelectItem key={industryOption.value} value={industryOption.value}>
+                  {industryOption.label}
                 </SelectItem>
               ))}
             </SelectContent>
