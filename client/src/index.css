@@ -417,58 +417,14 @@
     transparent 70%);
 }
 
-/* Floating droplet effect with natural refraction */
+/* Pure glassmorphism override */
 .liquid-glass-theme .glass-droplet {
-  background: linear-gradient(145deg, 
-    hsla(255, 255%, 255%, 0.08) 0%,
-    hsla(220, 40%, 8%, 0.02) 25%,
-    hsla(270, 80%, 65%, 0.04) 50%,
-    hsla(195, 80%, 60%, 0.03) 75%,
-    hsla(255, 255%, 255%, 0.06) 100%);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: none;
-  box-shadow: 
-    0 16px 40px 0 hsla(270, 80%, 30%, 0.25),
-    0 8px 16px 0 hsla(270, 80%, 30%, 0.15),
-    0 2px 8px 0 hsla(270, 80%, 30%, 0.08),
-    inset 0 1px 0 0 hsla(255, 255%, 255%, 0.12),
-    inset 0 -1px 0 0 hsla(220, 40%, 8%, 0.1),
-    inset 1px 0 0 0 hsla(270, 80%, 65%, 0.05),
-    inset -1px 0 0 0 hsla(195, 80%, 60%, 0.05);
-  position: relative;
-  overflow: hidden;
-  transform: translateZ(0);
+  background: none !important;
 }
 
-.liquid-glass-theme .glass-droplet::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(ellipse at center,
-    hsla(255, 255%, 255%, 0.1) 0%,
-    hsla(270, 80%, 65%, 0.02) 40%,
-    transparent 70%);
-  border-radius: inherit;
-  pointer-events: none;
-}
+/* Pseudo-element removed */
 
-.liquid-glass-theme .glass-droplet:hover {
-  transform: translateY(-3px) translateZ(0);
-  box-shadow: 
-    0 24px 48px 0 hsla(270, 80%, 30%, 0.3),
-    0 12px 24px 0 hsla(270, 80%, 30%, 0.2),
-    0 4px 12px 0 hsla(270, 80%, 30%, 0.12),
-    inset 0 1px 0 0 hsla(255, 255%, 255%, 0.15),
-    inset 0 -1px 0 0 hsla(220, 40%, 8%, 0.12),
-    inset 1px 0 0 0 hsla(270, 80%, 65%, 0.08),
-    inset -1px 0 0 0 hsla(195, 80%, 60%, 0.08),
-    0 0 20px hsla(270, 80%, 65%, 0.1);
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* Hover effects removed for pure glassmorphism */
 
 /* Layered glass surface with natural refraction */
 .liquid-glass-theme .glass-surface {
