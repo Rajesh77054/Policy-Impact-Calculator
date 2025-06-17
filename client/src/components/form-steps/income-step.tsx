@@ -60,11 +60,11 @@ interface IncomeStepProps {
 }
 
 export default function IncomeStep({ formData, onComplete }: IncomeStepProps) {
-  const [incomeRange, setIncomeRange] = useState<string>(formData.incomeRange || "");
+  const [incomeRange, setIncomeRange] = useState<"under-15k" | "15k-45k" | "45k-95k" | "95k-200k" | "200k-400k" | "over-400k" | "">(formData.incomeRange || "");
 
   const handleNext = () => {
-    if (incomeRange) {
-      onComplete({ incomeRange });
+    if (incomeRange && incomeRange !== "") {
+      onComplete({ incomeRange: incomeRange as "under-15k" | "15k-45k" | "45k-95k" | "95k-200k" | "200k-400k" | "over-400k" });
     }
   };
 
