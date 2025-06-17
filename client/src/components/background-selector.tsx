@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useBackground } from '../contexts/BackgroundContext';
 import { Button } from './ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from './ui/dialog';
@@ -148,23 +148,30 @@ interface BackgroundCardProps {
 
 function BackgroundCard({ background, isSelected, isLoading, onSelect, onPreview }: BackgroundCardProps) {
   const imagePath = getImagePath(background.path);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (cardRef.current) {
+      const element = cardRef.current;
+      // Force style overrides directly on DOM element
+      element.style.setProperty('background-image', `url('${imagePath}')`, 'important');
+      element.style.setProperty('background-size', 'cover', 'important');
+      element.style.setProperty('background-position', 'center', 'important');
+      element.style.setProperty('background-repeat', 'no-repeat', 'important');
+      element.style.setProperty('background-color', '#475569', 'important');
+      element.style.setProperty('backdrop-filter', 'none', 'important');
+      element.style.setProperty('-webkit-backdrop-filter', 'none', 'important');
+    }
+  }, [imagePath]);
 
   return (
     <div 
-      className={`group relative aspect-video rounded-lg overflow-hidden cursor-pointer border-2 transition-all duration-200 hover:scale-[1.02] background-thumbnail ${
+      ref={cardRef}
+      className={`group relative aspect-video rounded-lg overflow-hidden cursor-pointer border-2 transition-all duration-200 hover:scale-[1.02] ${
         isSelected ? 'border-blue-400 shadow-lg shadow-blue-400/30' : 'border-slate-600 hover:border-slate-500'
       }`}
       onClick={onSelect}
       onMouseEnter={onPreview}
-      data-background-thumbnail="true"
-      style={{
-        background: `url('${imagePath}') center/cover no-repeat, #475569`,
-        backgroundImage: `url('${imagePath}')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundColor: '#475569'
-      }}
     >
       
       {/* Content overlay */}
