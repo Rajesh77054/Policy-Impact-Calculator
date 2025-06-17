@@ -15,24 +15,45 @@ export default function LandingHero() {
         
         {/* Key Features Grid */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
-          <div className="hero-glass-card p-6 rounded-xl">
-            <div className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4">
+          <div className="p-6 rounded-xl" style={{
+            background: 'rgba(255, 255, 255, 0.09)',
+            backdropFilter: 'blur(25px) saturate(200%) brightness(115%)',
+            WebkitBackdropFilter: 'blur(25px) saturate(200%) brightness(115%)',
+            border: '1px solid rgba(255, 255, 255, 0.18)',
+            borderRadius: '20px',
+            boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3)'
+          }}>
+            <div className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4" style={{ background: 'transparent' }}>
               <Calculator className="w-6 h-6 text-blue-400" />
             </div>
             <h3 className="font-semibold text-white mb-2">Your Personal Impact</h3>
             <p className="text-sm text-white/80">See exactly how new policies might affect your taxes, healthcare costs, energy bills, and job opportunities in 3 minutes.</p>
           </div>
           
-          <div className="hero-glass-card p-6 rounded-xl">
-            <div className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4">
+          <div className="p-6 rounded-xl" style={{
+            background: 'rgba(255, 255, 255, 0.09)',
+            backdropFilter: 'blur(25px) saturate(200%) brightness(115%)',
+            WebkitBackdropFilter: 'blur(25px) saturate(200%) brightness(115%)',
+            border: '1px solid rgba(255, 255, 255, 0.18)',
+            borderRadius: '20px',
+            boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3)'
+          }}>
+            <div className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4" style={{ background: 'transparent' }}>
               <Shield className="w-6 h-6 text-emerald-400" />
             </div>
             <h3 className="font-semibold text-white mb-2">100% Private</h3>
             <p className="text-sm text-white/80">Your information stays with you. No accounts, no tracking, no data storage.</p>
           </div>
           
-          <div className="hero-glass-card p-6 rounded-xl">
-            <div className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4">
+          <div className="p-6 rounded-xl" style={{
+            background: 'rgba(255, 255, 255, 0.09)',
+            backdropFilter: 'blur(25px) saturate(200%) brightness(115%)',
+            WebkitBackdropFilter: 'blur(25px) saturate(200%) brightness(115%)',
+            border: '1px solid rgba(255, 255, 255, 0.18)',
+            borderRadius: '20px',
+            boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3)'
+          }}>
+            <div className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4" style={{ background: 'transparent' }}>
               <BookOpen className="w-6 h-6 text-amber-400" />
             </div>
             <h3 className="font-semibold text-white mb-2">Educational</h3>
@@ -43,7 +64,15 @@ export default function LandingHero() {
         <Link href="/calculator">
           <Button 
             size="lg" 
-            className="glass-button text-lg px-8 py-4 text-white hover:text-white border-white/30 hover:border-white/50"
+            className="text-lg px-8 py-4 text-white hover:text-white"
+            style={{
+              background: 'rgba(255, 255, 255, 0.12)',
+              backdropFilter: 'blur(20px) saturate(180%) brightness(110%)',
+              WebkitBackdropFilter: 'blur(20px) saturate(180%) brightness(110%)',
+              border: '1px solid rgba(255, 255, 255, 0.25)',
+              borderRadius: '12px',
+              boxShadow: '0 8px 25px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+            }}
           >
             Start Your Analysis
           </Button>
