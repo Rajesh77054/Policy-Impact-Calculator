@@ -26,7 +26,7 @@ export default function LandingHero() {
             <div 
               className="absolute inset-0 rounded-xl pointer-events-none"
               style={{
-                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.1) 100%)',
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.04) 100%)',
                 borderRadius: '20px'
               }}
             />
@@ -50,7 +50,7 @@ export default function LandingHero() {
             <div 
               className="absolute inset-0 rounded-xl pointer-events-none"
               style={{
-                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.1) 100%)',
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.04) 100%)',
                 borderRadius: '20px'
               }}
             />
@@ -74,7 +74,7 @@ export default function LandingHero() {
             <div 
               className="absolute inset-0 rounded-xl pointer-events-none"
               style={{
-                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.1) 100%)',
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.04) 100%)',
                 borderRadius: '20px'
               }}
             />
@@ -105,7 +105,7 @@ export default function LandingHero() {
               <div 
                 className="absolute inset-0 rounded-xl pointer-events-none"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, transparent 30%, transparent 70%, rgba(255, 255, 255, 0.15) 100%)',
+                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 30%, transparent 70%, rgba(255, 255, 255, 0.05) 100%)',
                   borderRadius: '12px'
                 }}
               />
