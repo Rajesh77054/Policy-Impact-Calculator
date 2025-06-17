@@ -2,16 +2,17 @@ import { Link } from "wouter";
 import LandingHero from "@/components/landing-hero";
 import ThemeSelector from "@/components/theme-selector";
 import { Shield, CheckCircle, BookOpen } from "lucide-react";
-import cyberpunkBackground from "@assets/cyberpunk-dream.png";
+// Using direct path to public directory
 
 export default function Home() {
   return (
     <div className="min-h-screen" style={{
-      backgroundImage: `url(${cyberpunkBackground})`,
+      backgroundImage: `url(/cyberpunk-dream.png?v=${Date.now()})`,
       backgroundPosition: 'center center',
       backgroundSize: 'cover',
       backgroundRepeat: 'no-repeat',
-      backgroundAttachment: 'fixed'
+      backgroundAttachment: 'fixed',
+      backgroundColor: '#1a0a2e'
     }}>
       {/* Navigation Header */}
       <header className="backdrop-blur-md border-b border-white/20 sticky top-0 z-50 glass-droplet">
