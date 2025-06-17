@@ -42,6 +42,15 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       // Remove any background classes when default theme is selected
       body.className = body.className.replace(/\b\w+-bg\b/g, '').trim();
       body.classList.add('default-theme-bg');
+      // Force override with inline styles for immediate effect
+      body.style.background = 'hsl(0, 0%, 100%)';
+      body.style.backgroundImage = 'none';
+      body.style.backgroundAttachment = 'initial';
+    } else {
+      // Clear inline styles when not default theme
+      body.style.background = '';
+      body.style.backgroundImage = '';
+      body.style.backgroundAttachment = '';
     }
     
     // Save to localStorage

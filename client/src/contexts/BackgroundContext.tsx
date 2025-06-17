@@ -29,11 +29,16 @@ export function BackgroundProvider({ children }: { children: ReactNode }) {
       setCurrentBackgroundId(backgroundId);
       localStorage.setItem(STORAGE_KEY, backgroundId);
       
-      // Apply CSS class to document body for global background
-      document.body.className = document.body.className
-        .replace(/\b\w+-bg\b/g, '') // Remove existing background classes
-        .trim();
-      document.body.classList.add(newBackground.cssClass);
+      // Check if default theme is active - if so, don't apply background
+      const isDefaultTheme = document.documentElement.classList.contains('default-theme');
+      
+      if (!isDefaultTheme) {
+        // Apply CSS class to document body for global background
+        document.body.className = document.body.className
+          .replace(/\b\w+-bg\b/g, '') // Remove existing background classes
+          .trim();
+        document.body.classList.add(newBackground.cssClass);
+      }
     }
   };
 
@@ -46,9 +51,13 @@ export function BackgroundProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  // Apply initial background class on mount
+  // Apply initial background class on mount (only if not default theme)
   useEffect(() => {
-    document.body.classList.add(currentBackground.cssClass);
+    const isDefaultTheme = document.documentElement.classList.contains('default-theme');
+    
+    if (!isDefaultTheme) {
+      document.body.classList.add(currentBackground.cssClass);
+    }
     
     return () => {
       // Cleanup: remove background classes on unmount
