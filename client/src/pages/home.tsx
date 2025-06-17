@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import LandingHero from "@/components/landing-hero";
 import ThemeSelector from "@/components/theme-selector";
+import BackgroundSelector from "@/components/background-selector";
 import { Shield, CheckCircle, BookOpen } from "lucide-react";
 // Using direct path to public directory
 
@@ -17,7 +18,7 @@ export default function Home() {
               </div>
               <h1 className="text-xl font-semibold text-foreground">Policy Impact Calculator</h1>
             </div>
-            {/* Trust Indicators and Theme Selector */}
+            {/* Trust Indicators and Controls */}
             <div className="flex items-center space-x-4">
               <div className="hidden md:flex items-center space-x-6">
                 <div className="flex items-center space-x-2 text-emerald-600">
@@ -29,6 +30,7 @@ export default function Home() {
                   <span className="text-sm font-medium">No Political Agenda</span>
                 </div>
               </div>
+              <BackgroundSelector />
               <ThemeSelector />
             </div>
           </div>
