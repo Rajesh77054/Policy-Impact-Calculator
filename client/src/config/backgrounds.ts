@@ -25,15 +25,7 @@ export const BACKGROUND_REGISTRY: BackgroundAsset[] = [
     featured: true
   },
 
-  // Cyberpunk Collection
-  {
-    id: 'tech-grid',
-    name: 'Tech Grid',
-    path: '/attached_assets/IMG_9280_1750180496772.png',
-    category: 'cyberpunk',
-    description: 'Digital grid pattern with tech aesthetics',
-    tags: ['grid', 'digital', 'tech', 'pattern']
-  },
+
 
   // Abstract/Gradient Collection
   {
@@ -49,9 +41,9 @@ export const BACKGROUND_REGISTRY: BackgroundAsset[] = [
     id: 'blue-lava-lamp',
     name: 'Blue Lava Lamp',
     path: '/attached_assets/Blue Lava Lamp_1750197379239.png',
-    category: 'abstract',
-    description: 'Dynamic purple-blue organic shapes',
-    tags: ['purple', 'blue', 'organic', 'fluid', 'modern']
+    category: 'cyberpunk',
+    description: 'Dynamic purple-blue organic shapes with futuristic feel',
+    tags: ['purple', 'blue', 'organic', 'fluid', 'modern', 'cyberpunk']
   },
   {
     id: 'dream-scape',
