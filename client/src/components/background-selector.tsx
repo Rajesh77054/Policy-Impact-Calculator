@@ -73,7 +73,11 @@ export default function BackgroundSelector() {
           <div className="flex items-center gap-4">
             <div 
               className="w-32 h-20 rounded-lg border border-slate-600 bg-cover bg-center bg-no-repeat flex-shrink-0"
-              style={{ backgroundImage: `url('${previewBackground.path}')` }}
+              style={{ 
+                backgroundImage: `url('${previewBackground.path.includes(' ') 
+                  ? previewBackground.path.replace(/ /g, '%20') 
+                  : previewBackground.path}')` 
+              }}
             />
             <div>
               <div className="text-white font-semibold text-lg">{previewBackground.name}</div>
@@ -152,6 +156,11 @@ interface BackgroundCardProps {
 }
 
 function BackgroundCard({ background, isSelected, isLoading, onSelect, onPreview }: BackgroundCardProps) {
+  // Handle URL encoding for paths with spaces
+  const imagePath = background.path.includes(' ') 
+    ? background.path.replace(/ /g, '%20')
+    : background.path;
+
   return (
     <div 
       className={`group relative aspect-video rounded-lg overflow-hidden cursor-pointer border-2 transition-all duration-200 hover:scale-[1.02] bg-slate-800 ${
@@ -162,7 +171,7 @@ function BackgroundCard({ background, isSelected, isLoading, onSelect, onPreview
     >
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url('${background.path}')` }}
+        style={{ backgroundImage: `url('${imagePath}')` }}
       />
       
       {/* Content overlay */}

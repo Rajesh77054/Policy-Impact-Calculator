@@ -54,7 +54,12 @@ export function BackgroundProvider({ children, defaultBackground = DEFAULT_BACKG
       img.onload = () => resolve();
       img.onerror = () => reject(new Error(`Failed to load background: ${background.name}`));
       
-      img.src = background.path;
+      // Handle URL encoding for paths with spaces
+      const imagePath = background.path.includes(' ') 
+        ? background.path.replace(/ /g, '%20')
+        : background.path;
+      
+      img.src = imagePath;
     });
   };
 
@@ -62,7 +67,10 @@ export function BackgroundProvider({ children, defaultBackground = DEFAULT_BACKG
   useEffect(() => {
     const applyBackground = () => {
       const root = document.documentElement;
-      const imagePath = currentBackground.path;
+      // Handle URL encoding for paths with spaces
+      const imagePath = currentBackground.path.includes(' ') 
+        ? currentBackground.path.replace(/ /g, '%20')
+        : currentBackground.path;
       
       // Apply background with CSS custom properties
       root.style.setProperty('--background-image', `url('${imagePath}')`);
