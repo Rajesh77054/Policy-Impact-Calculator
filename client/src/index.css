@@ -149,7 +149,7 @@
 
 /* Root canyon background */
 .liquid-glass-theme {
-  background: url('/canyon-background.jpg') center center / cover fixed !important;
+  background: url('@assets/image_1750119494024.png') center center / cover fixed !important;
   min-height: 100vh !important;
 }
 
