@@ -244,18 +244,18 @@
 
 /* Complex animation removed for glassmorphism */
 
-/* Liquid Glass Theme Variables */
+/* Liquid Glass Theme Variables - TRANSPARENT OVERRIDES */
 .liquid-glass-theme {
-  --background: hsl(0, 0%, 100%);
+  --background: transparent;
   --foreground: hsl(220, 40%, 15%);
-  --muted: hsla(220, 20%, 85%, 0.6);
+  --muted: transparent;
   --muted-foreground: hsl(220, 30%, 45%);
-  --popover: hsla(255, 255%, 255%, 0.95);
+  --popover: transparent;
   --popover-foreground: hsl(220, 40%, 15%);
-  --card: hsla(255, 255%, 255%, 0.4);
+  --card: transparent;
   --card-foreground: hsl(220, 40%, 15%);
-  --border: hsla(220, 30%, 75%, 0.3);
-  --input: hsla(255, 255%, 255%, 0.6);
+  --border: transparent;
+  --input: transparent;
   --primary: hsl(270, 80%, 45%);
   --primary-foreground: hsl(0, 0%, 100%);
   --secondary: hsla(220, 20%, 90%, 0.6);
@@ -391,9 +391,14 @@
     transparent 70%);
 }
 
-/* CLEAN GLASSMORPHISM - FINAL OVERRIDE */
-.liquid-glass-theme .glass-droplet {
+/* ULTRA-AGGRESSIVE GLASSMORPHISM OVERRIDE */
+.liquid-glass-theme .glass-droplet,
+.liquid-glass-theme .glass-button,
+.liquid-glass-theme div.glass-droplet,
+.liquid-glass-theme button.glass-button {
   background: rgba(255, 255, 255, 0.01) !important;
+  background-color: rgba(255, 255, 255, 0.01) !important;
+  background-image: none !important;
   backdrop-filter: blur(60px) saturate(300%) brightness(130%) contrast(110%) !important;
   -webkit-backdrop-filter: blur(60px) saturate(300%) brightness(130%) contrast(110%) !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
@@ -406,12 +411,19 @@
   overflow: hidden !important;
 }
 
-.liquid-glass-theme .glass-droplet::before {
+/* Remove all pseudo-elements that add opacity */
+.liquid-glass-theme .glass-droplet::before,
+.liquid-glass-theme .glass-droplet::after,
+.liquid-glass-theme .glass-button::before,
+.liquid-glass-theme .glass-button::after {
   display: none !important;
 }
 
-.liquid-glass-theme .glass-droplet:hover {
+/* Override hover states */
+.liquid-glass-theme .glass-droplet:hover,
+.liquid-glass-theme .glass-button:hover {
   background: rgba(255, 255, 255, 0.02) !important;
+  background-color: rgba(255, 255, 255, 0.02) !important;
 }
 
 /* Pseudo-element removed */
