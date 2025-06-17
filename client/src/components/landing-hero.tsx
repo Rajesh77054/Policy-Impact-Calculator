@@ -7,7 +7,7 @@ export default function LandingHero() {
     <section className="py-16 relative overflow-hidden">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 drop-shadow-lg">
-          Discover How Trump's Policies Impact Your <span className="text-blue-300">Finances, Work & Future</span>
+          Discover How Trump's Policies Impact Your <span className="text-[#ffffff]">Finances, Work & Future</span>
         </h1>
         <h2 className="text-xl text-white/90 mb-8 max-w-3xl mx-auto drop-shadow-md">
           See what changes to taxes, healthcare, energy costs and more could mean for your household - no spin, just the facts.
