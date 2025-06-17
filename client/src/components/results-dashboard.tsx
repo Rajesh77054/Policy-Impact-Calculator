@@ -704,7 +704,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                     </div>
                     <p className="text-xs text-slate-600 mb-3">Expanded Medicare and enhanced ACA subsidies</p>
                     <div className="space-y-2">
-                      {results.bigBillScenario.breakdown[1]?.details.map((detail, index) => (
+                      {results.bigBillScenario?.breakdown[1]?.details.map((detail, index) => (
                         <div key={index} className="flex justify-between text-sm">
                           <span className="text-slate-600">{detail.item}</span>
                           <span className={`font-medium ${detail.amount < 0 ? "text-green-600" : "text-red-600"}`}>
@@ -721,12 +721,12 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                     <p className="text-xs text-slate-600 mb-1">
                       <strong>Healthcare Cost Difference (Proposed vs Current):</strong>
                     </p>
-                    <p className={`text-sm font-medium ${(results.bigBillScenario.healthcareCostImpact - results.healthcareCostImpact) < 0 ? "text-green-600" : "text-red-600"}`}>
-                      {Math.abs(results.bigBillScenario.healthcareCostImpact - results.healthcareCostImpact) < 50 ? 
+                    <p className={`text-sm font-medium ${((results.bigBillScenario?.healthcareCostImpact || 0) - results.healthcareCostImpact) < 0 ? "text-green-600" : "text-red-600"}`}>
+                      {Math.abs((results.bigBillScenario?.healthcareCostImpact || 0) - results.healthcareCostImpact) < 50 ? 
                         "Nearly identical impact" : 
-                        (results.bigBillScenario.healthcareCostImpact - results.healthcareCostImpact) < 0 ?
-                          `$${Math.abs(results.bigBillScenario.healthcareCostImpact - results.healthcareCostImpact).toLocaleString()} more savings` :
-                          `$${Math.abs(results.bigBillScenario.healthcareCostImpact - results.healthcareCostImpact).toLocaleString()} less savings`
+                        ((results.bigBillScenario?.healthcareCostImpact || 0) - results.healthcareCostImpact) < 0 ?
+                          `$${Math.abs((results.bigBillScenario?.healthcareCostImpact || 0) - results.healthcareCostImpact).toLocaleString()} more savings` :
+                          `$${Math.abs((results.bigBillScenario?.healthcareCostImpact || 0) - results.healthcareCostImpact).toLocaleString()} less savings`
                       }
                     </p>
                   </div>

@@ -58,10 +58,10 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
 
           const proposedTimelineData = [
             { year: 'Current', value: 0 },
-            { year: 'Year 1', value: results.bigBillScenario.annualTaxImpact },
-            { year: 'Year 3', value: results.bigBillScenario.annualTaxImpact * 3 * 1.025 },
-            { year: 'Year 5', value: results.bigBillScenario.timeline.fiveYear },
-            { year: 'Year 10', value: results.bigBillScenario.timeline.tenYear }
+            { year: 'Year 1', value: results.bigBillScenario?.annualTaxImpact || 0 },
+            { year: 'Year 3', value: (results.bigBillScenario?.annualTaxImpact || 0) * 3 * 1.025 },
+            { year: 'Year 5', value: results.bigBillScenario?.timeline.fiveYear || 0 },
+            { year: 'Year 10', value: results.bigBillScenario?.timeline.tenYear || 0 }
           ];
 
           taxChartInstance.current = new Chart(taxCtx, {
@@ -114,7 +114,7 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
         const healthCtx = healthcareChartRef.current.getContext('2d');
         if (healthCtx) {
           const currentLawCost = results.healthcareCosts.current;
-          const proposedBillCost = results.bigBillScenario.healthcareCosts?.proposed || results.healthcareCosts.proposed;
+          const proposedBillCost = results.healthcareCosts.proposed;
 
           healthcareChartInstance.current = new Chart(healthCtx, {
             type: 'bar',
@@ -239,26 +239,26 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
                   <div className="space-y-2">
                     <div className="flex justify-between text-xs">
                       <span className="text-slate-600">Year 1</span>
-                      <span className={`font-medium ${results.bigBillScenario.annualTaxImpact < 0 ? "text-green-600" : "text-red-600"}`}>
-                        {results.bigBillScenario.annualTaxImpact < 0 ? `$${Math.abs(results.bigBillScenario.annualTaxImpact).toLocaleString()} saved` : `$${results.bigBillScenario.annualTaxImpact.toLocaleString()} cost`}
+                      <span className={`font-medium ${(results.bigBillScenario?.annualTaxImpact || 0) < 0 ? "text-green-600" : "text-red-600"}`}>
+                        {(results.bigBillScenario?.annualTaxImpact || 0) < 0 ? `$${Math.abs(results.bigBillScenario?.annualTaxImpact || 0).toLocaleString()} saved` : `$${(results.bigBillScenario?.annualTaxImpact || 0).toLocaleString()} cost`}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
                       <span className="text-slate-600">5 Years</span>
-                      <span className={`font-medium ${results.bigBillScenario.timeline.fiveYear < 0 ? "text-green-600" : "text-red-600"}`}>
-                        ${Math.abs(results.bigBillScenario.timeline.fiveYear / 1000).toFixed(0)}K
+                      <span className={`font-medium ${(results.bigBillScenario?.timeline.fiveYear || 0) < 0 ? "text-green-600" : "text-red-600"}`}>
+                        ${Math.abs((results.bigBillScenario?.timeline.fiveYear || 0) / 1000).toFixed(0)}K
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
                       <span className="text-slate-600">10 Years</span>
-                      <span className={`font-medium ${results.bigBillScenario.timeline.tenYear < 0 ? "text-green-600" : "text-red-600"}`}>
-                        ${Math.abs(results.bigBillScenario.timeline.tenYear / 1000).toFixed(0)}K
+                      <span className={`font-medium ${(results.bigBillScenario?.timeline.tenYear || 0) < 0 ? "text-green-600" : "text-red-600"}`}>
+                        ${Math.abs((results.bigBillScenario?.timeline.tenYear || 0) / 1000).toFixed(0)}K
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
                       <span className="text-slate-600">20 Years</span>
-                      <span className={`font-medium ${results.bigBillScenario.timeline.twentyYear < 0 ? "text-green-600" : "text-red-600"}`}>
-                        ${Math.abs(results.bigBillScenario.timeline.twentyYear / 1000).toFixed(0)}K
+                      <span className={`font-medium ${(results.bigBillScenario?.timeline.twentyYear || 0) < 0 ? "text-green-600" : "text-red-600"}`}>
+                        ${Math.abs((results.bigBillScenario?.timeline.twentyYear || 0) / 1000).toFixed(0)}K
                       </span>
                     </div>
                   </div>
@@ -270,10 +270,10 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
                   <p className="text-xs text-slate-600 mb-1">
                     <strong>20-Year Tax Savings Difference:</strong>
                   </p>
-                  <p className={`text-sm font-medium ${(results.bigBillScenario.timeline.twentyYear - results.timeline.twentyYear) < 0 ? "text-green-600" : "text-red-600"}`}>
-                    {Math.abs(results.bigBillScenario.timeline.twentyYear - results.timeline.twentyYear) < 1000 ? 
+                  <p className={`text-sm font-medium ${((results.bigBillScenario?.timeline.twentyYear || 0) - results.timeline.twentyYear) < 0 ? "text-green-600" : "text-red-600"}`}>
+                    {Math.abs((results.bigBillScenario?.timeline.twentyYear || 0) - results.timeline.twentyYear) < 1000 ? 
                       "Nearly identical" : 
-                      `$${Math.abs((results.bigBillScenario.timeline.twentyYear - results.timeline.twentyYear) / 1000).toFixed(0)}K additional savings`
+                      `$${Math.abs(((results.bigBillScenario?.timeline.twentyYear || 0) - results.timeline.twentyYear) / 1000).toFixed(0)}K additional savings`
                     }
                   </p>
                 </div>
