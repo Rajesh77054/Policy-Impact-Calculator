@@ -2,12 +2,19 @@ import { Link } from "wouter";
 import LandingHero from "@/components/landing-hero";
 import ThemeSelector from "@/components/theme-selector";
 import { Shield, CheckCircle, BookOpen } from "lucide-react";
+import canyonBackground from "@assets/image_1750119494024.png";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen" style={{
+      backgroundImage: `url(${canyonBackground})`,
+      backgroundPosition: 'center center',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+      backgroundAttachment: 'fixed'
+    }}>
       {/* Navigation Header */}
-      <header className="bg-background/80 backdrop-blur-md border-b border-border sticky top-0 z-50 glass-morphism">
+      <header className="backdrop-blur-md border-b border-white/20 sticky top-0 z-50 glass-droplet">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
