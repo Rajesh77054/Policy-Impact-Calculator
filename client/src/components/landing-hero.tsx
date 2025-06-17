@@ -15,24 +15,24 @@ export default function LandingHero() {
         
         {/* Key Features Grid */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
-          <div className="glass-droplet glow-on-hover floating-content p-6 rounded-xl">
-            <div className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4 floating">
+          <div className="glass-droplet p-6 rounded-xl">
+            <div className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4">
               <Calculator className="w-6 h-6 text-primary" />
             </div>
             <h3 className="font-semibold text-card-foreground mb-2">Your Personal Impact</h3>
             <p className="text-sm text-muted-foreground">See exactly how new policies might affect your taxes, healthcare costs, energy bills, and job opportunities in 3 minutes.</p>
           </div>
           
-          <div className="glass-droplet glow-on-hover floating-content p-6 rounded-xl" style={{ animationDelay: '1s' }}>
-            <div className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4 floating" style={{ animationDelay: '2s' }}>
+          <div className="glass-droplet p-6 rounded-xl">
+            <div className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4">
               <Shield className="w-6 h-6 text-emerald-500" />
             </div>
             <h3 className="font-semibold text-card-foreground mb-2">100% Private</h3>
             <p className="text-sm text-muted-foreground">Your information stays with you. No accounts, no tracking, no data storage.</p>
           </div>
           
-          <div className="glass-droplet glow-on-hover floating-content p-6 rounded-xl" style={{ animationDelay: '2s' }}>
-            <div className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4 floating" style={{ animationDelay: '4s' }}>
+          <div className="glass-droplet p-6 rounded-xl">
+            <div className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4">
               <BookOpen className="w-6 h-6 text-amber-500" />
             </div>
             <h3 className="font-semibold text-card-foreground mb-2">Educational</h3>
@@ -43,24 +43,7 @@ export default function LandingHero() {
         <Link href="/calculator">
           <Button 
             size="lg" 
-            className="glass-button glow-on-hover text-lg px-8 py-4 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
-            onClick={(e) => {
-              // Add ripple effect
-              const button = e.currentTarget;
-              const rect = button.getBoundingClientRect();
-              const size = Math.max(rect.width, rect.height);
-              const x = e.clientX - rect.left - size / 2;
-              const y = e.clientY - rect.top - size / 2;
-              
-              const ripple = document.createElement('span');
-              ripple.className = 'ripple';
-              ripple.style.width = ripple.style.height = size + 'px';
-              ripple.style.left = x + 'px';
-              ripple.style.top = y + 'px';
-              
-              button.appendChild(ripple);
-              setTimeout(() => ripple.remove(), 600);
-            }}
+            className="glass-button text-lg px-8 py-4"
           >
             Start Your Analysis
           </Button>
