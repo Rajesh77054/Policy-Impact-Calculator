@@ -112,16 +112,16 @@ function calculateBigBillTax(income: number, familyStatus: string, numberOfQuali
   const currentTax = calculateCurrentTax(income, familyStatus, numberOfQualifyingChildren, numberOfOtherDependents);
   const provisions = ONE_BIG_BEAUTIFUL_BILL_PROVISIONS.tax_changes;
 
-  // Enhanced standard deduction
-  const standardDeductionBonus = provisions.standard_deduction_increase;
+  // Enhanced standard deduction (5000 based on bill provisions)
+  const standardDeductionBonus = 5000;
 
-  // Middle class tax cut (apply to income between $25K-$400K)
+  // Middle class tax cut (apply to income between $25K-$400K) - 3% rate reduction
   const middleClassCut = (income > 25000 && income < 400000) ? 
-    Math.min(income - 25000, 375000) * provisions.middle_class_tax_cut : 0;
+    Math.min(income - 25000, 375000) * 0.03 : 0;
 
-  // Enhanced child tax credit per IRS methodology
+  // Enhanced child tax credit per IRS methodology ($2500 per qualifying child)
   const totalDependents = numberOfQualifyingChildren + numberOfOtherDependents;
-  const childTaxCreditBonus = totalDependents > 0 ? provisions.child_tax_credit * totalDependents : 0;
+  const childTaxCreditBonus = totalDependents > 0 ? 2500 * totalDependents : 0;
 
   // Calculate total tax reduction
   const taxReduction = (standardDeductionBonus * 0.22) + middleClassCut + childTaxCreditBonus;

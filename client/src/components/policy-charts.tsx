@@ -383,7 +383,7 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
                     <strong>Annual Healthcare Savings:</strong>
                   </p>
                   <p className="text-sm font-medium text-green-600">
-                    ${Math.abs(results.bigBillScenario.healthcareCostImpact || results.healthcareCostImpact).toLocaleString()} saved per year
+                    ${Math.abs(results.bigBillScenario?.healthcareCostImpact || results.healthcareCostImpact).toLocaleString()} saved per year
                   </p>
                 </div>
               </div>
