@@ -72,12 +72,22 @@ export const BACKGROUND_REGISTRY: BackgroundAsset[] = [
 
   // Minimal Collection
   {
-    id: 'minimal-dark',
-    name: 'Dark Minimal',
-    path: '/cyberpunk-dream.png',
+    id: 'frosted-white',
+    name: 'Frosted White',
+    path: '/attached_assets/Frosted White_1750203097262.png',
     category: 'minimal',
-    description: 'Clean dark background for minimal aesthetics',
-    tags: ['dark', 'clean', 'minimal', 'simple']
+    description: 'Clean frosted white background with subtle texture',
+    tags: ['white', 'frosted', 'clean', 'minimal', 'light'],
+    featured: true
+  },
+  {
+    id: 'dark-minimal',
+    name: 'Dark',
+    path: '/attached_assets/Dark_1750203097262.png',
+    category: 'minimal',
+    description: 'Deep dark gradient background for minimal aesthetics',
+    tags: ['dark', 'gradient', 'clean', 'minimal', 'simple'],
+    featured: true
   }
 ];
 
