@@ -32,11 +32,15 @@
   background-size: initial !important;
 }
 
-/* Ensure main container also shows canyon background */
+/* Force canyon background on all containers */
+.liquid-glass-theme html,
 .liquid-glass-theme #root,
 .liquid-glass-theme main,
-.liquid-glass-theme section {
-  background: inherit !important;
+.liquid-glass-theme section,
+.liquid-glass-theme div:not(.glass-droplet):not(.glass-button) {
+  background: url('@assets/image_1750119494024.png') center center / cover fixed !important;
+  background-attachment: fixed !important;
+  background-color: transparent !important;
 }
 
 /* TAILWIND UTILITY CLASS OVERRIDES */
@@ -194,6 +198,11 @@
   .liquid-glass-theme body {
     background: url('@assets/image_1750119494024.png') center center / cover fixed !important;
     background-attachment: fixed !important;
+    background-color: transparent !important;
+  }
+  
+  .liquid-glass-theme {
+    --background: transparent !important;
   }
 }
 
