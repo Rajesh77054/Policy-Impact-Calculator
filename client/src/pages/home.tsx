@@ -2,12 +2,12 @@ import { Link } from "wouter";
 import LandingHero from "@/components/landing-hero";
 import ThemeSelector from "@/components/theme-selector";
 import { Shield, CheckCircle, BookOpen } from "lucide-react";
-import canyonBackground from "@assets/image_1750119494024.png";
+import cyberpunkBackground from "@assets/CyberPunk Dream_1750186010075.png";
 
 export default function Home() {
   return (
     <div className="min-h-screen" style={{
-      backgroundImage: `url(${canyonBackground})`,
+      backgroundImage: `url(${cyberpunkBackground})`,
       backgroundPosition: 'center center',
       backgroundSize: 'cover',
       backgroundRepeat: 'no-repeat',
