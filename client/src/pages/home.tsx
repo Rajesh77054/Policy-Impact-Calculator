@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import LandingHero from "@/components/landing-hero";
 import ThemeSelector from "@/components/theme-selector";
 import { Shield, CheckCircle, BookOpen } from "lucide-react";
-import cyberpunkBackground from "@assets/CyberPunk Dream_1750186010075.png";
+import cyberpunkBackground from "@assets/cyberpunk-dream.png";
 
 export default function Home() {
   return (
