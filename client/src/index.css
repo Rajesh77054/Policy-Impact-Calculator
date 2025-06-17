@@ -5,12 +5,24 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Remove only specific problematic backgrounds */
-.liquid-glass-theme .bg-background,
-.liquid-glass-theme .bg-card,
-.liquid-glass-theme .bg-primary,
-.liquid-glass-theme .bg-muted {
-  background: transparent !important;
+/* Nuclear override for glass elements */
+.hero-glass-card,
+.glass-droplet,
+.glass-button,
+.liquid-glass-theme .hero-glass-card,
+.liquid-glass-theme .glass-droplet,
+.liquid-glass-theme .glass-button {
+  background: rgba(255, 255, 255, 0.09) !important;
+  background-color: rgba(255, 255, 255, 0.09) !important;
+  background-image: none !important;
+}
+
+/* Override any Tailwind background utilities on glass elements */
+.hero-glass-card[class*="bg-"],
+.glass-droplet[class*="bg-"],
+.glass-button[class*="bg-"] {
+  background: rgba(255, 255, 255, 0.09) !important;
+  background-color: rgba(255, 255, 255, 0.09) !important;
 }
 
 /* TAILWIND UTILITY CLASS OVERRIDES */
