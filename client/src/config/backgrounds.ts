@@ -117,7 +117,7 @@ export const BACKGROUND_REGISTRY: BackgroundAsset[] = [
   {
     id: 'blue-dream',
     name: 'Blue Dream',
-    path: '/attached_assets/Blue%20Dream_1750197379239.png',
+    path: '/attached_assets/Blue Dream_1750197379239.png',
     category: 'abstract',
     description: 'Smooth blue gradient with dreamy flow',
     tags: ['blue', 'gradient', 'smooth', 'peaceful'],
@@ -126,7 +126,7 @@ export const BACKGROUND_REGISTRY: BackgroundAsset[] = [
   {
     id: 'blue-lava-lamp',
     name: 'Blue Lava Lamp',
-    path: '/attached_assets/Blue%20Lava%20Lamp_1750197379239.png',
+    path: '/attached_assets/Blue Lava Lamp_1750197379239.png',
     category: 'abstract',
     description: 'Dynamic purple-blue organic shapes',
     tags: ['purple', 'blue', 'organic', 'fluid', 'modern']
@@ -134,7 +134,7 @@ export const BACKGROUND_REGISTRY: BackgroundAsset[] = [
   {
     id: 'dream-scape',
     name: 'Dream Scape',
-    path: '/attached_assets/Dream%20Scape_1750197379240.png',
+    path: '/attached_assets/Dream Scape_1750197379240.png',
     category: 'abstract',
     description: 'Soft pastel gradient from blue to pink',
     tags: ['pastel', 'gradient', 'soft', 'dreamy', 'pink']
@@ -142,7 +142,7 @@ export const BACKGROUND_REGISTRY: BackgroundAsset[] = [
   {
     id: 'blue-aurora',
     name: 'Blue Aurora',
-    path: '/attached_assets/Blue%20Aurora_1750197379240.png',
+    path: '/attached_assets/Blue Aurora_1750197379240.png',
     category: 'space',
     description: 'Ethereal teal and blue aurora patterns',
     tags: ['aurora', 'teal', 'ethereal', 'cosmic', 'flowing']
@@ -150,7 +150,7 @@ export const BACKGROUND_REGISTRY: BackgroundAsset[] = [
   {
     id: 'orange-lava-lamp',
     name: 'Orange Lava Lamp',
-    path: '/attached_assets/Orange%20Lava%20Lamp_1750197379240.png',
+    path: '/attached_assets/Orange Lava Lamp_1750197379240.png',
     category: 'abstract',
     description: 'Warm orange and coral flowing shapes',
     tags: ['orange', 'coral', 'warm', 'flowing', 'energetic']

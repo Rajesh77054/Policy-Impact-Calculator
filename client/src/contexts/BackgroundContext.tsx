@@ -63,10 +63,7 @@ export function BackgroundProvider({ children, defaultBackground = DEFAULT_BACKG
   useEffect(() => {
     const applyBackground = () => {
       const root = document.documentElement;
-      // Handle URL encoding for paths with spaces
-      const imagePath = currentBackground.path.includes(' ') 
-        ? currentBackground.path.replace(/ /g, '%20')
-        : currentBackground.path;
+      const imagePath = getImagePath(currentBackground.path);
       
       // Apply background with CSS custom properties
       root.style.setProperty('--background-image', `url('${imagePath}')`);

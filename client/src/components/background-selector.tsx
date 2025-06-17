@@ -73,11 +73,9 @@ export default function BackgroundSelector() {
         <div className="bg-slate-800/50 rounded-lg p-4 mb-6">
           <div className="flex items-center gap-4">
             <div 
-              className="w-32 h-20 rounded-lg border border-slate-600 bg-cover bg-center bg-no-repeat flex-shrink-0"
+              className="w-32 h-20 rounded-lg border border-slate-600 bg-cover bg-center bg-no-repeat flex-shrink-0 bg-slate-700"
               style={{ 
-                backgroundImage: `url('${previewBackground.path.includes(' ') 
-                  ? previewBackground.path.replace(/ /g, '%20') 
-                  : previewBackground.path}')` 
+                backgroundImage: `url('${getImagePath(previewBackground.path)}')` 
               }}
             />
             <div>
