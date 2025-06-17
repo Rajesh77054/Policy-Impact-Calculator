@@ -2,7 +2,6 @@ import { Link } from "wouter";
 import LandingHero from "@/components/landing-hero";
 import ThemeSelector from "@/components/theme-selector";
 import BackgroundSelector from "@/components/background-selector";
-import ImageTest from "@/components/image-test";
 import { Shield, CheckCircle, BookOpen } from "lucide-react";
 // Using direct path to public directory
 
@@ -39,7 +38,6 @@ export default function Home() {
       </header>
 
       <LandingHero />
-      <ImageTest />
 
       {/* Footer */}
       <footer className="bg-slate-900 text-white py-12">

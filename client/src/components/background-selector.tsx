@@ -155,55 +155,25 @@ interface BackgroundCardProps {
 }
 
 function BackgroundCard({ background, isSelected, isLoading, onSelect, onPreview }: BackgroundCardProps) {
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageError, setImageError] = useState(false);
   const imagePath = getImagePath(background.path);
-
-  useEffect(() => {
-    const img = new Image();
-    img.onload = () => {
-      setImageLoaded(true);
-      setImageError(false);
-    };
-    img.onerror = () => {
-      setImageLoaded(false);
-      setImageError(true);
-    };
-    img.src = imagePath;
-  }, [imagePath]);
 
   return (
     <div 
-      className={`group relative aspect-video rounded-lg overflow-hidden cursor-pointer border-2 transition-all duration-200 hover:scale-[1.02] bg-slate-800 ${
+      className={`group relative aspect-video rounded-lg overflow-hidden cursor-pointer border-2 transition-all duration-200 hover:scale-[1.02] bg-slate-700 ${
         isSelected ? 'border-blue-400 shadow-lg shadow-blue-400/30' : 'border-slate-600 hover:border-slate-500'
       }`}
       onClick={onSelect}
       onMouseEnter={onPreview}
+      style={{
+        backgroundImage: `url('${imagePath}')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
     >
-      {/* Background image */}
-      {imageLoaded && !imageError && (
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url('${imagePath}')` }}
-        />
-      )}
-      
-      {/* Fallback for broken images */}
-      {imageError && (
-        <div className="absolute inset-0 flex items-center justify-center bg-slate-700">
-          <ImageOff className="w-8 h-8 text-slate-500" />
-        </div>
-      )}
-      
-      {/* Loading state */}
-      {!imageLoaded && !imageError && (
-        <div className="absolute inset-0 flex items-center justify-center bg-slate-700">
-          <div className="w-6 h-6 border-2 border-slate-500 border-t-transparent rounded-full animate-spin" />
-        </div>
-      )}
       
       {/* Content overlay */}
-      <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/90 via-black/50 to-transparent">
+      <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-10">
         <div className="text-white text-xs font-medium truncate">
           {background.name}
         </div>
@@ -214,14 +184,14 @@ function BackgroundCard({ background, isSelected, isLoading, onSelect, onPreview
       
       {/* Loading state */}
       {isLoading && (
-        <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
+        <div className="absolute inset-0 bg-black/80 flex items-center justify-center z-20">
           <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin" />
         </div>
       )}
       
       {/* Selected state */}
       {isSelected && (
-        <div className="absolute top-2 right-2">
+        <div className="absolute top-2 right-2 z-10">
           <div className="bg-blue-500 text-white rounded-full p-1">
             <Eye className="w-3 h-3" />
           </div>
