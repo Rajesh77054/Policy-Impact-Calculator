@@ -1,0 +1,42 @@
+/* CLEAN GLASSMORPHISM IMPLEMENTATION - NO GRADIENTS */
+
+/* Canyon background - fundamental layer */
+.liquid-glass-theme html,
+.liquid-glass-theme body {
+  background: url('@assets/image_1750119494024.png') center center / cover fixed !important;
+  background-attachment: fixed !important;
+  min-height: 100vh;
+}
+
+/* Remove all existing backgrounds from everything */
+.liquid-glass-theme *:not(html):not(body) {
+  background: none !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* Pure glassmorphism cards - only transparency + blur */
+.liquid-glass-theme .glass-droplet {
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(20px) saturate(180%) brightness(110%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) brightness(110%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 16px !important;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+.liquid-glass-theme .glass-button {
+  background: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(15px) saturate(160%) brightness(105%) !important;
+  -webkit-backdrop-filter: blur(15px) saturate(160%) brightness(105%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: 12px !important;
+}
+
+/* Disable all pseudo-elements that could add layers */
+.liquid-glass-theme *::before,
+.liquid-glass-theme *::after {
+  display: none !important;
+}
