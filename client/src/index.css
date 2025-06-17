@@ -6,6 +6,21 @@
 @tailwind components;
 @tailwind utilities;
 
+/* EMERGENCY GLASSMORPHISM OVERRIDE - MUST BE AFTER TAILWIND */
+.liquid-glass-theme .glass-droplet {
+  background: rgba(255, 255, 255, 0.01) !important;
+  background-color: rgba(255, 255, 255, 0.01) !important;
+  background-image: none !important;
+  backdrop-filter: blur(60px) saturate(300%) brightness(130%) contrast(110%) !important;
+  -webkit-backdrop-filter: blur(60px) saturate(300%) brightness(130%) contrast(110%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 20px !important;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 1px 0 rgba(255, 255, 255, 0.02) !important;
+}
+
 @layer base {
   /* Enhanced typography */
   .form-step-title {
