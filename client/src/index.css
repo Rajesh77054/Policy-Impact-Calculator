@@ -137,37 +137,26 @@
   --chart-5: hsl(280, 65%, 60%);
 }
 
-/* ULTRA SIMPLE LIQUID GLASS THEME - Direct Canyon Background */
-.liquid-glass-theme body {
+/* LIQUID GLASS THEME - Canyon Background Override */
+.liquid-glass-theme,
+.liquid-glass-theme *,
+.liquid-glass-theme *::before,
+.liquid-glass-theme *::after {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* Root canyon background */
+.liquid-glass-theme {
   background: url('/canyon-background.jpg') center center / cover fixed !important;
+  min-height: 100vh !important;
+}
+
+.liquid-glass-theme body {
+  background: transparent !important;
   margin: 0;
   padding: 0;
-  min-height: 100vh;
-}
-
-/* Force transparent backgrounds on ALL containers */
-.liquid-glass-theme #root,
-.liquid-glass-theme main,
-.liquid-glass-theme section,
-.liquid-glass-theme div[class*="container"],
-.liquid-glass-theme div[class*="wrapper"],
-.liquid-glass-theme div[class*="bg-"],
-.liquid-glass-theme div[class*="background"],
-.liquid-glass-theme .min-h-screen,
-.liquid-glass-theme .h-screen {
-  background: transparent !important;
-  background-color: transparent !important;
-}
-
-/* Ensure the canyon shows through Tailwind utility classes */
-.liquid-glass-theme .bg-background,
-.liquid-glass-theme .bg-card,
-.liquid-glass-theme .bg-popover,
-.liquid-glass-theme .bg-muted,
-.liquid-glass-theme .bg-secondary,
-.liquid-glass-theme .bg-accent {
-  background: transparent !important;
-  background-color: transparent !important;
 }
 
 /* Ultra Transparent Glass Elements - Enhanced for Canyon Background */
