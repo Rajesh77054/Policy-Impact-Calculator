@@ -20,6 +20,28 @@
   background-size: initial !important;
 }
 
+/* TAILWIND UTILITY CLASS OVERRIDES */
+.liquid-glass-theme .bg-red-50,
+.liquid-glass-theme .bg-red-100,
+.liquid-glass-theme .bg-red-200,
+.liquid-glass-theme .bg-pink-50,
+.liquid-glass-theme .bg-pink-100,
+.liquid-glass-theme .bg-rose-50,
+.liquid-glass-theme .bg-rose-100,
+.liquid-glass-theme .bg-orange-50,
+.liquid-glass-theme .bg-orange-100,
+.liquid-glass-theme .bg-green-50,
+.liquid-glass-theme .bg-green-100,
+.liquid-glass-theme .bg-green-500,
+.liquid-glass-theme .bg-red-500,
+.liquid-glass-theme [class*="bg-"],
+.liquid-glass-theme [class*="bg-gradient"] {
+  background: rgba(255, 255, 255, 0.08) !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(40px) saturate(200%) brightness(120%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(120%) !important;
+}
+
 .liquid-glass-theme *::before,
 .liquid-glass-theme *::after {
   display: none !important;
