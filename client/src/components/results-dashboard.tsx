@@ -569,7 +569,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
         </div>
 
         {/* Charts Section */}
-        <PolicyCharts results={results} showBigBillComparison={showBigBillComparison} />
+        {results && <PolicyCharts results={results} showBigBillComparison={showBigBillComparison && !!results.bigBillScenario} />}
 
         {/* Policy Breakdown - Side by Side */}
         <Card className="mb-8">

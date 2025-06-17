@@ -42,7 +42,7 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
       }
 
       // Use appropriate scenario data based on toggle
-      const currentData = showBigBillComparison ? results.bigBillScenario : results;
+      const currentData = showBigBillComparison && results.bigBillScenario ? results.bigBillScenario : results;
 
       // Create tax impact timeline comparison chart
       if (taxChartRef.current) {
@@ -99,7 +99,8 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
                 y: {
                   ticks: {
                     callback: function (value) {
-                      return (value >= 0 ? '+' : '') + '$' + Math.abs(value).toLocaleString();
+                      const numValue = typeof value === 'number' ? value : 0;
+                      return (numValue >= 0 ? '+' : '') + '$' + Math.abs(numValue).toLocaleString();
                     }
                   }
                 }
@@ -349,19 +350,19 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
                     <div className="flex justify-between text-xs">
                       <span className="text-slate-600">Annual Premium</span>
                       <span className="font-medium text-green-600">
-                        ${results.bigBillScenario.healthcareCosts?.proposed?.toLocaleString() || results.healthcareCosts.proposed.toLocaleString()}
+                        ${results.healthcareCosts.proposed.toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
                       <span className="text-slate-600">Deductible</span>
                       <span className="font-medium text-green-600">
-                        ${((results.bigBillScenario.healthcareCosts?.proposed || results.healthcareCosts.proposed) * 0.2).toLocaleString()}
+                        ${(results.healthcareCosts.proposed * 0.2).toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
                       <span className="text-slate-600">Out-of-Pocket Max</span>
                       <span className="font-medium text-green-600">
-                        ${((results.bigBillScenario.healthcareCosts?.proposed || results.healthcareCosts.proposed) * 1.5).toLocaleString()}
+                        ${(results.healthcareCosts.proposed * 1.5).toLocaleString()}
                       </span>
                     </div>
                   </div>
@@ -369,7 +370,7 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
                     <div className="flex justify-between text-sm font-semibold">
                       <span>Total Annual Cost</span>
                       <span className="text-green-600">
-                        ${(results.bigBillScenario.healthcareCosts?.proposed || results.healthcareCosts.proposed).toLocaleString()}
+                        ${results.healthcareCosts.proposed.toLocaleString()}
                       </span>
                     </div>
                   </div>
