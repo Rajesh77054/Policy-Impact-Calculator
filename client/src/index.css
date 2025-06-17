@@ -16,27 +16,33 @@ body {
   transition: background-image 0.5s ease-in-out;
 }
 
-/* Nuclear override for glass elements */
+/* Nuclear override for glass elements - Match Default theme's crisp glass effect */
 .hero-glass-card,
 .glass-droplet,
 .glass-button,
 .liquid-glass-theme .hero-glass-card,
 .liquid-glass-theme .glass-droplet,
 .liquid-glass-theme .glass-button {
-  background: rgba(255, 255, 255, 0.09) !important;
-  background-color: rgba(255, 255, 255, 0.09) !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  background-color: rgba(255, 255, 255, 0.12) !important;
   background-image: none !important;
+  backdrop-filter: blur(16px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(120%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
 }
 
 /* Override any Tailwind background utilities on glass elements */
 .hero-glass-card[class*="bg-"],
 .glass-droplet[class*="bg-"],
 .glass-button[class*="bg-"] {
-  background: rgba(255, 255, 255, 0.09) !important;
-  background-color: rgba(255, 255, 255, 0.09) !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(16px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(120%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
 }
 
-/* TAILWIND UTILITY CLASS OVERRIDES */
+/* TAILWIND UTILITY CLASS OVERRIDES - Match Default theme's crisp glass effect */
 .liquid-glass-theme .bg-red-50,
 .liquid-glass-theme .bg-red-100,
 .liquid-glass-theme .bg-red-200,
@@ -49,13 +55,12 @@ body {
 .liquid-glass-theme .bg-green-50,
 .liquid-glass-theme .bg-green-100,
 .liquid-glass-theme .bg-green-500,
-.liquid-glass-theme .bg-red-500,
-.liquid-glass-theme [class*="bg-"],
-.liquid-glass-theme [class*="bg-gradient"] {
-  background: rgba(255, 255, 255, 0.08) !important;
-  background-color: rgba(255, 255, 255, 0.08) !important;
-  backdrop-filter: blur(40px) saturate(200%) brightness(120%) !important;
-  -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(120%) !important;
+.liquid-glass-theme .bg-red-500 {
+  background: rgba(255, 255, 255, 0.12) !important;
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(16px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(120%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
 }
 
 .liquid-glass-theme *::before,
@@ -63,12 +68,12 @@ body {
   display: none !important;
 }
 
-/* GLASSMORPHISM CARDS */
+/* GLASSMORPHISM CARDS - Match Default theme's crisp glass effect */
 .liquid-glass-theme .glass-droplet {
-  background: rgba(255, 255, 255, 0.08) !important;
-  backdrop-filter: blur(40px) saturate(200%) brightness(120%) !important;
-  -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(120%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(16px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(120%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
   border-radius: 16px !important;
   box-shadow: 
     0 8px 32px rgba(0, 0, 0, 0.1),
@@ -77,10 +82,10 @@ body {
 }
 
 .liquid-glass-theme .glass-button {
-  background: rgba(255, 255, 255, 0.1) !important;
-  backdrop-filter: blur(30px) saturate(180%) brightness(115%) !important;
-  -webkit-backdrop-filter: blur(30px) saturate(180%) brightness(115%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(16px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(120%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
   border-radius: 12px !important;
 }
 
