@@ -7,6 +7,7 @@ import {
   getBackgroundsByCategory,
   type BackgroundAsset 
 } from '../config/backgrounds';
+import { getImagePath } from '../utils/image-loader';
 
 interface BackgroundContextType {
   currentBackground: BackgroundAsset;
@@ -54,12 +55,7 @@ export function BackgroundProvider({ children, defaultBackground = DEFAULT_BACKG
       img.onload = () => resolve();
       img.onerror = () => reject(new Error(`Failed to load background: ${background.name}`));
       
-      // Handle URL encoding for paths with spaces
-      const imagePath = background.path.includes(' ') 
-        ? background.path.replace(/ /g, '%20')
-        : background.path;
-      
-      img.src = imagePath;
+      img.src = getImagePath(background.path);
     });
   };
 

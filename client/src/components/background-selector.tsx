@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useBackground } from '../contexts/BackgroundContext';
 import { Button } from './ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { Badge } from './ui/badge';
 import { ScrollArea } from './ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { ImageIcon, Palette, Eye, Download } from 'lucide-react';
+import { ImageIcon, Palette, Eye, Download, Image as ImageOff } from 'lucide-react';
 import type { BackgroundAsset } from '../config/backgrounds';
+import { getImagePath } from '../utils/image-loader';
 
 export default function BackgroundSelector() {
   const { 
@@ -156,10 +157,22 @@ interface BackgroundCardProps {
 }
 
 function BackgroundCard({ background, isSelected, isLoading, onSelect, onPreview }: BackgroundCardProps) {
-  // Handle URL encoding for paths with spaces
-  const imagePath = background.path.includes(' ') 
-    ? background.path.replace(/ /g, '%20')
-    : background.path;
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+  const imagePath = getImagePath(background.path);
+
+  useEffect(() => {
+    const img = new Image();
+    img.onload = () => {
+      setImageLoaded(true);
+      setImageError(false);
+    };
+    img.onerror = () => {
+      setImageLoaded(false);
+      setImageError(true);
+    };
+    img.src = imagePath;
+  }, [imagePath]);
 
   return (
     <div 
@@ -169,10 +182,27 @@ function BackgroundCard({ background, isSelected, isLoading, onSelect, onPreview
       onClick={onSelect}
       onMouseEnter={onPreview}
     >
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url('${imagePath}')` }}
-      />
+      {/* Background image */}
+      {imageLoaded && !imageError && (
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url('${imagePath}')` }}
+        />
+      )}
+      
+      {/* Fallback for broken images */}
+      {imageError && (
+        <div className="absolute inset-0 flex items-center justify-center bg-slate-700">
+          <ImageOff className="w-8 h-8 text-slate-500" />
+        </div>
+      )}
+      
+      {/* Loading state */}
+      {!imageLoaded && !imageError && (
+        <div className="absolute inset-0 flex items-center justify-center bg-slate-700">
+          <div className="w-6 h-6 border-2 border-slate-500 border-t-transparent rounded-full animate-spin" />
+        </div>
+      )}
       
       {/* Content overlay */}
       <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/90 via-black/50 to-transparent">
