@@ -43,7 +43,7 @@ export default function LandingHero() {
         <Link href="/calculator">
           <Button 
             size="lg" 
-            className="apple-glass-button text-lg px-8 py-4 text-white hover:text-white drop-shadow-lg"
+            className="apple-glass-card apple-glass-tertiary text-lg px-8 py-4 text-white hover:text-white drop-shadow-lg border-0.5 border-white/18"
           >
             Start Your Analysis
           </Button>
