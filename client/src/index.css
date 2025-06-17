@@ -137,10 +137,37 @@
   --chart-5: hsl(280, 65%, 60%);
 }
 
-/* LIQUID GLASS THEME - Enable True Transparency */
-.liquid-glass-theme *:not(body):not(html) {
+/* LIQUID GLASS THEME - Complete Reset and Override System */
+.liquid-glass-theme * {
   background: transparent !important;
   background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* Override Tailwind and Shadcn default backgrounds */
+.liquid-glass-theme .bg-white,
+.liquid-glass-theme .bg-gray-50,
+.liquid-glass-theme .bg-slate-50,
+.liquid-glass-theme .bg-background,
+.liquid-glass-theme .bg-card,
+.liquid-glass-theme .bg-primary,
+.liquid-glass-theme .bg-secondary,
+.liquid-glass-theme .bg-muted,
+.liquid-glass-theme .bg-accent,
+.liquid-glass-theme [class*="bg-"] {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Override CSS custom property backgrounds */
+.liquid-glass-theme * {
+  --background: transparent !important;
+  --card: transparent !important;
+  --popover: transparent !important;
+  --primary: transparent !important;
+  --secondary: transparent !important;
+  --muted: transparent !important;
+  --accent: transparent !important;
 }
 
 /* Root canyon background */
@@ -155,20 +182,28 @@
   padding: 0;
 }
 
-/* True Liquid Glass Elements - Ultra Transparent */
-.liquid-glass-theme .glass-panel,
-.liquid-glass-theme .glass-droplet,
-.liquid-glass-theme .glass-surface,
-.liquid-glass-theme .glass-layer-1,
-.liquid-glass-theme .glass-layer-2,
-.liquid-glass-theme .glass-layer-3,
-.liquid-glass-theme .apple-glass,
-.liquid-glass-theme [role="button"],
-.liquid-glass-theme button,
-.liquid-glass-theme .card,
-.liquid-glass-theme [data-testid*="card"],
-.liquid-glass-theme .glass-morphism {
-  background: rgba(255, 255, 255, 0.08) !important;
+/* MAXIMUM SPECIFICITY - True Liquid Glass Elements */
+.liquid-glass-theme.liquid-glass-theme .glass-panel,
+.liquid-glass-theme.liquid-glass-theme .glass-droplet,
+.liquid-glass-theme.liquid-glass-theme .glass-surface,
+.liquid-glass-theme.liquid-glass-theme .glass-layer-1,
+.liquid-glass-theme.liquid-glass-theme .glass-layer-2,
+.liquid-glass-theme.liquid-glass-theme .glass-layer-3,
+.liquid-glass-theme.liquid-glass-theme .apple-glass,
+.liquid-glass-theme.liquid-glass-theme [role="button"],
+.liquid-glass-theme.liquid-glass-theme button,
+.liquid-glass-theme.liquid-glass-theme .card,
+.liquid-glass-theme.liquid-glass-theme [data-testid*="card"],
+.liquid-glass-theme.liquid-glass-theme .glass-morphism,
+.liquid-glass-theme.liquid-glass-theme div.card,
+.liquid-glass-theme.liquid-glass-theme div[role="button"],
+.liquid-glass-theme.liquid-glass-theme div.glass-morphism,
+.liquid-glass-theme.liquid-glass-theme .bg-white,
+.liquid-glass-theme.liquid-glass-theme .bg-card,
+.liquid-glass-theme.liquid-glass-theme .bg-background {
+  background: rgba(255, 255, 255, 0.06) !important;
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  background-image: none !important;
   backdrop-filter: blur(40px) saturate(200%) brightness(110%) !important;
   -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(110%) !important;
   border: 1px solid rgba(255, 255, 255, 0.25) !important;
@@ -182,16 +217,19 @@
   overflow: hidden;
 }
 
-/* Glass reflection effect */
-.liquid-glass-theme .glass-panel::before,
-.liquid-glass-theme .glass-droplet::before,
-.liquid-glass-theme .glass-surface::before,
-.liquid-glass-theme .apple-glass::before,
-.liquid-glass-theme [role="button"]::before,
-.liquid-glass-theme button::before,
-.liquid-glass-theme .card::before,
-.liquid-glass-theme [data-testid*="card"]::before,
-.liquid-glass-theme .glass-morphism::before {
+/* Glass reflection effect with maximum specificity */
+.liquid-glass-theme.liquid-glass-theme .glass-panel::before,
+.liquid-glass-theme.liquid-glass-theme .glass-droplet::before,
+.liquid-glass-theme.liquid-glass-theme .glass-surface::before,
+.liquid-glass-theme.liquid-glass-theme .apple-glass::before,
+.liquid-glass-theme.liquid-glass-theme [role="button"]::before,
+.liquid-glass-theme.liquid-glass-theme button::before,
+.liquid-glass-theme.liquid-glass-theme .card::before,
+.liquid-glass-theme.liquid-glass-theme [data-testid*="card"]::before,
+.liquid-glass-theme.liquid-glass-theme .glass-morphism::before,
+.liquid-glass-theme.liquid-glass-theme div.card::before,
+.liquid-glass-theme.liquid-glass-theme .bg-white::before,
+.liquid-glass-theme.liquid-glass-theme .bg-card::before {
   content: '';
   position: absolute;
   top: 0;
@@ -207,16 +245,20 @@
   z-index: 1;
 }
 
-.liquid-glass-theme .glass-panel:hover,
-.liquid-glass-theme .glass-droplet:hover,
-.liquid-glass-theme .glass-surface:hover,
-.liquid-glass-theme .apple-glass:hover,
-.liquid-glass-theme [role="button"]:hover,
-.liquid-glass-theme button:hover,
-.liquid-glass-theme .card:hover,
-.liquid-glass-theme [data-testid*="card"]:hover,
-.liquid-glass-theme .glass-morphism:hover {
-  background: rgba(255, 255, 255, 0.12) !important;
+.liquid-glass-theme.liquid-glass-theme .glass-panel:hover,
+.liquid-glass-theme.liquid-glass-theme .glass-droplet:hover,
+.liquid-glass-theme.liquid-glass-theme .glass-surface:hover,
+.liquid-glass-theme.liquid-glass-theme .apple-glass:hover,
+.liquid-glass-theme.liquid-glass-theme [role="button"]:hover,
+.liquid-glass-theme.liquid-glass-theme button:hover,
+.liquid-glass-theme.liquid-glass-theme .card:hover,
+.liquid-glass-theme.liquid-glass-theme [data-testid*="card"]:hover,
+.liquid-glass-theme.liquid-glass-theme .glass-morphism:hover,
+.liquid-glass-theme.liquid-glass-theme div.card:hover,
+.liquid-glass-theme.liquid-glass-theme .bg-white:hover,
+.liquid-glass-theme.liquid-glass-theme .bg-card:hover {
+  background: rgba(255, 255, 255, 0.10) !important;
+  background-color: rgba(255, 255, 255, 0.10) !important;
   backdrop-filter: blur(50px) saturate(220%) brightness(115%) !important;
   -webkit-backdrop-filter: blur(50px) saturate(220%) brightness(115%) !important;
   border: 1px solid rgba(255, 255, 255, 0.35) !important;
@@ -317,12 +359,4 @@
   font-weight: 600;
 }
 
-@layer utilities {
-  .glass-morphism {
-    background: rgba(255, 255, 255, 0.1) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
-  }
-}
+/* Remove conflicting utility layer - handled by main glass system */
