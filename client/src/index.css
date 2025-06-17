@@ -220,35 +220,9 @@
   text-shadow: none !important;
 }
 
-/* Glass reflection effects */
-.liquid-glass-theme .glass-droplet::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 50%;
-  background: linear-gradient(180deg, 
-    rgba(255, 255, 255, 0.3) 0%, 
-    rgba(255, 255, 255, 0.1) 50%,
-    rgba(255, 255, 255, 0.05) 100%);
-  border-radius: inherit;
-  pointer-events: none;
-  z-index: 1;
-}
+/* Glass reflection removed for pure transparency */
 
-/* Ultra-subtle hover effects for maximum transparency */
-.liquid-glass-theme .glass-droplet:hover {
-  background: rgba(255, 255, 255, 0.06) !important;
-  backdrop-filter: blur(60px) saturate(300%) brightness(125%) !important;
-  -webkit-backdrop-filter: blur(60px) saturate(300%) brightness(125%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
-  transform: translateY(-3px) scale(1.02) !important;
-  box-shadow: 
-    0 12px 40px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    0 2px 0 rgba(255, 255, 255, 0.1) !important;
-}
+/* Hover removed for pure glassmorphism */
 
 .liquid-glass-theme .glass-button:hover {
   background: rgba(255, 255, 255, 0.07) !important;
@@ -464,52 +438,9 @@
   pointer-events: none;
 }
 
-/* Comprehensive Liquid Glass Button System with Enhanced Refraction */
-.liquid-glass-theme .glass-button {
-  background: linear-gradient(145deg,
-    hsla(255, 255%, 255%, 0.1) 0%,
-    hsla(220, 40%, 8%, 0.03) 25%,
-    hsla(270, 80%, 65%, 0.05) 50%,
-    hsla(195, 80%, 60%, 0.04) 75%,
-    hsla(255, 255%, 255%, 0.08) 100%);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid transparent;
-  border-image: linear-gradient(145deg,
-    hsla(255, 255%, 255%, 0.3) 0%,
-    hsla(270, 80%, 65%, 0.15) 30%,
-    hsla(195, 80%, 60%, 0.1) 70%,
-    hsla(255, 255%, 255%, 0.25) 100%) 1;
-  box-shadow: 
-    0 8px 24px 0 hsla(270, 80%, 30%, 0.2),
-    0 2px 8px 0 hsla(270, 80%, 30%, 0.1),
-    inset 0 1px 0 0 hsla(255, 255%, 255%, 0.25),
-    inset 0 -1px 0 0 hsla(220, 40%, 8%, 0.12),
-    inset 1px 0 0 0 hsla(270, 80%, 65%, 0.08),
-    inset -1px 0 0 0 hsla(195, 80%, 60%, 0.06),
-    inset 0 0 0 1px hsla(255, 255%, 255%, 0.15);
-  position: relative;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  transform: translateZ(0);
-}
+/* Button styles removed for pure glassmorphism */
 
-.liquid-glass-theme .glass-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at center,
-    hsla(255, 255%, 255%, 0.12) 0%,
-    hsla(270, 80%, 65%, 0.03) 40%,
-    transparent 70%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  border-radius: inherit;
-  pointer-events: none;
-}
+/* Button pseudo-elements removed */
 
 .liquid-glass-theme .glass-button:hover {
   transform: translateY(-2px) translateZ(0);
