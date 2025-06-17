@@ -137,34 +137,40 @@
   --chart-5: hsl(280, 65%, 60%);
 }
 
-/* ULTRA SIMPLE LIQUID GLASS THEME - Canyon Overlay */
+/* ULTRA SIMPLE LIQUID GLASS THEME - Direct Canyon Background */
 .liquid-glass-theme body {
-  position: relative;
+  background: url('/canyon-background.jpg') center center / cover fixed !important;
   margin: 0;
   padding: 0;
   min-height: 100vh;
 }
 
-/* Canyon background overlay - sits on top of Tailwind backgrounds */
-.liquid-glass-theme body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('/canyon-background.jpg') center center / cover;
-  z-index: 1;
-  pointer-events: none;
+/* Force transparent backgrounds on ALL containers */
+.liquid-glass-theme #root,
+.liquid-glass-theme main,
+.liquid-glass-theme section,
+.liquid-glass-theme div[class*="container"],
+.liquid-glass-theme div[class*="wrapper"],
+.liquid-glass-theme div[class*="bg-"],
+.liquid-glass-theme div[class*="background"],
+.liquid-glass-theme .min-h-screen,
+.liquid-glass-theme .h-screen {
+  background: transparent !important;
+  background-color: transparent !important;
 }
 
-/* Ensure all content appears above the canyon background */
-.liquid-glass-theme * {
-  position: relative;
-  z-index: 2;
+/* Ensure the canyon shows through Tailwind utility classes */
+.liquid-glass-theme .bg-background,
+.liquid-glass-theme .bg-card,
+.liquid-glass-theme .bg-popover,
+.liquid-glass-theme .bg-muted,
+.liquid-glass-theme .bg-secondary,
+.liquid-glass-theme .bg-accent {
+  background: transparent !important;
+  background-color: transparent !important;
 }
 
-/* Ultra Transparent Glass Elements */
+/* Ultra Transparent Glass Elements - Enhanced for Canyon Background */
 .liquid-glass-theme .glass-panel,
 .liquid-glass-theme .glass-droplet,
 .liquid-glass-theme .glass-surface,
@@ -177,11 +183,14 @@
 .liquid-glass-theme .card,
 .liquid-glass-theme [data-testid*="card"],
 .liquid-glass-theme .glass-morphism {
-  background: rgba(255, 255, 255, 0.1) !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 
+    0 8px 32px rgba(31, 38, 135, 0.37),
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
   transition: all 0.3s ease !important;
 }
 
