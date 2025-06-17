@@ -6,8 +6,20 @@
 @tailwind components;
 @tailwind utilities;
 
-/* COMPLETE CSS RESET FOR GLASSMORPHISM - EXCLUDE BODY */
-.liquid-glass-theme *:not(body):not(html) {
+/* NUCLEAR BACKGROUND OVERRIDE FOR GLASSMORPHISM */
+.liquid-glass-theme *:not(body):not(html),
+.liquid-glass-theme .glass-surface,
+.liquid-glass-theme .glass-layer-1,
+.liquid-glass-theme .glass-layer-2,
+.liquid-glass-theme .enhanced-card,
+.liquid-glass-theme [role="menu"],
+.liquid-glass-theme [role="listbox"],
+.liquid-glass-theme .dropdown-content,
+.liquid-glass-theme .progress-bar,
+.liquid-glass-theme .progress-fill,
+.liquid-glass-theme input:focus,
+.liquid-glass-theme textarea:focus,
+.liquid-glass-theme select:focus {
   background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
@@ -351,23 +363,12 @@
   --gradient-accent: transparent;
 }
 
-/* Advanced Liquid Glass Effects with Enhanced Refractive Boundaries */
+/* Glass panel - transparent only */
 .liquid-glass-theme .glass-panel {
-  background: linear-gradient(135deg,
-    rgba(255, 255, 255, 0.45) 0%,
-    rgba(220, 230, 255, 0.38) 25%,
-    rgba(240, 235, 255, 0.42) 50%,
-    rgba(235, 245, 255, 0.40) 75%,
-    rgba(255, 255, 255, 0.35) 100%);
-  backdrop-filter: blur(24px) saturate(1.8);
-  -webkit-backdrop-filter: blur(24px) saturate(1.8);
-  border: 1px solid;
-  border-image: linear-gradient(135deg,
-    rgba(255, 255, 255, 0.9) 0%,
-    rgba(200, 180, 255, 0.4) 25%,
-    rgba(180, 220, 255, 0.3) 50%,
-    rgba(255, 180, 220, 0.4) 75%,
-    rgba(255, 255, 255, 0.7) 100%) 1;
+  background: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(40px) saturate(200%) brightness(120%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(120%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
   box-shadow: 
     0 8px 32px 0 rgba(31, 38, 135, 0.37),
     0 2px 16px 0 rgba(120, 80, 200, 0.15),
@@ -382,35 +383,9 @@
 }
 
 /* Multi-layered glass effect */
-.liquid-glass-theme .glass-panel::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 40%;
-  background: linear-gradient(135deg,
-    rgba(255, 255, 255, 0.6) 0%,
-    rgba(200, 180, 255, 0.15) 35%,
-    transparent 70%);
-  border-radius: inherit;
-  opacity: 0.8;
-}
-
+.liquid-glass-theme .glass-panel::before,
 .liquid-glass-theme .glass-panel::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: 
-    radial-gradient(circle at 30% 20%, rgba(200, 180, 255, 0.12) 0%, transparent 50%),
-    radial-gradient(circle at 70% 80%, rgba(180, 220, 255, 0.10) 0%, transparent 50%),
-    radial-gradient(circle at 90% 30%, rgba(255, 180, 220, 0.08) 0%, transparent 40%),
-    linear-gradient(45deg,
-      rgba(180, 255, 220, 0.05) 0%,
-      rgba(255, 180, 255, 0.04) 25%,
-      rgba(255, 255, 180, 0.06) 50%,
-      rgba(180, 180, 255, 0.03) 75%,
-      transparent 100%);
+  display: none !important;
   border-radius: inherit;
   pointer-events: none;
   mix-blend-mode: soft-light;
@@ -430,12 +405,7 @@
 
 /* Enhanced Hover State */
 .liquid-glass-theme .glass-panel:hover {
-  background: linear-gradient(135deg,
-    rgba(255, 255, 255, 0.55) 0%,
-    rgba(220, 230, 255, 0.48) 25%,
-    rgba(240, 235, 255, 0.52) 50%,
-    rgba(235, 245, 255, 0.50) 75%,
-    rgba(255, 255, 255, 0.45) 100%);
+  background: rgba(255, 255, 255, 0.12) !important;
   transform: translateY(-2px);
   box-shadow: 
     0 16px 48px 0 rgba(31, 38, 135, 0.45),
