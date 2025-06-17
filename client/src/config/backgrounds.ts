@@ -111,6 +111,49 @@ export const BACKGROUND_REGISTRY: BackgroundAsset[] = [
     category: 'nature',
     description: 'Wide valley view with rolling hills',
     tags: ['valley', 'hills', 'vista', 'expansive']
+  },
+
+  // Abstract/Gradient Collection
+  {
+    id: 'blue-dream',
+    name: 'Blue Dream',
+    path: '/attached_assets/Blue Dream_1750197379239.png',
+    category: 'abstract',
+    description: 'Smooth blue gradient with dreamy flow',
+    tags: ['blue', 'gradient', 'smooth', 'peaceful'],
+    featured: true
+  },
+  {
+    id: 'blue-lava-lamp',
+    name: 'Blue Lava Lamp',
+    path: '/attached_assets/Blue Lava Lamp_1750197379239.png',
+    category: 'abstract',
+    description: 'Dynamic purple-blue organic shapes',
+    tags: ['purple', 'blue', 'organic', 'fluid', 'modern']
+  },
+  {
+    id: 'dream-scape',
+    name: 'Dream Scape',
+    path: '/attached_assets/Dream Scape_1750197379240.png',
+    category: 'abstract',
+    description: 'Soft pastel gradient from blue to pink',
+    tags: ['pastel', 'gradient', 'soft', 'dreamy', 'pink']
+  },
+  {
+    id: 'blue-aurora',
+    name: 'Blue Aurora',
+    path: '/attached_assets/Blue Aurora_1750197379240.png',
+    category: 'space',
+    description: 'Ethereal teal and blue aurora patterns',
+    tags: ['aurora', 'teal', 'ethereal', 'cosmic', 'flowing']
+  },
+  {
+    id: 'orange-lava-lamp',
+    name: 'Orange Lava Lamp',
+    path: '/attached_assets/Orange Lava Lamp_1750197379240.png',
+    category: 'abstract',
+    description: 'Warm orange and coral flowing shapes',
+    tags: ['orange', 'coral', 'warm', 'flowing', 'energetic']
   }
 ];
 
