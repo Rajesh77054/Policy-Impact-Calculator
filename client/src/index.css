@@ -398,21 +398,21 @@
 
 /* Liquid Glass Theme Variables */
 .liquid-glass-theme {
-  --background: hsl(0, 0%, 100%);
+  --background: transparent;
   --foreground: hsl(220, 40%, 15%);
-  --muted: hsla(220, 20%, 85%, 0.6);
+  --muted: hsla(220, 20%, 85%, 0.1);
   --muted-foreground: hsl(220, 30%, 45%);
-  --popover: hsla(255, 255%, 255%, 0.95);
+  --popover: hsla(255, 255%, 255%, 0.02);
   --popover-foreground: hsl(220, 40%, 15%);
-  --card: hsla(255, 255%, 255%, 0.4);
+  --card: hsla(255, 255%, 255%, 0.01);
   --card-foreground: hsl(220, 40%, 15%);
-  --border: hsla(220, 30%, 75%, 0.3);
-  --input: hsla(255, 255%, 255%, 0.6);
+  --border: hsla(220, 30%, 75%, 0.05);
+  --input: hsla(255, 255%, 255%, 0.05);
   --primary: hsl(270, 80%, 45%);
   --primary-foreground: hsl(0, 0%, 100%);
-  --secondary: hsla(220, 20%, 90%, 0.6);
+  --secondary: hsla(220, 20%, 90%, 0.05);
   --secondary-foreground: hsl(220, 40%, 15%);
-  --accent: hsla(270, 40%, 92%, 0.6);
+  --accent: hsla(270, 40%, 92%, 0.05);
   --accent-foreground: hsl(220, 40%, 15%);
   --destructive: hsl(0, 75%, 50%);
   --destructive-foreground: hsl(0, 0%, 98%);
@@ -424,11 +424,11 @@
   --chart-4: hsl(320, 80%, 65%);
   --chart-5: hsl(160, 70%, 60%);
 
-  /* Liquid Glass specific variables for white background */
-  --glass-bg: hsla(255, 255%, 255%, 0.25);
-  --glass-border: hsla(255, 255%, 255%, 0.4);
-  --glass-shadow: 0 8px 32px 0 hsla(220, 40%, 20%, 0.15);
-  --glass-blur: blur(20px);
+  /* Liquid Glass specific variables - ultra transparent */
+  --glass-bg: hsla(255, 255%, 255%, 0.01);
+  --glass-border: hsla(255, 255%, 255%, 0.05);
+  --glass-shadow: 0 4px 16px 0 hsla(220, 40%, 20%, 0.05);
+  --glass-blur: blur(12px);
   --gradient-primary: linear-gradient(135deg, 
     hsla(270, 80%, 65%, 0.7) 0%, 
     hsla(320, 70%, 55%, 0.5) 35%, 
@@ -502,28 +502,13 @@
 
 /* Comprehensive Liquid Glass Button System with Enhanced Refraction */
 .liquid-glass-theme .glass-button {
-  background: linear-gradient(145deg,
-    hsla(255, 255%, 255%, 0.1) 0%,
-    hsla(220, 40%, 8%, 0.03) 25%,
-    hsla(270, 80%, 65%, 0.05) 50%,
-    hsla(195, 80%, 60%, 0.04) 75%,
-    hsla(255, 255%, 255%, 0.08) 100%);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid transparent;
-  border-image: linear-gradient(145deg,
-    hsla(255, 255%, 255%, 0.3) 0%,
-    hsla(270, 80%, 65%, 0.15) 30%,
-    hsla(195, 80%, 60%, 0.1) 70%,
-    hsla(255, 255%, 255%, 0.25) 100%) 1;
+  background: rgba(255, 255, 255, 0.01) !important;
+  backdrop-filter: blur(12px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(120%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
   box-shadow: 
-    0 8px 24px 0 hsla(270, 80%, 30%, 0.2),
-    0 2px 8px 0 hsla(270, 80%, 30%, 0.1),
-    inset 0 1px 0 0 hsla(255, 255%, 255%, 0.25),
-    inset 0 -1px 0 0 hsla(220, 40%, 8%, 0.12),
-    inset 1px 0 0 0 hsla(270, 80%, 65%, 0.08),
-    inset -1px 0 0 0 hsla(195, 80%, 60%, 0.06),
-    inset 0 0 0 1px hsla(255, 255%, 255%, 0.15);
+    0 4px 16px 0 rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.1) !important;
   position: relative;
   overflow: hidden;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -569,23 +554,13 @@
 
 /* Apply enhanced glass effect to all buttons in liquid glass theme */
 .liquid-glass-theme button:not(.glass-button) {
-  background: linear-gradient(145deg,
-    hsla(255, 255%, 255%, 0.08) 0%,
-    hsla(220, 40%, 8%, 0.02) 30%,
-    hsla(270, 80%, 65%, 0.03) 70%,
-    hsla(255, 255%, 255%, 0.06) 100%);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid transparent;
-  border-image: linear-gradient(145deg,
-    hsla(255, 255%, 255%, 0.2) 0%,
-    hsla(270, 80%, 65%, 0.1) 50%,
-    hsla(255, 255%, 255%, 0.15) 100%) 1;
+  background: rgba(255, 255, 255, 0.01) !important;
+  backdrop-filter: blur(12px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(120%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
   box-shadow: 
-    0 4px 16px 0 hsla(270, 80%, 30%, 0.15),
-    inset 0 1px 0 0 hsla(255, 255%, 255%, 0.15),
-    inset 0 -1px 0 0 hsla(220, 40%, 8%, 0.08),
-    inset 0 0 0 1px hsla(255, 255%, 255%, 0.08);
+    0 4px 16px 0 rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.1) !important;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -882,20 +857,20 @@
 .liquid-glass-theme .card,
 .liquid-glass-theme [data-testid*="card"],
 .liquid-glass-theme .glass-morphism {
-  /* Ultra minimal background - let canyon colors show through */
-  background: rgba(255, 255, 255, 0.02) !important;
+  /* Completely transparent background - let canyon show through */
+  background: rgba(255, 255, 255, 0.01) !important;
   
-  /* Stronger blur to maintain glass effect while showing background */
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  /* Strong blur for glass effect */
+  backdrop-filter: blur(12px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(120%) !important;
   
-  /* Subtle glass edge */
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  /* Almost invisible border */
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
   
-  /* Clean shadow without blocking transparency */
+  /* Minimal shadow */
   box-shadow: 
-    0 8px 32px 0 rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.2) !important;
+    0 4px 16px 0 rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.1) !important;
   
   position: relative;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -905,13 +880,13 @@
 .liquid-glass-theme input,
 .liquid-glass-theme textarea,
 .liquid-glass-theme select {
-  background: rgba(255, 255, 255, 0.08) !important;
-  backdrop-filter: blur(16px) saturate(150%) !important;
-  -webkit-backdrop-filter: blur(16px) saturate(150%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  backdrop-filter: blur(12px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(120%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
   box-shadow: 
-    0 4px 16px 0 rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.25) !important;
+    0 4px 16px 0 rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.15) !important;
 }
 
 /* Single reflection layer - only when needed */
