@@ -137,25 +137,25 @@
   --chart-5: hsl(280, 65%, 60%);
 }
 
-/* ULTRA SIMPLE LIQUID GLASS THEME - Canyon Background Only */
+/* ULTRA SIMPLE LIQUID GLASS THEME - Canyon Overlay */
 .liquid-glass-theme body {
-  background: url('/canyon-background.jpg') center center / cover fixed !important;
+  position: relative;
   margin: 0;
   padding: 0;
   min-height: 100vh;
 }
 
-/* Override ALL background layers to be transparent */
-.liquid-glass-theme * {
-  background: transparent !important;
-}
-
-.liquid-glass-theme section,
-.liquid-glass-theme main,
-.liquid-glass-theme div,
-.liquid-glass-theme header,
-.liquid-glass-theme footer {
-  background: transparent !important;
+/* Canyon background overlay - sits on top of Tailwind backgrounds */
+.liquid-glass-theme body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/canyon-background.jpg') center center / cover;
+  z-index: -1;
+  pointer-events: none;
 }
 
 /* Ultra Transparent Glass Elements */
