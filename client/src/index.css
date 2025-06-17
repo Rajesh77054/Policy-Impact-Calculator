@@ -202,7 +202,7 @@
   --chart-5: hsl(280, 65%, 60%);
 }
 
-/* Simplified Canyon Background for Maximum Transparency */
+/* Canyon Image Background for Maximum Transparency */
 .liquid-glass-theme body {
   background: #1a0f1a;
   position: relative;
@@ -217,33 +217,17 @@
   right: 0;
   bottom: 0;
   background: 
-    /* Single dominant canyon formation */
-    radial-gradient(ellipse at 30% 80%, hsl(25, 90%, 45%) 0%, transparent 60%),
-    
-    /* Base canyon gradient */
-    linear-gradient(135deg, 
-      hsl(15, 80%, 35%) 0%,
-      hsl(35, 85%, 50%) 40%,
-      hsl(45, 90%, 60%) 70%,
-      hsl(30, 85%, 45%) 100%),
-    
-    /* Deep base color */
-    linear-gradient(180deg, 
-      hsl(280, 50%, 20%) 0%,
-      hsl(20, 70%, 25%) 100%);
+    /* Subtle overlay for glass effect visibility */
+    linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)),
+    /* Canyon image */
+    url('/canyon-background.jpg');
       
-  background-size: 
-    150% 100%,
-    100% 100%,
-    100% 100%;
-  background-position: 
-    20% 100%,
-    0% 0%,
-    0% 0%;
+  background-size: cover;
+  background-position: center center;
   background-attachment: fixed;
+  background-repeat: no-repeat;
   pointer-events: none;
   z-index: -2;
-  animation: canyonFlow 25s ease-in-out infinite;
 }
 
 /* Minimal shimmer overlay */
@@ -267,18 +251,10 @@
 
 @keyframes canyonFlow {
   0%, 100% {
-    background-position: 
-      20% 100%,
-      0% 0%,
-      0% 0%;
     filter: hue-rotate(0deg) saturate(1.1) brightness(1);
   }
   50% {
-    background-position: 
-      40% 90%,
-      0% 0%,
-      0% 0%;
-    filter: hue-rotate(8deg) saturate(1.2) brightness(1.1);
+    filter: hue-rotate(5deg) saturate(1.15) brightness(1.05);
   }
 }
 
