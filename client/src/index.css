@@ -21,9 +21,11 @@ body {
 .hero-glass-card,
 .glass-droplet,
 .glass-button,
+.apple-glass-card,
 .liquid-glass-theme .hero-glass-card,
 .liquid-glass-theme .glass-droplet,
-.liquid-glass-theme .glass-button {
+.liquid-glass-theme .glass-button,
+.liquid-glass-theme .apple-glass-card {
   background: rgba(255, 255, 255, 0.12) !important;
   background-color: rgba(255, 255, 255, 0.12) !important;
   background-image: none !important;
@@ -35,7 +37,10 @@ body {
 /* Override any Tailwind background utilities on glass elements */
 .hero-glass-card[class*="bg-"],
 .glass-droplet[class*="bg-"],
-.glass-button[class*="bg-"] {
+.glass-button[class*="bg-"],
+.apple-glass-card[class*="bg-"],
+button.apple-glass-card,
+button.apple-glass-card:hover {
   background: rgba(255, 255, 255, 0.12) !important;
   background-color: rgba(255, 255, 255, 0.12) !important;
   backdrop-filter: blur(16px) saturate(120%) !important;
