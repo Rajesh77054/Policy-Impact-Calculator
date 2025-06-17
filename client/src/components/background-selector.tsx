@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useBackground } from '../contexts/BackgroundContext';
 import { Button } from './ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from './ui/dialog';
 import { Badge } from './ui/badge';
 import { ScrollArea } from './ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
@@ -67,6 +67,9 @@ export default function BackgroundSelector() {
             <Palette className="w-6 h-6" />
             Choose Background
           </DialogTitle>
+          <DialogDescription className="text-slate-400">
+            Select a background image from the collection below to customize your experience.
+          </DialogDescription>
         </DialogHeader>
         
         {/* Current Preview */}

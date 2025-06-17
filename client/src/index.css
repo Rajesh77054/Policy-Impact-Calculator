@@ -5,15 +5,15 @@
 @tailwind components;
 @tailwind utilities;
 
-.cyberpunk-bg {
-  background-image: url('/cyberpunk-dream.png?cache-bust=1750187200');
+/* Dynamic background system using CSS custom properties */
+body {
+  background-image: var(--background-image, url('/cyberpunk-dream.png'));
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-color: #1a0a2e;
-  /* Force background override */
-  background-image: url('/cyberpunk-dream.png?v=20250617') !important;
+  transition: background-image 0.5s ease-in-out;
 }
 
 /* Nuclear override for glass elements */
