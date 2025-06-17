@@ -239,30 +239,30 @@
   overflow-x: hidden;
 }
 
-/* GLASSMORPHISM EFFECTS */
+/* MAXIMUM TRANSPARENCY GLASSMORPHISM */
 .liquid-glass-theme .glass-droplet {
-  background: rgba(255, 255, 255, 0.08) !important;
-  backdrop-filter: blur(40px) saturate(200%) brightness(110%) !important;
-  -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(110%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  background: rgba(255, 255, 255, 0.01) !important;
+  backdrop-filter: blur(60px) saturate(300%) brightness(130%) contrast(110%) !important;
+  -webkit-backdrop-filter: blur(60px) saturate(300%) brightness(130%) contrast(110%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
   border-radius: 20px !important;
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    0 8px 32px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 1px 0 rgba(255, 255, 255, 0.02) !important;
   position: relative;
   overflow: hidden;
 }
 
 .liquid-glass-theme .glass-button {
-  background: rgba(255, 255, 255, 0.10) !important;
-  backdrop-filter: blur(30px) saturate(180%) brightness(110%) !important;
-  -webkit-backdrop-filter: blur(30px) saturate(180%) brightness(110%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  background: rgba(255, 255, 255, 0.01) !important;
+  backdrop-filter: blur(50px) saturate(250%) brightness(125%) contrast(110%) !important;
+  -webkit-backdrop-filter: blur(50px) saturate(250%) brightness(125%) contrast(110%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
   border-radius: 15px !important;
   box-shadow: 
-    0 6px 24px rgba(0, 0, 0, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+    0 6px 24px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
 }
 
 /* TEXT VISIBILITY */
@@ -300,23 +300,23 @@
   z-index: 1;
 }
 
-/* Hover effects for glass elements */
+/* Ultra-subtle hover effects for maximum transparency */
 .liquid-glass-theme .glass-droplet:hover {
-  background: rgba(255, 255, 255, 0.12) !important;
-  backdrop-filter: blur(50px) saturate(220%) brightness(115%) !important;
-  -webkit-backdrop-filter: blur(50px) saturate(220%) brightness(115%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  backdrop-filter: blur(60px) saturate(300%) brightness(125%) !important;
+  -webkit-backdrop-filter: blur(60px) saturate(300%) brightness(125%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
   transform: translateY(-3px) scale(1.02) !important;
   box-shadow: 
-    0 12px 40px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3),
-    0 2px 0 rgba(255, 255, 255, 0.15) !important;
+    0 12px 40px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 2px 0 rgba(255, 255, 255, 0.1) !important;
 }
 
 .liquid-glass-theme .glass-button:hover {
-  background: rgba(255, 255, 255, 0.15) !important;
-  backdrop-filter: blur(40px) saturate(200%) brightness(120%) !important;
-  -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(120%) !important;
+  background: rgba(255, 255, 255, 0.07) !important;
+  backdrop-filter: blur(50px) saturate(250%) brightness(125%) !important;
+  -webkit-backdrop-filter: blur(50px) saturate(250%) brightness(125%) !important;
   transform: translateY(-2px) !important;
 }
 
