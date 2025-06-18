@@ -58,9 +58,9 @@ export default function Home() {
             <div>
               <h4 className="font-semibold mb-4">About</h4>
               <ul className="space-y-2 text-sm text-slate-400">
-                <li><a href="#" className="hover:text-white transition-colors">How it works</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Methodology</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Sources</a></li>
+                <li><Link href="/how-it-works" className="hover:text-white transition-colors">How it works</Link></li>
+                <li><Link href="/methodology" className="hover:text-white transition-colors">Methodology</Link></li>
+                <li><Link href="/sources" className="hover:text-white transition-colors">Sources</Link></li>
                 <li><Link href="/theme-demo" className="hover:text-white transition-colors">Theme Demo</Link></li>
               </ul>
             </div>

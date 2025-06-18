@@ -9,6 +9,9 @@ import Home from "./pages/home";
 import Calculator from "./pages/calculator";
 import Results from "./pages/results";
 import ThemeDemoPage from "./pages/theme-demo";
+import HowItWorks from "./pages/how-it-works";
+import Methodology from "./pages/methodology";
+import Sources from "./pages/sources";
 import NotFound from "./pages/not-found";
 
 function App() {
@@ -22,6 +25,9 @@ function App() {
               <Route path="/calculator" component={Calculator} />
               <Route path="/results" component={Results} />
               <Route path="/theme-demo" component={ThemeDemoPage} />
+              <Route path="/how-it-works" component={HowItWorks} />
+              <Route path="/methodology" component={Methodology} />
+              <Route path="/sources" component={Sources} />
               <Route component={NotFound} />
             </Switch>
             <Toaster />
