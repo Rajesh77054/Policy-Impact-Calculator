@@ -15,10 +15,8 @@ export default function ThemeSelector() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2 glass-button glow-on-hover">
-          <div className="glass-icon p-1 rounded">
-            <Palette className="h-4 w-4" />
-          </div>
+        <Button variant="outline" size="sm" className="gap-2 bg-slate-800/90 border-slate-600 hover:bg-slate-700 text-white hover:text-white">
+          <Palette className="h-4 w-4" />
           <span className="hidden sm:inline">Theme</span>
         </Button>
       </DropdownMenuTrigger>

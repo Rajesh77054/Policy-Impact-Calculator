@@ -43,7 +43,7 @@ export default function BackgroundSelector() {
         <Button 
           variant="outline" 
           size="sm" 
-          className="glass-button text-white border-white/20 hover:bg-white/10"
+          className="bg-slate-800/90 border-slate-600 hover:bg-slate-700 text-white hover:text-white"
         >
           <ImageIcon className="w-4 h-4 mr-2" />
           Change Background
