@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -23,9 +23,19 @@ const INDUSTRIES = [
 ];
 
 export default function EmploymentStep({ formData, onComplete }: EmploymentStepProps) {
-  const [employmentStatus, setEmploymentStatus] = useState(formData.employmentStatus || "");
-  const [industry, setIndustry] = useState(formData.industry || "");
+  const [employmentStatus, setEmploymentStatus] = useState<string>(formData.employmentStatus || "");
+  const [industry, setIndustry] = useState<string>(formData.industry || "");
   const [errors, setErrors] = useState<string[]>([]);
+
+  // Ensure proper initialization
+  useEffect(() => {
+    if (formData.employmentStatus && !employmentStatus) {
+      setEmploymentStatus(formData.employmentStatus);
+    }
+    if (formData.industry && !industry) {
+      setIndustry(formData.industry);
+    }
+  }, [formData.employmentStatus, formData.industry, employmentStatus, industry]);
 
   const validateForm = () => {
     const newErrors: string[] = [];
@@ -101,13 +111,26 @@ export default function EmploymentStep({ formData, onComplete }: EmploymentStepP
           <Label htmlFor="industry" className="text-sm font-medium text-slate-700">
             Industry <span className="text-red-500">*</span>
           </Label>
-          <Select value={industry} onValueChange={setIndustry}>
-            <SelectTrigger className="w-full mt-2">
+          <Select 
+            value={industry || ""} 
+            onValueChange={(value) => {
+              try {
+                setIndustry(value);
+                setErrors(prev => prev.filter(err => !err.includes("industry")));
+              } catch (error) {
+                console.error("Error setting industry:", error);
+              }
+            }}
+          >
+            <SelectTrigger className="w-full mt-2" id="industry">
               <SelectValue placeholder="Select your industry" />
             </SelectTrigger>
             <SelectContent>
               {INDUSTRIES.map((industryOption) => (
-                <SelectItem key={industryOption.value} value={industryOption.value}>
+                <SelectItem 
+                  key={industryOption.value} 
+                  value={industryOption.value}
+                >
                   {industryOption.label}
                 </SelectItem>
               ))}
