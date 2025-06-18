@@ -3,6 +3,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { FormData } from "@shared/schema";
+import ErrorBoundary from "@/components/error-boundary";
 
 interface EmploymentStepProps {
   formData: FormData;
@@ -111,31 +112,48 @@ export default function EmploymentStep({ formData, onComplete }: EmploymentStepP
           <Label htmlFor="industry" className="text-sm font-medium text-slate-700">
             Industry <span className="text-red-500">*</span>
           </Label>
-          <Select 
-            value={industry || ""} 
-            onValueChange={(value) => {
-              try {
-                setIndustry(value);
-                setErrors(prev => prev.filter(err => !err.includes("industry")));
-              } catch (error) {
-                console.error("Error setting industry:", error);
-              }
-            }}
-          >
-            <SelectTrigger className="w-full mt-2" id="industry">
-              <SelectValue placeholder="Select your industry" />
-            </SelectTrigger>
-            <SelectContent>
-              {INDUSTRIES.map((industryOption) => (
-                <SelectItem 
-                  key={industryOption.value} 
-                  value={industryOption.value}
-                >
-                  {industryOption.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <ErrorBoundary fallback={
+            <div className="w-full mt-2 p-3 border border-slate-200 rounded-md bg-slate-50">
+              <select 
+                value={industry || ""} 
+                onChange={(e) => setIndustry(e.target.value)}
+                className="w-full bg-transparent"
+              >
+                <option value="">Select your industry</option>
+                {INDUSTRIES.map((industryOption) => (
+                  <option key={industryOption.value} value={industryOption.value}>
+                    {industryOption.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          }>
+            <Select 
+              value={industry || ""} 
+              onValueChange={(value) => {
+                try {
+                  setIndustry(value);
+                  setErrors(prev => prev.filter(err => !err.includes("industry")));
+                } catch (error) {
+                  console.error("Error setting industry:", error);
+                }
+              }}
+            >
+              <SelectTrigger className="w-full mt-2" id="industry">
+                <SelectValue placeholder="Select your industry" />
+              </SelectTrigger>
+              <SelectContent>
+                {INDUSTRIES.map((industryOption) => (
+                  <SelectItem 
+                    key={industryOption.value} 
+                    value={industryOption.value}
+                  >
+                    {industryOption.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </ErrorBoundary>
         </div>
 
         <div className="flex justify-end mt-8">
