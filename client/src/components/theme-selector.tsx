@@ -25,16 +25,16 @@ export default function ThemeSelector() {
           <DropdownMenuItem
             key={themeOption.value}
             onClick={() => setTheme(themeOption.value)}
-            className={`cursor-pointer transition-all duration-200 hover:glass-morphism ${
-              theme === themeOption.value ? 'glass-morphism' : ''
+            className={`cursor-pointer transition-all duration-200 ${
+              theme === themeOption.value ? 'bg-accent' : ''
             }`}
           >
             <span className="flex items-center gap-2">
               <div
                 className={`w-3 h-3 rounded-full ${
                   themeOption.value === 'default'
-                    ? 'bg-blue-500 glass-icon'
-                    : 'glass-droplet glass-icon'
+                    ? 'bg-blue-500'
+                    : 'bg-purple-500'
                 }`}
               />
               {themeOption.label}

@@ -556,14 +556,14 @@
   -webkit-backdrop-filter: blur(50px) saturate(250%) brightness(125%) !important;
 }
 
-/* Block ALL pseudo-elements */
+/* Block ALL pseudo-elements - ONLY in liquid glass theme */
 .liquid-glass-theme *::before,
 .liquid-glass-theme *::after {
   display: none !important;
 }
 
-/* Override any potential Tailwind background classes */
-.liquid-glass-theme [class*="bg-"],
+/* Override any potential Tailwind background classes - ONLY in liquid glass theme */
+.liquid-glass-theme [class*="bg-"]:not([role="tooltip"]):not([data-radix-popper-content-wrapper]):not([data-radix-dropdown-content]):not([data-radix-select-content]):not([data-radix-context-menu-content]):not([data-radix-hover-card-content]):not([data-radix-navigation-menu-viewport]),
 .liquid-glass-theme [class*="gradient"] {
   background: rgba(255, 255, 255, 0.01) !important;
   background-image: none !important;
@@ -1108,7 +1108,8 @@
     background: transparent !important;
   }
 
-  .glass-morphism {
+  /* Glass morphism utility - ONLY for liquid glass theme */
+  .liquid-glass-theme .glass-morphism {
     backdrop-filter: blur(40px) saturate(200%) brightness(120%);
     -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(120%);
     background: rgba(255, 255, 255, 0.08) !important;
@@ -1116,5 +1117,14 @@
     box-shadow: 
       0 8px 32px rgba(0, 0, 0, 0.1),
       inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  }
+
+  /* Default theme - normal solid styling for glass-morphism class */
+  .default-theme .glass-morphism {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: hsl(var(--card)) !important;
+    border: 1px solid hsl(var(--border)) !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
   }
 }

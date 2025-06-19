@@ -1,8 +1,6 @@
-/* AUTHENTIC GLASSMORPHISM EFFECTS */
+/* AUTHENTIC GLASSMORPHISM EFFECTS - SCOPED TO LIQUID GLASS THEME ONLY */
 
-/* Core glass card styling with maximum specificity */
-.hero-glass-card,
-.glass-droplet,
+/* Core glass card styling - ONLY for liquid glass theme */
 .liquid-glass-theme .hero-glass-card,
 .liquid-glass-theme .glass-droplet {
   background: rgba(255, 255, 255, 0.09) !important;
@@ -17,8 +15,7 @@
   overflow: hidden !important;
 }
 
-/* Glass button with transparency */
-.glass-button,
+/* Glass button with transparency - ONLY for liquid glass theme */
 .liquid-glass-theme .glass-button {
   background: rgba(255, 255, 255, 0.12) !important;
   backdrop-filter: blur(20px) saturate(180%) brightness(110%) !important;
@@ -30,9 +27,27 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
 }
 
-/* Force removal of solid backgrounds on glass elements */
-.hero-glass-card *,
-.glass-droplet *,
-.glass-button * {
+/* Force removal of solid backgrounds on glass elements - ONLY for liquid glass theme */
+.liquid-glass-theme .hero-glass-card *,
+.liquid-glass-theme .glass-droplet *,
+.liquid-glass-theme .glass-button * {
   background-color: transparent !important;
+}
+
+/* Default theme - ensure normal solid backgrounds for glass-named elements */
+.default-theme .hero-glass-card,
+.default-theme .glass-droplet,
+.default-theme .glass-button {
+  background: hsl(var(--card)) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+}
+
+.default-theme .hero-glass-card *,
+.default-theme .glass-droplet *,
+.default-theme .glass-button * {
+  background-color: inherit !important;
 }
