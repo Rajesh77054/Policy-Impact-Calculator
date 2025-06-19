@@ -82,27 +82,7 @@ html .default-theme [role="radio"] {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
 }
 
-/* Radio button visibility */
-.default-theme input[type="radio"],
-.default-theme .radio-indicator,
-.default-theme [data-state="checked"] .radio-indicator,
-.default-theme [aria-checked="true"] .radio-indicator {
-  background: hsl(var(--primary)) !important;
-  border: 2px solid hsl(var(--primary)) !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-.default-theme input[type="radio"]::after,
-.default-theme .radio-indicator::after {
-  content: "";
-  display: block;
-  width: 6px;
-  height: 6px;
-  background: hsl(var(--primary-foreground)) !important;
-  border-radius: 50%;
-  margin: auto;
-}
+/* Remove this redundant styling - replaced above */
 
 /* Tooltip and popover fixes */
 .default-theme [role="tooltip"],
@@ -381,33 +361,17 @@ html.default-theme div[data-radix-tooltip-content] {
   border: 1px solid #e2e8f0 !important;
 }
 
-/* Radio button components - target all possible selectors */
-.default-theme [role="radio"],
-.default-theme [data-state="checked"],
-.default-theme [aria-checked="true"],
-.default-theme input[type="radio"]:checked,
-.default-theme .radio-group-item[data-state="checked"],
-.default-theme .radio-group-item[aria-checked="true"] {
-  background: hsl(var(--primary)) !important;
-  border: 2px solid hsl(var(--primary)) !important;
-  color: hsl(var(--primary-foreground)) !important;
+/* Radio button components - clean styling */
+.default-theme [role="radio"][data-state="checked"],
+.default-theme .radio-group-item[data-state="checked"] {
+  background: #2463eb !important;
+  border: 2px solid #2463eb !important;
 }
 
-.default-theme [role="radio"]:before,
-.default-theme [data-state="checked"]:before,
-.default-theme [aria-checked="true"]:before,
-.default-theme input[type="radio"]:checked:before,
-.default-theme .radio-group-item[data-state="checked"]:before {
-  content: "";
-  display: block;
-  width: 8px;
-  height: 8px;
-  background: hsl(var(--primary-foreground)) !important;
-  border-radius: 50%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.default-theme [role="radio"][data-state="unchecked"],
+.default-theme .radio-group-item[data-state="unchecked"] {
+  background: transparent !important;
+  border: 2px solid #cbd5e0 !important;
 }
 
 /* Industry dropdown and other select components with maximum specificity */
@@ -446,35 +410,18 @@ html body .default-theme .dialog-content {
   visibility: visible !important;
 }
 
-/* Radio button dot visibility with maximum specificity */
-html body .default-theme [role="radio"],
-html body .default-theme [data-state="checked"],
-html body .default-theme [aria-checked="true"],
-html body .default-theme input[type="radio"]:checked,
-html body .default-theme .radio-group-item[data-state="checked"] {
-  background: hsl(var(--primary)) !important;
-  border: 2px solid hsl(var(--primary)) !important;
-  color: hsl(var(--primary-foreground)) !important;
-  position: relative !important;
+/* Checkbox components - clean styling */
+.default-theme [role="checkbox"][data-state="checked"],
+.default-theme .checkbox[data-state="checked"] {
+  background: #2463eb !important;
+  border: 2px solid #2463eb !important;
+  color: white !important;
 }
 
-html body .default-theme [role="radio"]:after,
-html body .default-theme [data-state="checked"]:after,
-html body .default-theme [aria-checked="true"]:after,
-html body .default-theme input[type="radio"]:checked:after,
-html body .default-theme .radio-group-item[data-state="checked"]:after {
-  content: "" !important;
-  display: block !important;
-  width: 8px !important;
-  height: 8px !important;
-  background: hsl(var(--primary-foreground)) !important;
-  border-radius: 50% !important;
-  position: absolute !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  opacity: 1 !important;
-  visibility: visible !important;
+.default-theme [role="checkbox"][data-state="unchecked"],
+.default-theme .checkbox[data-state="unchecked"] {
+  background: transparent !important;
+  border: 2px solid #cbd5e0 !important;
 }
 
 /* Tooltip glass effect override with maximum specificity */
