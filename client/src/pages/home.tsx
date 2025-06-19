@@ -30,7 +30,7 @@ export default function Home() {
               <div className="hidden md:flex items-center space-x-6">
                 <div className="flex items-center space-x-2 text-emerald-600">
                   <Shield className="w-4 h-4" />
-                  <span className="text-sm font-medium">100% Anonymous - No Data Shared</span>
+                  <span className="text-sm font-medium">100% Anonymous</span>
                 </div>
                 <div className="flex items-center space-x-2 text-emerald-600">
                   <CheckCircle className="w-4 h-4" />
@@ -43,9 +43,7 @@ export default function Home() {
           </div>
         </div>
       </header>
-
       <LandingHero />
-
       {/* Footer */}
       <footer className="bg-slate-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
