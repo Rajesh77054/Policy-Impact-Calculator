@@ -27,9 +27,7 @@ export default function Results() {
         <div className="text-center">
           <p className="text-destructive mb-4">Error loading results. Please try again.</p>
           <Link href="/calculator">
-            <div className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 cursor-pointer">
-              Return to Calculator
-            </div>
+            <Button>Return to Calculator</Button>
           </Link>
         </div>
       </div>
@@ -71,10 +69,10 @@ export default function Results() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
         <div className="text-center">
           <Link href="/">
-            <div className="inline-flex items-center justify-center space-x-2 px-4 py-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-md text-sm font-medium transition-colors cursor-pointer">
+            <Button variant="outline" className="inline-flex items-center space-x-2">
               <ArrowLeft className="w-4 h-4" />
               <span>Start New Analysis</span>
-            </div>
+            </Button>
           </Link>
         </div>
       </div>

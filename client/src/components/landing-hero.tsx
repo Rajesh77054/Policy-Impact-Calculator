@@ -89,11 +89,12 @@ export default function LandingHero() {
         </div>
 
         <Link href="/calculator">
-          <div 
-            className="inline-flex items-center justify-center text-lg px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold border-0 rounded-lg transition-colors duration-200 cursor-pointer"
+          <Button 
+            size="lg" 
+            className="text-lg px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold border-0 rounded-lg transition-colors duration-200"
           >
             Start Your Analysis
-          </div>
+          </Button>
         </Link>
         
         <p className={`text-sm mt-4 ${

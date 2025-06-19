@@ -408,7 +408,7 @@ body .liquid-glass-theme div.background-thumbnail[data-background-thumbnail="tru
   --foreground: hsl(220, 40%, 15%);
   --muted: transparent;
   --muted-foreground: hsl(220, 30%, 45%);
-  --popover: rgba(255, 255, 255, 0.98);
+  --popover: transparent;
   --popover-foreground: hsl(220, 40%, 15%);
   --card: transparent;
   --card-foreground: hsl(220, 40%, 15%);
@@ -796,24 +796,6 @@ body .liquid-glass-theme div.background-thumbnail[data-background-thumbnail="tru
     inset 0 -1px 0 0 hsla(220, 40%, 8%, 0.06),
     inset 1px 0 0 0 hsla(270, 80%, 65%, 0.03),
     inset -1px 0 0 0 hsla(195, 80%, 60%, 0.025);
-}
-
-/* Enhanced tooltip styling for both themes */
-.default-theme [data-radix-tooltip-content] {
-  background: hsl(0, 0%, 100%) !important;
-  border: 1px solid hsl(214, 32%, 91%) !important;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-}
-
-.liquid-glass-theme [data-radix-tooltip-content] {
-  background: rgba(255, 255, 255, 0.98) !important;
-  backdrop-filter: blur(20px) saturate(150%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(150%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.12),
-    0 4px 16px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
 }
 
 .liquid-glass-theme .glass-layer-3 {
