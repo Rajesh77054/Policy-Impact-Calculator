@@ -11,10 +11,10 @@ export default function Methodology() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <Link href="/">
-              <Button variant="ghost" className="inline-flex items-center space-x-2">
+              <div className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 space-x-2 cursor-pointer">
                 <ArrowLeft className="w-4 h-4" />
                 <span>Back to Home</span>
-              </Button>
+              </div>
             </Link>
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
