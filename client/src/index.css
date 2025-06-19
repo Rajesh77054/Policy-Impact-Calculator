@@ -234,13 +234,13 @@
 }
 
 /* TEXT VISIBILITY */
-.liquid-glass-theme h1,
-.liquid-glass-theme h2,
-.liquid-glass-theme h3,
-.liquid-glass-theme p,
-.liquid-glass-theme span:not(.text-green-600):not(.text-red-600):not(.text-green-800):not(.text-red-800):not(.text-emerald-600):not(.text-orange-600):not(.text-blue-600):not(.text-blue-700):not(.text-blue-900):not(.text-emerald-900) {
-  color: white !important;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8) !important;
+.liquid-glass-theme h1:not([class*="text-"]),
+.liquid-glass-theme h2:not([class*="text-"]),
+.liquid-glass-theme h3:not([class*="text-"]),
+.liquid-glass-theme p:not([class*="text-"]),
+.liquid-glass-theme span:not([class*="text-"]):not([class*="bg-"]) {
+  color: white;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
 }
 
 .liquid-glass-theme .gradient-text {
