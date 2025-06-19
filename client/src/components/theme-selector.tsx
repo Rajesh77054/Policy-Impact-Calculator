@@ -17,7 +17,7 @@ export default function ThemeSelector() {
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="sm" className="gap-2 bg-slate-800/90 border-slate-600 hover:bg-slate-700 text-white hover:text-white">
           <Palette className="h-4 w-4" />
-          <span className="hidden sm:inline text-[#2563eb]">Theme</span>
+          <span className="hidden sm:inline text-[#0f172a]">Theme</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-36 dropdown-content">
