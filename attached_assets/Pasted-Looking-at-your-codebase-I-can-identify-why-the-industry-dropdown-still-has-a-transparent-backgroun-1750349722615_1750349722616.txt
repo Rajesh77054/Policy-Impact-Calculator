@@ -1,0 +1,39 @@
+Looking at your codebase, I can identify why the industry dropdown still has a transparent background. The issue is in your CSS import structure and specificity conflicts.
+
+Root Cause Analysis
+In your index.css, you're importing files in this order:
+
+@import './default-theme.css';
+@import './glassmorphism-consolidated.css';
+However, glassmorphism-consolidated.css contains several rules that are not properly scoped to .liquid-glass-theme, which means they're applying globally and overriding your default theme styles.
+
+Specific Problems in glassmorphism-consolidated.css
+Global Background Overrides (lines near the bottom):
+.liquid-glass-theme [class*="bg-"]:not([role="tooltip"]):not([data-radix-popper-content-wrapper]):not([data-radix-dropdown-content]):not([data-radix-select-content]):not([data-radix-context-menu-content]):not([data-radix-hover-card-content]):not([data-radix-navigation-menu-viewport]):not(.bg-popover) {
+  background: rgba(255, 255, 255, 0.01) !important;
+  background-image: none !important;
+}
+This rule is supposed to be scoped to .liquid-glass-theme but the selector structure makes it apply to elements that have background classes even outside the liquid glass theme.
+
+Pseudo-element Hiding:
+.liquid-glass-theme *::before,
+.liquid-glass-theme *::after {
+  display: none !important;
+}
+This is too broad and might be affecting dropdown styling.
+
+The Industry Dropdown Issue
+The industry dropdown (likely a Radix Select component) is getting affected because:
+
+The CSS selector .liquid-glass-theme [class*="bg-"] is matching elements outside of the .liquid-glass-theme context due to CSS specificity rules
+The !important declarations are overriding the solid background styles from default-theme.css
+Even though default-theme.css is imported first, the glassmorphism rules have higher specificity
+Solutions Needed
+The glassmorphism rules need to be more precisely scoped. The current selectors like .liquid-glass-theme [class*="bg-"] can match elements in the default theme if there's any CSS cascade inheritance happening.
+
+You should either:
+
+Restructure the CSS imports to load glassmorphism after default theme with more specific scoping
+Fix the overly broad selectors in glassmorphism-consolidated.css
+Add more specific default theme overrides for the dropdown components
+The core issue is that glassmorphism effects are "bleeding" into the default theme through CSS specificity conflicts, despite being intended to be theme-scoped.

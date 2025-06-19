@@ -280,6 +280,34 @@ html[lang] body .default-theme * .bg-popover * {
   background-image: none !important;
 }
 
+/* Nuclear option - override any possible glassmorphism on Select with ultra-high specificity */
+html[lang="en"] body.default-theme [data-radix-select-portal] [data-radix-select-content],
+html[lang="en"] body .default-theme [data-radix-select-portal] [data-radix-select-content],
+html[lang] body .default-theme [data-radix-select-portal] [data-radix-select-content],
+body .default-theme [data-radix-select-portal] [data-radix-select-content],
+.default-theme [data-radix-select-portal] [data-radix-select-content] {
+  background: white !important;
+  background-color: white !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Target the Select component directly by class structure */
+.default-theme [class*="select"] [class*="bg-popover"],
+.default-theme [role="listbox"],
+.default-theme div[data-radix-select-content] {
+  background: white !important;
+  background-color: white !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
 /* Radio button components - target all possible selectors */
 .default-theme [role="radio"],
 .default-theme [data-state="checked"],
