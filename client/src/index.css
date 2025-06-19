@@ -257,7 +257,10 @@
 .default-theme [data-radix-context-menu-content],
 .default-theme [data-radix-hover-card-content],
 .default-theme [data-radix-navigation-menu-viewport],
-.default-theme .bg-popover {
+.default-theme .bg-popover,
+.default-theme [data-state],
+.default-theme [data-side],
+.default-theme [data-align] {
   background: hsl(var(--popover)) !important;
   background-color: hsl(var(--popover)) !important;
   background-image: none !important;
@@ -265,6 +268,16 @@
   -webkit-backdrop-filter: none !important;
   border: 1px solid hsl(var(--border)) !important;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Force override any lingering translucent effects in Default theme */
+.default-theme * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.default-theme *:not(.liquid-glass-theme *):not(.glass-droplet):not(.glass-morphism):not(.apple-glass):not(.hero-glass-card):not(.glass-button) {
+  background-color: inherit !important;
 }
 
 /* LIQUID GLASS THEME - Glassmorphism effects for tooltips and popovers */
@@ -304,6 +317,55 @@
   min-height: 100vh !important;
   position: relative;
   overflow-x: hidden;
+}
+
+/* Apple Glass system - ONLY for liquid glass theme */
+.liquid-glass-theme .apple-glass-primary {
+  background: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(30px) saturate(150%) brightness(110%) !important;
+  -webkit-backdrop-filter: blur(30px) saturate(150%) brightness(110%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+}
+
+.liquid-glass-theme .apple-glass-secondary {
+  background: rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(25px) saturate(130%) brightness(105%) !important;
+  -webkit-backdrop-filter: blur(25px) saturate(130%) brightness(105%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.liquid-glass-theme .apple-glass-tertiary {
+  background: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(20px) saturate(120%) brightness(102%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(120%) brightness(102%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.liquid-glass-theme .apple-glass-adaptive {
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(22px) saturate(125%) brightness(108%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(125%) brightness(108%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+}
+
+.liquid-glass-theme .apple-glass-button {
+  background: rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(16px) saturate(120%) brightness(105%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(120%) brightness(105%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  transition: all 0.3s ease !important;
+}
+
+.liquid-glass-theme .apple-glass-content-light {
+  background: rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(18px) saturate(110%) brightness(95%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(110%) brightness(95%) !important;
+}
+
+.liquid-glass-theme .apple-glass-content-dark {
+  background: rgba(255, 255, 255, 0.06) !important;
+  backdrop-filter: blur(24px) saturate(140%) brightness(115%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(140%) brightness(115%) !important;
 }
 
 /* Ensure default theme stays clean */
@@ -1057,8 +1119,13 @@
   outline: none !important;
 }
 
-/* Readable text for glass cards */
+/* Readable text for glass cards - ONLY liquid glass theme */
 .liquid-glass-theme .apple-glass,
+.liquid-glass-theme .apple-glass-primary,
+.liquid-glass-theme .apple-glass-secondary,
+.liquid-glass-theme .apple-glass-tertiary,
+.liquid-glass-theme .apple-glass-adaptive,
+.liquid-glass-theme .apple-glass-button,
 .liquid-glass-theme [role="button"],
 .liquid-glass-theme button,
 .liquid-glass-theme .card,
@@ -1066,6 +1133,22 @@
 .liquid-glass-theme .glass-morphism {
   color: hsl(220, 40%, 15%) !important;
   text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Default theme - normal text styling for apple-glass classes */
+.default-theme .apple-glass,
+.default-theme .apple-glass-primary,
+.default-theme .apple-glass-secondary,
+.default-theme .apple-glass-tertiary,
+.default-theme .apple-glass-adaptive,
+.default-theme .apple-glass-button {
+  color: hsl(var(--foreground)) !important;
+  text-shadow: none !important;
+  background: hsl(var(--card)) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
 }
 
 /* Ensure content appears above glass effects */
