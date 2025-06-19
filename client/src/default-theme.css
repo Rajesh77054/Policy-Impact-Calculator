@@ -26,10 +26,283 @@
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
 }
 
-/* Force override any lingering translucent effects */
-.default-theme * {
+/* Force override any lingering translucent effects with higher specificity */
+.default-theme *,
+.default-theme *:before,
+.default-theme *:after {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
+}
+
+/* Prevent any glassmorphism bleeding with maximum specificity */
+html .default-theme *[class*="glass"],
+html .default-theme *[class*="apple-glass"],
+html .default-theme *[data-radix],
+html .default-theme button,
+html .default-theme [role="button"],
+html .default-theme [role="tooltip"],
+html .default-theme [role="listbox"],
+html .default-theme [role="combobox"],
+html .default-theme [role="option"],
+html .default-theme [role="radio"] {
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Theme button visibility fix */
+.default-theme button[aria-label*="theme"],
+.default-theme button[data-testid*="theme"],
+.default-theme .theme-selector,
+.default-theme .theme-button {
+  background: hsl(var(--primary)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Dropdown and Select components */
+.default-theme [data-radix-select-trigger],
+.default-theme [data-radix-select-content],
+.default-theme [role="combobox"],
+.default-theme [role="listbox"],
+.default-theme [role="option"],
+.default-theme .select-trigger,
+.default-theme .select-content,
+.default-theme .dropdown-content {
+  background: hsl(var(--background)) !important;
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Radio button visibility */
+.default-theme input[type="radio"],
+.default-theme .radio-indicator,
+.default-theme [data-state="checked"] .radio-indicator,
+.default-theme [aria-checked="true"] .radio-indicator {
+  background: hsl(var(--primary)) !important;
+  border: 2px solid hsl(var(--primary)) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.default-theme input[type="radio"]::after,
+.default-theme .radio-indicator::after {
+  content: "";
+  display: block;
+  width: 6px;
+  height: 6px;
+  background: hsl(var(--primary-foreground)) !important;
+  border-radius: 50%;
+  margin: auto;
+}
+
+/* Tooltip and popover fixes */
+.default-theme [role="tooltip"],
+.default-theme .tooltip-content,
+.default-theme [data-radix-tooltip-content],
+.default-theme .popover-content,
+.default-theme [data-radix-popover-content] {
+  background: hsl(var(--popover)) !important;
+  background-color: hsl(var(--popover)) !important;
+  color: hsl(var(--popover-foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Information popover elements */
+.default-theme .info-popover,
+.default-theme .help-tooltip,
+.default-theme [aria-label*="information"],
+.default-theme [aria-label*="help"] {
+  background: hsl(var(--popover)) !important;
+  color: hsl(var(--popover-foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Fix specific theme button styling with maximum specificity */
+html body .default-theme .bg-slate-800\/90,
+html body .default-theme .bg-slate-800,
+html body .default-theme .border-slate-600,
+html body .default-theme button.bg-slate-800\/90,
+html body .default-theme button.border-slate-600,
+html body .default-theme [data-testid*="theme"],
+html body .default-theme button[class*="bg-slate"] {
+  background: hsl(var(--primary)) !important;
+  background-color: hsl(var(--primary)) !important;
+  background-image: none !important;
+  border: 1px solid hsl(var(--border)) !important;
+  border-color: hsl(var(--border)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Force visible theme button with Tailwind class overrides */
+html body .default-theme button[class*="slate-800"],
+html body .default-theme button[class*="slate-600"] {
+  background: hsl(var(--primary)) !important;
+  border-color: hsl(var(--border)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+}
+
+/* Target all Radix dropdown components */
+.default-theme [data-radix-dropdown-menu-content],
+.default-theme [data-radix-select-viewport],
+.default-theme [data-radix-select-content],
+.default-theme [data-radix-navigation-menu-content],
+.default-theme [data-radix-context-menu-content],
+.default-theme [data-radix-hover-card-content],
+.default-theme [data-radix-popover-content],
+.default-theme [data-radix-tooltip-content] {
+  background: hsl(var(--popover)) !important;
+  background-color: hsl(var(--popover)) !important;
+  background-image: none !important;
+  color: hsl(var(--popover-foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Override bg-popover class specifically */
+.default-theme .bg-popover {
+  background: hsl(var(--popover)) !important;
+  background-color: hsl(var(--popover)) !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Radio button components - target all possible selectors */
+.default-theme [role="radio"],
+.default-theme [data-state="checked"],
+.default-theme [aria-checked="true"],
+.default-theme input[type="radio"]:checked,
+.default-theme .radio-group-item[data-state="checked"],
+.default-theme .radio-group-item[aria-checked="true"] {
+  background: hsl(var(--primary)) !important;
+  border: 2px solid hsl(var(--primary)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+}
+
+.default-theme [role="radio"]:before,
+.default-theme [data-state="checked"]:before,
+.default-theme [aria-checked="true"]:before,
+.default-theme input[type="radio"]:checked:before,
+.default-theme .radio-group-item[data-state="checked"]:before {
+  content: "";
+  display: block;
+  width: 8px;
+  height: 8px;
+  background: hsl(var(--primary-foreground)) !important;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Industry dropdown and other select components with maximum specificity */
+html body .default-theme .dropdown-content,
+html body .default-theme [role="listbox"],
+html body .default-theme [role="combobox"] + [role="listbox"],
+html body .default-theme .select-content,
+html body .default-theme [data-radix-select-content],
+html body .default-theme [data-radix-dropdown-menu-content] {
+  background: hsl(var(--background)) !important;
+  background-color: hsl(var(--background)) !important;
+  background-image: none !important;
+  color: hsl(var(--foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Bottom popover fix with maximum specificity */
+html body .default-theme .popover-content,
+html body .default-theme [data-radix-popover-content],
+html body .default-theme [role="dialog"],
+html body .default-theme .dialog-content {
+  background: hsl(var(--background)) !important;
+  background-color: hsl(var(--background)) !important;
+  background-image: none !important;
+  color: hsl(var(--foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Radio button dot visibility with maximum specificity */
+html body .default-theme [role="radio"],
+html body .default-theme [data-state="checked"],
+html body .default-theme [aria-checked="true"],
+html body .default-theme input[type="radio"]:checked,
+html body .default-theme .radio-group-item[data-state="checked"] {
+  background: hsl(var(--primary)) !important;
+  border: 2px solid hsl(var(--primary)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+  position: relative !important;
+}
+
+html body .default-theme [role="radio"]:after,
+html body .default-theme [data-state="checked"]:after,
+html body .default-theme [aria-checked="true"]:after,
+html body .default-theme input[type="radio"]:checked:after,
+html body .default-theme .radio-group-item[data-state="checked"]:after {
+  content: "" !important;
+  display: block !important;
+  width: 8px !important;
+  height: 8px !important;
+  background: hsl(var(--primary-foreground)) !important;
+  border-radius: 50% !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Tooltip glass effect override with maximum specificity */
+html body .default-theme [role="tooltip"],
+html body .default-theme .tooltip-content,
+html body .default-theme [data-radix-tooltip-content],
+html body .default-theme [aria-label*="help"],
+html body .default-theme [aria-describedby] {
+  background: hsl(var(--popover)) !important;
+  background-color: hsl(var(--popover)) !important;
+  background-image: none !important;
+  color: hsl(var(--popover-foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 /* Glass-named elements get solid styling in Default theme */
