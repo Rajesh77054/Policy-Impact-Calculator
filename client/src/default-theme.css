@@ -1,0 +1,138 @@
+/* DEFAULT THEME - SOLID OPAQUE STYLING */
+/* All elements have proper solid backgrounds and no glass effects */
+
+/* ===============================================
+   DEFAULT THEME OVERRIDES
+   =============================================== */
+
+/* Ensure solid opaque backgrounds for all UI components */
+.default-theme [role="tooltip"],
+.default-theme [data-radix-popper-content-wrapper],
+.default-theme [data-radix-dropdown-content],
+.default-theme [data-radix-select-content],
+.default-theme [data-radix-context-menu-content],
+.default-theme [data-radix-hover-card-content],
+.default-theme [data-radix-navigation-menu-viewport],
+.default-theme .bg-popover,
+.default-theme [data-state],
+.default-theme [data-side],
+.default-theme [data-align] {
+  background: hsl(var(--popover)) !important;
+  background-color: hsl(var(--popover)) !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Force override any lingering translucent effects */
+.default-theme * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Glass-named elements get solid styling in Default theme */
+.default-theme .hero-glass-card,
+.default-theme .glass-droplet,
+.default-theme .glass-button,
+.default-theme .glass-card,
+.default-theme .apple-glass,
+.default-theme .apple-glass-primary,
+.default-theme .apple-glass-secondary,
+.default-theme .apple-glass-tertiary,
+.default-theme .apple-glass-adaptive,
+.default-theme .apple-glass-button,
+.default-theme .apple-glass-card,
+.default-theme .glass-morphism {
+  background: hsl(var(--card)) !important;
+  background-color: hsl(var(--card)) !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+  color: hsl(var(--foreground)) !important;
+  text-shadow: none !important;
+}
+
+/* Ensure content in glass elements has normal styling */
+.default-theme .hero-glass-card *,
+.default-theme .glass-droplet *,
+.default-theme .glass-button *,
+.default-theme .glass-card *,
+.default-theme .apple-glass *,
+.default-theme .apple-glass-card * {
+  background-color: inherit !important;
+  color: inherit !important;
+  text-shadow: none !important;
+}
+
+/* Default theme variables */
+.default-theme {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(222, 84%, 4.9%);
+  --muted: hsl(210, 40%, 98%);
+  --muted-foreground: hsl(215, 16%, 47%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(222, 84%, 4.9%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(222, 84%, 4.9%);
+  --border: hsl(214, 32%, 91%);
+  --input: hsl(214, 32%, 91%);
+  --primary: hsl(221, 83%, 53%);
+  --primary-foreground: hsl(210, 40%, 98%);
+  --secondary: hsl(210, 40%, 96%);
+  --secondary-foreground: hsl(222, 47%, 11%);
+  --accent: hsl(210, 40%, 96%);
+  --accent-foreground: hsl(222, 47%, 11%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --ring: hsl(221, 83%, 53%);
+  --radius: 0.5rem;
+  --chart-1: hsl(221, 83%, 53%);
+  --chart-2: hsl(158, 64%, 52%);
+  --chart-3: hsl(45, 93%, 60%);
+  --chart-4: hsl(348, 83%, 47%);
+  --chart-5: hsl(280, 65%, 60%);
+}
+
+/* Clean white background */
+.default-theme {
+  background: hsl(0, 0%, 100%) !important;
+  background-image: none !important;
+}
+
+.default-theme body {
+  background: hsl(0, 0%, 100%) !important;
+  background-color: hsl(0, 0%, 100%) !important;
+  background-image: none !important;
+}
+
+/* Content adaptation classes get normal styling */
+.default-theme .apple-glass-content-light,
+.default-theme .apple-glass-content-dark,
+.default-theme .glass-content-light,
+.default-theme .glass-content-dark {
+  background: hsl(var(--card)) !important;
+  color: hsl(var(--foreground)) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Button hover states */
+.default-theme .glass-button:hover,
+.default-theme .apple-glass-button:hover {
+  background: hsl(var(--accent)) !important;
+  color: hsl(var(--accent-foreground)) !important;
+  transform: none !important;
+}
+
+.default-theme .glass-card:hover,
+.default-theme .hero-glass-card:hover,
+.default-theme .apple-glass-card:hover {
+  background: hsl(var(--card)) !important;
+  transform: none !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
