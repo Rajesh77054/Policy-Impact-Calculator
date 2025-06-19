@@ -798,57 +798,22 @@ body .liquid-glass-theme div.background-thumbnail[data-background-thumbnail="tru
     inset -1px 0 0 0 hsla(195, 80%, 60%, 0.025);
 }
 
-/* TOOLTIP STYLING - HIGH SPECIFICITY FOR BOTH THEMES */
-
-/* Default theme tooltips - solid white background */
-.default-theme [data-radix-tooltip-content],
-.default-theme [role="tooltip"],
-body.default-theme [data-radix-tooltip-content],
-html.default-theme [data-radix-tooltip-content] {
+/* Enhanced tooltip styling for both themes */
+.default-theme [data-radix-tooltip-content] {
   background: hsl(0, 0%, 100%) !important;
-  background-color: hsl(0, 0%, 100%) !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
   border: 1px solid hsl(214, 32%, 91%) !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+.liquid-glass-theme [data-radix-tooltip-content] {
+  background: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: blur(20px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(150%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
   box-shadow: 
-    0 8px 24px rgba(0, 0, 0, 0.12),
-    0 4px 12px rgba(0, 0, 0, 0.08),
-    0 2px 6px rgba(0, 0, 0, 0.04) !important;
-  color: hsl(222, 84%, 4.9%) !important;
-  z-index: 9999 !important;
-}
-
-/* Liquid Glass theme tooltips - enhanced glassmorphism */
-.liquid-glass-theme [data-radix-tooltip-content],
-.liquid-glass-theme [role="tooltip"],
-body.liquid-glass-theme [data-radix-tooltip-content],
-html.liquid-glass-theme [data-radix-tooltip-content] {
-  background: rgba(255, 255, 255, 0.95) !important;
-  background-color: rgba(255, 255, 255, 0.95) !important;
-  backdrop-filter: blur(40px) saturate(200%) brightness(110%) !important;
-  -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(110%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.4) !important;
-  box-shadow: 
-    0 16px 48px rgba(0, 0, 0, 0.15),
-    0 8px 24px rgba(0, 0, 0, 0.10),
-    0 4px 12px rgba(0, 0, 0, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
-  color: hsl(220, 40%, 15%) !important;
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8) !important;
-  z-index: 9999 !important;
-}
-
-/* Force tooltip text readability in both themes */
-.default-theme [data-radix-tooltip-content] *,
-.liquid-glass-theme [data-radix-tooltip-content] * {
-  color: inherit !important;
-  background: transparent !important;
-}
-
-/* Ensure tooltips appear above all glass effects */
-[data-radix-tooltip-content] {
-  position: relative !important;
-  z-index: 9999 !important;
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 4px 16px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
 }
 
 .liquid-glass-theme .glass-layer-3 {
