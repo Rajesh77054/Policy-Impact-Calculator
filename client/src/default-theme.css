@@ -467,29 +467,49 @@ html body .default-theme [aria-describedby] {
   text-shadow: none !important;
 }
 
-/* Ensure content in glass elements has normal styling */
-.default-theme .hero-glass-card *,
-.default-theme .glass-droplet *,
-.default-theme .glass-button *,
-.default-theme .glass-card *,
-.default-theme .apple-glass *,
-.default-theme .apple-glass-card * {
+/* Ensure content in glass elements has normal styling - but preserve financial indicators */
+.default-theme .hero-glass-card *:not(.text-green-600):not(.text-red-600):not(.text-green-800):not(.text-red-800):not(.text-emerald-600):not(.text-orange-600):not(.text-blue-600):not(.text-amber-600),
+.default-theme .glass-droplet *:not(.text-green-600):not(.text-red-600):not(.text-green-800):not(.text-red-800):not(.text-emerald-600):not(.text-orange-600):not(.text-blue-600):not(.text-amber-600),
+.default-theme .glass-button *:not(.text-green-600):not(.text-red-600):not(.text-green-800):not(.text-red-800):not(.text-emerald-600):not(.text-orange-600):not(.text-blue-600):not(.text-amber-600),
+.default-theme .glass-card *:not(.text-green-600):not(.text-red-600):not(.text-green-800):not(.text-red-800):not(.text-emerald-600):not(.text-orange-600):not(.text-blue-600):not(.text-amber-600),
+.default-theme .apple-glass *:not(.text-green-600):not(.text-red-600):not(.text-green-800):not(.text-red-800):not(.text-emerald-600):not(.text-orange-600):not(.text-blue-600):not(.text-amber-600),
+.default-theme .apple-glass-card *:not(.text-green-600):not(.text-red-600):not(.text-green-800):not(.text-red-800):not(.text-emerald-600):not(.text-orange-600):not(.text-blue-600):not(.text-amber-600) {
   background-color: inherit !important;
   color: inherit !important;
   text-shadow: none !important;
 }
 
-/* Default theme styling */
-.default-theme {
-  /* Ensure financial indicator colors are preserved */
+/* Preserve financial indicator colors in default theme */
+.default-theme .text-green-600 {
+  color: #059669 !important;
 }
 
-.default-theme .text-green-600,
-.default-theme .text-red-600,
-.default-theme .text-green-800,
-.default-theme .text-red-800,
+.default-theme .text-red-600 {
+  color: #dc2626 !important;
+}
+
+.default-theme .text-green-800 {
+  color: #166534 !important;
+}
+
+.default-theme .text-red-800 {
+  color: #991b1b !important;
+}
+
 .default-theme .text-emerald-600 {
-  color: inherit !important;
+  color: #059669 !important;
+}
+
+.default-theme .text-orange-600 {
+  color: #ea580c !important;
+}
+
+.default-theme .text-blue-600 {
+  color: #2563eb !important;
+}
+
+.default-theme .text-amber-600 {
+  color: #d97706 !important;
 }
 
 .default-theme {
