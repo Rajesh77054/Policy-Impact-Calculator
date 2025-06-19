@@ -146,6 +146,17 @@ body {
   color: #d97706 !important;
 }
 
+/* Mobile tabs spacing fix */
+@media (max-width: 640px) {
+  [data-radix-tabs-list] {
+    margin-bottom: 1.5rem !important;
+  }
+  
+  [data-radix-tabs-content] {
+    margin-top: 0 !important;
+  }
+}
+
 /* Essential animations */
 @keyframes ripple {
   0% {

@@ -86,7 +86,7 @@ export default function MethodologyModal({ trigger }: MethodologyModalProps) {
           </div>
         ) : methodologyData ? (
           <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1">
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1 mb-4 sm:mb-6">
               <TabsTrigger value="overview" className="text-xs sm:text-sm">Overview</TabsTrigger>
               <TabsTrigger value="calculations" className="text-xs sm:text-sm">Your Results</TabsTrigger>
               <TabsTrigger value="sources" className="text-xs sm:text-sm">Data Sources</TabsTrigger>
