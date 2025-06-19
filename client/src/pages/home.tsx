@@ -1,30 +1,24 @@
 import { Link } from "wouter";
 import LandingHero from "@/components/landing-hero";
-import BackgroundSelector from "@/components/background-selector";
+
 import { Shield, CheckCircle, BookOpen } from "lucide-react";
-import { useTheme } from "@/contexts/theme-context";
+
 // Using direct path to public directory
 
 export default function Home() {
-  const { theme } = useTheme();
-  const isLiquidGlass = theme === 'liquid-glass';
-  
   return (
     <div className="min-h-screen">
       {/* Navigation Header */}
-      <header className={isLiquidGlass 
-        ? "backdrop-blur-md border-b border-white/20 sticky top-0 z-50 glass-droplet" 
-        : "bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm"
-      }>
+      <header className="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <span className="text-primary-foreground font-bold text-sm">PC</span>
               </div>
-              <h1 className={`text-xl font-semibold ${isLiquidGlass ? 'text-foreground' : 'text-slate-900'}`}>Policy Impact Calculator</h1>
+              <h1 className="text-xl font-semibold text-slate-900">Policy Impact Calculator</h1>
             </div>
-            {/* Trust Indicators and Controls */}
+            {/* Trust Indicators */}
             <div className="flex items-center space-x-4">
               <div className="hidden md:flex items-center space-x-6">
                 <div className="flex items-center space-x-2 text-emerald-600">
@@ -36,7 +30,6 @@ export default function Home() {
                   <span className="text-sm font-medium">No Political Agenda</span>
                 </div>
               </div>
-              {isLiquidGlass && <BackgroundSelector />}
             </div>
           </div>
         </div>

@@ -76,33 +76,6 @@ body {
   --chart-5: hsl(280, 65%, 60%);
 }
 
-.dark {
-  --background: hsl(222, 84%, 4.9%);
-  --foreground: hsl(210, 40%, 98%);
-  --muted: hsl(217, 32%, 17%);
-  --muted-foreground: hsl(215, 20%, 65%);
-  --popover: hsl(222, 84%, 4.9%);
-  --popover-foreground: hsl(210, 40%, 98%);
-  --card: hsl(222, 84%, 4.9%);
-  --card-foreground: hsl(210, 40%, 98%);
-  --border: hsl(217, 32%, 17%);
-  --input: hsl(217, 32%, 17%);
-  --primary: hsl(221, 83%, 53%);
-  --primary-foreground: hsl(210, 40%, 98%);
-  --secondary: hsl(217, 32%, 17%);
-  --secondary-foreground: hsl(210, 40%, 98%);
-  --accent: hsl(217, 32%, 17%);
-  --accent-foreground: hsl(210, 40%, 98%);
-  --destructive: hsl(0, 62%, 30%);
-  --destructive-foreground: hsl(210, 40%, 98%);
-  --ring: hsl(221, 83%, 53%);
-  --chart-1: hsl(221, 83%, 53%);
-  --chart-2: hsl(158, 64%, 52%);
-  --chart-3: hsl(45, 93%, 60%);
-  --chart-4: hsl(348, 83%, 47%);
-  --chart-5: hsl(280, 65%, 60%);
-}
-
 @layer base {
   * {
     @apply border-border;
@@ -112,194 +85,6 @@ body {
     @apply text-foreground;
     font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
   }
-
-  .liquid-glass-theme {
-    --background: transparent !important;
-  }
-}
-
-/* Default Theme Variables */
-.default-theme {
-  --background: hsl(0, 0%, 100%);
-  --foreground: hsl(222, 84%, 4.9%);
-  --muted: hsl(210, 40%, 98%);
-  --muted-foreground: hsl(215, 16%, 47%);
-  --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(222, 84%, 4.9%);
-  --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(222, 84%, 4.9%);
-  --border: hsl(214, 32%, 91%);
-  --input: hsl(214, 32%, 91%);
-  --primary: hsl(221, 83%, 53%);
-  --primary-foreground: hsl(210, 40%, 98%);
-  --secondary: hsl(210, 40%, 96%);
-  --secondary-foreground: hsl(222, 47%, 11%);
-  --accent: hsl(210, 40%, 96%);
-  --accent-foreground: hsl(222, 47%, 11%);
-  --destructive: hsl(0, 84%, 60%);
-  --destructive-foreground: hsl(210, 40%, 98%);
-  --ring: hsl(221, 83%, 53%);
-  --radius: 0.5rem;
-  --chart-1: hsl(221, 83%, 53%);
-  --chart-2: hsl(158, 64%, 52%);
-  --chart-3: hsl(45, 93%, 60%);
-  --chart-4: hsl(348, 83%, 47%);
-  --chart-5: hsl(280, 65%, 60%);
-}
-
-/* Background variables */
-
-/* Dynamic Background System */
-:root {
-  --background-image: url('/cyberpunk-dream.png');
-  --background-name: "Cyberpunk Dream";
-}
-
-/* Core theme backgrounds - simplified */
-.liquid-glass-theme {
-  background: var(--background-image) center center / cover fixed !important;
-  min-height: 100vh !important;
-  position: relative;
-  overflow-x: hidden;
-}
-
-/* Category-specific background styling */
-.bg-cyberpunk {
-  background-color: #1a0a2e !important;
-}
-
-.bg-nature {
-  background-color: #2d3748 !important;
-}
-
-.bg-abstract {
-  background-color: #1a202c !important;
-}
-
-.bg-space {
-  background-color: #0f0f23 !important;
-}
-
-.bg-minimal {
-  background-color: #f7fafc !important;
-}
-
-/* Body stays transparent */
-.liquid-glass-theme body {
-  background: transparent !important;
-  position: relative;
-  overflow-x: hidden;
-}
-
-/* MAXIMUM TRANSPARENCY GLASSMORPHISM */
-.liquid-glass-theme .glass-droplet {
-  background: rgba(255, 255, 255, 0.01) !important;
-  backdrop-filter: blur(60px) saturate(300%) brightness(130%) contrast(110%) !important;
-  -webkit-backdrop-filter: blur(60px) saturate(300%) brightness(130%) contrast(110%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 20px !important;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    0 1px 0 rgba(255, 255, 255, 0.02) !important;
-  position: relative;
-  overflow: hidden;
-}
-
-.liquid-glass-theme .glass-button {
-  background: rgba(255, 255, 255, 0.01) !important;
-  backdrop-filter: blur(50px) saturate(250%) brightness(125%) contrast(110%) !important;
-  -webkit-backdrop-filter: blur(50px) saturate(250%) brightness(125%) contrast(110%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 15px !important;
-  box-shadow: 
-    0 6px 24px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
-}
-
-/* TEXT VISIBILITY */
-.liquid-glass-theme h1:not(.text-green-600):not(.text-red-600):not(.text-emerald-600):not(.text-orange-600):not(.text-blue-600):not(.text-blue-700):not(.text-blue-900):not(.text-emerald-900):not(.text-amber-600):not(.text-slate-600),
-.liquid-glass-theme h2:not(.text-green-600):not(.text-red-600):not(.text-emerald-600):not(.text-orange-600):not(.text-blue-600):not(.text-blue-700):not(.text-blue-900):not(.text-emerald-900):not(.text-amber-600):not(.text-slate-600),
-.liquid-glass-theme h3:not(.text-green-600):not(.text-red-600):not(.text-emerald-600):not(.text-orange-600):not(.text-blue-600):not(.text-blue-700):not(.text-blue-900):not(.text-emerald-900):not(.text-amber-600):not(.text-slate-600),
-.liquid-glass-theme p:not(.text-green-600):not(.text-red-600):not(.text-emerald-600):not(.text-orange-600):not(.text-blue-600):not(.text-blue-700):not(.text-blue-900):not(.text-emerald-900):not(.text-amber-600):not(.text-slate-600),
-.liquid-glass-theme span:not(.text-green-600):not(.text-red-600):not(.text-emerald-600):not(.text-orange-600):not(.text-blue-600):not(.text-blue-700):not(.text-blue-900):not(.text-emerald-900):not(.text-amber-600):not(.text-slate-600):not([class*="bg-"]) {
-  color: white;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
-}
-
-.liquid-glass-theme .gradient-text {
-  background: transparent !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  text-shadow: none !important;
-}
-
-/* Glass reflection removed for pure transparency */
-
-/* Hover removed for pure glassmorphism */
-
-.liquid-glass-theme .glass-button:hover {
-  background: rgba(255, 255, 255, 0.07) !important;
-  backdrop-filter: blur(50px) saturate(250%) brightness(125%) !important;
-  -webkit-backdrop-filter: blur(50px) saturate(250%) brightness(125%) !important;
-  transform: translateY(-2px) !important;
-}
-
-/* Content positioning above glass effects */
-.liquid-glass-theme .glass-droplet > *,
-.liquid-glass-theme .glass-button > * {
-  position: relative;
-  z-index: 2;
-}
-
-/* Background animation removed for glassmorphism */
-
-/* Canyon shimmer animation removed */
-
-/* Complex animation removed for glassmorphism */
-
-/* Liquid Glass Theme Variables */
-.liquid-glass-theme {
-  --background: transparent;
-  --foreground: hsl(220, 40%, 15%);
-  --muted: transparent;
-  --muted-foreground: hsl(220, 30%, 45%);
-  --popover: transparent;
-  --popover-foreground: hsl(220, 40%, 15%);
-  --card: transparent;
-  --card-foreground: hsl(220, 40%, 15%);
-  --border: transparent;
-  --input: transparent;
-  --primary: hsl(270, 80%, 45%);
-  --primary-foreground: hsl(0, 0%, 100%);
-  --secondary: hsla(220, 20%, 90%, 0.6);
-  --secondary-foreground: hsl(220, 40%, 15%);
-  --accent: hsla(270, 40%, 92%, 0.6);
-  --accent-foreground: hsl(220, 40%, 15%);
-  --destructive: hsl(0, 75%, 50%);
-  --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(270, 80%, 65%);
-  --radius: 1rem;
-  --chart-1: hsl(270, 80%, 65%);
-  --chart-2: hsl(195, 80%, 60%);
-  --chart-3: hsl(45, 90%, 65%);
-  --chart-4: hsl(320, 80%, 65%);
-  --chart-5: hsl(160, 70%, 60%);
-}
-
-
-
-
-
-/* Essential theme overrides - handled above */
-
-.liquid-glass-theme .gradient-text {
-  background: transparent !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  text-shadow: none !important;
 }
 
 /* Progress Bar Components */
@@ -328,21 +113,40 @@ body {
   box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
 }
 
-/* Default theme overrides for progress indicators */
-.default-theme .progress-bar {
-  background: #e5e7eb !important;
+/* Financial indicator colors */
+.text-green-600 {
+  color: #059669 !important;
 }
 
-.default-theme .progress-fill {
-  background: linear-gradient(90deg, #10b981, #059669) !important;
+.text-red-600 {
+  color: #dc2626 !important;
 }
 
-.default-theme .glass-icon {
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+.text-green-800 {
+  color: #166534 !important;
 }
 
-/* Essential animations only */
+.text-red-800 {
+  color: #991b1b !important;
+}
+
+.text-emerald-600 {
+  color: #059669 !important;
+}
+
+.text-orange-600 {
+  color: #ea580c !important;
+}
+
+.text-blue-600 {
+  color: #2563eb !important;
+}
+
+.text-amber-600 {
+  color: #d97706 !important;
+}
+
+/* Essential animations */
 @keyframes ripple {
   0% {
     transform: scale(0);
@@ -351,40 +155,5 @@ body {
   100% {
     transform: scale(4);
     opacity: 0;
-  }
-}
-
-.liquid-glass-theme .ripple {
-  position: absolute;
-  border-radius: 50%;
-  background: hsla(270, 80%, 65%, 0.6);
-  transform: scale(0);
-  animation: ripple 0.6s linear;
-}
-
-/* Background categories */
-.bg-cyberpunk {
-  background-color: #1a0a2e !important;
-}
-
-.bg-nature {
-  background-color: #2d3748 !important;
-}
-
-.bg-abstract {
-  background-color: #1a202c !important;
-}
-
-.bg-space {
-  background-color: #0f0f23 !important;
-}
-
-.bg-minimal {
-  background-color: #f7fafc !important;
-}
-
-@layer utilities {
-  .gradient-primary {
-    background: transparent !important;
   }
 }
