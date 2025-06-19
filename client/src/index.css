@@ -318,6 +318,46 @@
   text-shadow: none !important;
 }
 
+/* Progress Bar Components */
+.progress-bar {
+  background: #e5e7eb;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-fill {
+  background: linear-gradient(90deg, #10b981, #059669);
+  transition: width 0.7s ease-out;
+}
+
+.glass-icon {
+  position: relative;
+  z-index: 1;
+}
+
+.glow-on-hover {
+  transition: all 0.3s ease;
+}
+
+.glow-on-hover:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+}
+
+/* Default theme overrides for progress indicators */
+.default-theme .progress-bar {
+  background: #e5e7eb !important;
+}
+
+.default-theme .progress-fill {
+  background: linear-gradient(90deg, #10b981, #059669) !important;
+}
+
+.default-theme .glass-icon {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
 /* Essential animations only */
 @keyframes ripple {
   0% {
