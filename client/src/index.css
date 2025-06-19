@@ -6,7 +6,14 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Dynamic background system using CSS custom properties */
+/* Default theme - clean white background */
+.default-theme body {
+  background: hsl(0, 0%, 100%) !important;
+  background-color: hsl(0, 0%, 100%) !important;
+  background-image: none !important;
+}
+
+/* Liquid Glass theme - dynamic background system */
 .liquid-glass-theme body {
   background-image: var(--background-image, url('/cyberpunk-dream.png'));
   background-position: center center;
@@ -15,11 +22,6 @@
   background-attachment: fixed;
   background-color: #1a0a2e;
   transition: background-image 0.5s ease-in-out;
-}
-
-.default-theme body {
-  background: hsl(0, 0%, 100%);
-  background-color: hsl(0, 0%, 100%);
 }
 
 /* Glass elements only for Liquid Glass theme */
@@ -344,11 +346,18 @@ body .liquid-glass-theme div.background-thumbnail[data-background-thumbnail="tru
   --background-name: "Cyberpunk Dream";
 }
 
+/* Only apply dynamic background to liquid glass theme */
 .liquid-glass-theme {
   background: var(--background-image) center center / cover fixed !important;
   min-height: 100vh !important;
   position: relative;
   overflow-x: hidden;
+}
+
+/* Ensure default theme stays clean */
+.default-theme {
+  background: hsl(0, 0%, 100%) !important;
+  background-image: none !important;
 }
 
 /* Category-specific background styling */
