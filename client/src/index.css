@@ -244,11 +244,29 @@
   --chart-5: hsl(280, 65%, 60%);
 }
 
-/* SELECTIVE BACKGROUND OVERRIDE - Preserve Glass Effects */
-.liquid-glass-theme *:not(.glass-droplet):not(.glass-morphism):not(.apple-glass):not(.card):not([role="button"]):not(button) {
+/* SELECTIVE BACKGROUND OVERRIDE - Preserve Glass Effects and UI Components */
+.liquid-glass-theme *:not(.glass-droplet):not(.glass-morphism):not(.apple-glass):not(.card):not([role="button"]):not(button):not([role="tooltip"]):not([data-radix-popper-content-wrapper]):not([data-state]):not(.bg-popover) {
   background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
+}
+
+/* Ensure tooltips maintain proper backgrounds in both themes */
+.default-theme [role="tooltip"],
+.default-theme [data-radix-popper-content-wrapper],
+.default-theme .bg-popover {
+  background: hsl(var(--popover)) !important;
+  background-color: hsl(var(--popover)) !important;
+}
+
+/* Liquid glass theme tooltip styling */
+.liquid-glass-theme [role="tooltip"],
+.liquid-glass-theme [data-radix-popper-content-wrapper] {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(12px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(120%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Override common problem classes */
