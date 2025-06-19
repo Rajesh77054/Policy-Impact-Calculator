@@ -1,6 +1,5 @@
 import { Link } from "wouter";
 import LandingHero from "@/components/landing-hero";
-import ThemeSelector from "@/components/theme-selector";
 import BackgroundSelector from "@/components/background-selector";
 import { Shield, CheckCircle, BookOpen } from "lucide-react";
 import { useTheme } from "@/contexts/theme-context";
@@ -38,7 +37,6 @@ export default function Home() {
                 </div>
               </div>
               {isLiquidGlass && <BackgroundSelector />}
-              <ThemeSelector />
             </div>
           </div>
         </div>

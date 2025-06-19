@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import ResultsDashboard from "@/components/results-dashboard";
-import ThemeSelector from "@/components/theme-selector";
+
 import { Button } from "@/components/ui/button";
 import { Shield, CheckCircle, ArrowLeft } from "lucide-react";
 
@@ -57,7 +57,6 @@ export default function Results() {
                   <span className="text-sm font-medium">No Registration Required</span>
                 </div>
               </div>
-              <ThemeSelector />
             </div>
           </div>
         </div>

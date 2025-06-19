@@ -1,29 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-@import './default-theme.css';
-@import './glassmorphism-consolidated.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Dynamic background system */
-.liquid-glass-theme {
-  background-image: var(--background-image, url('/cyberpunk-dream.png'));
-  background-position: center center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-color: #1a0a2e;
-  transition: background-image 0.5s ease-in-out;
+/* Simple background system */
+body {
+  background-color: #ffffff;
   min-height: 100vh;
-  position: relative;
-  overflow-x: hidden;
-}
-
-/* Background thumbnail exception */
-.liquid-glass-theme .background-thumbnail {
-  background-image: inherit !important;
-  backdrop-filter: none !important;
 }
 
 @layer base {

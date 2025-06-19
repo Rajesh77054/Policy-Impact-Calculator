@@ -1,6 +1,5 @@
 import { Link } from "wouter";
 import ThemeDemo from "@/components/theme-demo";
-import ThemeSelector from "@/components/theme-selector";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -24,7 +23,6 @@ export default function ThemeDemoPage() {
                   <span className="hidden sm:inline">Back to Home</span>
                 </Button>
               </Link>
-              <ThemeSelector />
             </div>
           </div>
         </div>

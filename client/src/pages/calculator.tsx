@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import ProgressBar from "@/components/progress-bar";
-import ThemeSelector from "@/components/theme-selector";
+
 import LocationStep from "@/components/form-steps/location-step";
 import DemographicsStep from "@/components/form-steps/demographics-step";
 import EmploymentStep from "@/components/form-steps/employment-step";
@@ -214,7 +214,6 @@ export default function Calculator() {
               </div>
               <h1 className="text-xl font-semibold text-foreground">Policy Impact Calculator</h1>
             </div>
-            <ThemeSelector />
           </div>
         </div>
       </header>
