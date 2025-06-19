@@ -182,13 +182,15 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
                 <CardTitle className="text-lg font-semibold">Tax Impact Timeline Comparison</CardTitle>
                 <Tooltip>
                   <TooltipTrigger>
-                    <div 
-                      className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 px-3 p-0 h-auto cursor-pointer"
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="p-0 h-auto"
                       onClick={() => setOpenTaxModal(true)}
                     >
                       <Info className="w-4 h-4 mr-1" />
                       How we calculate this
-                    </div>
+                    </Button>
                   </TooltipTrigger>
                   <TooltipContent className="max-w-xs">
                     <p className="text-xs">Tax impact over time under Current Law vs. Proposed Bill scenarios</p>
@@ -287,13 +289,15 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
                 <CardTitle className="text-lg font-semibold">Healthcare Cost Scenario Comparison</CardTitle>
                 <Tooltip>
                   <TooltipTrigger>
-                    <div 
-                      className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 px-3 p-0 h-auto cursor-pointer"
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="p-0 h-auto"
                       onClick={() => setOpenHealthcareModal(true)}
                     >
                       <Info className="w-4 h-4 mr-1" />
                       Learn more
-                    </div>
+                    </Button>
                   </TooltipTrigger>
                   <TooltipContent className="max-w-xs">
                     <p className="text-xs">Annual healthcare costs under Current Law vs. Proposed Bill scenarios</p>
