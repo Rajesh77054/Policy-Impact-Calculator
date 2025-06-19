@@ -22,11 +22,7 @@
   background-color: hsl(0, 0%, 100%);
 }
 
-/* Nuclear override for glass elements - Match Default theme's crisp glass effect */
-.hero-glass-card,
-.glass-droplet,
-.glass-button,
-.apple-glass-card,
+/* Glass elements only for Liquid Glass theme */
 .liquid-glass-theme .hero-glass-card,
 .liquid-glass-theme .glass-droplet,
 .liquid-glass-theme .glass-button,
@@ -39,24 +35,53 @@
   border: 1px solid rgba(255, 255, 255, 0.18) !important;
 }
 
+/* Default theme - preserve original UI without glass effects */
+.default-theme .hero-glass-card,
+.default-theme .glass-droplet,
+.default-theme .glass-button,
+.default-theme .apple-glass-card {
+  background: hsl(0, 0%, 100%) !important;
+  background-color: hsl(0, 0%, 100%) !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid hsl(214, 32%, 91%) !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+}
+
 /* Exception for background selector thumbnails - allow background images */
 .liquid-glass-theme [data-background-thumbnail],
 .liquid-glass-theme .background-thumbnail {
   background-image: unset !important;
 }
 
-/* Override any Tailwind background utilities on glass elements */
-.hero-glass-card[class*="bg-"],
-.glass-droplet[class*="bg-"],
-.glass-button[class*="bg-"],
-.apple-glass-card[class*="bg-"],
-button.apple-glass-card,
-button.apple-glass-card:hover {
+/* Override Tailwind background utilities only for Liquid Glass theme */
+.liquid-glass-theme .hero-glass-card[class*="bg-"],
+.liquid-glass-theme .glass-droplet[class*="bg-"],
+.liquid-glass-theme .glass-button[class*="bg-"],
+.liquid-glass-theme .apple-glass-card[class*="bg-"],
+.liquid-glass-theme button.apple-glass-card,
+.liquid-glass-theme button.apple-glass-card:hover {
   background: rgba(255, 255, 255, 0.12) !important;
   background-color: rgba(255, 255, 255, 0.12) !important;
   backdrop-filter: blur(16px) saturate(120%) !important;
   -webkit-backdrop-filter: blur(16px) saturate(120%) !important;
   border: 1px solid rgba(255, 255, 255, 0.18) !important;
+}
+
+/* Default theme - preserve original Tailwind styling */
+.default-theme .hero-glass-card[class*="bg-"],
+.default-theme .glass-droplet[class*="bg-"],
+.default-theme .glass-button[class*="bg-"],
+.default-theme .apple-glass-card[class*="bg-"],
+.default-theme button.apple-glass-card,
+.default-theme button.apple-glass-card:hover {
+  background: unset !important;
+  background-color: unset !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: unset !important;
+  box-shadow: unset !important;
 }
 
 /* Exception for background thumbnails - exclude from glass overrides */
@@ -118,7 +143,7 @@ body .liquid-glass-theme div.background-thumbnail[data-background-thumbnail="tru
   display: none !important;
 }
 
-/* GLASSMORPHISM CARDS - Match Default theme's crisp glass effect */
+/* GLASSMORPHISM CARDS - Only for Liquid Glass theme */
 .liquid-glass-theme .glass-droplet {
   background: rgba(255, 255, 255, 0.12) !important;
   backdrop-filter: blur(16px) saturate(120%) !important;
@@ -137,6 +162,26 @@ body .liquid-glass-theme div.background-thumbnail[data-background-thumbnail="tru
   -webkit-backdrop-filter: blur(16px) saturate(120%) !important;
   border: 1px solid rgba(255, 255, 255, 0.18) !important;
   border-radius: 12px !important;
+}
+
+/* Default theme - remove all glass effects */
+.default-theme .glass-droplet {
+  background: hsl(0, 0%, 100%) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid hsl(214, 32%, 91%) !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+  position: relative !important;
+}
+
+.default-theme .glass-button {
+  background: hsl(0, 0%, 100%) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid hsl(214, 32%, 91%) !important;
+  border-radius: 0.375rem !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
 }
 
 @layer base {
