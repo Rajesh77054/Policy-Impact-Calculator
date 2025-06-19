@@ -234,11 +234,11 @@
 }
 
 /* TEXT VISIBILITY */
-.liquid-glass-theme h1:not([class*="text-"]),
-.liquid-glass-theme h2:not([class*="text-"]),
-.liquid-glass-theme h3:not([class*="text-"]),
-.liquid-glass-theme p:not([class*="text-"]),
-.liquid-glass-theme span:not([class*="text-"]):not([class*="bg-"]) {
+.liquid-glass-theme h1:not(.text-green-600):not(.text-red-600):not(.text-emerald-600):not(.text-orange-600):not(.text-blue-600):not(.text-blue-700):not(.text-blue-900):not(.text-emerald-900):not(.text-amber-600):not(.text-slate-600),
+.liquid-glass-theme h2:not(.text-green-600):not(.text-red-600):not(.text-emerald-600):not(.text-orange-600):not(.text-blue-600):not(.text-blue-700):not(.text-blue-900):not(.text-emerald-900):not(.text-amber-600):not(.text-slate-600),
+.liquid-glass-theme h3:not(.text-green-600):not(.text-red-600):not(.text-emerald-600):not(.text-orange-600):not(.text-blue-600):not(.text-blue-700):not(.text-blue-900):not(.text-emerald-900):not(.text-amber-600):not(.text-slate-600),
+.liquid-glass-theme p:not(.text-green-600):not(.text-red-600):not(.text-emerald-600):not(.text-orange-600):not(.text-blue-600):not(.text-blue-700):not(.text-blue-900):not(.text-emerald-900):not(.text-amber-600):not(.text-slate-600),
+.liquid-glass-theme span:not(.text-green-600):not(.text-red-600):not(.text-emerald-600):not(.text-orange-600):not(.text-blue-600):not(.text-blue-700):not(.text-blue-900):not(.text-emerald-900):not(.text-amber-600):not(.text-slate-600):not([class*="bg-"]) {
   color: white;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
 }
