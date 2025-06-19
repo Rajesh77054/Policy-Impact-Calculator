@@ -58,7 +58,8 @@
 }
 
 .liquid-glass-theme .glass-button,
-.liquid-glass-theme .apple-glass-button {
+.liquid-glass-theme .apple-glass-button,
+.liquid-glass-theme button {
   background: rgba(255, 255, 255, 0.1) !important;
   backdrop-filter: blur(20px) saturate(120%) brightness(105%) !important;
   -webkit-backdrop-filter: blur(20px) saturate(120%) brightness(105%) !important;
@@ -70,6 +71,16 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
   cursor: pointer !important;
   transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+/* Glass effect borders for Liquid Glass theme only */
+.liquid-glass-theme .glass-refractive-border,
+.liquid-glass-theme .glass-edge-glow {
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    0 1px 4px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
 }
 
 .liquid-glass-theme .glass-droplet {

@@ -155,10 +155,55 @@ html body .default-theme button[class*="bg-slate"] {
 
 /* Force visible theme button with Tailwind class overrides */
 html body .default-theme button[class*="slate-800"],
-html body .default-theme button[class*="slate-600"] {
+html body .default-theme button[class*="slate-600"],
+html body .default-theme .theme-selector-button {
   background: hsl(var(--primary)) !important;
+  background-color: hsl(var(--primary)) !important;
+  background-image: none !important;
+  border: 1px solid hsl(var(--border)) !important;
   border-color: hsl(var(--border)) !important;
   color: hsl(var(--primary-foreground)) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Theme button icon and text visibility with maximum specificity */
+html body .default-theme .theme-selector-button svg,
+html body .default-theme .theme-selector-button span,
+html body .default-theme button[data-radix-dropdown-menu-trigger] svg,
+html body .default-theme button[data-radix-dropdown-menu-trigger] span,
+html body .default-theme [role="button"] svg,
+html body .default-theme [role="button"] span {
+  color: hsl(var(--primary-foreground)) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  fill: hsl(var(--primary-foreground)) !important;
+  stroke: hsl(var(--primary-foreground)) !important;
+}
+
+/* Force all button elements in header to be visible */
+html body .default-theme header button,
+html body .default-theme nav button,
+html body .default-theme .theme-selector-button,
+html body .default-theme button[class*="theme"] {
+  background: hsl(var(--primary)) !important;
+  background-color: hsl(var(--primary)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: inline-flex !important;
+}
+
+/* Theme button hover state */
+html body .default-theme .theme-selector-button:hover {
+  background: hsl(var(--primary)) !important;
+  background-color: hsl(var(--primary)) !important;
+  border-color: hsl(var(--border)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+  opacity: 0.9 !important;
 }
 
 /* Target all Radix dropdown components */
