@@ -146,10 +146,25 @@ body {
   color: #d97706 !important;
 }
 
-/* Mobile tabs spacing fix */
+/* Mobile tabs spacing and scrolling fix */
 @media (max-width: 640px) {
   [data-radix-tabs-list] {
     margin-bottom: 1.5rem !important;
+    display: flex !important;
+    grid-template-columns: none !important;
+    overflow-x: auto !important;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+  }
+  
+  [data-radix-tabs-list]::-webkit-scrollbar {
+    display: none; /* WebKit */
+  }
+  
+  [data-radix-tabs-trigger] {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    min-width: fit-content !important;
   }
   
   [data-radix-tabs-content] {

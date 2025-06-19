@@ -86,12 +86,12 @@ export default function MethodologyModal({ trigger }: MethodologyModalProps) {
           </div>
         ) : methodologyData ? (
           <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1 mb-4 sm:mb-6">
-              <TabsTrigger value="overview" className="text-xs sm:text-sm">Overview</TabsTrigger>
-              <TabsTrigger value="calculations" className="text-xs sm:text-sm">Your Results</TabsTrigger>
-              <TabsTrigger value="sources" className="text-xs sm:text-sm">Data Sources</TabsTrigger>
-              <TabsTrigger value="methodology" className="text-xs sm:text-sm">Methods</TabsTrigger>
-              <TabsTrigger value="limitations" className="text-xs sm:text-sm col-span-2 sm:col-span-1">Limitations</TabsTrigger>
+            <TabsList className="w-full mb-4 sm:mb-6 flex sm:grid sm:grid-cols-3 lg:grid-cols-5 gap-1 overflow-x-auto sm:overflow-x-visible">
+              <TabsTrigger value="overview" className="text-xs sm:text-sm whitespace-nowrap flex-shrink-0">Overview</TabsTrigger>
+              <TabsTrigger value="calculations" className="text-xs sm:text-sm whitespace-nowrap flex-shrink-0">Your Results</TabsTrigger>
+              <TabsTrigger value="sources" className="text-xs sm:text-sm whitespace-nowrap flex-shrink-0">Data Sources</TabsTrigger>
+              <TabsTrigger value="methodology" className="text-xs sm:text-sm whitespace-nowrap flex-shrink-0">Methods</TabsTrigger>
+              <TabsTrigger value="limitations" className="text-xs sm:text-sm whitespace-nowrap flex-shrink-0">Limitations</TabsTrigger>
             </TabsList>
 
             <TabsContent value="overview" className="space-y-4">
