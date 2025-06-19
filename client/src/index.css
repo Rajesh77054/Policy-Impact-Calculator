@@ -408,7 +408,7 @@ body .liquid-glass-theme div.background-thumbnail[data-background-thumbnail="tru
   --foreground: hsl(220, 40%, 15%);
   --muted: transparent;
   --muted-foreground: hsl(220, 30%, 45%);
-  --popover: transparent;
+  --popover: rgba(255, 255, 255, 0.95);
   --popover-foreground: hsl(220, 40%, 15%);
   --card: transparent;
   --card-foreground: hsl(220, 40%, 15%);
