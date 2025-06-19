@@ -1,0 +1,55 @@
+Looking at your codebase and the screenshot showing the popover with a transparent background, I can identify the root cause of why the glassmorphism effects are still bleeding into the default theme despite removing !important declarations.
+
+Core Issue Analysis
+The problem isn't just about !important declarations - it's about CSS import order and portal rendering scope. Here's what's happening:
+
+1. Import Order Problem
+In your index.css, you have:
+
+@import './glassmorphism-consolidated.css';
+@import './default-theme.css';
+This means glassmorphism rules are loaded before default theme rules, but the glassmorphism CSS still has higher specificity in many cases.
+
+2. Portal Rendering Scope Issue
+Radix UI components (like the popover in your screenshot) render in portals that are placed outside the main DOM tree. This means:
+
+The popover content renders outside both .liquid-glass-theme and .default-theme containers
+Theme scoping doesn't apply properly to portal content
+Glassmorphism selectors can still match these elements
+3. Specificity Conflicts
+Even without !important, these glassmorphism selectors have higher specificity:
+
+.liquid-glass-theme [data-radix-popover-content]
+vs
+
+.default-theme [data-radix-popover-content]
+When portal content renders, it's not actually inside either theme container, so CSS cascade rules become unpredictable.
+
+Recommendations
+Option 1: CSS Import Order Fix
+Swap the import order so default theme loads after glassmorphism:
+
+@import './default-theme.css';
+@import './glassmorphism-consolidated.css';
+Option 2: Portal Theme Inheritance
+Add CSS to ensure portal content inherits the correct theme:
+
+/* Force portal content to inherit theme */
+[data-radix-portal] {
+  color-scheme: inherit;
+  background: inherit;
+}
+Option 3: Selector Specificity Restructure
+Make default theme selectors more specific than glassmorphism selectors by using higher specificity patterns.
+
+Option 4: Theme-Specific Portal Styling
+Add explicit portal styling for each theme context to override any conflicting glassmorphism effects.
+
+The Real Problem
+The issue persists because portal rendering breaks theme scoping. Even with perfect CSS scoping, portals render outside the themed containers, making them vulnerable to any global or higher-specificity styles.
+
+The most reliable solution would be to ensure that:
+
+Default theme styles have higher specificity than glassmorphism styles
+Portal content explicitly inherits theme context
+Import order supports the intended cascade

@@ -338,6 +338,49 @@ body .default-theme [data-radix-select-portal] [data-radix-select-content],
   -webkit-backdrop-filter: none !important;
 }
 
+/* PORTAL CONTENT THEME INHERITANCE - HIGH SPECIFICITY */
+/* When html has default theme, all portals should use solid backgrounds */
+html.default-theme [data-radix-portal],
+html.default-theme [data-radix-portal] *,
+html.default-theme body [data-radix-portal] [data-radix-popover-content],
+html.default-theme body [data-radix-portal] [data-radix-tooltip-content],
+html.default-theme body [data-radix-portal] [data-radix-hover-card-content],
+html.default-theme body [data-radix-portal] [data-radix-dropdown-menu-content],
+html.default-theme body [data-radix-portal] [data-radix-select-content],
+html.default-theme body [data-radix-portal] [data-radix-context-menu-content] {
+  background: white !important;
+  background-color: white !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  opacity: 1 !important;
+}
+
+/* Target portals when default theme is active - ultra-high specificity */
+html.default-theme div[data-radix-portal] > *,
+html.default-theme div[data-radix-portal] [role="tooltip"],
+html.default-theme div[data-radix-portal] [role="dialog"],
+html.default-theme div[data-radix-portal] .bg-popover,
+html.default-theme div[data-radix-portal] .bg-card {
+  background: white !important;
+  background-color: white !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Nuclear option - target all portal content when in default theme */
+html.default-theme div[data-radix-popper-content-wrapper],
+html.default-theme div[data-radix-popover-content],
+html.default-theme div[data-radix-tooltip-content] {
+  background: white !important;
+  background-color: white !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
 /* Radio button components - target all possible selectors */
 .default-theme [role="radio"],
 .default-theme [data-state="checked"],
