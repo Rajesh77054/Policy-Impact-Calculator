@@ -308,6 +308,36 @@ body .default-theme [data-radix-select-portal] [data-radix-select-content],
   -webkit-backdrop-filter: none !important;
 }
 
+/* Comprehensive Popover targeting for all Radix components */
+.default-theme [data-radix-popover-content],
+.default-theme [data-radix-tooltip-content],
+.default-theme [data-radix-hover-card-content],
+.default-theme [data-radix-dropdown-menu-content],
+.default-theme [data-radix-context-menu-content],
+.default-theme [data-radix-navigation-menu-viewport],
+.default-theme [role="dialog"],
+.default-theme [role="tooltip"],
+.default-theme .bg-popover,
+.default-theme .bg-card {
+  background: white !important;
+  background-color: white !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  opacity: 1 !important;
+}
+
+/* Force solid backgrounds on all overlay elements */
+.default-theme [data-state="open"][data-radix-popover-content],
+.default-theme [data-state="delayed-open"][data-radix-tooltip-content] {
+  background: white !important;
+  background-color: white !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
 /* Radio button components - target all possible selectors */
 .default-theme [role="radio"],
 .default-theme [data-state="checked"],
