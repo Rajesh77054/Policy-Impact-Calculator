@@ -208,7 +208,7 @@
   background-color: transparent !important;
 }
 
-.liquid-glass-theme [class*="bg-"]:not([role="tooltip"]):not([data-radix-popper-content-wrapper]):not([data-radix-dropdown-content]):not([data-radix-select-content]):not([data-radix-context-menu-content]):not([data-radix-hover-card-content]):not([data-radix-navigation-menu-viewport]) {
+.liquid-glass-theme [class*="bg-"]:not([role="tooltip"]):not([data-radix-popper-content-wrapper]):not([data-radix-dropdown-content]):not([data-radix-select-content]):not([data-radix-context-menu-content]):not([data-radix-hover-card-content]):not([data-radix-navigation-menu-viewport]):not(.bg-popover) {
   background: rgba(255, 255, 255, 0.01) !important;
   background-image: none !important;
 }

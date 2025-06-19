@@ -227,13 +227,57 @@ html body .default-theme .theme-selector-button:hover {
   visibility: visible !important;
 }
 
-/* Override bg-popover class specifically */
-.default-theme .bg-popover {
-  background: hsl(var(--popover)) !important;
-  background-color: hsl(var(--popover)) !important;
+/* Override bg-popover class specifically with maximum specificity */
+html body .default-theme .bg-popover,
+html body .default-theme [data-radix-select-content],
+html body .default-theme [data-radix-select-viewport],
+html body .default-theme .select-content {
+  background: white !important;
+  background-color: white !important;
   background-image: none !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Force all Select component parts to solid styling */
+html body .default-theme [data-radix-select-item],
+html body .default-theme .select-item {
+  background: white !important;
+  color: hsl(var(--foreground)) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+html body .default-theme [data-radix-select-item]:hover,
+html body .default-theme .select-item:hover {
+  background: hsl(var(--accent)) !important;
+  color: hsl(var(--accent-foreground)) !important;
+}
+
+/* Additional Select component targeting with ultra-high specificity */
+html[lang] body .default-theme [data-radix-select-portal] [data-radix-select-content],
+html[lang] body .default-theme [data-radix-select-portal] .bg-popover,
+html[lang] body .default-theme div[data-radix-select-content],
+html[lang] body .default-theme div[role="listbox"] {
+  background: white !important;
+  background-color: white !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Force remove any remaining glass effects from Select components */
+html[lang] body .default-theme * [data-radix-select-content] *,
+html[lang] body .default-theme * .bg-popover * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background-image: none !important;
 }
 
 /* Radio button components - target all possible selectors */
