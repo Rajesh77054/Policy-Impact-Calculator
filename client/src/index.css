@@ -238,7 +238,7 @@
 .liquid-glass-theme h2,
 .liquid-glass-theme h3,
 .liquid-glass-theme p,
-.liquid-glass-theme span {
+.liquid-glass-theme span:not(.text-green-600):not(.text-red-600):not(.text-green-800):not(.text-red-800):not(.text-emerald-600):not(.text-orange-600):not(.text-blue-600):not(.text-blue-700):not(.text-blue-900):not(.text-emerald-900) {
   color: white !important;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8) !important;
 }
@@ -308,15 +308,7 @@
 
 
 
-/* Essential theme overrides */
-.liquid-glass-theme h1,
-.liquid-glass-theme h2,
-.liquid-glass-theme h3,
-.liquid-glass-theme p,
-.liquid-glass-theme span {
-  color: white !important;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8) !important;
-}
+/* Essential theme overrides - handled above */
 
 .liquid-glass-theme .gradient-text {
   background: transparent !important;

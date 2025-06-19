@@ -240,7 +240,7 @@ html body .default-theme .select-item:hover {
 html[lang] body .default-theme [data-radix-select-portal] [data-radix-select-content],
 html[lang] body .default-theme [data-radix-select-portal] .bg-popover,
 html[lang] body .default-theme div[data-radix-select-content],
-html[lang] body .default-theme div[role="listbox"] {
+html[lang] body div[role="listbox"] {
   background: white !important;
   background-color: white !important;
   background-image: none !important;
@@ -479,7 +479,19 @@ html body .default-theme [aria-describedby] {
   text-shadow: none !important;
 }
 
-/* Default theme variables */
+/* Default theme styling */
+.default-theme {
+  /* Ensure financial indicator colors are preserved */
+}
+
+.default-theme .text-green-600,
+.default-theme .text-red-600,
+.default-theme .text-green-800,
+.default-theme .text-red-800,
+.default-theme .text-emerald-600 {
+  color: inherit !important;
+}
+
 .default-theme {
   --background: hsl(0, 0%, 100%);
   --foreground: hsl(222, 84%, 4.9%);
