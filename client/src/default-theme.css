@@ -442,7 +442,8 @@ html body .default-theme [aria-describedby] {
   visibility: visible !important;
 }
 
-/* Glass-named elements get solid styling in Default theme */
+/* COMPLETE GLASS ELIMINATION FOR DEFAULT THEME */
+/* Target ALL glass elements with maximum specificity */
 .default-theme .hero-glass-card,
 .default-theme .glass-droplet,
 .default-theme .glass-button,
@@ -454,16 +455,122 @@ html body .default-theme [aria-describedby] {
 .default-theme .apple-glass-adaptive,
 .default-theme .apple-glass-button,
 .default-theme .apple-glass-card,
-.default-theme .glass-morphism {
-  background: hsl(var(--card)) !important;
-  background-color: hsl(var(--card)) !important;
+.default-theme .glass-morphism,
+.default-theme .glass-primary,
+.default-theme .glass-secondary,
+.default-theme .glass-tertiary,
+.default-theme .glass-refractive-border,
+.default-theme .glass-edge-glow,
+.default-theme [class*="glass-"],
+.default-theme [class*="apple-glass"] {
+  background: white !important;
+  background-color: white !important;
   background-image: none !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
-  border: 1px solid hsl(var(--border)) !important;
+  border: 1px solid #e2e8f0 !important;
   border-radius: 0.5rem !important;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
-  color: hsl(var(--foreground)) !important;
+  color: #1e293b !important;
+  text-shadow: none !important;
+  transform: none !important;
+  transition: all 0.2s ease !important;
+}
+
+/* Override hover states for glass elements */
+.default-theme .hero-glass-card:hover,
+.default-theme .glass-droplet:hover,
+.default-theme .glass-button:hover,
+.default-theme .glass-card:hover,
+.default-theme .apple-glass:hover,
+.default-theme .apple-glass-primary:hover,
+.default-theme .apple-glass-secondary:hover,
+.default-theme .apple-glass-tertiary:hover,
+.default-theme .apple-glass-adaptive:hover,
+.default-theme .apple-glass-button:hover,
+.default-theme .apple-glass-card:hover,
+.default-theme .glass-morphism:hover,
+.default-theme .glass-primary:hover,
+.default-theme .glass-secondary:hover,
+.default-theme .glass-tertiary:hover,
+.default-theme .glass-refractive-border:hover,
+.default-theme .glass-edge-glow:hover,
+.default-theme [class*="glass-"]:hover,
+.default-theme [class*="apple-glass"]:hover {
+  background: #f8fafc !important;
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+  transform: none !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Override active states for glass elements */
+.default-theme .glass-button:active,
+.default-theme .apple-glass-button:active,
+.default-theme [class*="glass-"]:active,
+.default-theme [class*="apple-glass"]:active {
+  background: #e2e8f0 !important;
+  background-color: #e2e8f0 !important;
+  transform: none !important;
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06) !important;
+}
+
+/* PORTAL OVERRIDE SYSTEM - Target Radix UI components outside theme containers */
+/* These selectors target portal elements that escape the .default-theme wrapper */
+
+/* Default theme portal overrides with maximum specificity */
+html body:has(.default-theme) [role="tooltip"],
+html body:has(.default-theme) [data-radix-popper-content-wrapper],
+html body:has(.default-theme) [data-radix-dropdown-content],
+html body:has(.default-theme) [data-radix-select-content],
+html body:has(.default-theme) [data-radix-context-menu-content],
+html body:has(.default-theme) [data-radix-hover-card-content],
+html body:has(.default-theme) [data-radix-navigation-menu-viewport],
+html body:has(.default-theme) [data-radix-tooltip-content],
+html body:has(.default-theme) .tooltip-content,
+html body:has(.default-theme) [data-state="open"],
+html body:has(.default-theme) [data-side],
+html body:has(.default-theme) [data-align] {
+  background: white !important;
+  background-color: white !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 0.375rem !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  color: #1e293b !important;
+  text-shadow: none !important;
+}
+
+/* Target specific glass classes that might exist in portals */
+html body:has(.default-theme) [class*="glass-"],
+html body:has(.default-theme) [class*="apple-glass"],
+html body:has(.default-theme) .glass-droplet,
+html body:has(.default-theme) .glass-morphism,
+html body:has(.default-theme) .hero-glass-card {
+  background: white !important;
+  background-color: white !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+  color: #1e293b !important;
+  text-shadow: none !important;
+}
+
+/* Ensure content within portal elements follows default theme styling */
+html body:has(.default-theme) [role="tooltip"] *,
+html body:has(.default-theme) [data-radix-popper-content-wrapper] *,
+html body:has(.default-theme) [data-radix-dropdown-content] *,
+html body:has(.default-theme) [data-radix-select-content] *,
+html body:has(.default-theme) [class*="glass-"] *,
+html body:has(.default-theme) [class*="apple-glass"] * {
+  background-color: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
   text-shadow: none !important;
 }
 

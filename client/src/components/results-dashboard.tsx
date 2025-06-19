@@ -175,7 +175,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
 
         {/* Primary Hero Comparison Card */}
         <div className="mb-8">
-          <Card className="glass-droplet border-2 border-blue-200">
+          <Card className="bg-card border-2 border-blue-200 shadow-lg">
             <CardHeader className="pb-4">
               <div className="text-center">
                 <CardTitle className="text-2xl font-bold text-slate-900 mb-2">Policy Impact Comparison</CardTitle>

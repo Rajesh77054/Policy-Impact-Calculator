@@ -1,0 +1,54 @@
+I'm surprised to learn there were persisting glass element in the 'Default' theme. ARe there other instances of glass element in the Default theme pages?
+
+RH
+
+rajharrykissoon
+Assistant
+just now
+Based on my analysis of your CSS files, yes, there are still several instances where glass elements persist in the Default theme, despite your extensive override attempts.
+
+Current Glass Element Issues in Default Theme
+1. Broad Glass Class Overrides Are Incomplete
+Your default-theme.css targets many glass classes but misses some:
+
+.glass-refractive-border and .glass-edge-glow from glassmorphism-consolidated.css
+.glass-morphism variations
+Some Apple glass variants like .apple-glass-adaptive
+2. Portal Content Still Has Glass Effects
+Even with your extensive portal targeting, some Radix UI components may still inherit glassmorphism because:
+
+Portal elements render outside the theme context
+Some components use dynamic class application
+CSS specificity battles between your overrides and the glass styles
+3. Dynamic Glass Application
+Looking at your index.css, there are still some broad glass rules that could affect Default theme:
+
+The .liquid-glass-theme selectors are well-scoped, but some utility classes might bleed through
+Background gradient utilities that might still apply glass effects
+4. Component-Level Glass Persistence
+Your results dashboard and other components might still be applying glass classes programmatically through:
+
+Conditional className applications
+Dynamic theme switching logic
+Component props that add glass classes
+Key Areas to Investigate
+In Results Dashboard:
+
+Check if any components are still using glass-card, glass-droplet, or similar classes
+Look for dynamic className logic that might apply glass effects
+In Form Components:
+
+Select dropdowns, tooltips, and popovers are the most likely culprits
+These often render in portals outside your theme context
+In Navigation/Header:
+
+Theme selector button and navigation elements
+Any dropdown menus or tooltips
+Root Cause Analysis
+The main issue is that CSS specificity and portal rendering create scenarios where your Default theme overrides don't reach all elements. Glass effects can persist through:
+
+Portal Rendering: Components rendered outside the theme wrapper
+Higher Specificity: Some glassmorphism rules have higher specificity
+Dynamic Class Application: JavaScript adding glass classes after CSS loads
+Inheritance Gaps: Some nested elements not covered by your overrides
+The solution would require a more surgical approach - targeting the specific components and ensuring all glass-related classes are completely nullified with maximum CSS specificity for the Default theme context.
