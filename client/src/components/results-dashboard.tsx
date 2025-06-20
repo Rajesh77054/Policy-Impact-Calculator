@@ -745,7 +745,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
           </Button>
           <Link href="/calculator">
             <Button variant="outline" size="lg" className="px-8 py-3 w-full">
-              Start New Analysis
+              Calculate New Scenario
             </Button>
           </Link>
           <Button 

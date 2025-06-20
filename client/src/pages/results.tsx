@@ -70,7 +70,7 @@ export default function Results() {
           <Link href="/">
             <Button variant="outline" className="inline-flex items-center space-x-2">
               <ArrowLeft className="w-4 h-4" />
-              <span>Start New Analysis</span>
+              <span>Back to Home</span>
             </Button>
           </Link>
         </div>
