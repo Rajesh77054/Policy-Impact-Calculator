@@ -12,6 +12,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { MobileTooltip } from "@/components/ui/mobile-tooltip";
 
 interface PolicyChartsProps {
   results: PolicyResults;
@@ -287,22 +288,15 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div className="flex items-center space-x-1">
                 <CardTitle className="text-lg font-semibold">Healthcare Cost Scenario Comparison</CardTitle>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="p-0 h-auto"
-                      onClick={() => setOpenHealthcareModal(true)}
-                    >
-                      <Info className="w-4 h-4 mr-1" />
-                      Learn more
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent className="max-w-xs">
-                    <p className="text-xs">Annual healthcare costs under Current Law vs. Proposed Bill scenarios</p>
-                  </TooltipContent>
-                </Tooltip>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="p-0 h-auto"
+                  onClick={() => setOpenHealthcareModal(true)}
+                >
+                  <Info className="w-4 h-4 mr-1" />
+                  Learn more
+                </Button>
               </div>
               <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
                 <Heart className="w-5 h-5 text-emerald-600" />
