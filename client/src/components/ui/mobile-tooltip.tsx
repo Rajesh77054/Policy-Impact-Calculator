@@ -39,7 +39,6 @@ export function MobileTooltip({
   
   const IconComponent = icon === "help" ? HelpCircle : Info;
   
-  // For mobile, use dialog
   if (isMobile) {
     return (
       <Dialog>
@@ -63,19 +62,17 @@ export function MobileTooltip({
     );
   }
 
-  // For desktop, use tooltip with proper trigger
   return (
-    <Tooltip delayDuration={300}>
+    <Tooltip>
       <TooltipTrigger asChild>
         <button 
-          type="button"
-          className={`inline-flex items-center justify-center text-slate-400 hover:text-slate-600 cursor-help transition-colors ${className}`}
+          className={`text-slate-400 hover:text-slate-600 cursor-help transition-colors ${className}`}
           aria-label="Show help information"
         >
           <IconComponent className={iconClasses[iconSize]} />
         </button>
       </TooltipTrigger>
-      <TooltipContent side="top" className="max-w-xs z-50">
+      <TooltipContent className="max-w-xs">
         <p className="text-sm">{content}</p>
       </TooltipContent>
     </Tooltip>
