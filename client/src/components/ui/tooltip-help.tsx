@@ -11,6 +11,7 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -36,8 +37,10 @@ export function TooltipHelp({ content, className = "", title = "Help" }: Tooltip
         <DialogContent className="max-w-sm">
           <DialogHeader>
             <DialogTitle className="text-base">{title}</DialogTitle>
+            <DialogDescription className="text-sm text-slate-600 leading-relaxed">
+              {content}
+            </DialogDescription>
           </DialogHeader>
-          <p className="text-sm text-slate-600 leading-relaxed">{content}</p>
         </DialogContent>
       </Dialog>
     );

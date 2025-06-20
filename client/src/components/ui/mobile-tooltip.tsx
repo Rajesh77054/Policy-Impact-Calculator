@@ -9,6 +9,7 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -52,10 +53,10 @@ export function MobileTooltip({
         <DialogContent className="max-w-sm mx-4">
           <DialogHeader>
             <DialogTitle className="text-base leading-tight">{title}</DialogTitle>
+            <DialogDescription className="text-sm text-slate-600 leading-relaxed">
+              {content}
+            </DialogDescription>
           </DialogHeader>
-          <div className="text-sm text-slate-600 leading-relaxed">
-            {content}
-          </div>
         </DialogContent>
       </Dialog>
     );

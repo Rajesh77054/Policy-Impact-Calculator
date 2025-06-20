@@ -444,14 +444,12 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div className="flex items-center space-x-1">
                 <CardTitle className="text-lg font-semibold">Long-term Impact Comparison</CardTitle>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <HelpCircle className="w-4 h-4 text-slate-400 hover:text-slate-600" />
-                  </TooltipTrigger>
-                  <TooltipContent className="max-w-xs">
-                    <p className="text-xs">{getCalculationExplanation('timeline', results)}</p>
-                  </TooltipContent>
-                </Tooltip>
+                <MobileTooltip
+                  content={getCalculationExplanation('timeline', results)}
+                  title="Timeline Calculation"
+                  icon="help"
+                  iconSize="md"
+                />
               </div>
               <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
                 <Clock className="w-5 h-5 text-purple-600" />
