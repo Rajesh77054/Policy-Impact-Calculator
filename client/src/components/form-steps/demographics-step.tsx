@@ -85,9 +85,17 @@ export default function DemographicsStep({ formData, onComplete }: DemographicsS
                 { value: "45-64", label: "45-64" },
                 { value: "65+", label: "65+" },
               ].map((option) => (
-                <div key={option.value} className="flex items-center space-x-2 p-3 border border-slate-300 rounded-lg hover:border-primary transition-colors">
+                <div 
+                  key={option.value} 
+                  className={`flex items-center space-x-2 p-3 border-2 rounded-lg cursor-pointer transition-all duration-200 ${
+                    ageRange === option.value 
+                      ? "border-primary bg-primary/5 shadow-md" 
+                      : "border-slate-300 hover:border-primary/30 hover:bg-slate-50"
+                  }`}
+                  onClick={() => setAgeRange(option.value)}
+                >
                   <RadioGroupItem value={option.value} id={option.value} />
-                  <Label htmlFor={option.value} className="text-sm cursor-pointer">
+                  <Label htmlFor={option.value} className="text-sm cursor-pointer flex-1">
                     {option.label}
                   </Label>
                 </div>
@@ -126,9 +134,17 @@ export default function DemographicsStep({ formData, onComplete }: DemographicsS
                   description: "Unmarried with qualifying dependents",
                 },
               ].map((option) => (
-                <div key={option.value} className="flex items-center space-x-4 p-4 border border-slate-300 rounded-lg hover:border-primary transition-colors">
+                <div 
+                  key={option.value} 
+                  className={`flex items-center space-x-4 p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 ${
+                    familyStatus === option.value 
+                      ? "border-primary bg-primary/5 shadow-md" 
+                      : "border-slate-300 hover:border-primary/30 hover:bg-slate-50"
+                  }`}
+                  onClick={() => setFamilyStatus(option.value)}
+                >
                   <RadioGroupItem value={option.value} id={option.value} />
-                  <div>
+                  <div className="flex-1">
                     <Label htmlFor={option.value} className="text-sm font-medium cursor-pointer">
                       {option.title}
                     </Label>
@@ -147,15 +163,29 @@ export default function DemographicsStep({ formData, onComplete }: DemographicsS
           </div>
           <RadioGroup value={hasChildren ? "yes" : "no"} onValueChange={(value) => setHasChildren(value === "yes")}>
             <div className="grid grid-cols-2 gap-3">
-              <div className="flex items-center space-x-2 p-3 border border-slate-300 rounded-lg hover:border-primary transition-colors">
+              <div 
+                className={`flex items-center space-x-2 p-3 border-2 rounded-lg cursor-pointer transition-all duration-200 ${
+                  hasChildren 
+                    ? "border-primary bg-primary/5 shadow-md" 
+                    : "border-slate-300 hover:border-primary/30 hover:bg-slate-50"
+                }`}
+                onClick={() => setHasChildren(true)}
+              >
                 <RadioGroupItem value="yes" id="has-children-yes" />
-                <Label htmlFor="has-children-yes" className="text-sm cursor-pointer">
+                <Label htmlFor="has-children-yes" className="text-sm cursor-pointer flex-1">
                   Yes
                 </Label>
               </div>
-              <div className="flex items-center space-x-2 p-3 border border-slate-300 rounded-lg hover:border-primary transition-colors">
+              <div 
+                className={`flex items-center space-x-2 p-3 border-2 rounded-lg cursor-pointer transition-all duration-200 ${
+                  !hasChildren 
+                    ? "border-primary bg-primary/5 shadow-md" 
+                    : "border-slate-300 hover:border-primary/30 hover:bg-slate-50"
+                }`}
+                onClick={() => setHasChildren(false)}
+              >
                 <RadioGroupItem value="no" id="has-children-no" />
-                <Label htmlFor="has-children-no" className="text-sm cursor-pointer">
+                <Label htmlFor="has-children-no" className="text-sm cursor-pointer flex-1">
                   No
                 </Label>
               </div>

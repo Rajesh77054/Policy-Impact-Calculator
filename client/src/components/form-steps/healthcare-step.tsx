@@ -94,9 +94,16 @@ export default function HealthcareStep({ formData, onComplete }: HealthcareStepP
                 },
               ].map((option) => (
                 <div key={option.value}>
-                  <div className="flex items-center space-x-4 p-4 border border-slate-300 rounded-lg hover:border-primary transition-colors">
+                  <div 
+                    className={`flex items-center space-x-4 p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 ${
+                      insuranceType === option.value 
+                        ? "border-primary bg-primary/5 shadow-md" 
+                        : "border-slate-300 hover:border-primary/30 hover:bg-slate-50"
+                    }`}
+                    onClick={() => setInsuranceType(option.value)}
+                  >
                     <RadioGroupItem value={option.value} id={option.value} />
-                    <div>
+                    <div className="flex-1">
                       <Label htmlFor={option.value} className="text-sm font-medium cursor-pointer">
                         {option.title}
                       </Label>

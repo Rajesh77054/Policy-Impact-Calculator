@@ -97,9 +97,17 @@ export default function EmploymentStep({ formData, onComplete }: EmploymentStepP
                 { value: "student", label: "Student" },
                 { value: "unable", label: "Unable to work" },
               ].map((option) => (
-                <div key={option.value} className="flex items-center space-x-4 p-4 border border-slate-300 rounded-lg hover:border-primary transition-colors">
+                <div 
+                  key={option.value} 
+                  className={`flex items-center space-x-4 p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 ${
+                    employmentStatus === option.value 
+                      ? "border-primary bg-primary/5 shadow-md" 
+                      : "border-slate-300 hover:border-primary/30 hover:bg-slate-50"
+                  }`}
+                  onClick={() => setEmploymentStatus(option.value)}
+                >
                   <RadioGroupItem value={option.value} id={option.value} />
-                  <Label htmlFor={option.value} className="text-sm font-medium cursor-pointer">
+                  <Label htmlFor={option.value} className="text-sm font-medium cursor-pointer flex-1">
                     {option.label}
                   </Label>
                 </div>

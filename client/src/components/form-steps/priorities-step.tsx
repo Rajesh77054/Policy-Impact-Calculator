@@ -58,13 +58,14 @@ export default function PrioritiesStep({ formData, onComplete }: PrioritiesStepP
               return (
                 <div 
                   key={option.id} 
-                  className={`flex items-center space-x-3 p-4 border rounded-lg transition-colors ${
+                  className={`flex items-center space-x-3 p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 ${
                     isChecked 
-                      ? "border-primary bg-primary/5" 
+                      ? "border-primary bg-primary/5 shadow-md" 
                       : isDisabled 
-                        ? "border-slate-200 bg-slate-50 opacity-50" 
-                        : "border-slate-300 hover:border-primary"
+                        ? "border-slate-200 bg-slate-50 opacity-50 cursor-not-allowed" 
+                        : "border-slate-300 hover:border-primary/30 hover:bg-slate-50"
                   }`}
+                  onClick={() => !isDisabled && handlePriorityChange(option.id, !isChecked)}
                 >
                   <Checkbox
                     id={option.id}
@@ -74,7 +75,7 @@ export default function PrioritiesStep({ formData, onComplete }: PrioritiesStepP
                   />
                   <Label 
                     htmlFor={option.id} 
-                    className={`text-sm cursor-pointer ${isDisabled ? "text-slate-400" : ""}`}
+                    className={`text-sm cursor-pointer flex-1 ${isDisabled ? "text-slate-400" : ""}`}
                   >
                     {option.label}
                   </Label>
