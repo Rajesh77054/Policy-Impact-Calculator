@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { MobileTooltip } from "@/components/ui/mobile-tooltip";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { 
@@ -219,28 +220,24 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                     <div className="flex justify-between text-sm">
                       <div className="flex items-center space-x-1">
                         <span className="text-slate-600">Deficit Impact</span>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <HelpCircle className="w-3 h-3 text-slate-400 hover:text-slate-600" />
-                          </TooltipTrigger>
-                          <TooltipContent className="max-w-xs">
-                            <p className="text-xs">Federal deficit impact per taxpayer. Based on CBO baseline projections and Tax Policy Center analysis. Positive values increase deficit, negative values reduce deficit.</p>
-                          </TooltipContent>
-                        </Tooltip>
+                        <MobileTooltip
+                          content="Federal deficit impact per taxpayer. Based on CBO baseline projections and Tax Policy Center analysis. Positive values increase deficit, negative values reduce deficit."
+                          title="Deficit Impact"
+                          icon="help"
+                          iconSize="sm"
+                        />
                       </div>
                       <span className="font-medium text-slate-600">Baseline</span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <div className="flex items-center space-x-1">
                         <span className="text-slate-600">Recession Risk</span>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <HelpCircle className="w-3 h-3 text-slate-400 hover:text-slate-600" />
-                          </TooltipTrigger>
-                          <TooltipContent className="max-w-xs">
-                            <p className="text-xs">Probability of recession in next 2 years based on current policies. Source: Federal Reserve Economic Data (FRED) and CBO economic outlook.</p>
-                          </TooltipContent>
-                        </Tooltip>
+                        <MobileTooltip
+                          content="Probability of recession in next 2 years based on current policies. Source: Federal Reserve Economic Data (FRED) and CBO economic outlook."
+                          title="Recession Risk"
+                          icon="help"
+                          iconSize="sm"
+                        />
                       </div>
                       <span className="font-medium text-orange-600">28%</span>
                     </div>
@@ -285,28 +282,24 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                     <div className="flex justify-between text-sm">
                       <div className="flex items-center space-x-1">
                         <span className="text-slate-600">Deficit Impact</span>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <HelpCircle className="w-3 h-3 text-slate-400 hover:text-slate-600" />
-                          </TooltipTrigger>
-                          <TooltipContent className="max-w-xs">
-                            <p className="text-xs">Additional federal deficit impact per taxpayer from proposed policies. Based on CBO score of H.R. 1 and Joint Committee on Taxation analysis.</p>
-                          </TooltipContent>
-                        </Tooltip>
+                        <MobileTooltip
+                          content="Additional federal deficit impact per taxpayer from proposed policies. Based on CBO score of H.R. 1 and Joint Committee on Taxation analysis."
+                          title="Deficit Impact"
+                          icon="help"
+                          iconSize="sm"
+                        />
                       </div>
                       <span className="font-medium text-red-600">+$2,400/year</span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <div className="flex items-center space-x-1">
                         <span className="text-slate-600">Recession Risk</span>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <HelpCircle className="w-3 h-3 text-slate-400 hover:text-slate-600" />
-                          </TooltipTrigger>
-                          <TooltipContent className="max-w-xs">
-                            <p className="text-xs">Estimated recession probability with proposed policies. Based on CBO economic modeling and Federal Reserve stress testing scenarios.</p>
-                          </TooltipContent>
-                        </Tooltip>
+                        <MobileTooltip
+                          content="Estimated recession probability with proposed policies. Based on CBO economic modeling and Federal Reserve stress testing scenarios."
+                          title="Recession Risk"
+                          icon="help"
+                          iconSize="sm"
+                        />
                       </div>
                       <span className="font-medium text-green-600">22%</span>
                     </div>
@@ -369,14 +362,12 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div className="flex items-center space-x-1">
                 <CardTitle className="text-lg font-semibold">Community Impact Comparison</CardTitle>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <HelpCircle className="w-4 h-4 text-slate-400 hover:text-slate-600" />
-                  </TooltipTrigger>
-                  <TooltipContent className="max-w-xs">
-                    <p className="text-xs">Community impact shows how proposed policies would affect public services and economic opportunities in your area. Based on Congressional Budget Office economic models and local demographic data.</p>
-                  </TooltipContent>
-                </Tooltip>
+                <MobileTooltip
+                  content="Community impact shows how proposed policies would affect public services and economic opportunities in your area. Based on Congressional Budget Office economic models and local demographic data."
+                  title="Community Impact"
+                  icon="help"
+                  iconSize="md"
+                />
               </div>
               <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                 <Home className="w-5 h-5 text-blue-600" />
