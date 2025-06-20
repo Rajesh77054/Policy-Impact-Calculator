@@ -63,20 +63,18 @@ export function MobileTooltip({
   }
 
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <button 
-            className={`text-slate-400 hover:text-slate-600 cursor-help transition-colors ${className}`}
-            aria-label="Show help information"
-          >
-            <IconComponent className={iconClasses[iconSize]} />
-          </button>
-        </TooltipTrigger>
-        <TooltipContent className="max-w-xs">
-          <p className="text-sm">{content}</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button 
+          className={`text-slate-400 hover:text-slate-600 cursor-help transition-colors ${className}`}
+          aria-label="Show help information"
+        >
+          <IconComponent className={iconClasses[iconSize]} />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent className="max-w-xs">
+        <p className="text-sm">{content}</p>
+      </TooltipContent>
+    </Tooltip>
   );
 }
