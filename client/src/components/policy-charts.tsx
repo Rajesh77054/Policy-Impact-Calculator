@@ -377,6 +377,56 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
             </CardContent>
           </Card>
       </div>
+
+      {/* Tax Impact Modal */}
+      <Dialog open={openTaxModal} onOpenChange={setOpenTaxModal}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-semibold">Tax Impact Timeline Calculation</DialogTitle>
+            <DialogDescription className="text-sm text-slate-600 leading-relaxed">
+              <div className="space-y-3 mt-3">
+                <p>
+                  <strong>How we calculate tax impacts:</strong>
+                </p>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>Current tax calculations use IRS Publication 15 and current federal tax brackets</li>
+                  <li>Proposed changes are based on Congressional Budget Office (CBO) analysis of pending legislation</li>
+                  <li>Timeline projections include 2.5% annual inflation compounding</li>
+                  <li>Standard deduction and bracket adjustments are applied based on your income and filing status</li>
+                </ul>
+                <p className="text-xs text-slate-500 mt-4">
+                  Tax calculations are estimates based on current law and proposed legislation. Actual impacts may vary based on final enacted policies and individual circumstances.
+                </p>
+              </div>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+
+      {/* Healthcare Cost Modal */}
+      <Dialog open={openHealthcareModal} onOpenChange={setOpenHealthcareModal}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-semibold">Healthcare Cost Scenario Analysis</DialogTitle>
+            <DialogDescription className="text-sm text-slate-600 leading-relaxed">
+              <div className="space-y-3 mt-3">
+                <p>
+                  <strong>How we calculate healthcare costs:</strong>
+                </p>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>Current costs are based on Kaiser Family Foundation employer health benefits survey data</li>
+                  <li>Premium calculations use Centers for Medicare & Medicaid Services (CMS) expenditure reports</li>
+                  <li>Proposed changes reflect Medicare expansion and enhanced ACA subsidies from pending legislation</li>
+                  <li>Out-of-pocket maximums and deductibles are adjusted based on your insurance type and income level</li>
+                </ul>
+                <p className="text-xs text-slate-500 mt-4">
+                  Healthcare cost projections are estimates based on current market data and proposed policy changes. Actual costs may vary based on plan selection, provider networks, and individual health needs.
+                </p>
+              </div>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
