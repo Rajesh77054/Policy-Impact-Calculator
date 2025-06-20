@@ -181,22 +181,15 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div className="flex items-center space-x-1">
                 <CardTitle className="text-lg font-semibold">Tax Impact Timeline Comparison</CardTitle>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="p-0 h-auto"
-                      onClick={() => setOpenTaxModal(true)}
-                    >
-                      <Info className="w-4 h-4 mr-1" />
-                      How we calculate this
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent className="max-w-xs">
-                    <p className="text-xs">Tax impact over time under Current Law vs. Proposed Bill scenarios</p>
-                  </TooltipContent>
-                </Tooltip>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="p-0 h-auto"
+                  onClick={() => setOpenTaxModal(true)}
+                >
+                  <Info className="w-4 h-4 mr-1" />
+                  How we calculate this
+                </Button>
               </div>
               <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                 <TrendingUp className="w-5 h-5 text-blue-600" />
