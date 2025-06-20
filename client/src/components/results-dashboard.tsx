@@ -362,12 +362,20 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div className="flex items-center space-x-1">
                 <CardTitle className="text-lg font-semibold">Community Impact Comparison</CardTitle>
-                <MobileTooltip
-                  content="Community impact shows how proposed policies would affect public services and economic opportunities in your area. Based on Congressional Budget Office economic models and local demographic data."
-                  title="Community Impact"
-                  icon="help"
-                  iconSize="md"
-                />
+                <Tooltip delayDuration={300}>
+                  <TooltipTrigger asChild>
+                    <button 
+                      type="button"
+                      className="inline-flex items-center justify-center text-slate-400 hover:text-slate-600 cursor-help transition-colors"
+                      aria-label="Show help information"
+                    >
+                      <HelpCircle className="w-4 h-4" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="top" className="max-w-xs z-50">
+                    <p className="text-sm">Community impact shows how proposed policies would affect public services and economic opportunities in your area. Based on Congressional Budget Office economic models and local demographic data.</p>
+                  </TooltipContent>
+                </Tooltip>
               </div>
               <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                 <Home className="w-5 h-5 text-blue-600" />
