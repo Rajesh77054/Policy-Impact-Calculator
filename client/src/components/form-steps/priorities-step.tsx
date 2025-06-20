@@ -65,17 +65,29 @@ export default function PrioritiesStep({ formData, onComplete }: PrioritiesStepP
                         ? "border-slate-200 bg-slate-50 opacity-50 cursor-not-allowed" 
                         : "border-slate-300 hover:border-primary/30 hover:bg-slate-50"
                   }`}
-                  onClick={() => !isDisabled && handlePriorityChange(option.id, !isChecked)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (!isDisabled) {
+                      handlePriorityChange(option.id, !isChecked);
+                    }
+                  }}
                 >
                   <Checkbox
                     id={option.id}
                     checked={isChecked}
                     onCheckedChange={(checked) => handlePriorityChange(option.id, checked as boolean)}
                     disabled={isDisabled}
+                    onClick={(e) => e.stopPropagation()}
                   />
                   <Label 
                     htmlFor={option.id} 
                     className={`text-sm cursor-pointer flex-1 ${isDisabled ? "text-slate-400" : ""}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (!isDisabled) {
+                        handlePriorityChange(option.id, !isChecked);
+                      }
+                    }}
                   >
                     {option.label}
                   </Label>
