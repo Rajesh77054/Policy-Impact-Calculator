@@ -35,81 +35,100 @@ export default function NetFinancialImpactChart({ results }: NetFinancialImpactC
       const years = purchasingPowerData.currentScenario.map(d => d.year);
 
       // Server values are Big Bill vs Current Law differences
-      // Convert to cash flow convention for display
+      // Negative server values = user saves money (display as positive savings)
+      // Positive server values = user pays more (display as positive costs)
       
-      // For cumulative trend line - show absolute values
-      const cumulativeImpact = [
-        Math.abs(annualDifference), // Year 1 difference
-        Math.abs(fiveYearDifference), // 5-year cumulative difference
-        Math.abs(tenYearDifference), // 10-year cumulative difference
-        Math.abs(twentyYearDifference) // 20-year cumulative difference
+      // Convert server differences to cash flow convention for display
+      const displayValues = [
+        annualDifference < 0 ? Math.abs(annualDifference) : 0, // Annual savings
+        fiveYearDifference < 0 ? Math.abs(fiveYearDifference) : 0, // 5-year cumulative savings
+        tenYearDifference < 0 ? Math.abs(tenYearDifference) : 0, // 10-year cumulative savings
+        twentyYearDifference < 0 ? Math.abs(twentyYearDifference) : 0 // 20-year cumulative savings
+      ];
+      
+      const costValues = [
+        annualDifference >= 0 ? annualDifference : 0, // Annual costs
+        fiveYearDifference >= 0 ? fiveYearDifference : 0, // 5-year cumulative costs
+        tenYearDifference >= 0 ? tenYearDifference : 0, // 10-year cumulative costs
+        twentyYearDifference >= 0 ? twentyYearDifference : 0 // 20-year cumulative costs
       ];
 
-      // For bar chart data - show annual breakdown with absolute values
-      const annualBreakdownData = [
-        Math.abs(annualDifference), // Annual difference
-        Math.abs(fiveYearDifference / 5), // Average annual difference over 5 years
-        Math.abs(tenYearDifference / 10), // Average annual difference over 10 years  
-        Math.abs(twentyYearDifference / 20) // Average annual difference over 20 years
+      // For bar chart data - show annual averages
+      const annualSavingsData = [
+        displayValues[0], // Year 1
+        displayValues[1] / 5, // 5-year average
+        displayValues[2] / 10, // 10-year average  
+        displayValues[3] / 20 // 20-year average
+      ];
+      
+      const annualCostData = [
+        costValues[0], // Year 1
+        costValues[1] / 5, // 5-year average
+        costValues[2] / 10, // 10-year average  
+        costValues[3] / 20 // 20-year average
       ];
 
-      // Separate into savings vs costs based on server difference values
-      const savingsData = annualDifference < 0 ? annualBreakdownData : [null, null, null, null];
-      const costsData = annualDifference >= 0 ? annualBreakdownData : [null, null, null, null];
+      // Cumulative trend line - use actual cumulative values
+      const cumulativeData = [
+        displayValues[0] || costValues[0], // Year 1
+        displayValues[1] || costValues[1], // 5-year cumulative
+        displayValues[2] || costValues[2], // 10-year cumulative
+        displayValues[3] || costValues[3] // 20-year cumulative
+      ];
 
-      // Check if datasets have any actual data
-      const hasSavingsData = savingsData.some(value => value !== null);
-      const hasCostsData = costsData.some(value => value !== null);
+      // Determine which datasets to show
+      const hasSavings = displayValues.some(val => val > 0);
+      const hasCosts = costValues.some(val => val > 0);
 
-      // Build datasets conditionally based on data availability
+      // Build datasets based on actual data
       const datasets: any[] = [
         {
           label: 'Cumulative Impact Trend',
           type: 'line',
-          data: cumulativeImpact.map(val => Math.abs(val)),
-          borderColor: '#6366f1',
-          backgroundColor: 'rgba(99, 102, 241, 0.1)',
+          data: cumulativeData,
+          borderColor: hasSavings ? '#10b981' : '#ef4444',
+          backgroundColor: hasSavings ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
           borderWidth: 4,
           fill: false,
           tension: 0.2,
           pointRadius: 8,
           pointHoverRadius: 10,
-          pointBackgroundColor: '#6366f1',
+          pointBackgroundColor: hasSavings ? '#10b981' : '#ef4444',
           pointBorderColor: '#ffffff',
           pointBorderWidth: 3,
           yAxisID: 'y1',
-          order: 0, // Ensures this line is drawn on top
+          order: 0,
         }
       ];
 
-      // Only add savings data dataset if it has values (negative values = savings)
-      if (hasSavingsData) {
+      // Add savings bars if user saves money
+      if (hasSavings) {
         datasets.push({
-          label: 'Savings',
-          data: savingsData as any,
+          label: 'Annual Savings',
+          data: annualSavingsData,
           backgroundColor: '#10b981',
           borderColor: '#059669',
           borderWidth: 1,
           borderRadius: 4,
           borderSkipped: false,
           yAxisID: 'y',
-          order: 1, // Drawn after the line
-        } as any);
+          order: 1,
+        });
       }
 
-      // Only add costs data dataset if it has values (positive values = costs)
-      if (hasCostsData) {
+      // Add cost bars if user pays more
+      if (hasCosts) {
         datasets.push({
-          label: 'Costs',
-          data: costsData as any,
+          label: 'Annual Costs',
+          data: annualCostData,
           backgroundColor: '#ef4444',
           borderColor: '#dc2626',
           borderWidth: 1,
           borderRadius: 4,
           borderSkipped: false,
           yAxisID: 'y',
-          order: 2, // Drawn last
-        } as any);
+          order: 1,
+        });
       }
 
       chartInstance.current = new Chart(ctx, {
