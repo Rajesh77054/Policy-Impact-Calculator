@@ -201,6 +201,47 @@ export default function EconomicContextCard({ results, className }: EconomicCont
             Federal Reserve Economic Data • Last updated: {new Date(macroeconomicData.lastUpdated).toLocaleDateString()}
           </p>
         </div>
+
+        {/* National Debt and Deficit */}
+        {economicContext.fiscalData && (
+          <>
+            <Separator />
+            <div className="space-y-3">
+              <h4 className="font-semibold flex items-center gap-2">
+                <Building2 className="h-4 w-4" />
+                National Debt & Deficit
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="text-center space-y-1">
+                  <div className="text-sm text-muted-foreground">Total Public Debt</div>
+                  <div className="text-lg font-semibold">
+                    ${economicContext.fiscalData.totalPublicDebt.toFixed(1)}T
+                  </div>
+                </div>
+                <div className="text-center space-y-1">
+                  <div className="text-sm text-muted-foreground">Debt-to-GDP Ratio</div>
+                  <div className="text-lg font-semibold flex items-center justify-center gap-1">
+                    {formatPercentage(economicContext.fiscalData.debtToGdpRatio)}
+                    {getTrendIcon(economicContext.fiscalData.debtToGdpRatio, 100, true)}
+                  </div>
+                </div>
+                <div className="text-center space-y-1">
+                  <div className="text-sm text-muted-foreground">Deficit-to-GDP Ratio</div>
+                  <div className="text-lg font-semibold flex items-center justify-center gap-1">
+                    {formatPercentage(Math.abs(economicContext.fiscalData.deficitToGdpRatio))}
+                    {economicContext.fiscalData.deficitToGdpRatio < 0 ? 
+                      <TrendingDown className="h-4 w-4 text-red-500" /> : 
+                      <TrendingUp className="h-4 w-4 text-green-500" />
+                    }
+                  </div>
+                </div>
+              </div>
+              <p className="text-xs text-muted-foreground text-center">
+                Federal Reserve Economic Data • Last updated: {new Date(economicContext.fiscalData.lastUpdated).toLocaleDateString()}
+              </p>
+            </div>
+          </>
+        )}
       </CardContent>
     </Card>
   );

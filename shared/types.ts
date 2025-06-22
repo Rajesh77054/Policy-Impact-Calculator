@@ -23,6 +23,12 @@ export interface EconomicContext {
     federalFundsRate: number;
     lastUpdated: string;
   };
+  fiscalData?: {
+    totalPublicDebt: number;
+    debtToGdpRatio: number;
+    deficitToGdpRatio: number;
+    lastUpdated: string;
+  };
 }
 
 export interface PolicyResults {
