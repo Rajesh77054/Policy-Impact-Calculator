@@ -220,26 +220,26 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
                   <div className="space-y-2">
                     <div className="flex justify-between text-xs">
                       <span className="text-blue-700">Year 1</span>
-                      <span className="text-blue-900 font-medium">
+                      <span className={`font-medium ${results.annualTaxImpact < 0 ? 'text-green-700' : 'text-orange-700'}`}>
                         {results.annualTaxImpact < 0 ? `$${Math.abs(results.annualTaxImpact).toLocaleString()} saved` : `$${results.annualTaxImpact.toLocaleString()} cost`}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
                       <span className="text-blue-700">5 Years</span>
-                      <span className="text-blue-900 font-medium">
-                        ${Math.abs(results.timeline.fiveYear / 1000).toFixed(0)}K
+                      <span className={`font-medium ${results.timeline.fiveYear < 0 ? 'text-green-700' : 'text-orange-700'}`}>
+                        {results.timeline.fiveYear < 0 ? `$${Math.abs(results.timeline.fiveYear / 1000).toFixed(0)}K saved` : `$${Math.abs(results.timeline.fiveYear / 1000).toFixed(0)}K cost`}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
                       <span className="text-blue-700">10 Years</span>
-                      <span className="text-blue-900 font-medium">
-                        ${Math.abs(results.timeline.tenYear / 1000).toFixed(0)}K
+                      <span className={`font-medium ${results.timeline.tenYear < 0 ? 'text-green-700' : 'text-orange-700'}`}>
+                        {results.timeline.tenYear < 0 ? `$${Math.abs(results.timeline.tenYear / 1000).toFixed(0)}K saved` : `$${Math.abs(results.timeline.tenYear / 1000).toFixed(0)}K cost`}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
                       <span className="text-blue-700">20 Years</span>
-                      <span className="text-blue-900 font-medium">
-                        ${Math.abs(results.timeline.twentyYear / 1000).toFixed(0)}K
+                      <span className={`font-medium ${results.timeline.twentyYear < 0 ? 'text-green-700' : 'text-orange-700'}`}>
+                        {results.timeline.twentyYear < 0 ? `$${Math.abs(results.timeline.twentyYear / 1000).toFixed(0)}K saved` : `$${Math.abs(results.timeline.twentyYear / 1000).toFixed(0)}K cost`}
                       </span>
                     </div>
                   </div>

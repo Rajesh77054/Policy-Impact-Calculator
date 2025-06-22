@@ -52,13 +52,7 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
       const hasPositiveData = positiveData.some(value => value !== null);
       const hasNegativeData = negativeData.some(value => value !== null);
 
-      // Use actual cumulative timeline data
-      const cumulativeImpact = [
-        actualData.netAnnualImpact,
-        actualData.timeline.fiveYear,
-        actualData.timeline.tenYear,
-        actualData.timeline.twentyYear
-      ];
+      // Use cumulative impact data from outer scope
 
       // Build datasets conditionally based on data availability
       const datasets: any[] = [
@@ -283,6 +277,14 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
     actualData.timeline.fiveYear / 5,  // Average annual impact over 5 years
     actualData.timeline.tenYear / 10,  // Average annual impact over 10 years
     actualData.timeline.twentyYear / 20  // Average annual impact over 20 years
+  ];
+
+  // Use actual cumulative timeline data
+  const cumulativeImpact = [
+    actualData.netAnnualImpact,
+    actualData.timeline.fiveYear,
+    actualData.timeline.tenYear,
+    actualData.timeline.twentyYear
   ];
 
   // Calculate key metrics based on actual policy impact
