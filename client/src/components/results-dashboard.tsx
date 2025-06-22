@@ -180,13 +180,13 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
             </Card>
           )}
 
+          {/* Secondary Charts Section */}
+          <PolicyCharts results={results} />
+
           {/* Economic Context Section */}
           {results.economicContext && (
             <EconomicContextCard results={results} className="mb-8" />
           )}
-
-          {/* Secondary Charts Section */}
-          <PolicyCharts results={results} />
         </div>
       </div>
     </TooltipProvider>
