@@ -249,7 +249,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
 
                 {/* Proposed Bill Column */}
                 <div>
-                  <h4 className="text-sm font-medium text-blue-800 mb-3 text-center">Proposed Bill</h4>
+                  <h4 className="text-sm font-medium text-blue-800 mb-3 text-center">Big Bill</h4>
                   <div className="space-y-2">
                     <div className="flex justify-between text-xs">
                       <span className="text-blue-700">Annual Tax</span>
@@ -348,7 +348,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
 
                 {/* Proposed Bill Column */}
                 <div>
-                  <h4 className="text-sm font-medium text-green-800 mb-3 text-center">Proposed Bill</h4>
+                  <h4 className="text-sm font-medium text-green-800 mb-3 text-center">Big Bill</h4>
                   <div className="space-y-2">
                     <div className="flex justify-between text-xs">
                       <span className="text-green-700">Annual Premium</span>
