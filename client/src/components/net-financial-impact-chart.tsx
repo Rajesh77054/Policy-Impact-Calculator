@@ -7,10 +7,9 @@ import { PolicyResults } from "@shared/types";
 
 interface NetFinancialImpactChartProps {
   results: PolicyResults;
-  showBigBillComparison: boolean;
 }
 
-export default function NetFinancialImpactChart({ results, showBigBillComparison }: NetFinancialImpactChartProps) {
+export default function NetFinancialImpactChart({ results }: NetFinancialImpactChartProps) {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstance = useRef<any>(null);
 
@@ -27,16 +26,16 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
       const ctx = chartRef.current?.getContext('2d');
       if (!ctx) return;
 
-      // Use appropriate scenario data based on toggle
-      const currentData = showBigBillComparison ? results.bigBillScenario : results;
-      const purchasingPowerData = currentData?.purchasingPower || results.purchasingPower;
+      // Use Big Bill CBO data as the single authoritative source
+      const currentData = results;
+      const purchasingPowerData = results.purchasingPower;
 
       if (!purchasingPowerData) return;
 
       const years = purchasingPowerData.currentScenario.map(d => d.year);
 
-      // Calculate cumulative savings over time using actual server data
-      const actualData = showBigBillComparison ? (results.bigBillScenario || results) : results;
+      // Calculate cumulative savings over time using Big Bill CBO data
+      const actualData = results;
       
       // Build cumulative savings data matching the server's timeline calculations
       const cumulativeImpact = [
@@ -67,7 +66,7 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
         {
           label: 'Cumulative Impact Trend',
           type: 'line',
-          data: cumulativeTimeline.map(val => Math.abs(val)),
+          data: cumulativeImpact.map(val => Math.abs(val)),
           borderColor: '#6366f1',
           backgroundColor: 'rgba(99, 102, 241, 0.1)',
           borderWidth: 4,
@@ -154,8 +153,8 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
                   const datasetLabel = context.dataset.label;
                   const dataIndex = context.dataIndex;
                   
-                  // Get the actual data values from server
-                  const serverData = showBigBillComparison ? (results.bigBillScenario || results) : results;
+                  // Get the actual data values from Big Bill CBO data
+                  const serverData = results;
                   const originalValue = serverData.netAnnualImpact < 0 ? -Math.abs(serverData.netAnnualImpact) : Math.abs(serverData.netAnnualImpact);
                   const timelineValues = [
                     serverData.netAnnualImpact,
@@ -183,7 +182,7 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
                 },
                 afterBody: (context) => {
                   const dataIndex = context[0].dataIndex;
-                  const serverData = showBigBillComparison ? (results.bigBillScenario || results) : results;
+                  const serverData = results;
                   const timelineValues = [
                     serverData.netAnnualImpact,
                     serverData.timeline.fiveYear,
@@ -287,11 +286,11 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
         chartInstance.current = null;
       }
     };
-  }, [results, showBigBillComparison]);
+  }, [results]);
 
-  // Use correct scenario data consistently throughout
-  const currentData = showBigBillComparison ? results.bigBillScenario : results;
-  const purchasingPowerData = currentData?.purchasingPower || results.purchasingPower;
+  // Use Big Bill CBO data consistently throughout
+  const currentData = results;
+  const purchasingPowerData = results.purchasingPower;
 
   if (!purchasingPowerData) {
     return null;

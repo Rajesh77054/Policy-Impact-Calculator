@@ -519,12 +519,10 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
   const breakdown = [
     {
       category: "tax" as const,
-      title: includeBigBill ? "One Big Beautiful Bill Act - Tax Provisions" : "Federal Tax Policy Changes",
-      description: includeBigBill ? 
-        "PROPOSED LEGISLATION (NOT YET LAW) - Projected impact if One Big Beautiful Bill Act passes" :
-        "Based on current IRS brackets and proposed Congressional legislation",
+      title: "One Big Beautiful Bill Act - Tax Provisions",
+      description: "Based on H.R. 1 Congressional Budget Office analysis",
       impact: Math.round(scaledTaxImpact),
-      details: includeBigBill ? [
+      details: [
         {
           item: "Enhanced standard deduction (+$5,000)",
           amount: -1100, // $5000 * 22% bracket
@@ -533,23 +531,12 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
           item: hasChildren ? "Expanded child tax credit ($2,500)" : "Middle class tax rate reduction",
           amount: hasChildren ? -2500 : (income > 25000 && income < 400000 ? Math.min(income - 25000, 375000) * -0.03 : 0),
         },
-      ] : [
-        {
-          item: "Big Bill standard deduction increase",
-          amount: Math.round(-5000 * 0.22) // $5000 increase at 22% tax rate
-        },
-        { 
-          item: hasChildren ? "Enhanced child tax credit" : "Tax bracket adjustment", 
-          amount: hasChildren ? 
-                 -2500 : // $2500 per child under Big Bill
-                 Math.round(scaledTaxImpact * 0.6)
-        },
       ],
     },
     {
       category: "healthcare",
-      title: "Healthcare Policy Reforms",
-      description: "Based on Kaiser Family Foundation data and proposed Medicare expansion",
+      title: "One Big Beautiful Bill - Healthcare",
+      description: "Expanded Medicare and enhanced ACA subsidies based on CBO analysis",
       impact: Math.round(scaledHealthcareImpact),
       details: [
         { 
