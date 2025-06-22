@@ -377,44 +377,44 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
             <canvas ref={chartRef} />
           </div>
           
-          {/* Savings Growth Over Time */}
-          <div className="mb-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200">
+          {/* Financial Impact Growth Over Time */}
+          <div className={`mb-4 p-4 ${isOverallBenefit ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200' : 'bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200'} rounded-lg border`}>
             <div className="flex items-center justify-between mb-3">
-              <h4 className="text-sm font-semibold text-green-800 flex items-center gap-2">
-                <TrendingUp className="w-4 h-4" />
-                Savings Growth Over Time
+              <h4 className={`text-sm font-semibold ${isOverallBenefit ? 'text-green-800' : 'text-orange-800'} flex items-center gap-2`}>
+                {isOverallBenefit ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
+                {isOverallBenefit ? 'Savings Growth Over Time' : 'Financial Impact Over Time'}
               </h4>
-              <Badge variant="outline" className="bg-green-100 text-green-700 border-green-300 text-xs">
-                Cumulative Benefits
+              <Badge variant="outline" className={`${isOverallBenefit ? 'bg-green-100 text-green-700 border-green-300' : 'bg-orange-100 text-orange-700 border-orange-300'} text-xs`}>
+                {isOverallBenefit ? 'Cumulative Benefits' : 'Cumulative Costs'}
               </Badge>
             </div>
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
               {years.map((year: number, index: number) => {
                 const impact = netImpacts[index];
-                const cumulativeToDate = netImpacts.slice(0, index + 1).reduce((sum: number, val: number) => sum + val, 0);
+                const cumulative = cumulativeImpact[index];
                 
                 return (
-                  <div key={year} className={`rounded-lg p-2 border ${impact >= 0 ? 'bg-white border-green-200' : 'bg-red-50 border-red-200'}`}>
-                    <div className="text-xs font-medium text-green-700 mb-1">
+                  <div key={year} className={`rounded-lg p-2 border ${impact < 0 ? 'bg-white border-green-200' : 'bg-red-50 border-orange-200'}`}>
+                    <div className={`text-xs font-medium ${impact < 0 ? 'text-green-700' : 'text-orange-700'} mb-1`}>
                       {year}
                     </div>
-                    <div className={`text-sm font-bold ${impact >= 0 ? 'text-green-800' : 'text-red-800'}`}>
-                      Save {impact >= 0 ? '+' : ''}${impact.toLocaleString()} more
+                    <div className={`text-sm font-bold ${impact < 0 ? 'text-green-800' : 'text-orange-800'}`}>
+                      {cumulative < 0 ? `Save $${Math.abs(cumulative).toLocaleString()}` : `Pay $${Math.abs(cumulative).toLocaleString()} more`}
                     </div>
-                    <div className="text-xs text-green-600">
-                      more savings
+                    <div className={`text-xs ${impact < 0 ? 'text-green-600' : 'text-orange-600'}`}>
+                      by {year}
                     </div>
                     <div className="text-xs text-slate-500 mt-1">
-                      {cumulativeToDate >= 0 ? '+' : ''}${cumulativeToDate.toLocaleString()}
+                      {impact < 0 ? `$${Math.abs(impact).toLocaleString()}/year` : `$${Math.abs(impact).toLocaleString()}/year`}
                     </div>
                   </div>
                 );
               })}
             </div>
             
-            <div className="mt-3 text-xs text-green-700 text-center">
-              The proposed policy provides consistent additional savings that compound over time
+            <div className={`mt-3 text-xs text-center ${isOverallBenefit ? 'text-green-700' : 'text-orange-700'}`}>
+              The proposed policy provides {isOverallBenefit ? 'consistent additional savings that compound over time' : 'financial impacts that accumulate over time'}
             </div>
           </div>
           

@@ -45,10 +45,10 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
 
   const formatCurrency = (amount: number): string => {
     if (Math.abs(amount) >= 1000000) {
-      return `$${(amount / 1000000).toFixed(1)}M`;
+      return `$${(Math.abs(amount) / 1000000).toFixed(1)}M`;
     }
     if (Math.abs(amount) >= 1000) {
-      return `$${(amount / 1000).toFixed(0)}k`;
+      return `$${(Math.abs(amount) / 1000).toFixed(0)}k`;
     }
     return `$${Math.abs(amount).toLocaleString()}`;
   };
