@@ -295,11 +295,10 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
     -actualData.timeline.twentyYear
   ];
 
-  // Calculate key metrics based on actual policy impact
-  const totalSavings = netImpacts.reduce((sum: number, impact: number) => sum + Math.max(0, impact), 0);
-  const totalCosts = netImpacts.reduce((sum: number, impact: number) => sum + Math.min(0, impact), 0);
-  const netBenefit = actualData.timeline.twentyYear; // Use the actual 20-year cumulative impact
-  const averageAnnualImpact = actualData.netAnnualImpact; // Use the actual annual impact
+  // Use direct server calculations - no aggregation of overlapping time periods
+  const averageAnnualImpact = actualData.netAnnualImpact; // Annual impact: -127
+  const totalImpact = actualData.timeline.fiveYear; // Use 5-year as "total impact" metric
+  const netBenefit = actualData.timeline.twentyYear; // 20-year cumulative: -4156
 
   // Determine overall impact for card styling
   const isOverallBenefit = netBenefit < 0; // Negative values are benefits (savings)
@@ -352,16 +351,16 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
                   </div>
                 </div>
 
-                <div className={`rounded-lg p-3 border ${Math.abs(totalSavings) > Math.abs(totalCosts) ? 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200' : 'bg-gradient-to-r from-gray-50 to-slate-50 border-gray-200'}`}>
+                <div className={`rounded-lg p-3 border ${totalImpact < 0 ? 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200' : 'bg-gradient-to-r from-gray-50 to-slate-50 border-gray-200'}`}>
                   <div className="flex items-center gap-2 mb-1">
                     <TrendingUp className="w-4 h-4 text-blue-600" />
-                    <span className="text-xs font-medium text-blue-700">Total Impact</span>
+                    <span className="text-xs font-medium text-blue-700">5-Year Impact</span>
                   </div>
                   <div className="text-lg font-bold text-blue-800">
-                    {Math.abs(totalSavings) > Math.abs(totalCosts) ? `+$${totalSavings.toLocaleString()}` : `$${Math.abs(totalCosts).toLocaleString()}`}
+                    {totalImpact < 0 ? `Save $${Math.abs(totalImpact).toLocaleString()}` : `Pay $${totalImpact.toLocaleString()} more`}
                   </div>
                   <div className="text-xs text-blue-600">
-                    {Math.abs(totalSavings) > Math.abs(totalCosts) ? 'Benefits' : 'Costs'}
+                    {totalImpact < 0 ? '5-year savings' : '5-year costs'}
                   </div>
                 </div>
 
