@@ -67,7 +67,7 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
         {
           label: 'Cumulative Impact Trend',
           type: 'line',
-          data: cumulativeImpact,
+          data: cumulativeTimeline.map(val => Math.abs(val)),
           borderColor: '#6366f1',
           backgroundColor: 'rgba(99, 102, 241, 0.1)',
           borderWidth: 4,
@@ -289,7 +289,7 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
     };
   }, [results, showBigBillComparison]);
 
-  // Use appropriate scenario data for calculations
+  // Use correct scenario data consistently throughout
   const currentData = showBigBillComparison ? results.bigBillScenario : results;
   const purchasingPowerData = currentData?.purchasingPower || results.purchasingPower;
 
@@ -297,30 +297,34 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
     return null;
   }
 
-  // Use actual policy impact calculations instead of purchasing power projections
-  const actualData = showBigBillComparison ? (results.bigBillScenario || results) : results;
+  // Use ONLY the current scenario (not mixed with bigBillScenario unless explicitly requested)
+  const actualData = currentData || results;
 
-  // Calculate net impacts based on actual policy calculations
-  const years = [2025, 2030, 2035, 2045]; // Standard timeline years
+  // Calculate net impacts using correct server data - no conversion
+  const years = [2025, 2030, 2035, 2045];
   const netImpacts = [
-    actualData.netAnnualImpact,
-    actualData.timeline.fiveYear / 5,  // Average annual impact over 5 years
-    actualData.timeline.tenYear / 10,  // Average annual impact over 10 years
-    actualData.timeline.twentyYear / 20  // Average annual impact over 20 years
+    actualData.netAnnualImpact,  // Exact server value
+    actualData.timeline.fiveYear / 5,  // Average annual over 5 years
+    actualData.timeline.tenYear / 10,  // Average annual over 10 years  
+    actualData.timeline.twentyYear / 20  // Average annual over 20 years
   ];
 
-  // Use actual cumulative timeline data, reversed for upward trending display
-  const cumulativeImpact = [
-    -actualData.netAnnualImpact,
-    -actualData.timeline.fiveYear,
-    -actualData.timeline.tenYear,
-    -actualData.timeline.twentyYear
+  // Use actual cumulative timeline data from server
+  const cumulativeTimeline = [
+    actualData.netAnnualImpact,  // Year 1
+    actualData.timeline.fiveYear,  // 5-year cumulative
+    actualData.timeline.tenYear,  // 10-year cumulative
+    actualData.timeline.twentyYear  // 20-year cumulative
   ];
 
-  // Use direct server calculations - no aggregation of overlapping time periods
-  const averageAnnualImpact = actualData.netAnnualImpact; // Annual impact: -127
-  const totalImpact = actualData.timeline.fiveYear; // Use 5-year as "total impact" metric
-  const netBenefit = actualData.timeline.twentyYear; // 20-year cumulative: -4156
+  // Direct server calculations with no modification
+  const averageAnnualImpact = actualData.netAnnualImpact;
+  const fiveYearTotal = actualData.timeline.fiveYear;
+  const twentyYearTotal = actualData.timeline.twentyYear;
+  
+  // For display consistency
+  const totalImpact = fiveYearTotal;
+  const netBenefit = twentyYearTotal;
 
   // Determine overall impact for card styling
   const isOverallBenefit = netBenefit < 0; // Negative values are benefits (savings)
@@ -373,29 +377,29 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
                   </div>
                 </div>
 
-                <div className={`rounded-lg p-3 border ${totalImpact < 0 ? 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200' : 'bg-gradient-to-r from-gray-50 to-slate-50 border-gray-200'}`}>
+                <div className={`rounded-lg p-3 border ${fiveYearTotal < 0 ? 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200' : 'bg-gradient-to-r from-gray-50 to-slate-50 border-gray-200'}`}>
                   <div className="flex items-center gap-2 mb-1">
                     <TrendingUp className="w-4 h-4 text-blue-600" />
                     <span className="text-xs font-medium text-blue-700">5-Year Impact</span>
                   </div>
                   <div className="text-lg font-bold text-blue-800">
-                    {totalImpact < 0 ? `Save $${Math.abs(totalImpact).toLocaleString()}` : `Pay $${totalImpact.toLocaleString()} more`}
+                    {fiveYearTotal < 0 ? `Save $${Math.abs(fiveYearTotal).toLocaleString()}` : `Pay $${fiveYearTotal.toLocaleString()} more`}
                   </div>
                   <div className="text-xs text-blue-600">
-                    {totalImpact < 0 ? '5-year savings' : '5-year costs'}
+                    {fiveYearTotal < 0 ? '5-year savings' : '5-year costs'}
                   </div>
                 </div>
 
-                <div className={`rounded-lg p-3 border ${netBenefit < 0 ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200' : 'bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200'}`}>
+                <div className={`rounded-lg p-3 border ${twentyYearTotal < 0 ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200' : 'bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200'}`}>
                   <div className="flex items-center gap-2 mb-1">
-                    {netBenefit < 0 ? <TrendingUp className="w-4 h-4 text-green-600" /> : <TrendingDown className="w-4 h-4 text-orange-600" />}
-                    <span className={`text-xs font-medium ${netBenefit < 0 ? 'text-green-700' : 'text-orange-700'}`}>Net {netBenefit < 0 ? 'Benefit' : 'Cost'}</span>
+                    {twentyYearTotal < 0 ? <TrendingUp className="w-4 h-4 text-green-600" /> : <TrendingDown className="w-4 h-4 text-orange-600" />}
+                    <span className={`text-xs font-medium ${twentyYearTotal < 0 ? 'text-green-700' : 'text-orange-700'}`}>Net {twentyYearTotal < 0 ? 'Benefit' : 'Cost'}</span>
                   </div>
-                  <div className={`text-lg font-bold ${netBenefit < 0 ? 'text-green-800' : 'text-orange-800'}`}>
-                    {netBenefit < 0 ? `+$${Math.abs(netBenefit).toLocaleString()}` : `$${netBenefit.toLocaleString()}`}
+                  <div className={`text-lg font-bold ${twentyYearTotal < 0 ? 'text-green-800' : 'text-orange-800'}`}>
+                    {twentyYearTotal < 0 ? `+$${Math.abs(twentyYearTotal).toLocaleString()}` : `$${twentyYearTotal.toLocaleString()}`}
                   </div>
-                  <div className={`text-xs ${netBenefit < 0 ? 'text-green-600' : 'text-orange-600'}`}>
-                    {netBenefit < 0 ? 'Overall gain' : 'Overall cost'}
+                  <div className={`text-xs ${twentyYearTotal < 0 ? 'text-green-600' : 'text-orange-600'}`}>
+                    {twentyYearTotal < 0 ? 'Overall gain' : 'Overall cost'}
                   </div>
                 </div>
               </div>
@@ -423,7 +427,7 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
               {years.map((year: number, index: number) => {
                 const impact = netImpacts[index];
-                const cumulative = cumulativeImpact[index];
+                const cumulative = cumulativeTimeline[index];
 
                 return (
                   <div key={year} className={`rounded-lg p-2 border ${impact < 0 ? 'bg-white border-green-200' : 'bg-red-50 border-orange-200'}`}>
