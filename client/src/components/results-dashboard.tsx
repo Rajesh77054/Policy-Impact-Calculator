@@ -73,17 +73,17 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
     <TooltipProvider>
       <div className="space-y-8">
         {/* Primary Visualization - Net Financial Impact Summary */}
-        <Card className="border-2 border-green-200 bg-gradient-to-br from-green-50 to-emerald-50">
+        <Card className={`border-2 ${results.netAnnualImpact < 0 ? 'border-green-200 bg-gradient-to-br from-green-50 to-emerald-50' : 'border-orange-200 bg-gradient-to-br from-orange-50 to-amber-50'}`}>
           <CardHeader className="pb-4">
             <div className="text-center">
               <CardTitle className="text-2xl font-bold text-slate-900 mb-2">
-                Your Net Annual Benefit
+                {results.netAnnualImpact < 0 ? "Your Net Annual Benefit" : "Your Net Annual Impact"}
               </CardTitle>
-              <div className="text-5xl font-bold text-green-600 mb-3">
+              <div className={`text-5xl font-bold mb-3 ${results.netAnnualImpact < 0 ? 'text-green-600' : 'text-orange-600'}`}>
                 {formatTaxImpact(results.netAnnualImpact)}
               </div>
               <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-                This represents your total annual financial benefit from the 
+                This represents your total annual financial {results.netAnnualImpact < 0 ? 'benefit' : 'impact'} from the 
                 proposed policy, accounting for tax relief, healthcare savings, and 
                 any additional costs.
               </p>
@@ -143,21 +143,21 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
             </Card>
 
             {/* Net Total Impact */}
-            <Card className="border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50">
+            <Card className={`border-2 ${results.timeline.twentyYear < 0 ? 'border-green-200 bg-gradient-to-br from-green-50 to-emerald-50' : 'border-orange-200 bg-gradient-to-br from-orange-50 to-amber-50'}`}>
               <CardHeader className="pb-3">
-                <CardTitle className="text-lg text-blue-900 flex items-center">
-                  <TrendingUp className="w-5 h-5 mr-2" />
+                <CardTitle className={`text-lg flex items-center ${results.timeline.twentyYear < 0 ? 'text-green-900' : 'text-orange-900'}`}>
+                  {results.timeline.twentyYear < 0 ? <TrendingUp className="w-5 h-5 mr-2" /> : <TrendingDown className="w-5 h-5 mr-2" />}
                   Long-term Total
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-blue-700 mb-2">
+                <div className={`text-3xl font-bold mb-2 ${results.timeline.twentyYear < 0 ? 'text-green-700' : 'text-orange-700'}`}>
                   {formatTaxImpact(results.timeline.twentyYear)}
                 </div>
-                <p className="text-sm text-blue-600 mb-3">
-                  Cumulative 20-year benefit
+                <p className={`text-sm mb-3 ${results.timeline.twentyYear < 0 ? 'text-green-600' : 'text-orange-600'}`}>
+                  {results.timeline.twentyYear < 0 ? "Cumulative 20-year benefit" : "Cumulative 20-year cost"}
                 </p>
-                <div className="text-xs text-blue-700">
+                <div className={`text-xs ${results.timeline.twentyYear < 0 ? 'text-green-700' : 'text-orange-700'}`}>
                   Includes inflation adjustments and compound effects
                 </div>
               </CardContent>
