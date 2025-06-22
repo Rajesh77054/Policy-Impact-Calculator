@@ -65,6 +65,32 @@ const purchasingPowerSchema = z.object({
   lastUpdated: z.string(),
 });
 
+const economicContextSchema = z.object({
+  unemploymentRate: z.object({
+    national: z.number(),
+    state: z.number().optional(),
+    lastUpdated: z.string(),
+  }),
+  recessionIndicators: z.object({
+    yieldCurveInversion: z.number(),
+    unemploymentTrend: z.number(),
+    combined: z.number(),
+    lastUpdated: z.string(),
+  }),
+  wageValidation: z.object({
+    medianWeeklyEarnings: z.number(),
+    hourlyEarnings: z.number(),
+    incomeContext: z.string(),
+    lastUpdated: z.string(),
+  }),
+  macroeconomicData: z.object({
+    gdpGrowth: z.number(),
+    inflationRate: z.number(),
+    federalFundsRate: z.number(),
+    lastUpdated: z.string(),
+  }),
+});
+
 export const policyResultsSchema = z.object({
   annualTaxImpact: z.number(),
   healthcareCostImpact: z.number(),
@@ -88,6 +114,7 @@ export const policyResultsSchema = z.object({
   }),
   breakdown: z.array(policyBreakdownSchema),
   purchasingPower: purchasingPowerSchema,
+  economicContext: economicContextSchema.optional(),
   bigBillScenario: z.object({
     annualTaxImpact: z.number(),
     healthcareCostImpact: z.number(),

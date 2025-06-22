@@ -374,6 +374,7 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
   const ageRange = formData.ageRange || "30-44";
   const employmentStatus = formData.employmentStatus || "full-time";
   const includeBigBill = formData.includeBigBill || false;
+  const incomeRange = formData.incomeRange || "45k-95k";
 
   // Fetch real-time economic data from FRED
   let economicData: EconomicIndicators | undefined;
@@ -780,6 +781,23 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
     console.log('Using fallback purchasing power data');
   }
 
+// Prepare economic context data from FRED
+  let economicContext;
+  if (economicData) {
+    const incomeValidation = validateIncomeRange(incomeRange, economicData.wageData);
+    economicContext = {
+      unemploymentRate: economicData.unemploymentRate,
+      recessionIndicators: economicData.recessionProbability,
+      wageValidation: {
+        medianWeeklyEarnings: economicData.wageData.medianWeeklyEarnings,
+        hourlyEarnings: economicData.wageData.hourlyEarnings,
+        incomeContext: incomeValidation.context,
+        lastUpdated: economicData.wageData.lastUpdated,
+      },
+      macroeconomicData: economicData.economicContext,
+    };
+  }
+
 return {
     // Current law scenario (default) - These represent impacts of PROPOSED policy vs current law baseline
     annualTaxImpact: Math.round(scaledTaxImpact), // Negative = saves money under proposed
@@ -800,6 +818,7 @@ return {
     timeline: timeline,
     breakdown: breakdown,
     purchasingPower: purchasingPowerData,
+    economicContext: economicContext,
     // Big Bill scenario
     bigBillScenario: {
       annualTaxImpact: Math.round(bigBillTaxImpact),
