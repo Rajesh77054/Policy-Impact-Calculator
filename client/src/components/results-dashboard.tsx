@@ -45,14 +45,22 @@ const MobileTooltip = ({
 };
 
 const ActionButtons = () => {
-  const { user, downloadPdfMutation, shareResultsMutation } = useReplitAuth();
+  const { 
+    user, 
+    downloadPdf, 
+    shareResults, 
+    isDownloadingPdf, 
+    isSharingResults,
+    downloadPdfData,
+    shareResultsData
+  } = useReplitAuth();
 
   const handleDownloadPdf = () => {
-    downloadPdfMutation.mutate();
+    downloadPdf();
   };
 
   const handleShareResults = () => {
-    shareResultsMutation.mutate();
+    shareResults();
   };
 
   return (
@@ -61,7 +69,7 @@ const ActionButtons = () => {
         {/* Download PDF Button */}
         <Button
           onClick={handleDownloadPdf}
-          disabled={downloadPdfMutation.isPending || !user}
+          disabled={isDownloadingPdf || !user}
           className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2"
         >
           <Download className="w-4 h-4" />
@@ -79,7 +87,7 @@ const ActionButtons = () => {
         {/* Share Results Button */}
         <Button
           onClick={handleShareResults}
-          disabled={shareResultsMutation.isPending || !user}
+          disabled={isSharingResults || !user}
           variant="outline"
           className="inline-flex items-center space-x-2 px-6 py-2"
         >
@@ -96,19 +104,14 @@ const ActionButtons = () => {
       )}
 
       {/* Success/Error messages */}
-      {downloadPdfMutation.isSuccess && (
+      {downloadPdfData && (
         <p className="text-center text-sm text-green-600 mt-2">
           PDF download initiated successfully
         </p>
       )}
-      {shareResultsMutation.isSuccess && (
+      {shareResultsData && (
         <p className="text-center text-sm text-green-600 mt-2">
           Share link generated successfully
-        </p>
-      )}
-      {(downloadPdfMutation.isError || shareResultsMutation.isError) && (
-        <p className="text-center text-sm text-red-600 mt-2">
-          Please sign in to use this feature
         </p>
       )}
     </div>
