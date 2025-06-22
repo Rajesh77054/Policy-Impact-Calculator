@@ -35,25 +35,32 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
 
       const years = purchasingPowerData.currentScenario.map(d => d.year);
 
-      // Use actual policy impact data instead of purchasing power projections
+      // Calculate cumulative savings over time using actual server data
       const actualData = showBigBillComparison ? (results.bigBillScenario || results) : results;
-      const netImpactData = [
-        actualData.netAnnualImpact,
-        actualData.timeline.fiveYear / 5,  // Average annual impact over 5 years
-        actualData.timeline.tenYear / 10,  // Average annual impact over 10 years
-        actualData.timeline.twentyYear / 20  // Average annual impact over 20 years
+      
+      // Build cumulative savings data matching the server's timeline calculations
+      const cumulativeImpact = [
+        Math.abs(actualData.netAnnualImpact), // Year 1 annual impact
+        Math.abs(actualData.timeline.fiveYear), // 5-year cumulative 
+        Math.abs(actualData.timeline.tenYear), // 10-year cumulative
+        Math.abs(actualData.timeline.twentyYear) // 20-year cumulative
       ];
 
-      // Use cash flow convention: negative = costs, positive = savings for display
-      const displayData = netImpactData.map(value => -value); // Convert server convention to cash flow convention
-      const savingsData = displayData.map((value, index) => value > 0 ? value : null); // Positive values are savings
-      const costsData = displayData.map((value, index) => value < 0 ? Math.abs(value) : null); // Negative values are costs (display as positive)
+      // For bar chart data - show annual breakdown aligned with server calculations
+      const annualBreakdownData = [
+        Math.abs(actualData.netAnnualImpact), // Annual impact
+        Math.abs(actualData.timeline.fiveYear / 5), // Average annual over 5 years
+        Math.abs(actualData.timeline.tenYear / 10), // Average annual over 10 years  
+        Math.abs(actualData.timeline.twentyYear / 20) // Average annual over 20 years
+      ];
 
-      // Check if datasets have any actual data (not all null)
+      // All data represents savings (negative server values = positive savings for user)
+      const savingsData = actualData.netAnnualImpact < 0 ? annualBreakdownData : [null, null, null, null];
+      const costsData = actualData.netAnnualImpact >= 0 ? annualBreakdownData : [null, null, null, null];
+
+      // Check if datasets have any actual data
       const hasSavingsData = savingsData.some(value => value !== null);
       const hasCostsData = costsData.some(value => value !== null);
-
-      // Use cumulative impact data from outer scope
 
       // Build datasets conditionally based on data availability
       const datasets: any[] = [

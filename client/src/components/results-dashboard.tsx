@@ -78,15 +78,14 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
           <CardHeader className="pb-4">
             <div className="text-center">
               <CardTitle className="text-2xl font-bold text-slate-900 mb-2">
-                {results.netAnnualImpact < 0 ? "Your Net Annual Benefit" : "Your Net Annual Impact"}
+                Your Net Annual Impact
               </CardTitle>
               <div className={`text-5xl font-bold mb-3 ${results.netAnnualImpact < 0 ? 'text-green-600' : 'text-orange-600'}`}>
-                {formatTaxImpact(results.netAnnualImpact)}
+                {results.netAnnualImpact < 0 ? `Save $${Math.abs(results.netAnnualImpact).toLocaleString()}` : `Pay $${results.netAnnualImpact.toLocaleString()} more`}
               </div>
               <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-                This represents your total annual financial {results.netAnnualImpact < 0 ? 'benefit' : 'impact'} from the 
-                proposed policy, accounting for tax relief, healthcare savings, and 
-                any additional costs.
+                This represents your total annual financial impact from the proposed policy, 
+                accounting for tax relief, healthcare savings, and any additional costs.
               </p>
             </div>
           </CardHeader>
@@ -111,13 +110,13 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold text-green-700 mb-2">
-                  {formatTaxImpact(results.annualTaxImpact)}
+                  {results.annualTaxImpact < 0 ? `Save $${Math.abs(results.annualTaxImpact).toLocaleString()}` : `Pay $${results.annualTaxImpact.toLocaleString()} more`}
                 </div>
                 <p className="text-sm text-green-600 mb-3">
                   Annual tax savings from policy changes
                 </p>
                 <div className="text-xs text-green-700">
-                  20-year total: {formatTaxImpact(results.annualTaxImpact * 20)}
+                  20-year total: {results.annualTaxImpact < 0 ? `Save $${Math.abs(results.annualTaxImpact * 20).toLocaleString()}` : `Pay $${(results.annualTaxImpact * 20).toLocaleString()} more`}
                 </div>
               </CardContent>
             </Card>
@@ -132,7 +131,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold text-green-700 mb-2">
-                  {formatCostImpact(results.healthcareCostImpact)}
+                  {results.healthcareCostImpact < 0 ? `Save $${Math.abs(results.healthcareCostImpact).toLocaleString()}` : `Cost $${results.healthcareCostImpact.toLocaleString()} more`}
                 </div>
                 <p className="text-sm text-green-600 mb-3">
                   Annual healthcare cost reduction
@@ -153,7 +152,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
               </CardHeader>
               <CardContent>
                 <div className={`text-3xl font-bold mb-2 ${results.timeline.twentyYear < 0 ? 'text-green-700' : 'text-orange-700'}`}>
-                  {formatTaxImpact(results.timeline.twentyYear)}
+                  {results.timeline.twentyYear < 0 ? `Save $${Math.abs(results.timeline.twentyYear).toLocaleString()}` : `Pay $${results.timeline.twentyYear.toLocaleString()} more`}
                 </div>
                 <p className={`text-sm mb-3 ${results.timeline.twentyYear < 0 ? 'text-green-600' : 'text-orange-600'}`}>
                   {results.timeline.twentyYear < 0 ? "Cumulative 20-year benefit" : "Cumulative 20-year cost"}
