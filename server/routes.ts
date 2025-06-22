@@ -27,13 +27,13 @@ interface ReplitUser {
 export async function registerRoutes(app: Express): Promise<Server> {
   // Session middleware
   app.use(session({
-    secret: process.env.SESSION_SECRET || 'policy-calculator-secret-' + Math.random().toString(36),
-    resave: false,
+    secret: process.env.SESSION_SECRET || 'policy-calculator-secret-12345',
+    resave: true, // Changed to true for better session persistence
     saveUninitialized: true,
     cookie: { 
       secure: false, // Set to false for Replit deployment
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      httpOnly: true,
+      httpOnly: false, // Changed to false for better compatibility in Replit
       sameSite: 'lax' // Changed from 'strict' to 'lax' for better compatibility
     }
   }));
@@ -44,12 +44,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log("Creating new session...");
       const sessionId = generateSessionId();
       console.log("Generated session ID:", sessionId);
-      
+
       const session = await storage.createSession(sessionId);
       console.log("Session created in storage:", session);
 
+      // Force session save
       req.session.policySessionId = sessionId;
-      console.log("Session ID stored in express session");
+      await new Promise<void>((resolve, reject) => {
+        req.session.save((err) => {
+          if (err) reject(err);
+          else resolve();
+        });
+      });
+
+      console.log("Session ID stored and saved:", sessionId);
 
       res.json({ sessionId });
     } catch (error: any) {
@@ -80,24 +88,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Update form data
   app.post("/api/session/form-data", async (req, res) => {
     try {
-      const sessionId = req.session.policySessionId;
+      let sessionId = req.session.policySessionId;
       console.log("Form data update - Session ID:", sessionId);
-      console.log("Form data update - Full session object:", req.session);
-      console.log("Form data update - Raw body:", JSON.stringify(req.body, null, 2));
+      console.log('Form data update - Full session object:', req.session);
+      console.log('Form data update - Raw body:', req.body);
 
       if (!sessionId) {
-        console.error("No session ID found in request.session:", req.session);
-        // Try to create a new session if none exists
-        const newSessionId = generateSessionId();
-        console.log("Creating emergency session with ID:", newSessionId);
-        
-        const newSession = await storage.createSession(newSessionId);
-        req.session.policySessionId = newSessionId;
-        
-        const validatedData = formDataSchema.parse(req.body);
-        const updatedSession = await storage.updateSessionFormData(newSessionId, validatedData);
-        
-        return res.json(updatedSession);
+        console.log('No session ID found in request.session:', req.session);
+        // Try to find existing session first
+        const existingSessions = await storage.getSessions();
+
+        if (existingSessions.length > 0) {
+          sessionId = existingSessions[0].sessionId;
+          req.session.policySessionId = sessionId;
+          console.log('Reusing existing session:', sessionId);
+        } else {
+          // Create emergency session only if no existing sessions
+          sessionId = generateSessionId();
+          console.log('Creating emergency session with ID:', sessionId);
+          req.session.policySessionId = sessionId;
+
+          const newSession = await storage.createSession(sessionId, req.body);
+
+          return res.json(newSession);
+        }
       }
 
       const validatedData = formDataSchema.parse(req.body);
@@ -117,21 +131,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/calculate", async (req, res) => {
     try {
       const sessionId = req.session.policySessionId;
-      console.log("Calculate request - Session ID:", sessionId);
+      console.log('Calculate request - Session ID:', sessionId);
 
       if (!sessionId) {
-        return res.status(404).json({ message: "No session found" });
+        console.error("No session ID found for calculation");
+        return res.status(400).json({ 
+          message: "Session expired. Please restart the calculator." 
+        });
       }
 
       const session = await storage.getSession(sessionId);
       console.log("Calculate request - Session data:", JSON.stringify(session, null, 2));
 
-      if (!session || !session.formData) {
-        return res.status(400).json({ message: "Form data not found" });
+      if (!session) {
+        console.error("Session not found in storage:", sessionId);
+        return res.status(400).json({ 
+          message: "Session not found. Please restart the calculator." 
+        });
+      }
+
+      if (!session.formData) {
+        console.error("Form data missing from session:", sessionId);
+        return res.status(400).json({ 
+          message: "Form data incomplete. Please complete all steps." 
+        });
       }
 
       console.log("Calculating for form data:", JSON.stringify(session.formData, null, 2));
-      const results = calculatePolicyImpact(session.formData);
+      const results = await calculatePolicyImpact(session.formData);
       console.log("Calculation results:", JSON.stringify(results, null, 2));
 
       const updatedSession = await storage.updateSessionResults(sessionId, results);
@@ -139,7 +166,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(updatedSession);
     } catch (error: any) {
       console.error("Calculate error:", error.message, error.stack);
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ 
+        message: "Calculation failed. Please try again.",
+        details: error.message 
+      });
     }
   });
 

@@ -94,6 +94,19 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
               plugins: {
                 legend: {
                   display: false
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      const value = context.parsed.y;
+                      const label = context.dataset.label;
+                      if (value < 0) {
+                        return `${label}: Save $${Math.abs(value).toLocaleString()}`;
+                      } else {
+                        return `${label}: Pay $${value.toLocaleString()} more`;
+                      }
+                    }
+                  }
                 }
               },
               scales: {
@@ -101,7 +114,13 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
                   ticks: {
                     callback: function (value) {
                       const numValue = typeof value === 'number' ? value : 0;
-                      return (numValue >= 0 ? '+' : '') + '$' + Math.abs(numValue).toLocaleString();
+                      if (numValue < 0) {
+                        return 'Save $' + Math.abs(numValue).toLocaleString();
+                      } else if (numValue > 0) {
+                        return 'Pay $' + numValue.toLocaleString() + ' more';
+                      } else {
+                        return '$0';
+                      }
                     }
                   }
                 }
@@ -173,9 +192,7 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
 
   return (
     <div className="mb-8">
-      <h3 className="text-xl font-semibold text-slate-900 mb-6">
-        Visual Analysis
-      </h3>
+      <h3 className="text-xl font-semibold text-slate-900 mb-6">Side-by-Side Comparison</h3>
       <div className="grid lg:grid-cols-2 gap-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -377,7 +394,6 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
             </CardContent>
           </Card>
       </div>
-
       {/* Tax Impact Modal */}
       <Dialog open={openTaxModal} onOpenChange={setOpenTaxModal}>
         <DialogContent className="max-w-lg">
@@ -402,7 +418,6 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
           </DialogHeader>
         </DialogContent>
       </Dialog>
-
       {/* Healthcare Cost Modal */}
       <Dialog open={openHealthcareModal} onOpenChange={setOpenHealthcareModal}>
         <DialogContent className="max-w-lg">

@@ -9,6 +9,7 @@ import {
   METHODOLOGY_NOTES,
   ONE_BIG_BEAUTIFUL_BILL_PROVISIONS
 } from "../data/policy-data";
+import { fetchCPIData, calculatePurchasingPowerOverTime, calculatePurchasingPowerForScenario, getIncomeMidpoint } from "../services/bls-api";
 
 export function generateSessionId(): string {
   return Math.random().toString(36).substring(2, 15) + 
@@ -358,7 +359,7 @@ function calculateHealthcareCosts(
   };
 }
 
-export function calculatePolicyImpact(formData: FormData): PolicyResults {
+export async function calculatePolicyImpact(formData: FormData): Promise<PolicyResults> {
   // Get median income for calculations
   const income = formData.incomeRange ? INCOME_MEDIANS[formData.incomeRange] : 62500;
 
@@ -632,12 +633,126 @@ export function calculatePolicyImpact(formData: FormData): PolicyResults {
   const currentRecessionProbability = calculateRecessionProbability(false);
   const bigBillRecessionProbability = calculateRecessionProbability(true);
 
+  // Purchasing Power Analysis with BLS API integration
+  const currentYear = new Date().getFullYear();
+  const projectionYears = [currentYear, currentYear + 5, currentYear + 10, currentYear + 20];
+  
+  console.log('Starting purchasing power calculation...');
+  
+  // Calculate disposable income after taxes and healthcare costs
+  const currentDisposableIncome = income - currentTax - healthcareCosts.current;
+  const proposedDisposableIncome = income - proposedTax - healthcareCosts.proposed;
+  const bigBillDisposableIncome = income - bigBillTax - (healthcareCosts.proposed * 0.8);
+  
+  console.log(`Disposable incomes: Current=${currentDisposableIncome}, Proposed=${proposedDisposableIncome}, BigBill=${bigBillDisposableIncome}`);
+  
+  let purchasingPowerData;
+  let bigBillPurchasingPowerData;
+  
+  try {
+    // Fetch CPI data from BLS API - get wider range to ensure we have projections
+    const cpiData = await fetchCPIData(currentYear - 3, currentYear + 25);
+    console.log(`Retrieved ${cpiData.length} CPI data points`);
+    console.log('Available years in CPI data:', cpiData.map(d => d.year).join(', '));
+    console.log('Projection years needed:', projectionYears.join(', '));
+    
+    // Generate purchasing power projections using shared baseline for proper comparison
+    // Use Current Law as baseline so differences are clearly visible
+    const baselineIncome = currentDisposableIncome;
+    
+    const currentLawScenario = calculatePurchasingPowerForScenario(
+      currentDisposableIncome,
+      cpiData,
+      'Current Law',
+      baselineIncome
+    );
+    
+    const proposedPolicyScenario = calculatePurchasingPowerForScenario(
+      proposedDisposableIncome,
+      cpiData,
+      'Proposed Policy',
+      baselineIncome
+    );
+    
+    const bigBillScenario = calculatePurchasingPowerForScenario(
+      bigBillDisposableIncome,
+      cpiData,
+      'Big Bill',
+      baselineIncome
+    );
+    
+    // Filter for projection years and ensure we have data
+    const currentScenarioFiltered = currentLawScenario.filter(d => 
+      projectionYears.includes(d.year)
+    );
+    const proposedScenarioFiltered = proposedPolicyScenario.filter(d => 
+      projectionYears.includes(d.year)
+    );
+    const bigBillScenarioFiltered = bigBillScenario.filter(d => 
+      projectionYears.includes(d.year)
+    );
+    
+    console.log(`Filtered purchasing power data: ${currentScenarioFiltered.length} points for current scenario`);
+    console.log(`Filtered purchasing power data: ${proposedScenarioFiltered.length} points for proposed scenario`);
+    console.log(`Filtered purchasing power data: ${bigBillScenarioFiltered.length} points for big bill scenario`);
+    
+    // Use projection year data if available, otherwise use first 4 data points
+    purchasingPowerData = {
+      currentScenario: currentScenarioFiltered.length > 0 ? currentScenarioFiltered : currentLawScenario.slice(0, 4),
+      proposedScenario: proposedScenarioFiltered.length > 0 ? proposedScenarioFiltered : proposedPolicyScenario.slice(0, 4),
+      dataSource: "U.S. Bureau of Labor Statistics CPI-U (Consumer Price Index, All Urban Consumers)",
+      lastUpdated: new Date().toISOString().split('T')[0]
+    };
+    
+    bigBillPurchasingPowerData = {
+      currentScenario: currentScenarioFiltered.length > 0 ? currentScenarioFiltered : currentLawScenario.slice(0, 4),
+      proposedScenario: bigBillScenarioFiltered.length > 0 ? bigBillScenarioFiltered : bigBillScenario.slice(0, 4),
+      dataSource: "U.S. Bureau of Labor Statistics CPI-U (Consumer Price Index, All Urban Consumers)",
+      lastUpdated: new Date().toISOString().split('T')[0]
+    };
+    
+    console.log('Purchasing power data calculated successfully using BLS API data');
+    
+  } catch (error) {
+    console.error('Error calculating purchasing power data:', error);
+    // Generate fallback data using historical inflation averages
+    const inflationRate = 0.025; // 2.5% average annual inflation
+    
+    const generateFallbackData = (disposableIncome: number) => {
+      return projectionYears.map(year => {
+        const yearsFromNow = year - currentYear;
+        const inflationFactor = Math.pow(1 + inflationRate, yearsFromNow);
+        return {
+          year,
+          purchasingPowerIndex: Math.round(100 / inflationFactor),
+          projectedDisposableIncome: Math.round(disposableIncome / inflationFactor)
+        };
+      });
+    };
+    
+    purchasingPowerData = {
+      currentScenario: generateFallbackData(currentDisposableIncome),
+      proposedScenario: generateFallbackData(proposedDisposableIncome),
+      dataSource: "Historical inflation trends (2.5% average annual)",
+      lastUpdated: new Date().toISOString().split('T')[0]
+    };
+    
+    bigBillPurchasingPowerData = {
+      currentScenario: generateFallbackData(currentDisposableIncome),
+      proposedScenario: generateFallbackData(bigBillDisposableIncome),
+      dataSource: "Historical inflation trends (2.5% average annual)",
+      lastUpdated: new Date().toISOString().split('T')[0]
+    };
+    
+    console.log('Using fallback purchasing power data');
+  }
+
 return {
-    // Current law scenario (default)
-    annualTaxImpact: Math.round(scaledTaxImpact + employmentTaxAdjustment),
-    healthcareCostImpact: Math.round(finalHealthcareImpact),
-    energyCostImpact: Math.round(finalEnergyImpact),
-    netAnnualImpact: Math.round(adjustedNetAnnualImpact),
+    // Current law scenario (default) - These represent impacts of PROPOSED policy vs current law baseline
+    annualTaxImpact: Math.round(scaledTaxImpact), // Negative = saves money under proposed
+    healthcareCostImpact: Math.round(finalHealthcareImpact), // Negative = saves money under proposed  
+    energyCostImpact: Math.round(finalEnergyImpact), // Positive = costs more under proposed
+    netAnnualImpact: Math.round(adjustedNetAnnualImpact), // Negative = net savings under proposed
     deficitImpact: currentDeficitImpact,
     recessionProbability: currentRecessionProbability,
     healthcareCosts: {
@@ -651,6 +766,7 @@ return {
     },
     timeline: timeline,
     breakdown: breakdown,
+    purchasingPower: purchasingPowerData,
     // Big Bill scenario
     bigBillScenario: {
       annualTaxImpact: Math.round(bigBillTaxImpact),
@@ -690,7 +806,8 @@ return {
             { item: "Expanded prescription coverage", amount: Math.round(healthcareImpact * 1.4 * 0.3) }
           ]
         }
-      ]
+      ],
+      purchasingPower: bigBillPurchasingPowerData
     }
   };
 }

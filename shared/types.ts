@@ -20,6 +20,20 @@ export interface PolicyResults {
     tenYear: number;
     twentyYear: number;
   };
+  purchasingPower: {
+    currentScenario: Array<{
+      year: number;
+      purchasingPowerIndex: number;
+      projectedDisposableIncome: number;
+    }>;
+    proposedScenario: Array<{
+      year: number;
+      purchasingPowerIndex: number;
+      projectedDisposableIncome: number;
+    }>;
+    dataSource: string;
+    lastUpdated: string;
+  };
   breakdown: Array<{
     category: string;
     title: string;
@@ -61,5 +75,19 @@ export interface PolicyResults {
         amount: number;
       }>;
     }>;
+    purchasingPower: {
+      currentScenario: Array<{
+        year: number;
+        purchasingPowerIndex: number;
+        projectedDisposableIncome: number;
+      }>;
+      proposedScenario: Array<{
+        year: number;
+        purchasingPowerIndex: number;
+        projectedDisposableIncome: number;
+      }>;
+      dataSource: string;
+      lastUpdated: string;
+    };
   };
 }

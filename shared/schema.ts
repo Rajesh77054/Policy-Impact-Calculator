@@ -50,6 +50,21 @@ const policyBreakdownSchema = z.object({
   })),
 });
 
+const purchasingPowerSchema = z.object({
+  currentScenario: z.array(z.object({
+    year: z.number(),
+    purchasingPowerIndex: z.number(),
+    projectedDisposableIncome: z.number(),
+  })),
+  proposedScenario: z.array(z.object({
+    year: z.number(),
+    purchasingPowerIndex: z.number(),
+    projectedDisposableIncome: z.number(),
+  })),
+  dataSource: z.string(),
+  lastUpdated: z.string(),
+});
+
 export const policyResultsSchema = z.object({
   annualTaxImpact: z.number(),
   healthcareCostImpact: z.number(),
@@ -72,6 +87,7 @@ export const policyResultsSchema = z.object({
     twentyYear: z.number(),
   }),
   breakdown: z.array(policyBreakdownSchema),
+  purchasingPower: purchasingPowerSchema,
   bigBillScenario: z.object({
     annualTaxImpact: z.number(),
     healthcareCostImpact: z.number(),
@@ -94,6 +110,7 @@ export const policyResultsSchema = z.object({
       twentyYear: z.number(),
     }),
     breakdown: z.array(policyBreakdownSchema),
+    purchasingPower: purchasingPowerSchema,
   }).optional(),
 });
 
