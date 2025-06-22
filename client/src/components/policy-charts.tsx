@@ -269,7 +269,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                     <div className="flex justify-between text-xs">
                       <span className="text-blue-700">20 Years</span>
                       <span className="text-blue-900 font-medium">
-                        ${Math.abs((results.bigBillScenario?.timeline.twentyYear || 0) / 1000).toFixed(0)}K
+                        ${Math.abs(results.timeline.twentyYear / 1000).toFixed(0)}K
                       </span>
                     </div>
                   </div>
@@ -280,10 +280,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                 <div className="text-center">
                   <p className="text-xs text-blue-700">20-Year Tax Savings Difference:</p>
                   <p className="text-sm font-semibold text-blue-800">
-                    {Math.abs((results.bigBillScenario?.timeline.twentyYear || 0) - results.timeline.twentyYear) < 1000 ? 
-                      "Nearly identical" : 
-                      `$${Math.abs(((results.bigBillScenario?.timeline.twentyYear || 0) - results.timeline.twentyYear) / 1000).toFixed(0)}K additional savings`
-                    }
+                    Consolidated Big Bill CBO Data
                   </p>
                 </div>
               </div>
@@ -351,19 +348,19 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                     <div className="flex justify-between text-xs">
                       <span className="text-green-700">Annual Premium</span>
                       <span className="font-medium text-green-900">
-                        ${results.bigBillScenario?.healthcareCosts?.proposed?.toLocaleString() || results.healthcareCosts.proposed.toLocaleString()}
+                        ${results.healthcareCosts.proposed.toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
                       <span className="text-green-700">Deductible</span>
                       <span className="font-medium text-green-900">
-                        ${((results.bigBillScenario?.healthcareCosts?.proposed || results.healthcareCosts.proposed) * 0.2).toLocaleString()}
+                        ${(results.healthcareCosts.proposed * 0.2).toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
                       <span className="text-green-700">Out-of-Pocket Max</span>
                       <span className="font-medium text-green-900">
-                        ${((results.bigBillScenario?.healthcareCosts?.proposed || results.healthcareCosts.proposed) * 1.5).toLocaleString()}
+                        ${(results.healthcareCosts.proposed * 1.5).toLocaleString()}
                       </span>
                     </div>
                   </div>
@@ -371,7 +368,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                     <div className="flex justify-between text-sm">
                       <span className="font-medium text-green-800">Total Annual Cost</span>
                       <span className="font-bold text-green-900">
-                        ${((results.bigBillScenario?.healthcareCosts?.proposed || results.healthcareCosts.proposed)).toLocaleString()}
+                        ${results.healthcareCosts.proposed.toLocaleString()}
                       </span>
                     </div>
                   </div>
@@ -382,7 +379,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                 <div className="text-center">
                   <p className="text-xs text-green-700">Annual Healthcare Savings:</p>
                   <p className="text-sm font-semibold text-green-800">
-                    ${Math.abs(results.bigBillScenario?.healthcareCostImpact || results.healthcareCostImpact).toLocaleString()} saved per year
+                    ${Math.abs(results.healthcareCostImpact).toLocaleString()} saved per year
                   </p>
                 </div>
               </div>
