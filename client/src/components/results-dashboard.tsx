@@ -42,7 +42,6 @@ const MobileTooltip = ({
 };
 
 export default function ResultsDashboard({ results }: ResultsDashboardProps) {
-  const showBigBillComparison = Boolean(results.bigBillScenario);
 
   const formatCurrency = (amount: number): string => {
     if (Math.abs(amount) >= 1000000) {
@@ -92,7 +91,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
         </Card>
 
         {/* Primary Chart - Net Financial Impact Over Time */}
-        <NetFinancialImpactChart results={results} showBigBillComparison={showBigBillComparison} />
+        <NetFinancialImpactChart results={results} />
 
         {/* Secondary Supporting Information */}
         <div className="border-t pt-8">
@@ -187,7 +186,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
           )}
 
           {/* Secondary Charts Section */}
-          <PolicyCharts results={results} showBigBillComparison={showBigBillComparison} />
+          <PolicyCharts results={results} />
         </div>
       </div>
     </TooltipProvider>

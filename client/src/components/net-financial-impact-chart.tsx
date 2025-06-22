@@ -296,8 +296,8 @@ export default function NetFinancialImpactChart({ results }: NetFinancialImpactC
     return null;
   }
 
-  // Use ONLY the current scenario (not mixed with bigBillScenario unless explicitly requested)
-  const actualData = currentData || results;
+  // Use Big Bill CBO data as the single authoritative source
+  const actualData = results;
 
   // Calculate net impacts using correct server data - no conversion
   const years = [2025, 2030, 2035, 2045];

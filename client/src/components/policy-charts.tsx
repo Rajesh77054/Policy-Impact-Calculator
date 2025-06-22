@@ -16,10 +16,9 @@ import { MobileTooltip } from "@/components/ui/mobile-tooltip";
 
 interface PolicyChartsProps {
   results: PolicyResults;
-  showBigBillComparison: boolean;
 }
 
-export default function PolicyCharts({ results, showBigBillComparison }: PolicyChartsProps) {
+export default function PolicyCharts({ results }: PolicyChartsProps) {
   const taxChartRef = useRef<HTMLCanvasElement>(null);
   const healthcareChartRef = useRef<HTMLCanvasElement>(null);
   const taxChartInstance = useRef<any>(null);

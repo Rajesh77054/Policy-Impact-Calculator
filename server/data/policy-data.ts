@@ -48,13 +48,7 @@ export const FEDERAL_TAX_BRACKETS_2024: TaxBracket[] = [
   { min: 626351, max: Infinity, rate: 0.37, standard_deduction_single: 14600, standard_deduction_married: 29200, standard_deduction_family: 29200 },
 ];
 
-// Proposed tax changes - representative examples based on common policy proposals
-export const PROPOSED_TAX_CHANGES = {
-  standard_deduction_increase: 2000, // Proposed increase in standard deduction
-  child_tax_credit_increase: 1000, // Proposed increase in child tax credit
-  earned_income_tax_credit_expansion: 0.15, // 15% expansion
-  top_bracket_rate_change: 0.02, // 2% increase on top bracket
-};
+// Deprecated - Use ONE_BIG_BEAUTIFUL_BILL_PROVISIONS for authoritative CBO data
 
 // Healthcare cost data - from Kaiser Family Foundation and CMS
 export const HEALTHCARE_COSTS_2024: HealthcareCosts = {
@@ -64,14 +58,7 @@ export const HEALTHCARE_COSTS_2024: HealthcareCosts = {
   prescription_drug_avg: 1480, // CMS average annual prescription costs
 };
 
-// Proposed healthcare changes based on Congressional proposals
-export const PROPOSED_HEALTHCARE_CHANGES = {
-  medicare_expansion_age: 60, // Lower Medicare eligibility age to 60
-  prescription_drug_cap: 2000, // Annual out-of-pocket cap for all plans
-  premium_subsidies_expansion: 0.35, // Enhanced ACA premium subsidies
-  medicaid_expansion_income_limit: 1.5, // 150% of federal poverty level
-  public_option_premium_reduction: 0.15, // 15% lower than marketplace average
-};
+// Deprecated - Use ONE_BIG_BEAUTIFUL_BILL_PROVISIONS for authoritative CBO data
 
 // Real CBO-scored provisions from H.R. 1 "One Big Beautiful Bill Act"
 // Source: Congressional Budget Office Cost Estimate, June 4, 2025
