@@ -1,11 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { HelpCircle, TrendingUp, TrendingDown, Calculator, DollarSign, Heart, Zap, Building, Users, Shield } from "lucide-react";
+import { HelpCircle, TrendingUp, TrendingDown, Calculator, DollarSign, Heart, Zap, Building, Users, Shield, Download, Share2, RotateCcw } from "lucide-react";
 import { PolicyResults } from "@shared/types";
 import PolicyCharts from "./policy-charts";
 import NetFinancialImpactChart from "./net-financial-impact-chart";
 import EconomicContextCard from "./economic-context-card";
+import { useReplitAuth } from "@/hooks/use-replit-auth";
+import { Link } from "wouter";
 
 interface ResultsDashboardProps {
   results: PolicyResults;
@@ -38,6 +41,77 @@ const MobileTooltip = ({
         </div>
       </TooltipContent>
     </Tooltip>
+  );
+};
+
+const ActionButtons = () => {
+  const { user, downloadPdfMutation, shareResultsMutation } = useReplitAuth();
+
+  const handleDownloadPdf = () => {
+    downloadPdfMutation.mutate();
+  };
+
+  const handleShareResults = () => {
+    shareResultsMutation.mutate();
+  };
+
+  return (
+    <div className="border-t pt-8 mt-8">
+      <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        {/* Download PDF Button */}
+        <Button
+          onClick={handleDownloadPdf}
+          disabled={downloadPdfMutation.isPending || !user}
+          className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2"
+        >
+          <Download className="w-4 h-4" />
+          <span>Download PDF Report</span>
+        </Button>
+
+        {/* Start New Analysis Button */}
+        <Link href="/calculator">
+          <Button variant="outline" className="inline-flex items-center space-x-2 px-6 py-2">
+            <RotateCcw className="w-4 h-4" />
+            <span>Start New Analysis</span>
+          </Button>
+        </Link>
+
+        {/* Share Results Button */}
+        <Button
+          onClick={handleShareResults}
+          disabled={shareResultsMutation.isPending || !user}
+          variant="outline"
+          className="inline-flex items-center space-x-2 px-6 py-2"
+        >
+          <Share2 className="w-4 h-4" />
+          <span>Share Results</span>
+        </Button>
+      </div>
+
+      {/* Authentication message for users not logged in */}
+      {!user && (
+        <p className="text-center text-sm text-muted-foreground mt-4">
+          Sign in with Replit to download PDF reports and share results
+        </p>
+      )}
+
+      {/* Success/Error messages */}
+      {downloadPdfMutation.isSuccess && (
+        <p className="text-center text-sm text-green-600 mt-2">
+          PDF download initiated successfully
+        </p>
+      )}
+      {shareResultsMutation.isSuccess && (
+        <p className="text-center text-sm text-green-600 mt-2">
+          Share link generated successfully
+        </p>
+      )}
+      {(downloadPdfMutation.isError || shareResultsMutation.isError) && (
+        <p className="text-center text-sm text-red-600 mt-2">
+          Please sign in to use this feature
+        </p>
+      )}
+    </div>
   );
 };
 
@@ -187,6 +261,9 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
           {results.economicContext && (
             <EconomicContextCard results={results} className="mb-8" />
           )}
+
+          {/* Action Buttons Section */}
+          <ActionButtons />
         </div>
       </div>
     </TooltipProvider>
