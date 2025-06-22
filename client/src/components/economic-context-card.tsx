@@ -80,17 +80,17 @@ export default function EconomicContextCard({ results, className }: EconomicCont
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">State Unemployment</span>
+                </div>
+                <div className="text-2xl font-bold flex items-center gap-1">
+                  {formatPercentage(unemploymentRate.state)}
                   {getTrendIcon(unemploymentRate.state, unemploymentRate.national)}
                 </div>
-                <div className="text-2xl font-bold">
-                  {formatPercentage(unemploymentRate.state)}
-                  <Badge 
-                    variant={unemploymentRate.state > unemploymentRate.national ? "destructive" : "default"}
-                    className="ml-2"
-                  >
-                    {unemploymentRate.state > unemploymentRate.national ? "Above" : "Below"} National
-                  </Badge>
-                </div>
+                <Badge 
+                  variant={unemploymentRate.state > unemploymentRate.national ? "destructive" : "default"}
+                  className="ml-2"
+                >
+                  {unemploymentRate.state > unemploymentRate.national ? "Above" : "Below"} National
+                </Badge>
               </div>
             )}
           </div>
