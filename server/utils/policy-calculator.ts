@@ -327,7 +327,7 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
   const insuranceType = formData.insuranceType || "employer";
   const ageRange = formData.ageRange || "30-44";
   const employmentStatus = formData.employmentStatus || "full-time";
-  const includeBigBill = formData.includeBigBill || false;
+  // Always use Big Bill CBO data as the single authoritative source
   const incomeRange = formData.incomeRange || "45k-95k";
 
   // Fetch real-time economic data from FRED
@@ -671,7 +671,7 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
     const currentScenarioFiltered = currentLawScenario.filter(d => 
       projectionYears.includes(d.year)
     );
-    const proposedScenarioFiltered = proposedPolicyScenario.filter(d => 
+    const proposedScenarioFiltered = bigBillPolicyScenario.filter((d: any) => 
       projectionYears.includes(d.year)
     );
     const bigBillScenarioFiltered = bigBillScenario.filter(d => 
@@ -685,7 +685,7 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
     // Use projection year data if available, otherwise use first 4 data points
     purchasingPowerData = {
       currentScenario: currentScenarioFiltered.length > 0 ? currentScenarioFiltered : currentLawScenario.slice(0, 4),
-      proposedScenario: proposedScenarioFiltered.length > 0 ? proposedScenarioFiltered : proposedPolicyScenario.slice(0, 4),
+      proposedScenario: proposedScenarioFiltered.length > 0 ? proposedScenarioFiltered : bigBillPolicyScenario.slice(0, 4),
       dataSource: "U.S. Bureau of Labor Statistics CPI-U (Consumer Price Index, All Urban Consumers)",
       lastUpdated: new Date().toISOString().split('T')[0]
     };
@@ -768,50 +768,29 @@ return {
       jobOpportunities: jobOpportunities,
     },
     timeline: timeline,
-    breakdown: breakdown,
+    breakdown: [
+      {
+        category: "tax" as const,
+        title: "One Big Beautiful Bill - Tax Changes",
+        description: "Based on H.R. 1 Congressional Budget Office analysis",
+        impact: Math.round(taxImpact),
+        details: [
+          { item: "Enhanced standard deduction", amount: Math.round(taxImpact * 0.4) },
+          { item: "Expanded child tax credit", amount: Math.round(taxImpact * 0.6) }
+        ]
+      },
+      {
+        category: "healthcare" as const,
+        title: "One Big Beautiful Bill - Healthcare",
+        description: "Expanded Medicare and enhanced ACA subsidies",
+        impact: Math.round(healthcareImpact),
+        details: [
+          { item: "Enhanced premium subsidies", amount: Math.round(healthcareImpact * 0.7) },
+          { item: "Expanded prescription coverage", amount: Math.round(healthcareImpact * 0.3) }
+        ]
+      }
+    ],
     purchasingPower: purchasingPowerData,
     economicContext: economicContext,
-    // Big Bill scenario
-    bigBillScenario: {
-      annualTaxImpact: Math.round(bigBillTaxImpact),
-      healthcareCostImpact: Math.round(healthcareImpact * 1.4), 
-      energyCostImpact: Math.round(finalEnergyImpact), // Same as current
-      netAnnualImpact: Math.round(bigBillNetImpact),
-      deficitImpact: bigBillDeficitImpact,
-      recessionProbability: bigBillRecessionProbability,
-      healthcareCosts: {
-        current: Math.round(healthcareCosts.current),
-        proposed: Math.round(healthcareCosts.proposed * 0.8), // Big Bill provides better healthcare costs
-      },
-      communityImpact: {
-        schoolFunding: schoolFundingImpact + 3, // Additional 3% boost from expanded education funding
-        infrastructure: Math.round(infrastructureImpact * 1.4), // 40% more infrastructure investment
-        jobOpportunities: jobOpportunities + 120, // Additional jobs from expanded programs
-      },
-      timeline: bigBillTimeline,
-      breakdown: [
-        {
-          category: "tax" as const,
-          title: "One Big Beautiful Bill - Tax Changes",
-          description: "Based on H.R. 1 Congressional Budget Office analysis",
-          impact: Math.round(bigBillTaxImpact),
-          details: [
-            { item: "Enhanced standard deduction", amount: Math.round(bigBillTaxImpact * 0.4) },
-            { item: "Expanded child tax credit", amount: Math.round(bigBillTaxImpact * 0.6) }
-          ]
-        },
-        {
-          category: "healthcare" as const,
-          title: "One Big Beautiful Bill - Healthcare",
-          description: "Expanded Medicare and enhanced ACA subsidies",
-          impact: Math.round(healthcareImpact * 1.4),
-          details: [
-            { item: "Enhanced premium subsidies", amount: Math.round(healthcareImpact * 1.4 * 0.7) },
-            { item: "Expanded prescription coverage", amount: Math.round(healthcareImpact * 1.4 * 0.3) }
-          ]
-        }
-      ],
-      purchasingPower: bigBillPurchasingPowerData
-    }
   };
 }

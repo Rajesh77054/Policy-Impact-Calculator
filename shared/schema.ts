@@ -36,7 +36,6 @@ export const formDataSchema = z.object({
 
   // Step 6: Priorities
   priorities: z.array(z.string()).optional(),
-  includeBigBill: z.boolean().optional(),
 });
 
 const policyBreakdownSchema = z.object({
@@ -115,30 +114,6 @@ export const policyResultsSchema = z.object({
   breakdown: z.array(policyBreakdownSchema),
   purchasingPower: purchasingPowerSchema,
   economicContext: economicContextSchema.optional(),
-  bigBillScenario: z.object({
-    annualTaxImpact: z.number(),
-    healthcareCostImpact: z.number(),
-    energyCostImpact: z.number(),
-    netAnnualImpact: z.number(),
-    deficitImpact: z.number(),
-    recessionProbability: z.number(),
-    healthcareCosts: z.object({
-      current: z.number(),
-      proposed: z.number(),
-    }),
-    communityImpact: z.object({
-      schoolFunding: z.number(),
-      infrastructure: z.number(),
-      jobOpportunities: z.number(),
-    }),
-    timeline: z.object({
-      fiveYear: z.number(),
-      tenYear: z.number(),
-      twentyYear: z.number(),
-    }),
-    breakdown: z.array(policyBreakdownSchema),
-    purchasingPower: purchasingPowerSchema,
-  }).optional(),
 });
 
 export const insertSessionSchema = createInsertSchema(userSessions).omit({
