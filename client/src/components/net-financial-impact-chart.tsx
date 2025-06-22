@@ -35,12 +35,14 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
 
       const years = purchasingPowerData.currentScenario.map(d => d.year);
 
-      // Calculate net financial impact (proposed - current) for each year
-      const netImpactData = years.map((year, index) => {
-        const currentIncome = purchasingPowerData.currentScenario[index]?.projectedDisposableIncome || 0;
-        const proposedIncome = purchasingPowerData.proposedScenario[index]?.projectedDisposableIncome || 0;
-        return proposedIncome - currentIncome;
-      });
+      // Use actual policy impact data instead of purchasing power projections
+      const actualData = showBigBillComparison ? (results.bigBillScenario || results) : results;
+      const netImpactData = [
+        actualData.netAnnualImpact,
+        actualData.timeline.fiveYear / 5,  // Average annual impact over 5 years
+        actualData.timeline.tenYear / 10,  // Average annual impact over 10 years
+        actualData.timeline.twentyYear / 20  // Average annual impact over 20 years
+      ];
 
       // Separate positive and negative values for different styling
       const positiveData = netImpactData.map(value => value > 0 ? value : null);
@@ -50,12 +52,13 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
       const hasPositiveData = positiveData.some(value => value !== null);
       const hasNegativeData = negativeData.some(value => value !== null);
 
-      // Calculate cumulative impact over time
-      const cumulativeImpact = netImpactData.reduce((acc, impact, index) => {
-        const total = netImpactData.slice(0, index + 1).reduce((sum, val) => sum + val, 0);
-        acc.push(total);
-        return acc;
-      }, [] as number[]);
+      // Use actual cumulative timeline data
+      const cumulativeImpact = [
+        actualData.netAnnualImpact,
+        actualData.timeline.fiveYear,
+        actualData.timeline.tenYear,
+        actualData.timeline.twentyYear
+      ];
 
       // Build datasets conditionally based on data availability
       const datasets: any[] = [
@@ -270,39 +273,46 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
     return null;
   }
 
-  // Calculate net financial impact data for summary cards
-  const years = purchasingPowerData.currentScenario.map((d: any) => d.year);
-  const netImpacts = years.map((year: any, index: number) => {
-    const currentIncome = purchasingPowerData.currentScenario[index]?.projectedDisposableIncome || 0;
-    const proposedIncome = purchasingPowerData.proposedScenario[index]?.projectedDisposableIncome || 0;
-    return proposedIncome - currentIncome;
-  });
+  // Use actual policy impact calculations instead of purchasing power projections
+  const actualData = showBigBillComparison ? (results.bigBillScenario || results) : results;
+  
+  // Calculate net impacts based on actual policy calculations
+  const years = [2025, 2030, 2035, 2045]; // Standard timeline years
+  const netImpacts = [
+    actualData.netAnnualImpact,
+    actualData.timeline.fiveYear / 5,  // Average annual impact over 5 years
+    actualData.timeline.tenYear / 10,  // Average annual impact over 10 years
+    actualData.timeline.twentyYear / 20  // Average annual impact over 20 years
+  ];
 
-  // Calculate key metrics
+  // Calculate key metrics based on actual policy impact
   const totalSavings = netImpacts.reduce((sum: number, impact: number) => sum + Math.max(0, impact), 0);
   const totalCosts = netImpacts.reduce((sum: number, impact: number) => sum + Math.min(0, impact), 0);
-  const netBenefit = totalSavings + totalCosts;
-  const averageAnnualImpact = netImpacts.reduce((sum: number, impact: number) => sum + impact, 0) / netImpacts.length;
+  const netBenefit = actualData.timeline.twentyYear; // Use the actual 20-year cumulative impact
+  const averageAnnualImpact = actualData.netAnnualImpact; // Use the actual annual impact
+
+  // Determine overall impact for card styling
+  const isOverallBenefit = netBenefit < 0; // Negative values are benefits (savings)
 
   return (
     <TooltipProvider>
-      <Card className="border-2 border-green-200 bg-gradient-to-br from-green-50 to-emerald-50">
+      <Card className={`border-2 ${isOverallBenefit ? 'border-green-200 bg-gradient-to-br from-green-50 to-emerald-50' : 'border-orange-200 bg-gradient-to-br from-orange-50 to-amber-50'}`}>
         <CardHeader className="pb-4">
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                Your Additional Savings Over Time
+                {isOverallBenefit ? 'Your Additional Savings Over Time' : 'Your Financial Impact Over Time'}
                 <Tooltip>
                   <TooltipTrigger>
                     <Info className="w-4 h-4 text-slate-500" />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-sm">
-                    <p>Shows how much more you save with the proposed policy compared to current law. Green bars indicate annual savings, red bars indicate costs. The blue trend line shows your cumulative total savings over time.</p>
+                    <p>Shows your financial impact with the proposed policy compared to current law. {isOverallBenefit ? 'Green bars indicate annual savings, red bars indicate costs.' : 'Orange bars indicate costs, green bars indicate savings.'} The trend line shows your cumulative total impact over time.</p>
                   </TooltipContent>
                 </Tooltip>
               </CardTitle>
               <CardDescription className="text-slate-600">
-                How much more you save with the proposed policy, with cumulative impact trend
+                {isOverallBenefit ? 'How much more you save with the proposed policy, with cumulative impact trend' : 'Your financial impact from the proposed policy, with cumulative trend'}
               </CardDescription>
             </div>
             <Badge variant="outline" className="text-xs">
@@ -312,49 +322,49 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
           
           {/* Key Financial Impact Summary */}
           <div className="mt-4 space-y-3">
-            <div className="p-3 bg-white rounded-lg border border-green-200">
+            <div className={`p-3 bg-white rounded-lg border ${isOverallBenefit ? 'border-green-200' : 'border-orange-200'}`}>
               <p className="text-sm text-slate-700 mb-3">
-                <strong>Higher values = more savings in your pocket</strong><br/>
-                <span className="text-xs text-slate-600">The blue trend line shows how your savings accumulate over time</span>
+                <strong>{isOverallBenefit ? 'Higher values = more savings in your pocket' : 'Policy financial impact analysis'}</strong><br/>
+                <span className="text-xs text-slate-600">The trend line shows how your {isOverallBenefit ? 'savings' : 'costs'} accumulate over time</span>
               </p>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <div className={`rounded-lg p-3 border ${averageAnnualImpact >= 0 ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200' : 'bg-gradient-to-r from-red-50 to-rose-50 border-red-200'}`}>
+                <div className={`rounded-lg p-3 border ${averageAnnualImpact < 0 ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200' : 'bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200'}`}>
                   <div className="flex items-center gap-2 mb-1">
-                    {averageAnnualImpact >= 0 ? <TrendingUp className="w-4 h-4 text-green-600" /> : <TrendingDown className="w-4 h-4 text-red-600" />}
-                    <span className={`text-xs font-medium ${averageAnnualImpact >= 0 ? 'text-green-700' : 'text-red-700'}`}>Average Annual Impact</span>
+                    {averageAnnualImpact < 0 ? <TrendingUp className="w-4 h-4 text-green-600" /> : <TrendingDown className="w-4 h-4 text-orange-600" />}
+                    <span className={`text-xs font-medium ${averageAnnualImpact < 0 ? 'text-green-700' : 'text-orange-700'}`}>Average Annual Impact</span>
                   </div>
-                  <div className={`text-lg font-bold ${averageAnnualImpact >= 0 ? 'text-green-800' : 'text-red-800'}`}>
-                    {averageAnnualImpact >= 0 ? '+' : ''}${averageAnnualImpact.toLocaleString()}
+                  <div className={`text-lg font-bold ${averageAnnualImpact < 0 ? 'text-green-800' : 'text-orange-800'}`}>
+                    {averageAnnualImpact < 0 ? `Save $${Math.abs(averageAnnualImpact).toLocaleString()}` : `Pay $${averageAnnualImpact.toLocaleString()} more`}
                   </div>
-                  <div className={`text-xs ${averageAnnualImpact >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {averageAnnualImpact >= 0 ? 'more savings' : 'additional cost'}
+                  <div className={`text-xs ${averageAnnualImpact < 0 ? 'text-green-600' : 'text-orange-600'}`}>
+                    {averageAnnualImpact < 0 ? 'more savings' : 'additional cost'}
                   </div>
                 </div>
                 
-                <div className={`rounded-lg p-3 border ${totalSavings > 0 ? 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200' : 'bg-gradient-to-r from-gray-50 to-slate-50 border-gray-200'}`}>
+                <div className={`rounded-lg p-3 border ${Math.abs(totalSavings) > Math.abs(totalCosts) ? 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200' : 'bg-gradient-to-r from-gray-50 to-slate-50 border-gray-200'}`}>
                   <div className="flex items-center gap-2 mb-1">
                     <TrendingUp className="w-4 h-4 text-blue-600" />
-                    <span className="text-xs font-medium text-blue-700">Total Savings</span>
+                    <span className="text-xs font-medium text-blue-700">Total Impact</span>
                   </div>
                   <div className="text-lg font-bold text-blue-800">
-                    +${totalSavings.toLocaleString()}
+                    {Math.abs(totalSavings) > Math.abs(totalCosts) ? `+$${totalSavings.toLocaleString()}` : `$${Math.abs(totalCosts).toLocaleString()}`}
                   </div>
                   <div className="text-xs text-blue-600">
-                    Cumulative benefits
+                    {Math.abs(totalSavings) > Math.abs(totalCosts) ? 'Benefits' : 'Costs'}
                   </div>
                 </div>
                 
-                <div className={`rounded-lg p-3 border ${netBenefit >= 0 ? 'bg-gradient-to-r from-purple-50 to-violet-50 border-purple-200' : 'bg-gradient-to-r from-red-50 to-rose-50 border-red-200'}`}>
+                <div className={`rounded-lg p-3 border ${netBenefit < 0 ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200' : 'bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200'}`}>
                   <div className="flex items-center gap-2 mb-1">
-                    {netBenefit >= 0 ? <TrendingUp className="w-4 h-4 text-purple-600" /> : <TrendingDown className="w-4 h-4 text-red-600" />}
-                    <span className={`text-xs font-medium ${netBenefit >= 0 ? 'text-purple-700' : 'text-red-700'}`}>Net Benefit</span>
+                    {netBenefit < 0 ? <TrendingUp className="w-4 h-4 text-green-600" /> : <TrendingDown className="w-4 h-4 text-orange-600" />}
+                    <span className={`text-xs font-medium ${netBenefit < 0 ? 'text-green-700' : 'text-orange-700'}`}>Net {netBenefit < 0 ? 'Benefit' : 'Cost'}</span>
                   </div>
-                  <div className={`text-lg font-bold ${netBenefit >= 0 ? 'text-purple-800' : 'text-red-800'}`}>
-                    {netBenefit >= 0 ? '+' : ''}${netBenefit.toLocaleString()}
+                  <div className={`text-lg font-bold ${netBenefit < 0 ? 'text-green-800' : 'text-orange-800'}`}>
+                    {netBenefit < 0 ? `+$${Math.abs(netBenefit).toLocaleString()}` : `$${netBenefit.toLocaleString()}`}
                   </div>
-                  <div className={`text-xs ${netBenefit >= 0 ? 'text-purple-600' : 'text-red-600'}`}>
-                    {netBenefit >= 0 ? 'Overall gain' : 'Overall cost'}
+                  <div className={`text-xs ${netBenefit < 0 ? 'text-green-600' : 'text-orange-600'}`}>
+                    {netBenefit < 0 ? 'Overall gain' : 'Overall cost'}
                   </div>
                 </div>
               </div>
