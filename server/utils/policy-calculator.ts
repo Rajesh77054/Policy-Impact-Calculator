@@ -358,7 +358,7 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
   const bigBillTax = calculateBigBillTax(income, familyStatus, numberOfQualifyingChildren, numberOfOtherDependents);
   const taxImpact = bigBillTax - currentTax;
 
-  // Healthcare calculations - both scenarios
+  // Healthcare calculations - Big Bill scenario
   const healthcareCosts = calculateHealthcareCosts(
     insuranceType, 
     ageRange, 
@@ -369,7 +369,6 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
     formData.hasHSA || false
   );
   const healthcareImpact = healthcareCosts.proposed - healthcareCosts.current;
-  const bigBillHealthcareImpact = healthcareImpact * 1.4; // Big Bill provides more generous healthcare benefits
 
   // State-specific adjustments
   let stateAdjustment = 0;
@@ -509,7 +508,7 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
   const adjustedNetAnnualImpact = scaledTaxImpact + finalHealthcareImpact + stateAdjustment + finalEnergyImpact + employmentTaxAdjustment;
 
   // Debug logging with all intermediate steps
-  console.log(`Tax calculation: Current=${currentTax}, Proposed=${proposedTax}, BigBill=${bigBillTax}, Impact=${taxImpact}`);
+  console.log(`Tax calculation: Current=${currentTax}, BigBill=${bigBillTax}, Impact=${taxImpact}`);
   console.log(`Healthcare calculation: Current=${healthcareCosts.current}, Proposed=${healthcareCosts.proposed}, Impact=${healthcareImpact}`);
   console.log(`Employment adjustment: Status=${employmentStatus}, Adjustment=${employmentTaxAdjustment}`);
   console.log(`Final scaled impacts: Tax=${Math.round(scaledTaxImpact)}, Healthcare=${Math.round(finalHealthcareImpact)}, Energy=${Math.round(finalEnergyImpact)}, Employment=${Math.round(employmentTaxAdjustment)}`);
@@ -536,13 +535,13 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
         },
       ] : [
         {
-          item: "Standard deduction increase",
-          amount: Math.round(-PROPOSED_TAX_CHANGES.standard_deduction_increase * 0.22) 
+          item: "Big Bill standard deduction increase",
+          amount: Math.round(-5000 * 0.22) // $5000 increase at 22% tax rate
         },
         { 
           item: hasChildren ? "Enhanced child tax credit" : "Tax bracket adjustment", 
           amount: hasChildren ? 
-                 -PROPOSED_TAX_CHANGES.child_tax_credit_increase : 
+                 -2500 : // $2500 per child under Big Bill
                  Math.round(scaledTaxImpact * 0.6)
         },
       ],
@@ -628,10 +627,10 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
   
   // Calculate disposable income after taxes and healthcare costs
   const currentDisposableIncome = income - currentTax - healthcareCosts.current;
-  const proposedDisposableIncome = income - proposedTax - healthcareCosts.proposed;
+  const bigBillDisposableIncomeCalculated = income - bigBillTax - healthcareCosts.proposed;
   const bigBillDisposableIncome = income - bigBillTax - (healthcareCosts.proposed * 0.8);
   
-  console.log(`Disposable incomes: Current=${currentDisposableIncome}, Proposed=${proposedDisposableIncome}, BigBill=${bigBillDisposableIncome}`);
+  console.log(`Disposable incomes: Current=${currentDisposableIncome}, BigBill=${bigBillDisposableIncome}`);
   
   let purchasingPowerData;
   let bigBillPurchasingPowerData;
@@ -654,10 +653,10 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
       baselineIncome
     );
     
-    const proposedPolicyScenario = calculatePurchasingPowerForScenario(
-      proposedDisposableIncome,
+    const bigBillPolicyScenario = calculatePurchasingPowerForScenario(
+      bigBillDisposableIncome,
       cpiData,
-      'Proposed Policy',
+      'Big Bill Policy',
       baselineIncome
     );
     
@@ -719,7 +718,7 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
     
     purchasingPowerData = {
       currentScenario: generateFallbackData(currentDisposableIncome),
-      proposedScenario: generateFallbackData(proposedDisposableIncome),
+      proposedScenario: generateFallbackData(bigBillDisposableIncome),
       dataSource: "Historical inflation trends (2.5% average annual)",
       lastUpdated: new Date().toISOString().split('T')[0]
     };
