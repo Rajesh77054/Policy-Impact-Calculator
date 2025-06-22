@@ -152,10 +152,18 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
                   if (value === null) return '';
 
                   const datasetLabel = context.dataset.label;
-
                   const dataIndex = context.dataIndex;
-                  const originalValue = netImpactData[dataIndex];
-                  const originalCumulative = -cumulativeImpact[dataIndex]; // Convert back to original
+                  
+                  // Get the actual data values from server
+                  const serverData = showBigBillComparison ? (results.bigBillScenario || results) : results;
+                  const originalValue = serverData.netAnnualImpact < 0 ? -Math.abs(serverData.netAnnualImpact) : Math.abs(serverData.netAnnualImpact);
+                  const timelineValues = [
+                    serverData.netAnnualImpact,
+                    serverData.timeline.fiveYear,
+                    serverData.timeline.tenYear,
+                    serverData.timeline.twentyYear
+                  ];
+                  const originalCumulative = timelineValues[dataIndex];
 
                   // Handle cumulative trend line
                   if (datasetLabel === 'Cumulative Impact Trend') {
@@ -175,8 +183,15 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
                 },
                 afterBody: (context) => {
                   const dataIndex = context[0].dataIndex;
-                  const originalAnnual = netImpactData[dataIndex];
-                  const originalCumulative = -cumulativeImpact[dataIndex]; // Convert back to original
+                  const serverData = showBigBillComparison ? (results.bigBillScenario || results) : results;
+                  const timelineValues = [
+                    serverData.netAnnualImpact,
+                    serverData.timeline.fiveYear,
+                    serverData.timeline.tenYear,
+                    serverData.timeline.twentyYear
+                  ];
+                  const originalAnnual = serverData.netAnnualImpact;
+                  const originalCumulative = timelineValues[dataIndex];
 
                   // Only show additional context if we're not already showing cumulative data
                   const showingCumulative = context.some(item => item.dataset.label === 'Cumulative Impact Trend');
