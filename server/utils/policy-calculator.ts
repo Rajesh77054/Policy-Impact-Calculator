@@ -10,6 +10,7 @@ import {
   ONE_BIG_BEAUTIFUL_BILL_PROVISIONS
 } from "../data/policy-data";
 import { fetchCPIData, calculatePurchasingPowerOverTime, calculatePurchasingPowerForScenario, getIncomeMidpoint } from "../services/bls-api";
+import { getComprehensiveEconomicData, validateIncomeRange, type EconomicIndicators } from "../services/fred-api";
 
 export function generateSessionId(): string {
   return Math.random().toString(36).substring(2, 15) + 
@@ -374,6 +375,24 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
   const employmentStatus = formData.employmentStatus || "full-time";
   const includeBigBill = formData.includeBigBill || false;
 
+  // Fetch real-time economic data from FRED
+  let economicData: EconomicIndicators | undefined;
+  try {
+    // Get state code from full state name if needed
+    const stateCode = state ? Object.keys(STATE_TAX_DATA).find(code => 
+      STATE_TAX_DATA[code] && (code === state || STATE_TAX_DATA[code].state === state)
+    ) : undefined;
+    
+    economicData = await getComprehensiveEconomicData(stateCode);
+    console.log('FRED economic data fetched:', {
+      unemployment: economicData.unemploymentRate,
+      recession: economicData.recessionProbability,
+      wages: economicData.wageData
+    });
+  } catch (error) {
+    console.warn('Failed to fetch FRED data, using static assumptions:', error);
+  }
+
   // Debug logging
   console.log(`=== CALCULATION DEBUG START ===`);
   console.log(`Input: Income=${income}, State=${state}, Employment=${employmentStatus}, Family=${familyStatus}, Insurance=${insuranceType}, Age=${ageRange}`);
@@ -456,7 +475,7 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
   const incomeBasedInfrastructure = Math.round(1500000 + (income / 100000) * 600000); // Scale with income
   const incomeBasedJobs = Math.round(200 + (income / 1000) * 2); // Scale with income
 
-  // Calculate state-specific community impacts
+  // Calculate state-specific community impacts enhanced with FRED data
   let schoolFundingImpact = incomeBasedSchoolFunding;
   let infrastructureImpact = incomeBasedInfrastructure;
   let jobOpportunities = incomeBasedJobs;
@@ -472,9 +491,23 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
     const taxRevenueFactor = (stateData.income_tax_rate + stateData.sales_tax_rate) * 10;
     infrastructureImpact = Math.round(1500000 + (stateSizeFactor * taxRevenueFactor * income * 2));
 
-    // Job opportunities based on state economic activity and policy impact
+    // Job opportunities enhanced with real-time unemployment data
     const economicActivity = stateData.cost_of_living_index * stateData.property_tax_avg / 10000;
-    jobOpportunities = Math.round(200 + (economicActivity * income / 1000) + (taxRevenueFactor * 50));
+    let baseJobOpportunities = Math.round(200 + (economicActivity * income / 1000) + (taxRevenueFactor * 50));
+    
+    // Adjust job opportunities based on current unemployment rates
+    if (economicData?.unemploymentRate) {
+      const nationalUnemployment = economicData.unemploymentRate.national;
+      const stateUnemployment = economicData.unemploymentRate.state || nationalUnemployment;
+      
+      // Higher unemployment = more potential for policy-driven job creation
+      const unemploymentFactor = stateUnemployment / nationalUnemployment;
+      const unemploymentMultiplier = 1 + (unemploymentFactor - 1) * 0.3; // 30% adjustment based on relative unemployment
+      
+      baseJobOpportunities = Math.round(baseJobOpportunities * unemploymentMultiplier);
+    }
+    
+    jobOpportunities = baseJobOpportunities;
 
     // State-specific adjustments
     switch (state) {
@@ -613,10 +646,10 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
     return 0;
   };
 
-  // Calculate recession probability based on economic models
-  const calculateRecessionProbability = (isBigBill: boolean = false): number => {
-    // Baseline recession probability from Fed models and CBO outlook
-    const baselineProbability = 28; // 28% baseline probability next 2 years
+  // Calculate recession probability using real-time FRED data
+  const calculateRecessionProbability = (isBigBill: boolean = false, economicData?: EconomicIndicators): number => {
+    // Use real-time FRED data if available, otherwise fallback to static model
+    const baselineProbability = economicData?.recessionProbability.combined || 28;
     
     if (isBigBill) {
       // Large fiscal stimulus tends to reduce near-term recession risk
@@ -630,8 +663,8 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
 
   const currentDeficitImpact = calculateDeficitImpact(adjustedNetAnnualImpact, false);
   const bigBillDeficitImpact = calculateDeficitImpact(bigBillNetImpact, true);
-  const currentRecessionProbability = calculateRecessionProbability(false);
-  const bigBillRecessionProbability = calculateRecessionProbability(true);
+  const currentRecessionProbability = calculateRecessionProbability(false, economicData);
+  const bigBillRecessionProbability = calculateRecessionProbability(true, economicData);
 
   // Purchasing Power Analysis with BLS API integration
   const currentYear = new Date().getFullYear();
