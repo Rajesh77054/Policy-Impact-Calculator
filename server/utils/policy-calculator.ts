@@ -717,6 +717,10 @@ return {
     netAnnualImpact: Math.round(netDifference), // Net Big Bill impact vs Current Law
     deficitImpact: currentDeficitImpact,
     recessionProbability: currentRecessionProbability,
+    taxCosts: {
+      current: Math.round(currentTax),
+      proposed: Math.round(bigBillTax),
+    },
     healthcareCosts: {
       current: Math.round(healthcareCosts.current),
       proposed: Math.round(healthcareCosts.proposed),

@@ -198,7 +198,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <TrendingUp className="w-5 h-5 text-blue-600" />
-                  <CardTitle className="text-lg text-blue-900">Tax Impact Timeline Comparison</CardTitle>
+                  <CardTitle className="text-lg text-blue-900">Tax Cost Scenario Comparison</CardTitle>
                   <Button 
                     variant="ghost" 
                     size="sm" 
@@ -218,27 +218,29 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                   <h4 className="text-sm font-medium text-blue-800 mb-3 text-center">Current Law</h4>
                   <div className="space-y-2">
                     <div className="flex justify-between text-xs">
-                      <span className="text-blue-700">Year 1</span>
-                      <span className="font-medium text-slate-600">
-                        $0 (baseline)
+                      <span className="text-blue-700">Annual Tax</span>
+                      <span className="font-medium text-blue-900">
+                        ${results.taxCosts.current.toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-blue-700">5 Years</span>
-                      <span className="font-medium text-slate-600">
-                        $0 (baseline)
+                      <span className="text-blue-700">Standard Deduction</span>
+                      <span className="font-medium text-blue-900">
+                        $29,200
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-blue-700">10 Years</span>
-                      <span className="font-medium text-slate-600">
-                        $0 (baseline)
+                      <span className="text-blue-700">Child Tax Credit</span>
+                      <span className="font-medium text-blue-900">
+                        $4,000
                       </span>
                     </div>
-                    <div className="flex justify-between text-xs">
-                      <span className="text-blue-700">20 Years</span>
-                      <span className="font-medium text-slate-600">
-                        $0 (baseline)
+                  </div>
+                  <div className="mt-3 pt-2 border-t border-blue-200">
+                    <div className="flex justify-between text-sm">
+                      <span className="font-medium text-blue-800">Total Annual Tax</span>
+                      <span className="font-bold text-blue-900">
+                        ${results.taxCosts.current.toLocaleString()}
                       </span>
                     </div>
                   </div>
@@ -249,27 +251,29 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                   <h4 className="text-sm font-medium text-blue-800 mb-3 text-center">Proposed Bill</h4>
                   <div className="space-y-2">
                     <div className="flex justify-between text-xs">
-                      <span className="text-blue-700">Year 1</span>
-                      <span className={`font-medium ${results.annualTaxImpact < 0 ? 'text-green-700' : 'text-orange-700'}`}>
-                        {results.annualTaxImpact < 0 ? `$${Math.abs(results.annualTaxImpact).toLocaleString()} saved` : `$${results.annualTaxImpact.toLocaleString()} cost`}
+                      <span className="text-blue-700">Annual Tax</span>
+                      <span className="font-medium text-blue-900">
+                        ${results.taxCosts.proposed.toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-blue-700">5 Years</span>
-                      <span className={`font-medium ${results.timeline.fiveYear < 0 ? 'text-green-700' : 'text-orange-700'}`}>
-                        {results.timeline.fiveYear < 0 ? `$${Math.abs(results.timeline.fiveYear / 1000).toFixed(0)}K saved` : `$${Math.abs(results.timeline.fiveYear / 1000).toFixed(0)}K cost`}
+                      <span className="text-blue-700">Enhanced Std Deduction</span>
+                      <span className="font-medium text-blue-900">
+                        $34,200
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-blue-700">10 Years</span>
-                      <span className={`font-medium ${results.timeline.tenYear < 0 ? 'text-green-700' : 'text-orange-700'}`}>
-                        {results.timeline.tenYear < 0 ? `$${Math.abs(results.timeline.tenYear / 1000).toFixed(0)}K saved` : `$${Math.abs(results.timeline.tenYear / 1000).toFixed(0)}K cost`}
+                      <span className="text-blue-700">Enhanced Child Credit</span>
+                      <span className="font-medium text-blue-900">
+                        $5,000
                       </span>
                     </div>
-                    <div className="flex justify-between text-xs">
-                      <span className="text-blue-700">20 Years</span>
-                      <span className={`font-medium ${results.timeline.twentyYear < 0 ? 'text-green-700' : 'text-orange-700'}`}>
-                        {results.timeline.twentyYear < 0 ? `$${Math.abs(results.timeline.twentyYear / 1000).toFixed(0)}K saved` : `$${Math.abs(results.timeline.twentyYear / 1000).toFixed(0)}K cost`}
+                  </div>
+                  <div className="mt-3 pt-2 border-t border-blue-200">
+                    <div className="flex justify-between text-sm">
+                      <span className="font-medium text-blue-800">Total Annual Tax</span>
+                      <span className="font-bold text-blue-900">
+                        ${results.taxCosts.proposed.toLocaleString()}
                       </span>
                     </div>
                   </div>
@@ -278,9 +282,9 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
 
               <div className="mt-4 pt-4 border-t border-blue-200">
                 <div className="text-center">
-                  <p className="text-xs text-blue-700">20-Year Tax Savings Difference:</p>
+                  <p className="text-xs text-blue-700">Annual Tax Savings:</p>
                   <p className="text-sm font-semibold text-blue-800">
-                    Consolidated Big Bill CBO Data
+                    ${Math.abs(results.annualTaxImpact).toLocaleString()} saved per year
                   </p>
                 </div>
               </div>
