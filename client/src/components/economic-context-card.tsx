@@ -11,7 +11,7 @@ interface EconomicContextCardProps {
 
 export default function EconomicContextCard({ results, className }: EconomicContextCardProps) {
   const economicContext = results.economicContext;
-  
+
   if (!economicContext) {
     return null;
   }

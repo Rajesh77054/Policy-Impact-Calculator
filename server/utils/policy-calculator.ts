@@ -704,6 +704,7 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
         lastUpdated: economicData.wageData.lastUpdated,
       },
       macroeconomicData: economicData.economicContext,
+      fiscalData: economicData.debtAndDeficit,
     };
   }
 

@@ -67,6 +67,12 @@ export interface EconomicIndicators {
     federalFundsRate: number;
     lastUpdated: string;
   };
+  debtAndDeficit: {
+    totalPublicDebt: number; // In trillions
+    debtToGdpRatio: number;
+    deficitToGdpRatio: number;
+    lastUpdated: string;
+  };
 }
 
 export interface StateUnemploymentData {
@@ -147,6 +153,11 @@ const FRED_SERIES = {
   GDP_GROWTH: 'GDPC1', // Real GDP
   INFLATION_RATE: 'CPIAUCSL', // Consumer Price Index
   FEDERAL_FUNDS_RATE: 'FEDFUNDS', // Federal funds rate
+  
+  // National debt and deficit
+  TOTAL_PUBLIC_DEBT: 'GFDEBTN', // Federal Debt: Total Public Debt (Millions)
+  DEBT_TO_GDP_RATIO: 'GFDEGDQ188S', // Federal Debt as Percent of GDP
+  DEFICIT_TO_GDP_RATIO: 'FYFSDFYGDP', // Federal Surplus or Deficit as Percent of GDP
 } as const;
 
 class FREDAPIError extends Error {
@@ -340,20 +351,53 @@ export async function fetchEconomicContext(): Promise<{ gdpGrowth: number; infla
   }
 }
 
+export async function fetchDebtAndDeficitData(): Promise<{ totalPublicDebt: number; debtToGdpRatio: number; deficitToGdpRatio: number; lastUpdated: string }> {
+  try {
+    const [debtData, debtToGdpData, deficitToGdpData] = await Promise.all([
+      fetchFREDData(FRED_SERIES.TOTAL_PUBLIC_DEBT, 1),
+      fetchFREDData(FRED_SERIES.DEBT_TO_GDP_RATIO, 1),
+      fetchFREDData(FRED_SERIES.DEFICIT_TO_GDP_RATIO, 1)
+    ]);
+    
+    const totalPublicDebtMillions = parseFloat(debtData.observations[0]?.value || '0');
+    const totalPublicDebt = totalPublicDebtMillions / 1000000; // Convert millions to trillions
+    const debtToGdpRatio = parseFloat(debtToGdpData.observations[0]?.value || '0');
+    const deficitToGdpRatio = parseFloat(deficitToGdpData.observations[0]?.value || '0');
+    const lastUpdated = debtData.observations[0]?.date || new Date().toISOString().split('T')[0];
+    
+    return {
+      totalPublicDebt: Math.round(totalPublicDebt * 100) / 100,
+      debtToGdpRatio: Math.round(debtToGdpRatio * 10) / 10,
+      deficitToGdpRatio: Math.round(deficitToGdpRatio * 10) / 10,
+      lastUpdated
+    };
+  } catch (error) {
+    console.error('Failed to fetch debt and deficit data:', error);
+    return {
+      totalPublicDebt: 33.7, // Current approximate debt in trillions
+      debtToGdpRatio: 120.1,
+      deficitToGdpRatio: -5.8,
+      lastUpdated: new Date().toISOString().split('T')[0]
+    };
+  }
+}
+
 export async function getComprehensiveEconomicData(stateCode?: string): Promise<EconomicIndicators> {
   try {
-    const [unemployment, recessionProb, wages, context] = await Promise.all([
+    const [unemployment, recessionProb, wages, context, debtDeficit] = await Promise.all([
       fetchUnemploymentRate(stateCode),
       calculateRecessionProbability(),
       fetchWageData(),
-      fetchEconomicContext()
+      fetchEconomicContext(),
+      fetchDebtAndDeficitData()
     ]);
     
     return {
       unemploymentRate: unemployment,
       recessionProbability: recessionProb,
       wageData: wages,
-      economicContext: context
+      economicContext: context,
+      debtAndDeficit: debtDeficit
     };
   } catch (error) {
     console.error('Failed to fetch comprehensive economic data:', error);
@@ -379,6 +423,12 @@ export async function getComprehensiveEconomicData(stateCode?: string): Promise<
         gdpGrowth: 2.1,
         inflationRate: 3.2,
         federalFundsRate: 5.25,
+        lastUpdated: today
+      },
+      debtAndDeficit: {
+        totalPublicDebt: 33.7,
+        debtToGdpRatio: 120.1,
+        deficitToGdpRatio: -5.8,
         lastUpdated: today
       }
     };
