@@ -1,9 +1,7 @@
 import { FormData, PolicyResults } from "@shared/schema";
 import { 
   FEDERAL_TAX_BRACKETS_2024, 
-  PROPOSED_TAX_CHANGES, 
   HEALTHCARE_COSTS_2024, 
-  PROPOSED_HEALTHCARE_CHANGES,
   STATE_TAX_DATA,
   DATA_SOURCES,
   METHODOLOGY_NOTES,
@@ -62,50 +60,6 @@ function calculateCurrentTax(income: number, familyStatus: string, numberOfQuali
 
   const finalChildTaxCredit = Math.max(0, childTaxCredit - childTaxCreditReduction);
   tax -= (finalChildTaxCredit + otherDependentCredit);
-
-  return Math.max(0, tax);
-}
-
-function calculateProposedTax(income: number, familyStatus: string, numberOfQualifyingChildren: number = 0, numberOfOtherDependents: number = 0): number {
-  const enhancedStandardDeduction = (familyStatus === "single" ? 14600 : 29200) + 
-                                   PROPOSED_TAX_CHANGES.standard_deduction_increase;
-
-  const taxableIncome = Math.max(0, income - enhancedStandardDeduction);
-  let tax = 0;
-  let previousMax = 0;
-
-  // Apply modified brackets with correct progressive calculation
-  for (const bracket of FEDERAL_TAX_BRACKETS_2024) {
-    if (taxableIncome <= previousMax) break;
-
-    const taxableAtThisBracket = Math.min(taxableIncome, bracket.max) - Math.max(previousMax, bracket.min);
-    if (taxableAtThisBracket > 0) {
-      const rate = bracket.max === Infinity ? 
-                   bracket.rate + PROPOSED_TAX_CHANGES.top_bracket_rate_change : 
-                   bracket.rate;
-      tax += taxableAtThisBracket * rate;
-    }
-    previousMax = bracket.max;
-  }
-
-  // Apply IRS Child Tax Credit and Credit for Other Dependents
-  // Current 2024: $2,000 per qualifying child, $500 per other dependent
-  // Proposed: Enhanced amounts per PROPOSED_TAX_CHANGES
-  const currentChildTaxCredit = numberOfQualifyingChildren * 2000;
-  const currentOtherDependentCredit = numberOfOtherDependents * 500;
-  const enhancedChildTaxCredit = numberOfQualifyingChildren * (2000 + PROPOSED_TAX_CHANGES.child_tax_credit_increase);
-  const enhancedOtherDependentCredit = numberOfOtherDependents * 500; // No change proposed for other dependents
-
-  // Phase-out rules for high income (AGI > $200K single, $400K married)
-  const phaseOutThreshold = familyStatus === "single" || familyStatus === "head-of-household" ? 200000 : 400000;
-  let childTaxCreditReduction = 0;
-  if (income > phaseOutThreshold) {
-    const excessIncome = income - phaseOutThreshold;
-    childTaxCreditReduction = Math.floor(excessIncome / 1000) * 50; // $50 reduction per $1,000 over threshold
-  }
-
-  const finalChildTaxCredit = Math.max(0, enhancedChildTaxCredit - childTaxCreditReduction);
-  tax -= (finalChildTaxCredit + enhancedOtherDependentCredit);
 
   return Math.max(0, tax);
 }
@@ -322,8 +276,9 @@ function calculateHealthcareCosts(
       proposedCost *= 0.95; // 5% slower premium growth for marketplace HSA plans
     }
 
-    // Public option availability (15% lower than marketplace average)
-    const publicOptionCost = basePremium * ageMultiplier * (1 - PROPOSED_HEALTHCARE_CHANGES.public_option_premium_reduction);
+    // Big Bill: Enhanced premium subsidies (12.2% reduction based on CBO data)
+    const bigBillPremiumReduction = ONE_BIG_BEAUTIFUL_BILL_PROVISIONS.healthcare_changes.premium_changes / -100; // Convert -12.2% to 0.122
+    const publicOptionCost = basePremium * ageMultiplier * (1 - bigBillPremiumReduction);
     if (state && STATE_TAX_DATA[state]) {
       const adjustedPublicOption = publicOptionCost * (STATE_TAX_DATA[state].cost_of_living_index / 100);
       proposedCost = Math.min(proposedCost, adjustedPublicOption);
@@ -338,20 +293,19 @@ function calculateHealthcareCosts(
     proposedCost = Math.min(proposedCost, medicareOption);
   }
 
-  // Prescription drug cost cap
+  // Big Bill: Prescription drug savings based on Medicare savings data
   const currentDrugCosts = insuranceType === "medicare" ? 
                           HEALTHCARE_COSTS_2024.prescription_drug_avg * 1.5 :
                           HEALTHCARE_COSTS_2024.prescription_drug_avg;
 
-  if (currentDrugCosts > PROPOSED_HEALTHCARE_CHANGES.prescription_drug_cap) {
-    const drugSavings = currentDrugCosts - PROPOSED_HEALTHCARE_CHANGES.prescription_drug_cap;
-    proposedCost = Math.max(0, proposedCost - drugSavings);
-  }
+  // Apply Big Bill prescription drug savings (based on $352M Medicare savings)
+  const prescriptionSavingsRate = 0.25; // 25% reduction based on CBO Medicare savings
+  const drugSavings = currentDrugCosts * prescriptionSavingsRate;
+  proposedCost = Math.max(0, proposedCost - drugSavings);
 
-  // Medicaid expansion
-  if (insuranceType === "uninsured" && 
-      incomeAsFPL <= PROPOSED_HEALTHCARE_CHANGES.medicaid_expansion_income_limit) {
-    proposedCost = 0; // Would qualify for expanded Medicaid
+  // Big Bill: Enhanced Medicaid coverage (150% FPL threshold)
+  if (insuranceType === "uninsured" && incomeAsFPL <= 1.5) {
+    proposedCost = 0; // Would qualify for expanded Medicaid under Big Bill
   }
 
   return { 
@@ -401,8 +355,7 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
 
   // Tax calculations
   const currentTax = calculateCurrentTax(income, familyStatus, numberOfQualifyingChildren, numberOfOtherDependents);
-  const proposedTax = calculateProposedTax(income, familyStatus, numberOfQualifyingChildren, numberOfOtherDependents);
-  const bigBillTax = includeBigBill ? calculateBigBillTax(income, familyStatus, numberOfQualifyingChildren, numberOfOtherDependents) : proposedTax;
+  const bigBillTax = calculateBigBillTax(income, familyStatus, numberOfQualifyingChildren, numberOfOtherDependents);
   const taxImpact = bigBillTax - currentTax;
 
   // Healthcare calculations - both scenarios
