@@ -41,8 +41,8 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
         healthcareChartInstance.current = null;
       }
 
-      // Use appropriate scenario data based on toggle
-      const currentData = showBigBillComparison && results.bigBillScenario ? results.bigBillScenario : results;
+      // Use Big Bill CBO data as the single authoritative source
+      const currentData = results;
 
       // Create tax impact timeline comparison chart
       if (taxChartRef.current) {
@@ -58,10 +58,10 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
 
           const proposedTimelineData = [
             { year: 'Current', value: 0 },
-            { year: 'Year 1', value: results.bigBillScenario?.annualTaxImpact || 0 },
-            { year: 'Year 3', value: (results.bigBillScenario?.annualTaxImpact || 0) * 3 * 1.025 },
-            { year: 'Year 5', value: results.bigBillScenario?.timeline.fiveYear || 0 },
-            { year: 'Year 10', value: results.bigBillScenario?.timeline.tenYear || 0 }
+            { year: 'Year 1', value: results.annualTaxImpact },
+            { year: 'Year 3', value: results.annualTaxImpact * 3 * 1.025 },
+            { year: 'Year 5', value: results.timeline.fiveYear },
+            { year: 'Year 10', value: results.timeline.tenYear }
           ];
 
           taxChartInstance.current = new Chart(taxCtx, {
@@ -78,7 +78,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                   tension: 0.4
                 },
                 {
-                  label: 'Proposed Bill',
+                  label: 'Big Bill',
                   data: proposedTimelineData.map(d => d.value),
                   borderColor: 'hsl(215, 70%, 60%)',
                   backgroundColor: 'hsla(215, 70%, 60%, 0.1)',
@@ -134,7 +134,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
         const healthCtx = healthcareChartRef.current.getContext('2d');
         if (healthCtx) {
           const currentLawCost = results.healthcareCosts.current;
-          const proposedBillCost = results.bigBillScenario?.healthcareCosts?.proposed || results.healthcareCosts.proposed;
+          const proposedBillCost = results.healthcareCosts.proposed;
 
           healthcareChartInstance.current = new Chart(healthCtx, {
             type: 'bar',
@@ -187,7 +187,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
         healthcareChartInstance.current = null;
       }
     };
-  }, [results, showBigBillComparison]);
+  }, [results]);
 
   return (
     <div className="border-t pt-8 mb-8">
@@ -251,19 +251,19 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                     <div className="flex justify-between text-xs">
                       <span className="text-blue-700">Year 1</span>
                       <span className="text-blue-900 font-medium">
-                        {(results.bigBillScenario?.annualTaxImpact || 0) < 0 ? `$${Math.abs(results.bigBillScenario?.annualTaxImpact || 0).toLocaleString()} saved` : `$${(results.bigBillScenario?.annualTaxImpact || 0).toLocaleString()} cost`}
+                        {results.annualTaxImpact < 0 ? `$${Math.abs(results.annualTaxImpact).toLocaleString()} saved` : `$${results.annualTaxImpact.toLocaleString()} cost`}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
                       <span className="text-blue-700">5 Years</span>
                       <span className="text-blue-900 font-medium">
-                        ${Math.abs((results.bigBillScenario?.timeline.fiveYear || 0) / 1000).toFixed(0)}K
+                        ${Math.abs(results.timeline.fiveYear / 1000).toFixed(0)}K
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
                       <span className="text-blue-700">10 Years</span>
                       <span className="text-blue-900 font-medium">
-                        ${Math.abs((results.bigBillScenario?.timeline.tenYear || 0) / 1000).toFixed(0)}K
+                        ${Math.abs(results.timeline.tenYear / 1000).toFixed(0)}K
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
