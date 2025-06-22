@@ -1,4 +1,30 @@
 
+export interface EconomicContext {
+  unemploymentRate: {
+    national: number;
+    state?: number;
+    lastUpdated: string;
+  };
+  recessionIndicators: {
+    yieldCurveInversion: number;
+    unemploymentTrend: number;
+    combined: number;
+    lastUpdated: string;
+  };
+  wageValidation: {
+    medianWeeklyEarnings: number;
+    hourlyEarnings: number;
+    incomeContext: string;
+    lastUpdated: string;
+  };
+  macroeconomicData: {
+    gdpGrowth: number;
+    inflationRate: number;
+    federalFundsRate: number;
+    lastUpdated: string;
+  };
+}
+
 export interface PolicyResults {
   annualTaxImpact: number;
   healthcareCostImpact: number;
@@ -34,6 +60,7 @@ export interface PolicyResults {
     dataSource: string;
     lastUpdated: string;
   };
+  economicContext?: EconomicContext;
   breakdown: Array<{
     category: string;
     title: string;

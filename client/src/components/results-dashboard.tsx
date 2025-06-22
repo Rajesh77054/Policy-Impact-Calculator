@@ -5,6 +5,7 @@ import { HelpCircle, TrendingUp, TrendingDown, Calculator, DollarSign, Heart, Za
 import { PolicyResults } from "@shared/types";
 import PolicyCharts from "./policy-charts";
 import NetFinancialImpactChart from "./net-financial-impact-chart";
+import EconomicContextCard from "./economic-context-card";
 
 interface ResultsDashboardProps {
   results: PolicyResults;
@@ -179,6 +180,11 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                 </div>
               </CardContent>
             </Card>
+          )}
+
+          {/* Economic Context Section */}
+          {results.economicContext && (
+            <EconomicContextCard results={results} className="mb-8" />
           )}
 
           {/* Secondary Charts Section */}
