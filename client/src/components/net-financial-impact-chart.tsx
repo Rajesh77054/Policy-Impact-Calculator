@@ -44,9 +44,10 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
         actualData.timeline.twentyYear / 20  // Average annual impact over 20 years
       ];
 
-      // Separate savings (negative values) and costs (positive values) for different styling
-      const savingsData = netImpactData.map(value => value < 0 ? value : null);
-      const costsData = netImpactData.map(value => value > 0 ? value : null);
+      // Reverse the values for intuitive display: savings (negative values) become positive for upward trending
+      const displayData = netImpactData.map(value => -value); // Flip sign so savings trend upward
+      const savingsData = displayData.map((value, index) => netImpactData[index] < 0 ? value : null);
+      const costsData = displayData.map((value, index) => netImpactData[index] > 0 ? value : null);
 
       // Check if datasets have any actual data (not all null)
       const hasSavingsData = savingsData.some(value => value !== null);
@@ -145,38 +146,42 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
                   
                   const datasetLabel = context.dataset.label;
                   
+                  const dataIndex = context.dataIndex;
+                  const originalValue = netImpactData[dataIndex];
+                  const originalCumulative = -cumulativeImpact[dataIndex]; // Convert back to original
+                  
                   // Handle cumulative trend line
                   if (datasetLabel === 'Cumulative Impact Trend') {
-                    if (value < 0) {
-                      return `Cumulative Savings: $${Math.abs(value).toLocaleString()}`;
+                    if (originalCumulative < 0) {
+                      return `Cumulative Savings: $${Math.abs(originalCumulative).toLocaleString()}`;
                     } else {
-                      return `Cumulative Cost: $${value.toLocaleString()}`;
+                      return `Cumulative Cost: $${originalCumulative.toLocaleString()}`;
                     }
                   }
                   
-                  // Handle annual impact bars - negative values are savings, positive are costs
-                  if (value < 0) {
-                    return `Annual Savings: $${Math.abs(value).toLocaleString()}`;
+                  // Handle annual impact bars - use original values for correct labels
+                  if (originalValue < 0) {
+                    return `Annual Savings: $${Math.abs(originalValue).toLocaleString()}`;
                   } else {
-                    return `Annual Cost: $${value.toLocaleString()}`;
+                    return `Annual Cost: $${originalValue.toLocaleString()}`;
                   }
                 },
                 afterBody: (context) => {
                   const dataIndex = context[0].dataIndex;
-                  const annualImpact = netImpactData[dataIndex];
-                  const cumulativeValue = cumulativeImpact[dataIndex];
+                  const originalAnnual = netImpactData[dataIndex];
+                  const originalCumulative = -cumulativeImpact[dataIndex]; // Convert back to original
                   
                   // Only show additional context if we're not already showing cumulative data
                   const showingCumulative = context.some(item => item.dataset.label === 'Cumulative Impact Trend');
                   if (showingCumulative) return [];
                   
-                  const annualLabel = annualImpact < 0 ? 'Annual Savings' : 'Annual Cost';
-                  const cumulativeLabel = cumulativeValue < 0 ? 'Cumulative Savings' : 'Cumulative Cost';
+                  const annualLabel = originalAnnual < 0 ? 'Annual Savings' : 'Annual Cost';
+                  const cumulativeLabel = originalCumulative < 0 ? 'Cumulative Savings' : 'Cumulative Cost';
                   
                   return [
                     '',
-                    `${annualLabel}: $${Math.abs(annualImpact).toLocaleString()}`,
-                    `${cumulativeLabel}: $${Math.abs(cumulativeValue).toLocaleString()}`
+                    `${annualLabel}: $${Math.abs(originalAnnual).toLocaleString()}`,
+                    `${cumulativeLabel}: $${Math.abs(originalCumulative).toLocaleString()}`
                   ];
                 }
               }
@@ -201,7 +206,7 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
               position: 'left',
               title: {
                 display: true,
-                text: 'Annual Net Impact ($)',
+                text: isOverallBenefit ? 'Annual Savings ($)' : 'Annual Impact ($)',
                 font: {
                   weight: 'bold'
                 }
@@ -212,8 +217,8 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
               ticks: {
                 callback: function(value) {
                   const numValue = Number(value);
-                  const prefix = numValue >= 0 ? '+' : '';
-                  return prefix + '$' + Math.abs(numValue).toLocaleString();
+                  if (numValue <= 0) return '$0';
+                  return '$' + numValue.toLocaleString();
                 }
               },
               beginAtZero: true
@@ -224,7 +229,7 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
               position: 'right',
               title: {
                 display: true,
-                text: 'Cumulative Impact ($)',
+                text: isOverallBenefit ? 'Cumulative Savings ($)' : 'Cumulative Impact ($)',
                 font: {
                   weight: 'bold'
                 },
@@ -236,8 +241,8 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
               ticks: {
                 callback: function(value) {
                   const numValue = Number(value);
-                  const prefix = numValue >= 0 ? '+' : '';
-                  return prefix + '$' + Math.abs(numValue).toLocaleString();
+                  if (numValue <= 0) return '$0';
+                  return '$' + numValue.toLocaleString();
                 },
                 color: '#6366f1'
               }
@@ -282,12 +287,12 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
     actualData.timeline.twentyYear / 20  // Average annual impact over 20 years
   ];
 
-  // Use actual cumulative timeline data
+  // Use actual cumulative timeline data, reversed for upward trending display
   const cumulativeImpact = [
-    actualData.netAnnualImpact,
-    actualData.timeline.fiveYear,
-    actualData.timeline.tenYear,
-    actualData.timeline.twentyYear
+    -actualData.netAnnualImpact,
+    -actualData.timeline.fiveYear,
+    -actualData.timeline.tenYear,
+    -actualData.timeline.twentyYear
   ];
 
   // Calculate key metrics based on actual policy impact
