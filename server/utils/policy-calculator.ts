@@ -522,64 +522,21 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
   const netDifference = scaledTaxDifference + scaledHealthcareDifference + stateAdjustment + scaledEnergyDifference + employmentTaxAdjustment;
 
   // Debug logging with all intermediate steps
-  console.log(`Tax calculation: Current=${currentTax}, BigBill=${bigBillTax}, Impact=${taxImpact}`);
-  console.log(`Healthcare calculation: Current=${healthcareCosts.current}, Proposed=${healthcareCosts.proposed}, Impact=${healthcareImpact}`);
+  console.log(`Tax calculation: Current=${currentTax}, BigBill=${bigBillTax}, Impact=${taxDifference}`);
+  console.log(`Healthcare calculation: Current=${healthcareCosts.current}, Proposed=${healthcareCosts.proposed}, Impact=${healthcareDifference}`);
   console.log(`Employment adjustment: Status=${employmentStatus}, Adjustment=${employmentTaxAdjustment}`);
-  console.log(`Final scaled impacts: Tax=${Math.round(scaledTaxImpact)}, Healthcare=${Math.round(finalHealthcareImpact)}, Energy=${Math.round(finalEnergyImpact)}, Employment=${Math.round(employmentTaxAdjustment)}`);
-  console.log(`Final net impact: ${Math.round(adjustedNetAnnualImpact)}`);
+  console.log(`Final scaled impacts: Tax=${Math.round(scaledTaxDifference)}, Healthcare=${Math.round(scaledHealthcareDifference)}, Energy=${Math.round(scaledEnergyDifference)}, Employment=${Math.round(employmentTaxAdjustment)}`);
+  console.log(`Final net impact: ${Math.round(netDifference)}`);
   console.log(`Community: School=${schoolFundingImpact}%, Infrastructure=$${Math.round(infrastructureImpact/1000)}K, Jobs=${jobOpportunities}`);
   console.log(`=== CALCULATION DEBUG END ===`);
 
-  const breakdown = [
-    {
-      category: "tax" as const,
-      title: "One Big Beautiful Bill Act - Tax Provisions",
-      description: "Based on H.R. 1 Congressional Budget Office analysis",
-      impact: Math.round(scaledTaxImpact),
-      details: [
-        {
-          item: "Enhanced standard deduction (+$5,000)",
-          amount: -1100, // $5000 * 22% bracket
-        },
-        {
-          item: hasChildren ? "Expanded child tax credit ($2,500)" : "Middle class tax rate reduction",
-          amount: hasChildren ? -2500 : (income > 25000 && income < 400000 ? Math.min(income - 25000, 375000) * -0.03 : 0),
-        },
-      ],
-    },
-    {
-      category: "healthcare",
-      title: "One Big Beautiful Bill - Healthcare",
-      description: "Expanded Medicare and enhanced ACA subsidies based on CBO analysis",
-      impact: Math.round(scaledHealthcareImpact),
-      details: [
-        { 
-          item: "Premium subsidies", 
-          amount: Math.round(scaledHealthcareImpact * 0.7) 
-        },
-        { 
-          item: "Prescription drug cap", 
-          amount: Math.round(scaledHealthcareImpact * 0.3) 
-        },
-      ],
-    },
-  ];
   
-    console.log(`Results: Tax=${taxImpact}, Healthcare=${healthcareImpact}, State=${stateAdjustment}, Energy=${energyImpact}, Net=${netAnnualImpact}`);
-  console.log(`Community: School=${schoolFundingImpact}%, Infrastructure=$${Math.round(infrastructureImpact/1000)}K, Jobs=${jobOpportunities}`);
 
   // Timeline calculations based on Big Bill vs Current Law differences
   const timeline = {
     fiveYear: Math.round(netDifference * 5 * 1.025), // 2.5% annual inflation
     tenYear: Math.round(netDifference * 10 * 1.28), // Compound inflation
     twentyYear: Math.round(netDifference * 20 * 1.64),
-  };
-
-  const bigBillNetImpact = bigBillTaxImpact + (finalHealthcareImpact * 1.4) + stateAdjustment + finalEnergyImpact + employmentTaxAdjustment;
-  const bigBillTimeline = {
-    fiveYear: Math.round(bigBillNetImpact * 5 * 1.025), // 2.5% annual inflation
-    tenYear: Math.round(bigBillNetImpact * 10 * 1.28), // Compound inflation
-    twentyYear: Math.round(bigBillNetImpact * 20 * 1.64),
   };
 
 // Calculate deficit impact based on CBO methodology
@@ -615,8 +572,8 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
     return baselineProbability;
   };
 
-  const currentDeficitImpact = calculateDeficitImpact(adjustedNetAnnualImpact, false);
-  const bigBillDeficitImpact = calculateDeficitImpact(bigBillNetImpact, true);
+  const currentDeficitImpact = calculateDeficitImpact(netDifference, false);
+  const bigBillDeficitImpact = calculateDeficitImpact(netDifference, true);
   const currentRecessionProbability = calculateRecessionProbability(false, economicData);
   const bigBillRecessionProbability = calculateRecessionProbability(true, economicData);
 
@@ -628,8 +585,7 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
   
   // Calculate disposable income after taxes and healthcare costs
   const currentDisposableIncome = income - currentTax - healthcareCosts.current;
-  const bigBillDisposableIncomeCalculated = income - bigBillTax - healthcareCosts.proposed;
-  const bigBillDisposableIncome = income - bigBillTax - (healthcareCosts.proposed * 0.8);
+  const bigBillDisposableIncome = income - bigBillTax - healthcareCosts.proposed;
   
   console.log(`Disposable incomes: Current=${currentDisposableIncome}, BigBill=${bigBillDisposableIncome}`);
   
