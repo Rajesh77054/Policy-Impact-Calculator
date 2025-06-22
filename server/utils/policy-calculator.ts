@@ -497,15 +497,29 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
     jobOpportunities = Math.max(150, Math.min(800, jobOpportunities));
   }
 
-  // Calculate Big Bill specific impacts
-  const bigBillTaxImpact = bigBillTax - currentTax;
-
-  // Keep impacts differentiated - don't apply family multipliers that reduce differences
-  const finalHealthcareImpact = scaledHealthcareImpact;
-  const finalEnergyImpact = scaledEnergyImpact;
+  // All impacts represent Big Bill vs Current Law differences
+  // Negative values = user saves money with Big Bill
+  // Positive values = user pays more with Big Bill
   
-  // Calculate final net impact
-  const adjustedNetAnnualImpact = scaledTaxImpact + finalHealthcareImpact + stateAdjustment + finalEnergyImpact + employmentTaxAdjustment;
+  // Tax impact: Big Bill vs Current Law
+  const taxDifference = bigBillTax - currentTax;
+  
+  // Healthcare impact: Big Bill vs Current Law
+  const healthcareDifference = healthcareCosts.proposed - healthcareCosts.current;
+  
+  // Energy impact: Big Bill vs Current Law
+  // Big Bill includes clean energy investments that reduce long-term energy costs
+  const currentEnergyImpact = Math.round(120 + (income / 2000)); // Current law baseline
+  const bigBillEnergyImpact = Math.round(currentEnergyImpact * 0.85); // 15% reduction from clean energy
+  const energyDifference = bigBillEnergyImpact - currentEnergyImpact;
+  
+  // Apply income scaling to all differences
+  const scaledTaxDifference = taxDifference;
+  const scaledHealthcareDifference = healthcareDifference;
+  const scaledEnergyDifference = energyDifference * incomeScalar;
+  
+  // Calculate final net difference (Big Bill vs Current Law)
+  const netDifference = scaledTaxDifference + scaledHealthcareDifference + stateAdjustment + scaledEnergyDifference + employmentTaxAdjustment;
 
   // Debug logging with all intermediate steps
   console.log(`Tax calculation: Current=${currentTax}, BigBill=${bigBillTax}, Impact=${taxImpact}`);
@@ -554,11 +568,11 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
     console.log(`Results: Tax=${taxImpact}, Healthcare=${healthcareImpact}, State=${stateAdjustment}, Energy=${energyImpact}, Net=${netAnnualImpact}`);
   console.log(`Community: School=${schoolFundingImpact}%, Infrastructure=$${Math.round(infrastructureImpact/1000)}K, Jobs=${jobOpportunities}`);
 
-  // Timeline calculations with compounding for both scenarios
+  // Timeline calculations based on Big Bill vs Current Law differences
   const timeline = {
-    fiveYear: Math.round(adjustedNetAnnualImpact * 5 * 1.025), // 2.5% annual inflation
-    tenYear: Math.round(adjustedNetAnnualImpact * 10 * 1.28), // Compound inflation
-    twentyYear: Math.round(adjustedNetAnnualImpact * 20 * 1.64),
+    fiveYear: Math.round(netDifference * 5 * 1.025), // 2.5% annual inflation
+    tenYear: Math.round(netDifference * 10 * 1.28), // Compound inflation
+    twentyYear: Math.round(netDifference * 20 * 1.64),
   };
 
   const bigBillNetImpact = bigBillTaxImpact + (finalHealthcareImpact * 1.4) + stateAdjustment + finalEnergyImpact + employmentTaxAdjustment;
@@ -738,11 +752,13 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
   }
 
 return {
-    // Current law scenario (default) - These represent impacts of PROPOSED policy vs current law baseline
-    annualTaxImpact: Math.round(scaledTaxImpact), // Negative = saves money under proposed
-    healthcareCostImpact: Math.round(finalHealthcareImpact), // Negative = saves money under proposed  
-    energyCostImpact: Math.round(finalEnergyImpact), // Positive = costs more under proposed
-    netAnnualImpact: Math.round(adjustedNetAnnualImpact), // Negative = net savings under proposed
+    // All values represent Big Bill vs Current Law differences
+    // Negative values = user saves money with Big Bill (benefits)
+    // Positive values = user pays more with Big Bill (costs)
+    annualTaxImpact: Math.round(scaledTaxDifference), // Big Bill tax impact vs Current Law
+    healthcareCostImpact: Math.round(scaledHealthcareDifference), // Big Bill healthcare cost vs Current Law
+    energyCostImpact: Math.round(scaledEnergyDifference), // Big Bill energy cost vs Current Law
+    netAnnualImpact: Math.round(netDifference), // Net Big Bill impact vs Current Law
     deficitImpact: currentDeficitImpact,
     recessionProbability: currentRecessionProbability,
     healthcareCosts: {
@@ -759,21 +775,21 @@ return {
       {
         category: "tax" as const,
         title: "One Big Beautiful Bill - Tax Changes",
-        description: "Based on H.R. 1 Congressional Budget Office analysis",
-        impact: Math.round(taxImpact),
+        description: "Tax impact vs Current Law (based on H.R. 1 CBO analysis)",
+        impact: Math.round(scaledTaxDifference),
         details: [
-          { item: "Enhanced standard deduction", amount: Math.round(taxImpact * 0.4) },
-          { item: "Expanded child tax credit", amount: Math.round(taxImpact * 0.6) }
+          { item: "Enhanced standard deduction", amount: Math.round(scaledTaxDifference * 0.4) },
+          { item: "Expanded child tax credit", amount: Math.round(scaledTaxDifference * 0.6) }
         ]
       },
       {
         category: "healthcare" as const,
         title: "One Big Beautiful Bill - Healthcare",
-        description: "Expanded Medicare and enhanced ACA subsidies",
-        impact: Math.round(healthcareImpact),
+        description: "Healthcare cost difference vs Current Law",
+        impact: Math.round(scaledHealthcareDifference),
         details: [
-          { item: "Enhanced premium subsidies", amount: Math.round(healthcareImpact * 0.7) },
-          { item: "Expanded prescription coverage", amount: Math.round(healthcareImpact * 0.3) }
+          { item: "Enhanced premium subsidies", amount: Math.round(scaledHealthcareDifference * 0.7) },
+          { item: "Expanded prescription coverage", amount: Math.round(scaledHealthcareDifference * 0.3) }
         ]
       }
     ],

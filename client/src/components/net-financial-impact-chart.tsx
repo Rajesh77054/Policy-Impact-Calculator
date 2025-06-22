@@ -34,28 +34,28 @@ export default function NetFinancialImpactChart({ results }: NetFinancialImpactC
 
       const years = purchasingPowerData.currentScenario.map(d => d.year);
 
-      // Calculate cumulative savings over time using Big Bill CBO data
-      const actualData = results;
+      // Server values are Big Bill vs Current Law differences
+      // Convert to cash flow convention for display
       
-      // Build cumulative savings data matching the server's timeline calculations
+      // For cumulative trend line - show absolute values
       const cumulativeImpact = [
-        Math.abs(actualData.netAnnualImpact), // Year 1 annual impact
-        Math.abs(actualData.timeline.fiveYear), // 5-year cumulative 
-        Math.abs(actualData.timeline.tenYear), // 10-year cumulative
-        Math.abs(actualData.timeline.twentyYear) // 20-year cumulative
+        Math.abs(annualDifference), // Year 1 difference
+        Math.abs(fiveYearDifference), // 5-year cumulative difference
+        Math.abs(tenYearDifference), // 10-year cumulative difference
+        Math.abs(twentyYearDifference) // 20-year cumulative difference
       ];
 
-      // For bar chart data - show annual breakdown aligned with server calculations
+      // For bar chart data - show annual breakdown with absolute values
       const annualBreakdownData = [
-        Math.abs(actualData.netAnnualImpact), // Annual impact
-        Math.abs(actualData.timeline.fiveYear / 5), // Average annual over 5 years
-        Math.abs(actualData.timeline.tenYear / 10), // Average annual over 10 years  
-        Math.abs(actualData.timeline.twentyYear / 20) // Average annual over 20 years
+        Math.abs(annualDifference), // Annual difference
+        Math.abs(fiveYearDifference / 5), // Average annual difference over 5 years
+        Math.abs(tenYearDifference / 10), // Average annual difference over 10 years  
+        Math.abs(twentyYearDifference / 20) // Average annual difference over 20 years
       ];
 
-      // All data represents savings (negative server values = positive savings for user)
-      const savingsData = actualData.netAnnualImpact < 0 ? annualBreakdownData : [null, null, null, null];
-      const costsData = actualData.netAnnualImpact >= 0 ? annualBreakdownData : [null, null, null, null];
+      // Separate into savings vs costs based on server difference values
+      const savingsData = annualDifference < 0 ? annualBreakdownData : [null, null, null, null];
+      const costsData = annualDifference >= 0 ? annualBreakdownData : [null, null, null, null];
 
       // Check if datasets have any actual data
       const hasSavingsData = savingsData.some(value => value !== null);
@@ -153,31 +153,29 @@ export default function NetFinancialImpactChart({ results }: NetFinancialImpactC
                   const datasetLabel = context.dataset.label;
                   const dataIndex = context.dataIndex;
                   
-                  // Get the actual data values from Big Bill CBO data
-                  const serverData = results;
-                  const originalValue = serverData.netAnnualImpact < 0 ? -Math.abs(serverData.netAnnualImpact) : Math.abs(serverData.netAnnualImpact);
+                  // Server values are Big Bill vs Current Law differences
                   const timelineValues = [
-                    serverData.netAnnualImpact,
-                    serverData.timeline.fiveYear,
-                    serverData.timeline.tenYear,
-                    serverData.timeline.twentyYear
+                    annualDifference,
+                    fiveYearDifference,
+                    tenYearDifference,
+                    twentyYearDifference
                   ];
                   const originalCumulative = timelineValues[dataIndex];
 
                   // Handle cumulative trend line
                   if (datasetLabel === 'Cumulative Impact Trend') {
                     if (originalCumulative < 0) {
-                      return `Cumulative Savings: $${Math.abs(originalCumulative).toLocaleString()}`;
+                      return `Cumulative Savings with Big Bill: $${Math.abs(originalCumulative).toLocaleString()}`;
                     } else {
-                      return `Cumulative Cost: $${originalCumulative.toLocaleString()}`;
+                      return `Cumulative Additional Cost with Big Bill: $${originalCumulative.toLocaleString()}`;
                     }
                   }
 
-                  // Handle annual impact bars - use original values for correct labels
-                  if (originalValue < 0) {
-                    return `Annual Savings: $${Math.abs(originalValue).toLocaleString()}`;
+                  // Handle annual impact bars
+                  if (annualDifference < 0) {
+                    return `Annual Savings with Big Bill: $${Math.abs(annualDifference).toLocaleString()}`;
                   } else {
-                    return `Annual Cost: $${originalValue.toLocaleString()}`;
+                    return `Annual Additional Cost with Big Bill: $${annualDifference.toLocaleString()}`;
                   }
                 },
                 afterBody: (context) => {
@@ -288,45 +286,47 @@ export default function NetFinancialImpactChart({ results }: NetFinancialImpactC
     };
   }, [results]);
 
-  // Use Big Bill CBO data consistently throughout
-  const currentData = results;
   const purchasingPowerData = results.purchasingPower;
 
   if (!purchasingPowerData) {
     return null;
   }
 
-  // Use Big Bill CBO data as the single authoritative source
-  const actualData = results;
-
-  // Calculate net impacts using correct server data - no conversion
-  const years = [2025, 2030, 2035, 2045];
-  const netImpacts = [
-    actualData.netAnnualImpact,  // Exact server value
-    actualData.timeline.fiveYear / 5,  // Average annual over 5 years
-    actualData.timeline.tenYear / 10,  // Average annual over 10 years  
-    actualData.timeline.twentyYear / 20  // Average annual over 20 years
-  ];
-
-  // Use actual cumulative timeline data from server
-  const cumulativeTimeline = [
-    actualData.netAnnualImpact,  // Year 1
-    actualData.timeline.fiveYear,  // 5-year cumulative
-    actualData.timeline.tenYear,  // 10-year cumulative
-    actualData.timeline.twentyYear  // 20-year cumulative
-  ];
-
-  // Direct server calculations with no modification
-  const averageAnnualImpact = actualData.netAnnualImpact;
-  const fiveYearTotal = actualData.timeline.fiveYear;
-  const twentyYearTotal = actualData.timeline.twentyYear;
+  // Server values represent Big Bill vs Current Law differences
+  // Negative server values = user saves money (benefits) - display as positive in cash flow
+  // Positive server values = user pays more (costs) - display as positive costs
   
-  // For display consistency
-  const totalImpact = fiveYearTotal;
-  const netBenefit = twentyYearTotal;
+  const years = [2025, 2030, 2035, 2045];
+  
+  // Use exact server values (differences between Big Bill and Current Law)
+  const annualDifference = results.netAnnualImpact;
+  const fiveYearDifference = results.timeline.fiveYear;
+  const tenYearDifference = results.timeline.tenYear;
+  const twentyYearDifference = results.timeline.twentyYear;
+  
+  // Calculate average annual differences for display
+  const netImpacts = [
+    annualDifference,  // Year 1 difference
+    fiveYearDifference / 5,  // Average annual difference over 5 years
+    tenYearDifference / 10,  // Average annual difference over 10 years  
+    twentyYearDifference / 20  // Average annual difference over 20 years
+  ];
 
-  // Determine overall impact for card styling
-  const isOverallBenefit = netBenefit < 0; // Negative values are benefits (savings)
+  // Cumulative differences over time
+  const cumulativeTimeline = [
+    annualDifference,  // Year 1 difference
+    fiveYearDifference,  // 5-year cumulative difference
+    tenYearDifference,  // 10-year cumulative difference
+    twentyYearDifference  // 20-year cumulative difference
+  ];
+
+  // For display and card styling
+  const averageAnnualImpact = annualDifference;
+  const fiveYearTotal = fiveYearDifference;
+  const twentyYearTotal = twentyYearDifference;
+  
+  // Determine if Big Bill is beneficial (negative difference = saves money)
+  const isOverallBenefit = twentyYearTotal < 0;
 
   return (
     <TooltipProvider>
@@ -366,13 +366,13 @@ export default function NetFinancialImpactChart({ results }: NetFinancialImpactC
                 <div className={`rounded-lg p-3 border ${averageAnnualImpact < 0 ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200' : 'bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200'}`}>
                   <div className="flex items-center gap-2 mb-1">
                     {averageAnnualImpact < 0 ? <TrendingUp className="w-4 h-4 text-green-600" /> : <TrendingDown className="w-4 h-4 text-orange-600" />}
-                    <span className={`text-xs font-medium ${averageAnnualImpact < 0 ? 'text-green-700' : 'text-orange-700'}`}>Average Annual Impact</span>
+                    <span className={`text-xs font-medium ${averageAnnualImpact < 0 ? 'text-green-700' : 'text-orange-700'}`}>Big Bill vs Current Law</span>
                   </div>
                   <div className={`text-lg font-bold ${averageAnnualImpact < 0 ? 'text-green-800' : 'text-orange-800'}`}>
                     {averageAnnualImpact < 0 ? `Save $${Math.abs(averageAnnualImpact).toLocaleString()}` : `Pay $${averageAnnualImpact.toLocaleString()} more`}
                   </div>
                   <div className={`text-xs ${averageAnnualImpact < 0 ? 'text-green-600' : 'text-orange-600'}`}>
-                    {averageAnnualImpact < 0 ? 'more savings' : 'additional cost'}
+                    {averageAnnualImpact < 0 ? 'with Big Bill' : 'with Big Bill'}
                   </div>
                 </div>
 
