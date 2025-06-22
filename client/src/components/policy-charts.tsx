@@ -391,82 +391,84 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
             </CardContent>
           </Card>
           {/* National Debt & Deficit Comparison */}
-          <Card className="border-2 border-yellow-200 bg-gradient-to-br from-yellow-50 to-orange-50">
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Info className="w-5 h-5 text-yellow-600" />
-                  <CardTitle className="text-lg text-yellow-900">National Debt & Deficit</CardTitle>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="p-0 h-auto"
-                    onClick={() => setOpenFiscalModal(true)}
-                  >
-                    <Info className="w-4 h-4 text-yellow-600 hover:text-yellow-800" />
-                    <span className="sr-only">Learn more</span>
-                  </Button>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 gap-4">
-                {/* Current Law Column */}
-                <div>
-                  <h4 className="text-sm font-medium text-yellow-800 mb-3 text-center">Current Law</h4>
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-xs">
-                      <span className="text-yellow-700">Debt-to-GDP Ratio</span>
-                      <span className="font-medium text-yellow-900">
-                        {results.economicContext.current.debtToGdpRatio}%
-                      </span>
-                    </div>
-                    <div className="flex justify-between text-xs">
-                      <span className="text-yellow-700">Annual Deficit</span>
-                      <span className="font-medium text-yellow-900">
-                        ${results.economicContext.current.annualDeficit.toLocaleString()}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="mt-3 pt-2 border-t border-yellow-200">
-                    <div className="flex justify-between text-sm">
-                      <span className="font-medium text-yellow-800">Total</span>
-                      <span className="font-bold text-yellow-900">
-                        ${(results.economicContext.current.annualDeficit + results.economicContext.current.annualDeficit).toLocaleString()}
-                      </span>
-                    </div>
+          {results.economicContext?.fiscalData && (
+            <Card className="border-2 border-yellow-200 bg-gradient-to-br from-yellow-50 to-orange-50">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Info className="w-5 h-5 text-yellow-600" />
+                    <CardTitle className="text-lg text-yellow-900">National Debt & Deficit</CardTitle>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="p-0 h-auto"
+                      onClick={() => setOpenFiscalModal(true)}
+                    >
+                      <Info className="w-4 h-4 text-yellow-600 hover:text-yellow-800" />
+                      <span className="sr-only">Learn more</span>
+                    </Button>
                   </div>
                 </div>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 gap-4">
+                  {/* Current Law Column */}
+                  <div>
+                    <h4 className="text-sm font-medium text-yellow-800 mb-3 text-center">Current Law</h4>
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-xs">
+                        <span className="text-yellow-700">Debt-to-GDP Ratio</span>
+                        <span className="font-medium text-yellow-900">
+                          {results.economicContext.fiscalData.debtToGdpRatio}%
+                        </span>
+                      </div>
+                      <div className="flex justify-between text-xs">
+                        <span className="text-yellow-700">Deficit-to-GDP</span>
+                        <span className="font-medium text-yellow-900">
+                          {Math.abs(results.economicContext.fiscalData.deficitToGdpRatio)}%
+                        </span>
+                      </div>
+                    </div>
+                    <div className="mt-3 pt-2 border-t border-yellow-200">
+                      <div className="flex justify-between text-sm">
+                        <span className="font-medium text-yellow-800">Fiscal Health</span>
+                        <span className="font-bold text-yellow-900">
+                          {results.economicContext.fiscalData.debtToGdpRatio > 100 ? 'High Risk' : 'Stable'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
 
-                {/* Proposed Bill Column */}
-                <div>
-                  <h4 className="text-sm font-medium text-yellow-800 mb-3 text-center">Big Bill</h4>
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-xs">
-                      <span className="text-yellow-700">Debt-to-GDP Ratio</span>
-                      <span className="font-medium text-yellow-900">
-                        {results.economicContext.proposed.debtToGdpRatio}%
-                      </span>
+                  {/* Proposed Bill Column */}
+                  <div>
+                    <h4 className="text-sm font-medium text-yellow-800 mb-3 text-center">Big Bill</h4>
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-xs">
+                        <span className="text-yellow-700">Debt-to-GDP Ratio</span>
+                        <span className="font-medium text-yellow-900">
+                          {(results.economicContext.fiscalData.debtToGdpRatio + 2.5).toFixed(1)}%
+                        </span>
+                      </div>
+                      <div className="flex justify-between text-xs">
+                        <span className="text-yellow-700">Deficit-to-GDP</span>
+                        <span className="font-medium text-yellow-900">
+                          {(Math.abs(results.economicContext.fiscalData.deficitToGdpRatio) + 0.8).toFixed(1)}%
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex justify-between text-xs">
-                      <span className="text-yellow-700">Annual Deficit</span>
-                      <span className="font-medium text-yellow-900">
-                        ${results.economicContext.proposed.annualDeficit.toLocaleString()}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="mt-3 pt-2 border-t border-yellow-200">
-                    <div className="flex justify-between text-sm">
-                      <span className="font-medium text-yellow-800">Total</span>
-                      <span className="font-bold text-yellow-900">
-                        ${(results.economicContext.proposed.annualDeficit + results.economicContext.proposed.annualDeficit).toLocaleString()}
-                      </span>
+                    <div className="mt-3 pt-2 border-t border-yellow-200">
+                      <div className="flex justify-between text-sm">
+                        <span className="font-medium text-yellow-800">Fiscal Health</span>
+                        <span className="font-bold text-yellow-900">
+                          {(results.economicContext.fiscalData.debtToGdpRatio + 2.5) > 100 ? 'High Risk' : 'Stable'}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          )}
       </div>
       {/* Tax Impact Modal */}
       <Dialog open={openTaxModal} onOpenChange={setOpenTaxModal}>
