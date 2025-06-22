@@ -191,54 +191,54 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
   }, [results, showBigBillComparison]);
 
   return (
-    <div className="mb-8">
+    <div className="border-t pt-8 mb-8">
       <h3 className="text-xl font-semibold text-slate-900 mb-6">Side-by-Side Comparison</h3>
-      <div className="grid lg:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <div className="flex items-center space-x-1">
-                <CardTitle className="text-lg font-semibold">Tax Impact Timeline Comparison</CardTitle>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="p-0 h-auto"
-                  onClick={() => setOpenTaxModal(true)}
-                >
-                  <Info className="w-4 h-4 mr-1" />
-                  How we calculate this
-                </Button>
-              </div>
-              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-blue-600" />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <Card className="border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <TrendingUp className="w-5 h-5 text-blue-600" />
+                  <CardTitle className="text-lg text-blue-900">Tax Impact Timeline Comparison</CardTitle>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="p-0 h-auto"
+                    onClick={() => setOpenTaxModal(true)}
+                  >
+                    <Info className="w-4 h-4 text-blue-600 hover:text-blue-800" />
+                    <span className="sr-only">How we calculate this</span>
+                  </Button>
+                </div>
               </div>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
                 {/* Current Law Column */}
                 <div>
-                  <h4 className="text-sm font-medium text-slate-700 mb-3 text-center">Current Law</h4>
+                  <h4 className="text-sm font-medium text-blue-800 mb-3 text-center">Current Law</h4>
                   <div className="space-y-2">
                     <div className="flex justify-between text-xs">
-                      <span className="text-slate-600">Year 1</span>
-                      <span className={`font-medium ${results.annualTaxImpact < 0 ? "text-green-600" : "text-red-600"}`}>
+                      <span className="text-blue-700">Year 1</span>
+                      <span className="text-blue-900 font-medium">
                         {results.annualTaxImpact < 0 ? `$${Math.abs(results.annualTaxImpact).toLocaleString()} saved` : `$${results.annualTaxImpact.toLocaleString()} cost`}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-slate-600">5 Years</span>
-                      <span className={`font-medium ${results.timeline.fiveYear < 0 ? "text-green-600" : "text-red-600"}`}>
+                      <span className="text-blue-700">5 Years</span>
+                      <span className="text-blue-900 font-medium">
                         ${Math.abs(results.timeline.fiveYear / 1000).toFixed(0)}K
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-slate-600">10 Years</span>
-                      <span className={`font-medium ${results.timeline.tenYear < 0 ? "text-green-600" : "text-red-600"}`}>
+                      <span className="text-blue-700">10 Years</span>
+                      <span className="text-blue-900 font-medium">
                         ${Math.abs(results.timeline.tenYear / 1000).toFixed(0)}K
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-slate-600">20 Years</span>
-                      <span className={`font-medium ${results.timeline.twentyYear < 0 ? "text-green-600" : "text-red-600"}`}>
+                      <span className="text-blue-700">20 Years</span>
+                      <span className="text-blue-900 font-medium">
                         ${Math.abs(results.timeline.twentyYear / 1000).toFixed(0)}K
                       </span>
                     </div>
@@ -246,30 +246,30 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
                 </div>
 
                 {/* Proposed Bill Column */}
-                <div className="border-l border-slate-200 pl-4">
-                  <h4 className="text-sm font-medium text-blue-700 mb-3 text-center">Proposed Bill</h4>
+                <div>
+                  <h4 className="text-sm font-medium text-blue-800 mb-3 text-center">Proposed Bill</h4>
                   <div className="space-y-2">
                     <div className="flex justify-between text-xs">
-                      <span className="text-slate-600">Year 1</span>
-                      <span className={`font-medium ${(results.bigBillScenario?.annualTaxImpact || 0) < 0 ? "text-green-600" : "text-red-600"}`}>
+                      <span className="text-blue-700">Year 1</span>
+                      <span className="text-blue-900 font-medium">
                         {(results.bigBillScenario?.annualTaxImpact || 0) < 0 ? `$${Math.abs(results.bigBillScenario?.annualTaxImpact || 0).toLocaleString()} saved` : `$${(results.bigBillScenario?.annualTaxImpact || 0).toLocaleString()} cost`}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-slate-600">5 Years</span>
-                      <span className={`font-medium ${(results.bigBillScenario?.timeline.fiveYear || 0) < 0 ? "text-green-600" : "text-red-600"}`}>
+                      <span className="text-blue-700">5 Years</span>
+                      <span className="text-blue-900 font-medium">
                         ${Math.abs((results.bigBillScenario?.timeline.fiveYear || 0) / 1000).toFixed(0)}K
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-slate-600">10 Years</span>
-                      <span className={`font-medium ${(results.bigBillScenario?.timeline.tenYear || 0) < 0 ? "text-green-600" : "text-red-600"}`}>
+                      <span className="text-blue-700">10 Years</span>
+                      <span className="text-blue-900 font-medium">
                         ${Math.abs((results.bigBillScenario?.timeline.tenYear || 0) / 1000).toFixed(0)}K
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-slate-600">20 Years</span>
-                      <span className={`font-medium ${(results.bigBillScenario?.timeline.twentyYear || 0) < 0 ? "text-green-600" : "text-red-600"}`}>
+                      <span className="text-blue-700">20 Years</span>
+                      <span className="text-blue-900 font-medium">
                         ${Math.abs((results.bigBillScenario?.timeline.twentyYear || 0) / 1000).toFixed(0)}K
                       </span>
                     </div>
@@ -277,12 +277,10 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
                 </div>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-slate-200">
+              <div className="mt-4 pt-4 border-t border-blue-200">
                 <div className="text-center">
-                  <p className="text-xs text-slate-600 mb-1">
-                    <strong>20-Year Tax Savings Difference:</strong>
-                  </p>
-                  <p className={`text-sm font-medium ${((results.bigBillScenario?.timeline.twentyYear || 0) - results.timeline.twentyYear) < 0 ? "text-green-600" : "text-red-600"}`}>
+                  <p className="text-xs text-blue-700">20-Year Tax Savings Difference:</p>
+                  <p className="text-sm font-semibold text-blue-800">
                     {Math.abs((results.bigBillScenario?.timeline.twentyYear || 0) - results.timeline.twentyYear) < 1000 ? 
                       "Nearly identical" : 
                       `$${Math.abs(((results.bigBillScenario?.timeline.twentyYear || 0) - results.timeline.twentyYear) / 1000).toFixed(0)}K additional savings`
@@ -293,54 +291,54 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
             </CardContent>
           </Card>
 
-          {/* Healthcare Cost Comparison - Side by Side */}
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <div className="flex items-center space-x-1">
-                <CardTitle className="text-lg font-semibold">Healthcare Cost Scenario Comparison</CardTitle>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="p-0 h-auto"
-                  onClick={() => setOpenHealthcareModal(true)}
-                >
-                  <Info className="w-4 h-4 mr-1" />
-                  Learn more
-                </Button>
-              </div>
-              <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-                <Heart className="w-5 h-5 text-emerald-600" />
+          {/* Healthcare Cost Comparison */}
+          <Card className="border-2 border-green-200 bg-gradient-to-br from-green-50 to-emerald-50">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Heart className="w-5 h-5 text-green-600" />
+                  <CardTitle className="text-lg text-green-900">Healthcare Cost Scenario Comparison</CardTitle>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="p-0 h-auto"
+                    onClick={() => setOpenHealthcareModal(true)}
+                  >
+                    <Info className="w-4 h-4 text-green-600 hover:text-green-800" />
+                    <span className="sr-only">Learn more</span>
+                  </Button>
+                </div>
               </div>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
                 {/* Current Law Column */}
                 <div>
-                  <h4 className="text-sm font-medium text-slate-700 mb-3 text-center">Current Law</h4>
+                  <h4 className="text-sm font-medium text-green-800 mb-3 text-center">Current Law</h4>
                   <div className="space-y-2">
                     <div className="flex justify-between text-xs">
-                      <span className="text-slate-600">Annual Premium</span>
-                      <span className="font-medium text-slate-600">
+                      <span className="text-green-700">Annual Premium</span>
+                      <span className="font-medium text-green-900">
                         ${results.healthcareCosts.current.toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-slate-600">Deductible</span>
-                      <span className="font-medium text-slate-600">
+                      <span className="text-green-700">Deductible</span>
+                      <span className="font-medium text-green-900">
                         ${(results.healthcareCosts.current * 0.3).toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-slate-600">Out-of-Pocket Max</span>
-                      <span className="font-medium text-slate-600">
+                      <span className="text-green-700">Out-of-Pocket Max</span>
+                      <span className="font-medium text-green-900">
                         ${(results.healthcareCosts.current * 1.8).toLocaleString()}
                       </span>
                     </div>
                   </div>
-                  <div className="mt-3 pt-2 border-t border-slate-200">
-                    <div className="flex justify-between text-sm font-semibold">
-                      <span>Total Annual Cost</span>
-                      <span className="text-slate-600">
+                  <div className="mt-3 pt-2 border-t border-green-200">
+                    <div className="flex justify-between text-sm">
+                      <span className="font-medium text-green-800">Total Annual Cost</span>
+                      <span className="font-bold text-green-900">
                         ${results.healthcareCosts.current.toLocaleString()}
                       </span>
                     </div>
@@ -348,32 +346,32 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
                 </div>
 
                 {/* Proposed Bill Column */}
-                <div className="border-l border-slate-200 pl-4">
-                  <h4 className="text-sm font-medium text-blue-700 mb-3 text-center">Proposed Bill</h4>
+                <div>
+                  <h4 className="text-sm font-medium text-green-800 mb-3 text-center">Proposed Bill</h4>
                   <div className="space-y-2">
                     <div className="flex justify-between text-xs">
-                      <span className="text-slate-600">Annual Premium</span>
-                      <span className="font-medium text-green-600">
+                      <span className="text-green-700">Annual Premium</span>
+                      <span className="font-medium text-green-900">
                         ${results.bigBillScenario?.healthcareCosts?.proposed?.toLocaleString() || results.healthcareCosts.proposed.toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-slate-600">Deductible</span>
-                      <span className="font-medium text-green-600">
+                      <span className="text-green-700">Deductible</span>
+                      <span className="font-medium text-green-900">
                         ${((results.bigBillScenario?.healthcareCosts?.proposed || results.healthcareCosts.proposed) * 0.2).toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-slate-600">Out-of-Pocket Max</span>
-                      <span className="font-medium text-green-600">
+                      <span className="text-green-700">Out-of-Pocket Max</span>
+                      <span className="font-medium text-green-900">
                         ${((results.bigBillScenario?.healthcareCosts?.proposed || results.healthcareCosts.proposed) * 1.5).toLocaleString()}
                       </span>
                     </div>
                   </div>
-                  <div className="mt-3 pt-2 border-t border-slate-200">
-                    <div className="flex justify-between text-sm font-semibold">
-                      <span>Total Annual Cost</span>
-                      <span className="text-green-600">
+                  <div className="mt-3 pt-2 border-t border-green-200">
+                    <div className="flex justify-between text-sm">
+                      <span className="font-medium text-green-800">Total Annual Cost</span>
+                      <span className="font-bold text-green-900">
                         ${((results.bigBillScenario?.healthcareCosts?.proposed || results.healthcareCosts.proposed)).toLocaleString()}
                       </span>
                     </div>
@@ -381,12 +379,10 @@ export default function PolicyCharts({ results, showBigBillComparison }: PolicyC
                 </div>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-slate-200">
+              <div className="mt-4 pt-4 border-t border-green-200">
                 <div className="text-center">
-                  <p className="text-xs text-slate-600 mb-1">
-                    <strong>Annual Healthcare Savings:</strong>
-                  </p>
-                  <p className="text-sm font-medium text-green-600">
+                  <p className="text-xs text-green-700">Annual Healthcare Savings:</p>
+                  <p className="text-sm font-semibold text-green-800">
                     ${Math.abs(results.bigBillScenario?.healthcareCostImpact || results.healthcareCostImpact).toLocaleString()} saved per year
                   </p>
                 </div>
