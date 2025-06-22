@@ -17,7 +17,7 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
   useEffect(() => {
     const loadChartAndRender = async () => {
       const { default: Chart } = await import('chart.js/auto');
-      
+
       // Destroy existing chart instance
       if (chartInstance.current) {
         chartInstance.current.destroy();
@@ -44,10 +44,10 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
         actualData.timeline.twentyYear / 20  // Average annual impact over 20 years
       ];
 
-      // Reverse the values for intuitive display: savings (negative values) become positive for upward trending
-      const displayData = netImpactData.map(value => -value); // Flip sign so savings trend upward
-      const savingsData = displayData.map((value, index) => netImpactData[index] < 0 ? value : null);
-      const costsData = displayData.map((value, index) => netImpactData[index] > 0 ? value : null);
+      // Use cash flow convention: negative = costs, positive = savings for display
+      const displayData = netImpactData.map(value => -value); // Convert server convention to cash flow convention
+      const savingsData = displayData.map((value, index) => value > 0 ? value : null); // Positive values are savings
+      const costsData = displayData.map((value, index) => value < 0 ? Math.abs(value) : null); // Negative values are costs (display as positive)
 
       // Check if datasets have any actual data (not all null)
       const hasSavingsData = savingsData.some(value => value !== null);
@@ -143,13 +143,13 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
                 label: (context) => {
                   const value = context.parsed.y;
                   if (value === null) return '';
-                  
+
                   const datasetLabel = context.dataset.label;
-                  
+
                   const dataIndex = context.dataIndex;
                   const originalValue = netImpactData[dataIndex];
                   const originalCumulative = -cumulativeImpact[dataIndex]; // Convert back to original
-                  
+
                   // Handle cumulative trend line
                   if (datasetLabel === 'Cumulative Impact Trend') {
                     if (originalCumulative < 0) {
@@ -158,7 +158,7 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
                       return `Cumulative Cost: $${originalCumulative.toLocaleString()}`;
                     }
                   }
-                  
+
                   // Handle annual impact bars - use original values for correct labels
                   if (originalValue < 0) {
                     return `Annual Savings: $${Math.abs(originalValue).toLocaleString()}`;
@@ -170,14 +170,14 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
                   const dataIndex = context[0].dataIndex;
                   const originalAnnual = netImpactData[dataIndex];
                   const originalCumulative = -cumulativeImpact[dataIndex]; // Convert back to original
-                  
+
                   // Only show additional context if we're not already showing cumulative data
                   const showingCumulative = context.some(item => item.dataset.label === 'Cumulative Impact Trend');
                   if (showingCumulative) return [];
-                  
+
                   const annualLabel = originalAnnual < 0 ? 'Annual Savings' : 'Annual Cost';
                   const cumulativeLabel = originalCumulative < 0 ? 'Cumulative Savings' : 'Cumulative Cost';
-                  
+
                   return [
                     '',
                     `${annualLabel}: $${Math.abs(originalAnnual).toLocaleString()}`,
@@ -277,7 +277,7 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
 
   // Use actual policy impact calculations instead of purchasing power projections
   const actualData = showBigBillComparison ? (results.bigBillScenario || results) : results;
-  
+
   // Calculate net impacts based on actual policy calculations
   const years = [2025, 2030, 2035, 2045]; // Standard timeline years
   const netImpacts = [
@@ -329,7 +329,7 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
               {purchasingPowerData.dataSource.includes('BLS') ? 'Live Data' : 'Projected'}
             </Badge>
           </div>
-          
+
           {/* Key Financial Impact Summary */}
           <div className="mt-4 space-y-3">
             <div className={`p-3 bg-white rounded-lg border ${isOverallBenefit ? 'border-green-200' : 'border-orange-200'}`}>
@@ -337,7 +337,7 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
                 <strong>{isOverallBenefit ? 'Higher values = more savings in your pocket' : 'Policy financial impact analysis'}</strong><br/>
                 <span className="text-xs text-slate-600">The trend line shows how your {isOverallBenefit ? 'savings' : 'costs'} accumulate over time</span>
               </p>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div className={`rounded-lg p-3 border ${averageAnnualImpact < 0 ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200' : 'bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200'}`}>
                   <div className="flex items-center gap-2 mb-1">
@@ -351,7 +351,7 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
                     {averageAnnualImpact < 0 ? 'more savings' : 'additional cost'}
                   </div>
                 </div>
-                
+
                 <div className={`rounded-lg p-3 border ${Math.abs(totalSavings) > Math.abs(totalCosts) ? 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200' : 'bg-gradient-to-r from-gray-50 to-slate-50 border-gray-200'}`}>
                   <div className="flex items-center gap-2 mb-1">
                     <TrendingUp className="w-4 h-4 text-blue-600" />
@@ -364,7 +364,7 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
                     {Math.abs(totalSavings) > Math.abs(totalCosts) ? 'Benefits' : 'Costs'}
                   </div>
                 </div>
-                
+
                 <div className={`rounded-lg p-3 border ${netBenefit < 0 ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200' : 'bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200'}`}>
                   <div className="flex items-center gap-2 mb-1">
                     {netBenefit < 0 ? <TrendingUp className="w-4 h-4 text-green-600" /> : <TrendingDown className="w-4 h-4 text-orange-600" />}
@@ -381,12 +381,12 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
             </div>
           </div>
         </CardHeader>
-        
+
         <CardContent>
           <div className="h-80 mb-4">
             <canvas ref={chartRef} />
           </div>
-          
+
           {/* Financial Impact Growth Over Time */}
           <div className={`mb-4 p-4 ${isOverallBenefit ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200' : 'bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200'} rounded-lg border`}>
             <div className="flex items-center justify-between mb-3">
@@ -398,12 +398,12 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
                 {isOverallBenefit ? 'Cumulative Benefits' : 'Cumulative Costs'}
               </Badge>
             </div>
-            
+
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
               {years.map((year: number, index: number) => {
                 const impact = netImpacts[index];
                 const cumulative = cumulativeImpact[index];
-                
+
                 return (
                   <div key={year} className={`rounded-lg p-2 border ${impact < 0 ? 'bg-white border-green-200' : 'bg-red-50 border-orange-200'}`}>
                     <div className={`text-xs font-medium ${impact < 0 ? 'text-green-700' : 'text-orange-700'} mb-1`}>
@@ -422,12 +422,12 @@ export default function NetFinancialImpactChart({ results, showBigBillComparison
                 );
               })}
             </div>
-            
+
             <div className={`mt-3 text-xs text-center ${isOverallBenefit ? 'text-green-700' : 'text-orange-700'}`}>
               The proposed policy provides {isOverallBenefit ? 'consistent additional savings that compound over time' : 'financial impacts that accumulate over time'}
             </div>
           </div>
-          
+
           {/* Data Source Attribution */}
           <div className="text-xs text-slate-500 border-t pt-3">
             <p>
