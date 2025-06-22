@@ -23,8 +23,9 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
   const healthcareChartRef = useRef<HTMLCanvasElement>(null);
   const taxChartInstance = useRef<any>(null);
   const healthcareChartInstance = useRef<any>(null);
-  const [openTaxModal, setOpenTaxModal] = useState(false); // State for Tax Impact Modal
-  const [openHealthcareModal, setOpenHealthcareModal] = useState(false); // State for Healthcare Modal
+  const [openTaxModal, setOpenTaxModal] = useState(false);
+  const [openHealthcareModal, setOpenHealthcareModal] = useState(false);
+  const [openFiscalModal, setOpenFiscalModal] = useState(false);
 
 
   useEffect(() => {
@@ -389,6 +390,83 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
               </div>
             </CardContent>
           </Card>
+          {/* National Debt & Deficit Comparison */}
+          <Card className="border-2 border-yellow-200 bg-gradient-to-br from-yellow-50 to-orange-50">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Info className="w-5 h-5 text-yellow-600" />
+                  <CardTitle className="text-lg text-yellow-900">National Debt & Deficit</CardTitle>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="p-0 h-auto"
+                    onClick={() => setOpenFiscalModal(true)}
+                  >
+                    <Info className="w-4 h-4 text-yellow-600 hover:text-yellow-800" />
+                    <span className="sr-only">Learn more</span>
+                  </Button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 gap-4">
+                {/* Current Law Column */}
+                <div>
+                  <h4 className="text-sm font-medium text-yellow-800 mb-3 text-center">Current Law</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-yellow-700">Debt-to-GDP Ratio</span>
+                      <span className="font-medium text-yellow-900">
+                        {results.economicContext.current.debtToGdpRatio}%
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                      <span className="text-yellow-700">Annual Deficit</span>
+                      <span className="font-medium text-yellow-900">
+                        ${results.economicContext.current.annualDeficit.toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="mt-3 pt-2 border-t border-yellow-200">
+                    <div className="flex justify-between text-sm">
+                      <span className="font-medium text-yellow-800">Total</span>
+                      <span className="font-bold text-yellow-900">
+                        ${(results.economicContext.current.annualDeficit + results.economicContext.current.annualDeficit).toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Proposed Bill Column */}
+                <div>
+                  <h4 className="text-sm font-medium text-yellow-800 mb-3 text-center">Big Bill</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-yellow-700">Debt-to-GDP Ratio</span>
+                      <span className="font-medium text-yellow-900">
+                        {results.economicContext.proposed.debtToGdpRatio}%
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                      <span className="text-yellow-700">Annual Deficit</span>
+                      <span className="font-medium text-yellow-900">
+                        ${results.economicContext.proposed.annualDeficit.toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="mt-3 pt-2 border-t border-yellow-200">
+                    <div className="flex justify-between text-sm">
+                      <span className="font-medium text-yellow-800">Total</span>
+                      <span className="font-bold text-yellow-900">
+                        ${(results.economicContext.proposed.annualDeficit + results.economicContext.proposed.annualDeficit).toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
       </div>
       {/* Tax Impact Modal */}
       <Dialog open={openTaxModal} onOpenChange={setOpenTaxModal}>
@@ -432,6 +510,30 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                 </ul>
                 <p className="text-xs text-slate-500 mt-4">
                   Healthcare cost projections are estimates based on current market data and proposed policy changes. Actual costs may vary based on plan selection, provider networks, and individual health needs.
+                </p>
+              </div>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+      {/* Fiscal Impact Modal */}
+      <Dialog open={openFiscalModal} onOpenChange={setOpenFiscalModal}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-semibold">National Debt & Deficit Analysis</DialogTitle>
+            <DialogDescription className="text-sm text-slate-600 leading-relaxed">
+              <div className="space-y-3 mt-3">
+                <p>
+                  <strong>How we project national debt and deficit:</strong>
+                </p>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>Baseline projections use Congressional Budget Office (CBO) extended baseline forecasts</li>
+                  <li>Policy impacts reflect CBO scoring of proposed legislation</li>
+                  <li>Debt-to-GDP ratio is calculated using nominal GDP projections from the Office of Management and Budget (OMB)</li>
+                  <li>Deficit figures include both on-budget and off-budget spending</li>
+                </ul>
+                <p className="text-xs text-slate-500 mt-4">
+                  Debt and deficit projections are subject to considerable uncertainty and may change based on economic conditions and future policy decisions.
                 </p>
               </div>
             </DialogDescription>
