@@ -1,8 +1,14 @@
 import { eq } from "drizzle-orm";
-import { userSessions, type UserSession, type InsertSession, type FormData, type PolicyResults } from "@shared/schema";
+import { userSessions, users, type UserSession, type InsertSession, type FormData, type PolicyResults, type User, type UpsertUser } from "@shared/schema";
 import { db } from "./db";
 
 export interface IStorage {
+  // User operations
+  // (IMPORTANT) these user operations are mandatory for Replit Auth.
+  getUser(id: string): Promise<User | undefined>;
+  upsertUser(user: UpsertUser): Promise<User>;
+  
+  // Session operations
   createSession(sessionId: string): Promise<UserSession>;
   getSession(sessionId: string): Promise<UserSession | undefined>;
   getSessions(): Promise<UserSession[]>;
@@ -12,7 +18,30 @@ export interface IStorage {
 }
 
 export class DatabaseStorage implements IStorage {
+  // User operations
+  // (IMPORTANT) these user operations are mandatory for Replit Auth.
+  
+  async getUser(id: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
 
+  async upsertUser(userData: UpsertUser): Promise<User> {
+    const [user] = await db
+      .insert(users)
+      .values(userData)
+      .onConflictDoUpdate({
+        target: users.id,
+        set: {
+          ...userData,
+          updatedAt: new Date(),
+        },
+      })
+      .returning();
+    return user;
+  }
+
+  // Session operations
   async createSession(sessionId: string): Promise<UserSession> {
     const [session] = await db
       .insert(userSessions)
@@ -84,11 +113,28 @@ export class DatabaseStorage implements IStorage {
 // Fallback to memory storage if database is not available
 export class MemStorage implements IStorage {
   private sessions: Map<string, UserSession>;
+  private users: Map<string, User>;
   private currentId: number;
 
   constructor() {
     this.sessions = new Map();
+    this.users = new Map();
     this.currentId = 1;
+  }
+
+  // User operations
+  async getUser(id: string): Promise<User | undefined> {
+    return this.users.get(id);
+  }
+
+  async upsertUser(userData: UpsertUser): Promise<User> {
+    const user: User = {
+      ...userData,
+      createdAt: userData.createdAt || new Date(),
+      updatedAt: new Date(),
+    };
+    this.users.set(userData.id, user);
+    return user;
   }
 
   async createSession(sessionId: string): Promise<UserSession> {
