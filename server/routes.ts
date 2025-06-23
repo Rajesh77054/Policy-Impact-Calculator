@@ -1,10 +1,10 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import session from "express-session";
 import { storage } from "./storage";
 import { formDataSchema } from "@shared/schema";
 import { generateSessionId, calculatePolicyImpact } from "./utils/policy-calculator";
 import { readExcelFile, extractCBOData } from "./utils/excel-reader";
+import { setupAuth, isAuthenticated } from "./replitAuth";
 import multer from 'multer';
 import path from 'path';
 
@@ -25,18 +25,20 @@ interface ReplitUser {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Session middleware
-  app.use(session({
-    secret: process.env.SESSION_SECRET || 'policy-calculator-secret-12345',
-    resave: true, // Changed to true for better session persistence
-    saveUninitialized: true,
-    cookie: { 
-      secure: false, // Set to false for Replit deployment
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      httpOnly: false, // Changed to false for better compatibility in Replit
-      sameSite: 'lax' // Changed from 'strict' to 'lax' for better compatibility
+  // Auth middleware
+  await setupAuth(app);
+
+  // Auth routes
+  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      res.json(user);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: "Failed to fetch user" });
     }
-  }));
+  });
 
   // Create new session
   app.post("/api/session", async (req, res) => {
