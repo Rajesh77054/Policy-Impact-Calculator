@@ -3,9 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link } from "wouter";
+import type { User } from "@shared/schema";
 
 export default function Home() {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading } = useAuth() as { user: User | undefined; isLoading: boolean; isAuthenticated: boolean };
 
   if (isLoading) {
     return (
@@ -30,13 +31,13 @@ export default function Home() {
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src={user.profileImageUrl || ""} alt={user.firstName || "User"} />
+                  <AvatarImage src={user?.profileImageUrl || ""} alt={user?.firstName || "User"} />
                   <AvatarFallback>
-                    {user.firstName?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || "U"}
+                    {user?.firstName?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || "U"}
                   </AvatarFallback>
                 </Avatar>
                 <span className="text-sm text-gray-700 dark:text-gray-300">
-                  {user.firstName} {user.lastName}
+                  {user?.firstName} {user?.lastName}
                 </span>
               </div>
               <Button

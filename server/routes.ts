@@ -110,7 +110,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           console.log('Creating emergency session with ID:', sessionId);
           req.session.policySessionId = sessionId;
 
-          const newSession = await storage.createSession(sessionId, req.body);
+          const newSession = await storage.createSession(sessionId);
 
           return res.json(newSession);
         }
@@ -345,7 +345,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error("Error processing Excel file:", error);
       res.status(500).json({ 
         error: "Failed to process Excel file",
-        details: error.message 
+        details: error instanceof Error ? error.message : "Unknown error"
       });
     }
   });
