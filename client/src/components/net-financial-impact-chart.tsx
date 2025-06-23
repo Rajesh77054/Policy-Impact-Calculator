@@ -381,6 +381,16 @@ export default function NetFinancialImpactChart({ results }: NetFinancialImpactC
                 <span className="text-xs text-slate-600">The trend line shows how your {isOverallBenefit ? 'savings' : 'costs'} accumulate over time</span>
               </p>
 
+              {/* Contract Worker Explanation */}
+              {!isOverallBenefit && results.breakdown?.some(item => item.category === "employment" && item.impact > 0) && (
+                <div className="mb-3 p-2 bg-amber-50 border border-amber-200 rounded text-xs">
+                  <p className="text-amber-800">
+                    <strong>Why you see costs despite policy benefits:</strong> While the policy provides tax and healthcare savings, 
+                    your employment status as a contract worker creates additional tax burdens that offset these benefits.
+                  </p>
+                </div>
+              )}
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div className={`rounded-lg p-3 border ${averageAnnualImpact < 0 ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200' : 'bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200'}`}>
                   <div className="flex items-center gap-2 mb-1">

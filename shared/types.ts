@@ -1,4 +1,3 @@
-
 export interface EconomicContext {
   unemploymentRate: {
     national: number;
@@ -76,5 +75,16 @@ export interface PolicyResults {
       item: string;
       amount: number;
     }>;
+  }>;
+}
+
+export interface BreakdownItem {
+  category: "tax" | "healthcare" | "energy" | "housing" | "education" | "employment";
+  title: string;
+  description: string;
+  impact: number;
+  details?: Array<{
+    item: string;
+    amount: number;
   }>;
 }

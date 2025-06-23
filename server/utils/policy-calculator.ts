@@ -708,7 +708,66 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
     };
   }
 
-return {
+// Build breakdown array with all significant impacts
+  const breakdown = [
+    {
+      category: "tax" as const,
+      title: "Policy Tax Changes",
+      description: "Tax savings from enhanced standard deduction and child tax credits",
+      impact: Math.round(scaledTaxDifference),
+      details: [
+        { item: "Enhanced standard deduction", amount: Math.round(scaledTaxDifference * 0.4) },
+        { item: "Expanded child tax credit", amount: Math.round(scaledTaxDifference * 0.6) }
+      ]
+    },
+    {
+      category: "healthcare" as const,
+      title: "Healthcare Cost Changes",
+      description: "Healthcare savings from enhanced subsidies and prescription coverage",
+      impact: Math.round(scaledHealthcareDifference),
+      details: [
+        { item: "Enhanced premium subsidies", amount: Math.round(scaledHealthcareDifference * 0.7) },
+        { item: "Expanded prescription coverage", amount: Math.round(scaledHealthcareDifference * 0.3) }
+      ]
+    }
+  ];
+
+  // Add employment status impact if significant (> $100)
+  if (Math.abs(employmentTaxAdjustment) > 100) {
+    breakdown.push({
+      category: "employment" as const,
+      title: "Employment Status Impact",
+      description: employmentStatus === "contract" ? 
+        "Additional tax burden for contract workers (self-employment tax, 1099 complications)" :
+        employmentStatus === "self-employed" ?
+        "Self-employment tax and additional compliance burden" :
+        `Employment-specific tax impacts for ${employmentStatus} workers`,
+      impact: Math.round(employmentTaxAdjustment),
+      details: [
+        { 
+          item: employmentStatus === "contract" ? "Contract worker tax burden" : 
+                employmentStatus === "self-employed" ? "Self-employment tax burden" :
+                "Employment tax adjustment", 
+          amount: Math.round(employmentTaxAdjustment) 
+        }
+      ]
+    });
+  }
+
+  // Add energy impact if significant (> $50)
+  if (Math.abs(scaledEnergyDifference) > 50) {
+    breakdown.push({
+      category: "energy" as const,
+      title: "Energy Cost Changes",
+      description: "Energy cost impact from clean energy investments",
+      impact: Math.round(scaledEnergyDifference),
+      details: [
+        { item: "Clean energy transition savings", amount: Math.round(scaledEnergyDifference) }
+      ]
+    });
+  }
+
+  return {
     // All values represent Big Bill vs Current Law differences
     // Negative values = user saves money with Big Bill (benefits)
     // Positive values = user pays more with Big Bill (costs)
@@ -732,28 +791,7 @@ return {
       jobOpportunities: jobOpportunities,
     },
     timeline: timeline,
-    breakdown: [
-      {
-        category: "tax" as const,
-        title: "One Big Beautiful Bill - Tax Changes",
-        description: "Tax impact vs Current Law (based on H.R. 1 CBO analysis)",
-        impact: Math.round(scaledTaxDifference),
-        details: [
-          { item: "Enhanced standard deduction", amount: Math.round(scaledTaxDifference * 0.4) },
-          { item: "Expanded child tax credit", amount: Math.round(scaledTaxDifference * 0.6) }
-        ]
-      },
-      {
-        category: "healthcare" as const,
-        title: "One Big Beautiful Bill - Healthcare",
-        description: "Healthcare cost difference vs Current Law",
-        impact: Math.round(scaledHealthcareDifference),
-        details: [
-          { item: "Enhanced premium subsidies", amount: Math.round(scaledHealthcareDifference * 0.7) },
-          { item: "Expanded prescription coverage", amount: Math.round(scaledHealthcareDifference * 0.3) }
-        ]
-      }
-    ],
+    breakdown: breakdown,
     purchasingPower: purchasingPowerData,
     economicContext: economicContext,
   };

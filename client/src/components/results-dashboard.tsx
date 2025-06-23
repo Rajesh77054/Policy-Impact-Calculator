@@ -172,7 +172,34 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
 
         {/* Secondary Supporting Information */}
         <div className="border-t pt-8">
-          <h3 className="text-xl font-semibold text-slate-900 mb-6">How Your Savings Break Down</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-6">How Your Impact Breaks Down</h3>
+          
+          {/* Employment Status Alert for Contract Workers */}
+          {results.breakdown.some(item => item.category === "employment" && item.impact > 0) && (
+            <Card className="bg-amber-50 border-amber-200 mb-6">
+              <CardContent className="pt-6">
+                <div className="flex items-start gap-3">
+                  <div className="p-2 bg-amber-100 rounded-lg">
+                    <Building className="w-5 h-5 text-amber-700" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-amber-900 mb-2">Employment Status Impact</h4>
+                    <p className="text-sm text-amber-800 mb-3">
+                      As a contract worker, you face additional tax burdens that offset some policy benefits. This includes self-employment taxes, 1099 complications, and lack of employer-provided benefits.
+                    </p>
+                    <div className="bg-white rounded-lg p-3 border border-amber-200">
+                      <div className="text-sm text-amber-900">
+                        <strong>Employment Impact:</strong> +${Math.abs(results.breakdown.find(item => item.category === "employment")?.impact || 0).toLocaleString()}/year
+                      </div>
+                      <div className="text-xs text-amber-700 mt-1">
+                        This reflects the real additional costs contract workers face compared to traditional employees
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
           
           {/* Unified Impact Breakdown */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -238,6 +265,59 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                 </div>
               </CardContent>
             </Card>
+          </div>
+
+          {/* Detailed Impact Breakdown */}
+          <div className="bg-white rounded-xl border border-slate-200 p-6 mb-8">
+            <h4 className="text-lg font-semibold text-slate-900 mb-4 flex items-center">
+              <Calculator className="w-5 h-5 mr-2 text-slate-600" />
+              Complete Impact Analysis
+            </h4>
+            <div className="space-y-3">
+              {results.breakdown.map((item, index) => (
+                <div key={index} className={`p-4 rounded-lg border ${item.impact < 0 ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <h5 className={`font-medium ${item.impact < 0 ? 'text-green-900' : 'text-red-900'}`}>
+                        {item.title}
+                      </h5>
+                      <p className={`text-sm ${item.impact < 0 ? 'text-green-700' : 'text-red-700'}`}>
+                        {item.description}
+                      </p>
+                    </div>
+                    <div className={`text-lg font-bold ${item.impact < 0 ? 'text-green-800' : 'text-red-800'}`}>
+                      {item.impact < 0 ? `Save $${Math.abs(item.impact).toLocaleString()}` : `+$${item.impact.toLocaleString()}`}
+                    </div>
+                  </div>
+                  {item.details && (
+                    <div className="mt-3 space-y-1">
+                      {item.details.map((detail, detailIndex) => (
+                        <div key={detailIndex} className="flex justify-between text-sm">
+                          <span className={item.impact < 0 ? 'text-green-600' : 'text-red-600'}>
+                            • {detail.item}
+                          </span>
+                          <span className={`font-medium ${item.impact < 0 ? 'text-green-700' : 'text-red-700'}`}>
+                            {detail.amount < 0 ? `Save $${Math.abs(detail.amount).toLocaleString()}` : `+$${detail.amount.toLocaleString()}`}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            
+            {/* Net Impact Summary */}
+            <div className={`mt-4 p-4 rounded-lg border-2 ${results.netAnnualImpact < 0 ? 'bg-green-100 border-green-300' : 'bg-red-100 border-red-300'}`}>
+              <div className="flex justify-between items-center">
+                <span className={`font-semibold ${results.netAnnualImpact < 0 ? 'text-green-900' : 'text-red-900'}`}>
+                  Net Annual Impact:
+                </span>
+                <span className={`text-xl font-bold ${results.netAnnualImpact < 0 ? 'text-green-800' : 'text-red-800'}`}>
+                  {results.netAnnualImpact < 0 ? `Save $${Math.abs(results.netAnnualImpact).toLocaleString()}` : `Pay $${results.netAnnualImpact.toLocaleString()} more`}
+                </span>
+              </div>
+            </div>
           </div>
 
           {/* Energy Impact Note (if applicable) */}
