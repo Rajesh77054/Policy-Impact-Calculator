@@ -1,10 +1,10 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import session from "express-session";
 import { storage } from "./storage";
 import { formDataSchema } from "@shared/schema";
 import { generateSessionId, calculatePolicyImpact } from "./utils/policy-calculator";
 import { readExcelFile, extractCBOData } from "./utils/excel-reader";
-import { setupAuth, isAuthenticated } from "./replitAuth";
 import multer from 'multer';
 import path from 'path';
 
@@ -25,20 +25,18 @@ interface ReplitUser {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Auth middleware
-  await setupAuth(app);
-
-  // Auth routes
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      res.json(user);
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({ message: "Failed to fetch user" });
+  // Session middleware
+  app.use(session({
+    secret: process.env.SESSION_SECRET || 'policy-calculator-secret-12345',
+    resave: true, // Changed to true for better session persistence
+    saveUninitialized: true,
+    cookie: { 
+      secure: false, // Set to false for Replit deployment
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      httpOnly: false, // Changed to false for better compatibility in Replit
+      sameSite: 'lax' // Changed from 'strict' to 'lax' for better compatibility
     }
-  });
+  }));
 
   // Create new session
   app.post("/api/session", async (req, res) => {
@@ -110,7 +108,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           console.log('Creating emergency session with ID:', sessionId);
           req.session.policySessionId = sessionId;
 
-          const newSession = await storage.createSession(sessionId);
+          const newSession = await storage.createSession(sessionId, req.body);
 
           return res.json(newSession);
         }
@@ -345,7 +343,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error("Error processing Excel file:", error);
       res.status(500).json({ 
         error: "Failed to process Excel file",
-        details: error instanceof Error ? error.message : "Unknown error"
+        details: error.message 
       });
     }
   });
