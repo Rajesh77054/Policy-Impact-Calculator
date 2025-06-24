@@ -97,10 +97,6 @@ export const policyResultsSchema = z.object({
   netAnnualImpact: z.number(),
   deficitImpact: z.number(),
   recessionProbability: z.number(),
-  taxCosts: z.object({
-    current: z.number(),
-    proposed: z.number(),
-  }),
   healthcareCosts: z.object({
     current: z.number(),
     proposed: z.number(),
@@ -116,8 +112,31 @@ export const policyResultsSchema = z.object({
     twentyYear: z.number(),
   }),
   breakdown: z.array(policyBreakdownSchema),
-  purchasingPower: purchasingPowerSchema,
+  purchasingPower: purchasingPowerSchema.optional(),
   economicContext: economicContextSchema.optional(),
+  bigBillScenario: z.object({
+    annualTaxImpact: z.number(),
+    healthcareCostImpact: z.number(),
+    energyCostImpact: z.number(),
+    netAnnualImpact: z.number(),
+    deficitImpact: z.number(),
+    recessionProbability: z.number(),
+    healthcareCosts: z.object({
+      current: z.number(),
+      proposed: z.number(),
+    }),
+    communityImpact: z.object({
+      schoolFunding: z.number(),
+      infrastructure: z.number(),
+      jobOpportunities: z.number(),
+    }),
+    timeline: z.object({
+      fiveYear: z.number(),
+      tenYear: z.number(),
+      twentyYear: z.number(),
+    }),
+    breakdown: z.array(policyBreakdownSchema),
+  }).optional(),
 });
 
 export const insertSessionSchema = createInsertSchema(userSessions).omit({
