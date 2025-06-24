@@ -162,139 +162,174 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
 
         <DataDisclaimer />
 
-        {/* Primary Hero Comparison Card */}
+        {/* Hero Section - Annual Savings */}
         <div className="mb-8">
-          <Card className="bg-card border-2 border-blue-200 shadow-lg">
-            <CardHeader className="pb-4">
-              <div className="text-center">
-                <CardTitle className="text-2xl font-bold text-slate-900 mb-2">Policy Impact Comparison</CardTitle>
-                <p className="text-slate-600">
-                  Side-by-side comparison of Current Law vs. Proposed "One Big Beautiful Bill Act"
-                </p>
-                <p className="text-sm text-amber-600 font-medium mt-2">
-                  ⚠️ Proposed legislation has not yet been enacted into law
-                </p>
-              </div>
+          <Card className="bg-gradient-to-br from-emerald-50 to-emerald-100 border-2 border-emerald-200 shadow-lg">
+            <CardHeader className="text-center pb-2">
+              <CardTitle className="text-4xl font-bold text-emerald-900 mb-2">
+                Save ${Math.abs(currentData?.netAnnualImpact || 0).toLocaleString()}
+              </CardTitle>
+              <p className="text-emerald-700 text-lg">
+                Your estimated annual savings from proposed policy changes
+              </p>
+              <p className="text-sm text-emerald-600 mt-1">
+                Based on your personal profile and current tax/healthcare situation
+              </p>
+            </CardHeader>
+          </Card>
+        </div>
+
+        {/* Savings Over Time Chart */}
+        <div className="mb-8">
+          <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-2xl font-bold text-center">Your Savings Over Time</CardTitle>
+              <p className="text-center text-slate-600">How much you could save each year with proposed changes</p>
             </CardHeader>
             <CardContent>
-              <div className="grid md:grid-cols-2 gap-6">
-                {/* Current Law Column */}
-                <div className="bg-white rounded-lg p-6 border border-slate-200">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-slate-900">Current Law</h3>
-                    <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
-                      <Calculator className="w-4 h-4 text-slate-600" />
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-slate-600">Tax Changes</span>
-                      <span className={`font-medium ${results.annualTaxImpact < 0 ? "text-green-600" : "text-red-600"}`}>
-                        {formatTaxImpact(results.annualTaxImpact)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-slate-600">Healthcare Costs</span>
-                      <span className={`font-medium ${results.healthcareCostImpact < 0 ? "text-green-600" : "text-red-600"}`}>
-                        {formatCostImpact(results.healthcareCostImpact)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-slate-600">Energy Costs</span>
-                      <span className={`font-medium ${results.energyCostImpact < 0 ? "text-green-600" : "text-red-600"}`}>
-                        {formatCostImpact(results.energyCostImpact)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-slate-600">Deficit Impact</span>
-                      <span className="font-medium text-slate-600">Baseline</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-slate-600">Recession Risk</span>
-                      <span className="font-medium text-orange-600">28%</span>
-                    </div>
-                    <div className="pt-3 border-t border-slate-200">
-                      <div className="flex justify-between font-semibold text-lg">
-                        <span>Net Annual Impact</span>
-                        <span className={results.netAnnualImpact < 0 ? "text-green-600" : "text-red-600"}>
-                          {formatNetImpact(results.netAnnualImpact)}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div className="h-80 w-full">
+                <canvas ref={(canvas) => {
+                  if (canvas && currentData) {
+                    import('chart.js/auto').then(({ default: Chart }) => {
+                      // Destroy existing chart
+                      const existingChart = Chart.getChart(canvas);
+                      if (existingChart) {
+                        existingChart.destroy();
+                      }
 
-                {/* Proposed Bill Column */}
-                <div className="bg-white rounded-lg p-6 border-2 border-blue-300">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-blue-900">Proposed Bill</h3>
-                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <Calculator className="w-4 h-4 text-blue-600" />
-                    </div>
+                      const ctx = canvas.getContext('2d');
+                      if (ctx) {
+                        new Chart(ctx, {
+                          type: 'bar',
+                          data: {
+                            labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5', 'Year 10', 'Year 15', 'Year 20'],
+                            datasets: [{
+                              label: 'Annual Savings',
+                              data: [
+                                Math.abs(currentData.netAnnualImpact),
+                                Math.abs(currentData.netAnnualImpact) * 1.02,
+                                Math.abs(currentData.netAnnualImpact) * 1.05,
+                                Math.abs(currentData.netAnnualImpact) * 1.08,
+                                Math.abs(currentData.timeline.fiveYear / 5),
+                                Math.abs(currentData.timeline.tenYear / 10),
+                                Math.abs(currentData.timeline.tenYear / 10) * 1.1,
+                                Math.abs(currentData.timeline.twentyYear / 20)
+                              ],
+                              backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                              borderColor: 'rgba(16, 185, 129, 1)',
+                              borderWidth: 2,
+                              borderRadius: 8,
+                              borderSkipped: false,
+                            }]
+                          },
+                          options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                              legend: {
+                                display: false
+                              },
+                              tooltip: {
+                                callbacks: {
+                                  label: function(context) {
+                                    return `$${context.parsed.y.toLocaleString()} saved`;
+                                  }
+                                }
+                              }
+                            },
+                            scales: {
+                              y: {
+                                beginAtZero: true,
+                                ticks: {
+                                  callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                  }
+                                },
+                                grid: {
+                                  color: 'rgba(0, 0, 0, 0.1)'
+                                }
+                              },
+                              x: {
+                                grid: {
+                                  display: false
+                                }
+                              }
+                            }
+                          }
+                        });
+                      }
+                    });
+                  }
+                }} className="w-full h-full" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Detailed Breakdown Section */}
+        <div className="grid lg:grid-cols-2 gap-8 mb-12">
+          {/* Tax Savings Card */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <DollarSign className="w-5 h-5 text-green-600" />
+                Tax Savings
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-600">Annual Tax Impact</span>
+                  <span className="text-2xl font-bold text-green-600">
+                    ${Math.abs(currentData?.annualTaxImpact || 0).toLocaleString()}
+                  </span>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>5 Year Total</span>
+                    <span className="font-medium">${Math.abs(currentData?.timeline.fiveYear || 0).toLocaleString()}</span>
                   </div>
-                  <div className="space-y-3">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-slate-600">Tax Changes</span>
-                      <span className={`font-medium ${(results.bigBillScenario?.annualTaxImpact || 0) < 0 ? "text-green-600" : "text-red-600"}`}>
-                        {formatTaxImpact(results.bigBillScenario?.annualTaxImpact || 0)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-slate-600">Healthcare Costs</span>
-                      <span className={`font-medium ${(results.bigBillScenario?.healthcareCostImpact || 0) < 0 ? "text-green-600" : "text-red-600"}`}>
-                        {formatCostImpact(results.bigBillScenario?.healthcareCostImpact || 0)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-slate-600">Energy Costs</span>
-                      <span className={`font-medium ${(results.bigBillScenario?.energyCostImpact || 0) < 0 ? "text-green-600" : "text-red-600"}`}>
-                        {formatCostImpact(results.bigBillScenario?.energyCostImpact || 0)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-slate-600">Deficit Impact</span>
-                      <span className="font-medium text-red-600">+$2,400/year</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-slate-600">Recession Risk</span>
-                      <span className="font-medium text-green-600">22%</span>
-                    </div>
-                    <div className="pt-3 border-t border-slate-200">
-                      <div className="flex justify-between font-semibold text-lg">
-                        <span>Net Annual Impact</span>
-                        <span className={(results.bigBillScenario?.netAnnualImpact || 0) < 0 ? "text-green-600" : "text-red-600"}>
-                          {formatNetImpact(results.bigBillScenario?.netAnnualImpact || 0)}
-                        </span>
-                      </div>
-                    </div>
+                  <div className="flex justify-between text-sm">
+                    <span>10 Year Total</span>
+                    <span className="font-medium">${Math.abs(currentData?.timeline.tenYear || 0).toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>20 Year Total</span>
+                    <span className="font-medium">${Math.abs(currentData?.timeline.twentyYear || 0).toLocaleString()}</span>
                   </div>
                 </div>
               </div>
+            </CardContent>
+          </Card>
 
-              {/* Comparison Summary */}
-              <div className="mt-6 p-4 bg-slate-50 rounded-lg">
-                <div className="text-center">
-                  <h4 className="font-semibold text-slate-900 mb-2">Bottom Line Comparison</h4>
-                  <div className="grid md:grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <p className="text-slate-600">
-                        <strong>Your Annual Savings Difference:</strong>
-                      </p>
-                      <p className={`text-lg font-bold ${((results.bigBillScenario?.netAnnualImpact || 0) - results.netAnnualImpact) < 0 ? "text-green-600" : "text-red-600"}`}>
-                        {Math.abs((results.bigBillScenario?.netAnnualImpact || 0) - results.netAnnualImpact) < 100 ? 
-                          "Nearly identical impact" : 
-                          formatCurrency((results.bigBillScenario?.netAnnualImpact || 0) - results.netAnnualImpact)
-                        }
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-slate-600">
-                        <strong>Economic Risk Change:</strong>
-                      </p>
-                      <p className="text-lg font-bold text-green-600">
-                        6% lower recession risk
-                      </p>
-                    </div>
+          {/* Healthcare Savings Card */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Heart className="w-5 h-5 text-blue-600" />
+                Healthcare Savings
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-600">Annual Healthcare Impact</span>
+                  <span className="text-2xl font-bold text-green-600">
+                    ${Math.abs(currentData?.healthcareCostImpact || 0).toLocaleString()}
+                  </span>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Current Annual Cost</span>
+                    <span className="font-medium">${(currentData?.healthcareCosts.current || 0).toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Proposed Annual Cost</span>
+                    <span className="font-medium">${(currentData?.healthcareCosts.proposed || 0).toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between text-sm text-green-600">
+                    <span>Annual Savings</span>
+                    <span className="font-medium">${Math.abs((currentData?.healthcareCosts.current || 0) - (currentData?.healthcareCosts.proposed || 0)).toLocaleString()}</span>
                   </div>
                 </div>
               </div>
@@ -302,8 +337,49 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
           </Card>
         </div>
 
-        {/* Charts Section */}
-        {results && <PolicyCharts results={results} showBigBillComparison={showBigBillComparison && !!results.bigBillScenario} />}
+        {/* Community Impact Section */}
+        <div className="mb-12">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-center">Community Impact</CardTitle>
+              <p className="text-center text-slate-600">How these policies could benefit your local area</p>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <GraduationCap className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <h3 className="font-semibold mb-2">School Funding</h3>
+                  <p className="text-2xl font-bold text-blue-600">
+                    {formatPercentage(currentData?.communityImpact.schoolFunding || 0)}
+                  </p>
+                  <p className="text-sm text-slate-600">Increase in local education funding</p>
+                </div>
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <Building className="w-6 h-6 text-green-600" />
+                  </div>
+                  <h3 className="font-semibold mb-2">Infrastructure</h3>
+                  <p className="text-2xl font-bold text-green-600">
+                    {formatPercentage(currentData?.communityImpact.infrastructure || 0)}
+                  </p>
+                  <p className="text-sm text-slate-600">Improvement in local infrastructure</p>
+                </div>
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <Users className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <h3 className="font-semibold mb-2">Job Opportunities</h3>
+                  <p className="text-2xl font-bold text-purple-600">
+                    {formatPercentage(currentData?.communityImpact.jobOpportunities || 0)}
+                  </p>
+                  <p className="text-sm text-slate-600">Growth in local employment</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
