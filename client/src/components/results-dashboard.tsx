@@ -202,65 +202,72 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
           )}
           
           {/* Unified Impact Breakdown */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             {/* Tax Impact */}
             <Card className="border-2 border-green-200 bg-gradient-to-br from-green-50 to-emerald-50">
               <CardHeader className="pb-3">
-                <CardTitle className="text-lg text-green-900 flex items-center">
-                  <Calculator className="w-5 h-5 mr-2" />
+                <CardTitle className="text-base text-green-900 flex items-center">
+                  <Calculator className="w-4 h-4 mr-2" />
                   Tax Relief
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-green-700 mb-2">
+                <div className="text-2xl font-bold text-green-700 mb-1">
                   {results.annualTaxImpact < 0 ? `Save $${Math.abs(results.annualTaxImpact).toLocaleString()}` : `Pay $${results.annualTaxImpact.toLocaleString()} more`}
                 </div>
-                <p className="text-sm text-green-600 mb-3">Annual tax savings from Big Bill policy changes</p>
-                <div className="text-xs text-green-700">
-                  20-year total: {results.annualTaxImpact < 0 ? `Save $${Math.abs(results.annualTaxImpact * 20).toLocaleString()}` : `Pay $${(results.annualTaxImpact * 20).toLocaleString()} more`}
-                </div>
+                <p className="text-xs text-green-600">Annual tax savings from Big Bill changes</p>
               </CardContent>
             </Card>
 
             {/* Healthcare Impact */}
             <Card className="border-2 border-green-200 bg-gradient-to-br from-green-50 to-emerald-50">
               <CardHeader className="pb-3">
-                <CardTitle className="text-lg text-green-900 flex items-center">
-                  <Heart className="w-5 h-5 mr-2" />
+                <CardTitle className="text-base text-green-900 flex items-center">
+                  <Heart className="w-4 h-4 mr-2" />
                   Healthcare Savings
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-green-700 mb-2">
+                <div className="text-2xl font-bold text-green-700 mb-1">
                   {results.healthcareCostImpact < 0 ? `Save $${Math.abs(results.healthcareCostImpact).toLocaleString()}` : `Cost $${results.healthcareCostImpact.toLocaleString()} more`}
                 </div>
-                <p className="text-sm text-green-600 mb-3">
-                  Annual healthcare cost reduction
-                </p>
-                <div className="text-xs text-green-700">
-                  Current: ${results.healthcareCosts.current.toLocaleString()}/year → Big Bill: ${results.healthcareCosts.proposed.toLocaleString()}/year
-                </div>
+                <p className="text-xs text-green-600">Annual healthcare cost reduction</p>
               </CardContent>
             </Card>
 
+            {/* Employment Impact - Show if significant */}
+            {results.breakdown.find(item => item.category === 'employment') && (
+              <Card className="border-2 border-red-200 bg-gradient-to-br from-red-50 to-orange-50">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base text-red-900 flex items-center">
+                    <Users className="w-4 h-4 mr-2" />
+                    Employment Impact
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-red-700 mb-1">
+                    Pay ${results.breakdown.find(item => item.category === 'employment')?.impact.toLocaleString()} more
+                  </div>
+                  <p className="text-xs text-red-600">Self-employment tax burden</p>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Net Total Impact */}
-            <Card className={`border-2 ${results.timeline.twentyYear < 0 ? 'border-green-200 bg-gradient-to-br from-green-50 to-emerald-50' : 'border-orange-200 bg-gradient-to-br from-orange-50 to-amber-50'}`}>
+            <Card className={`border-2 ${results.netAnnualImpact < 0 ? 'border-green-200 bg-gradient-to-br from-green-50 to-emerald-50' : 'border-orange-200 bg-gradient-to-br from-orange-50 to-amber-50'}`}>
               <CardHeader className="pb-3">
-                <CardTitle className={`text-lg flex items-center ${results.timeline.twentyYear < 0 ? 'text-green-900' : 'text-orange-900'}`}>
-                  {results.timeline.twentyYear < 0 ? <TrendingUp className="w-5 h-5 mr-2" /> : <TrendingDown className="w-5 h-5 mr-2" />}
-                  Long-term Total
+                <CardTitle className={`text-base flex items-center ${results.netAnnualImpact < 0 ? 'text-green-900' : 'text-orange-900'}`}>
+                  {results.netAnnualImpact < 0 ? <TrendingUp className="w-4 h-4 mr-2" /> : <TrendingDown className="w-4 h-4 mr-2" />}
+                  Net Annual Impact
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className={`text-3xl font-bold mb-2 ${results.timeline.twentyYear < 0 ? 'text-green-700' : 'text-orange-700'}`}>
-                  {results.timeline.twentyYear < 0 ? `Save $${Math.abs(results.timeline.twentyYear).toLocaleString()}` : `Pay $${results.timeline.twentyYear.toLocaleString()} more`}
+                <div className={`text-2xl font-bold mb-1 ${results.netAnnualImpact < 0 ? 'text-green-700' : 'text-orange-700'}`}>
+                  {results.netAnnualImpact < 0 ? `Save $${Math.abs(results.netAnnualImpact).toLocaleString()}` : `Pay $${results.netAnnualImpact.toLocaleString()} more`}
                 </div>
-                <p className={`text-sm mb-3 ${results.timeline.twentyYear < 0 ? 'text-green-600' : 'text-orange-600'}`}>
-                  {results.timeline.twentyYear < 0 ? "Cumulative 20-year benefit" : "Cumulative 20-year cost"}
+                <p className={`text-xs ${results.netAnnualImpact < 0 ? 'text-green-600' : 'text-orange-600'}`}>
+                  Total annual impact including all factors
                 </p>
-                <div className={`text-xs ${results.timeline.twentyYear < 0 ? 'text-green-700' : 'text-orange-700'}`}>
-                  Includes inflation adjustments and compound effects
-                </div>
               </CardContent>
             </Card>
           </div>
