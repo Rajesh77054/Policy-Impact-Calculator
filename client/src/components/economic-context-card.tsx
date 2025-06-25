@@ -25,8 +25,8 @@ export default function EconomicContextCard({ results }: EconomicContextCardProp
   }
 
   const getRecessionRiskLevel = (probability: number) => {
-    if (probability <= 0.15) return { level: "Low", color: "green", icon: CheckCircle };
-    if (probability <= 0.35) return { level: "Moderate", color: "yellow", icon: AlertTriangle };
+    if (probability <= 15) return { level: "Low", color: "green", icon: CheckCircle };
+    if (probability <= 35) return { level: "Moderate", color: "yellow", icon: AlertTriangle };
     return { level: "High", color: "red", icon: AlertTriangle };
   };
 
@@ -118,7 +118,7 @@ export default function EconomicContextCard({ results }: EconomicContextCardProp
                 </Badge>
               </div>
               <div className="text-2xl font-bold text-slate-900">
-                {Math.round(results.recessionProbability * 100)}%
+                {Math.round(results.recessionProbability)}%
               </div>
               <div className="text-xs text-slate-600">Recession Risk</div>
             </div>
