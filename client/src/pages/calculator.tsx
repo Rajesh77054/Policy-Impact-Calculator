@@ -41,11 +41,11 @@ export default function Calculator() {
     },
     onError: (error) => {
       console.error("Failed to create session:", error);
-      // Retry session creation after a short delay
-      setTimeout(() => {
-        console.log("Retrying session creation...");
-        createSession();
-      }, 2000);
+      toast({
+        title: "Session Error",
+        description: "Failed to create session. Please refresh the page.",
+        variant: "destructive",
+      });
     },
   });
 
@@ -71,29 +71,19 @@ export default function Calculator() {
     },
     onError: (error: any) => {
       console.error("Calculation error:", error);
-
-      // Check if it's a session-related error
-      if (error.message?.includes("Session") || error.message?.includes("expired")) {
-        toast({
-          title: "Session Expired",
-          description: "Your session has expired. Creating a new session...",
-          variant: "destructive",
-        });
-        // Restart the session
-        createSession();
-      } else {
-        toast({
-          title: "Calculation Error",
-          description: error.message || "There was an error calculating your results. Please try again.",
-          variant: "destructive",
-        });
-      }
+      toast({
+        title: "Calculation Error",
+        description: error.message || "There was an error calculating your results. Please try again.",
+        variant: "destructive",
+      });
     },
   });
 
   useEffect(() => {
-    createSession();
-  }, []);
+    if (!sessionReady) {
+      createSession();
+    }
+  }, [sessionReady, createSession]);
 
   const handleStepComplete = async (stepData: Partial<FormData>) => {
     console.log("Step completed with data:", stepData);
@@ -101,12 +91,10 @@ export default function Calculator() {
     console.log("Session ready status:", sessionReady);
 
     if (!sessionReady) {
-      console.error("Session not ready, attempting to create new session");
-      createSession();
-
+      console.error("Session not ready");
       toast({
         title: "Session Error",
-        description: "Creating new session. Please wait a moment and try again.",
+        description: "Session not ready. Please wait a moment and try again.",
         variant: "destructive",
       });
       return;
@@ -134,15 +122,13 @@ export default function Calculator() {
         const errorText = await response.text();
         console.error("Server error response:", errorText);
 
-        // If it's a session error, try to reinitialize session
+        // If it's a session error, handle gracefully
         if (response.status === 404) {
-          console.log("Session not found, reinitializing...");
-          setSessionReady(false);
-          createSession();
+          console.log("Session not found");
           toast({
-            title: "Session Reinitialized",
-            description: "Please try your action again.",
-            variant: "default",
+            title: "Session Error",
+            description: "Please refresh the page to start over.",
+            variant: "destructive",
           });
           return;
         }
