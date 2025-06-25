@@ -330,22 +330,40 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
   // Always use Big Bill CBO data as the single authoritative source
   const incomeRange = formData.incomeRange || "45k-95k";
 
-  // Fetch real-time economic data from FRED
+  // Fetch comprehensive economic data from FRED API
   let economicData: EconomicIndicators | undefined;
+  let economicContext: any;
+  
   try {
-    // Get state code from full state name if needed
-    const stateCode = state ? Object.keys(STATE_TAX_DATA).find(code => 
-      STATE_TAX_DATA[code] && (code === state || STATE_TAX_DATA[code].state === state)
-    ) : undefined;
-    
-    economicData = await getComprehensiveEconomicData(stateCode);
-    console.log('FRED economic data fetched:', {
-      unemployment: economicData.unemploymentRate,
-      recession: economicData.recessionProbability,
-      wages: economicData.wageData
+    const data = await getComprehensiveEconomicData();
+    console.log('FRED economic data fetched:', { 
+      unemployment: data.unemploymentData, 
+      recession: data.recessionIndicators, 
+      wages: data.wageValidation 
     });
+    
+    economicData = {
+      unemploymentRate: data.unemploymentData.national,
+      inflationRate: data.macroeconomicData.inflationRate,
+      gdpGrowth: data.macroeconomicData.gdpGrowth,
+      federalFundsRate: data.macroeconomicData.federalFundsRate,
+      yieldCurveSpread: data.recessionIndicators.yieldCurveInversion,
+      lastUpdated: data.macroeconomicData.lastUpdated
+    };
+
+    // Build economic context for results
+    economicContext = {
+      unemploymentRate: data.unemploymentData,
+      recessionIndicators: data.recessionIndicators,
+      wageValidation: data.wageValidation,
+      macroeconomicData: data.macroeconomicData,
+      fiscalData: data.fiscalData
+    };
   } catch (error) {
-    console.warn('Failed to fetch FRED data, using static assumptions:', error);
+    console.error('Error fetching FRED data:', error);
+    // Use fallback values if FRED API fails
+    economicData = undefined;
+    economicContext = undefined;
   }
 
   // Debug logging
@@ -450,11 +468,11 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
     
     // Adjust job opportunities based on current unemployment rates
     if (economicData?.unemploymentRate) {
-      const nationalUnemployment = economicData.unemploymentRate.national;
-      const stateUnemployment = economicData.unemploymentRate.state || nationalUnemployment;
+      const nationalUnemployment = economicData.unemploymentRate;
+      const stateUnemployment = nationalUnemployment; // Using national rate as fallback
       
       // Higher unemployment = more potential for policy-driven job creation
-      const unemploymentFactor = stateUnemployment / nationalUnemployment;
+      const unemploymentFactor = Math.max(0.8, Math.min(1.5, nationalUnemployment / 3.7)); // Normalize against 3.7% baseline
       const unemploymentMultiplier = 1 + (unemploymentFactor - 1) * 0.3; // 30% adjustment based on relative unemployment
       
       baseJobOpportunities = Math.round(baseJobOpportunities * unemploymentMultiplier);
@@ -558,9 +576,13 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
   };
 
   // Calculate recession probability using real-time FRED data
-  const calculateRecessionProbability = (isBigBill: boolean = false, economicData?: EconomicIndicators): number => {
+  const calculateRecessionProbability = (isBigBill: boolean = false, economicContextData?: any): number => {
     // Use real-time FRED data if available, otherwise fallback to static model
-    const baselineProbability = economicData?.recessionProbability.combined || 28;
+    let baselineProbability = 28; // Default fallback value
+    
+    if (economicContextData?.recessionIndicators?.combined !== undefined) {
+      baselineProbability = economicContextData.recessionIndicators.combined * 100; // Convert to percentage
+    }
     
     if (isBigBill) {
       // Large fiscal stimulus tends to reduce near-term recession risk
@@ -574,8 +596,8 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
 
   const currentDeficitImpact = calculateDeficitImpact(netDifference, false);
   const bigBillDeficitImpact = calculateDeficitImpact(netDifference, true);
-  const currentRecessionProbability = calculateRecessionProbability(false, economicData);
-  const bigBillRecessionProbability = calculateRecessionProbability(true, economicData);
+  const currentRecessionProbability = calculateRecessionProbability(false, economicContext);
+  const bigBillRecessionProbability = calculateRecessionProbability(true, economicContext);
 
   // Purchasing Power Analysis with BLS API integration
   const currentYear = new Date().getFullYear();
@@ -690,23 +712,7 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
     console.log('Using fallback purchasing power data');
   }
 
-// Prepare economic context data from FRED
-  let economicContext;
-  if (economicData) {
-    const incomeValidation = validateIncomeRange(incomeRange, economicData.wageData);
-    economicContext = {
-      unemploymentRate: economicData.unemploymentRate,
-      recessionIndicators: economicData.recessionProbability,
-      wageValidation: {
-        medianWeeklyEarnings: economicData.wageData.medianWeeklyEarnings,
-        hourlyEarnings: economicData.wageData.hourlyEarnings,
-        incomeContext: incomeValidation.context,
-        lastUpdated: economicData.wageData.lastUpdated,
-      },
-      macroeconomicData: economicData.economicContext,
-      fiscalData: economicData.debtAndDeficit,
-    };
-  }
+  // Use the economic context that was already built above
 
 // Build breakdown array with all significant impacts
   const breakdown = [
