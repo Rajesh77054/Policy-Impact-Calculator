@@ -287,11 +287,13 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                             </div>
                           ))}
                           <div className="border-t pt-2 mt-2 flex justify-between font-medium">
-                            <span>Total:</span>
+                            <span>Net Total:</span>
                             <span className="font-mono">
-                              {results.breakdown.map(item => item.impact < 0 ? `-$${Math.abs(item.impact).toLocaleString()}` : `+$${item.impact.toLocaleString()}`).join(' ')} = 
-                              {results.netAnnualImpact < 0 ? ` -$${Math.abs(results.netAnnualImpact).toLocaleString()}` : ` +$${results.netAnnualImpact.toLocaleString()}`}
+                              {results.netAnnualImpact < 0 ? `-$${Math.abs(results.netAnnualImpact).toLocaleString()}` : `+$${results.netAnnualImpact.toLocaleString()}`}
                             </span>
+                          </div>
+                          <div className="text-xs text-slate-500 mt-1">
+                            *Includes state adjustments and energy costs
                           </div>
                         </div>
                       </div>
@@ -343,6 +345,14 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                   )}
                 </div>
               ))}
+              
+              {/* Summary note for transparency */}
+              <div className="mt-4 p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                <p className="text-sm text-slate-600">
+                  <strong>Net calculation includes:</strong> All policy impacts shown above, plus state-specific adjustments 
+                  and energy cost changes that vary by location and family circumstances.
+                </p>
+              </div>
             </div>
             
             
