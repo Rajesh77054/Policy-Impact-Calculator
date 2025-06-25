@@ -473,7 +473,8 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                     <p className="text-sm text-yellow-800 leading-relaxed">
                       <strong>Policy Trade-off Analysis:</strong> The Big Bill provides {results.netAnnualImpact < 0 ? 'significant personal savings' : 'modest personal costs'} 
                       {results.netAnnualImpact < 0 ? ` of $${Math.abs(results.netAnnualImpact).toLocaleString()} annually` : ` of $${results.netAnnualImpact.toLocaleString()} annually`}, 
-                      but increases national debt-to-GDP by 2.5 percentage points and deficit-to-GDP by 0.8 percentage points. 
+                      but increases national debt by approximately <strong>$680 billion</strong> and annual deficit by roughly <strong>$218 billion</strong>. 
+                      For comparison, this means each taxpayer would theoretically bear an additional <strong>$4,500</strong> in national debt burden. 
                       According to Congressional Budget Office projections, both Current Law and Big Bill scenarios maintain <strong>High Risk</strong> fiscal health ratings, 
                       indicating structural fiscal challenges that extend beyond this policy choice.
                     </p>
