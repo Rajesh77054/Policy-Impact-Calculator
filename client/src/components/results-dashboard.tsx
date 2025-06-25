@@ -215,9 +215,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                 <div className="text-3xl font-bold text-green-700 mb-2">
                   {results.annualTaxImpact < 0 ? `Save $${Math.abs(results.annualTaxImpact).toLocaleString()}` : `Pay $${results.annualTaxImpact.toLocaleString()} more`}
                 </div>
-                <p className="text-sm text-green-600 mb-3">
-                  Annual tax savings from policy changes
-                </p>
+                <p className="text-sm text-green-600 mb-3">Annual tax savings from Big Bill policy changes</p>
                 <div className="text-xs text-green-700">
                   20-year total: {results.annualTaxImpact < 0 ? `Save $${Math.abs(results.annualTaxImpact * 20).toLocaleString()}` : `Pay $${(results.annualTaxImpact * 20).toLocaleString()} more`}
                 </div>
@@ -240,7 +238,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                   Annual healthcare cost reduction
                 </p>
                 <div className="text-xs text-green-700">
-                  Current: ${results.healthcareCosts.current.toLocaleString()}/year → Proposed: ${results.healthcareCosts.proposed.toLocaleString()}/year
+                  Current: ${results.healthcareCosts.current.toLocaleString()}/year → Big Bill: ${results.healthcareCosts.proposed.toLocaleString()}/year
                 </div>
               </CardContent>
             </Card>
