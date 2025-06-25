@@ -221,13 +221,13 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                     <div className="flex justify-between text-xs">
                       <span className="text-blue-700">Federal Income Tax</span>
                       <span className="font-medium text-blue-900">
-                        ${Math.max(0, results.taxCosts.current - 200).toLocaleString()}
+                        ${Math.max(0, Math.abs(results.annualTaxImpact) - 200).toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
                       <span className="text-blue-700">FICA Taxes</span>
                       <span className="font-medium text-blue-900">
-                        ${Math.min(200, results.taxCosts.current).toLocaleString()}
+                        ${Math.min(200, Math.abs(results.annualTaxImpact)).toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
@@ -241,7 +241,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                     <div className="flex justify-between text-sm">
                       <span className="font-medium text-blue-800">Total Annual Tax</span>
                       <span className="font-bold text-blue-900">
-                        ${results.taxCosts.current.toLocaleString()}
+                        ${Math.abs(results.annualTaxImpact).toLocaleString()}
                       </span>
                     </div>
                   </div>
@@ -254,13 +254,13 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                     <div className="flex justify-between text-xs">
                       <span className="text-blue-700">Federal Income Tax</span>
                       <span className="font-medium text-blue-900">
-                        ${Math.max(0, results.taxCosts.proposed - 200).toLocaleString()}
+                        ${Math.max(0, Math.abs(results.annualTaxImpact) + results.annualTaxImpact - 200).toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
                       <span className="text-blue-700">FICA Taxes</span>
                       <span className="font-medium text-blue-900">
-                        ${Math.min(200, results.taxCosts.proposed).toLocaleString()}
+                        ${Math.min(200, Math.abs(results.annualTaxImpact) + results.annualTaxImpact).toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
@@ -274,7 +274,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                     <div className="flex justify-between text-sm">
                       <span className="font-medium text-blue-800">Total Annual Tax</span>
                       <span className="font-bold text-blue-900">
-                        ${results.taxCosts.proposed.toLocaleString()}
+                        ${(Math.abs(results.annualTaxImpact) + results.annualTaxImpact).toLocaleString()}
                       </span>
                     </div>
                   </div>
