@@ -479,8 +479,6 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                     </p>
                   </div>
                 </div>
-                  </div>
-                </div>
               </CardContent>
             </Card>
           )}
