@@ -312,6 +312,31 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
               ))}
             </div>
             
+            {/* Math Verification */}
+            <div className="mt-4 p-4 bg-slate-50 border rounded-lg">
+              <h5 className="font-medium text-slate-900 mb-3 flex items-center">
+                <Calculator className="w-4 h-4 mr-2" />
+                Calculation Verification
+              </h5>
+              <div className="text-sm text-slate-700 space-y-1">
+                {results.breakdown.map((item, index) => (
+                  <div key={index} className="flex justify-between">
+                    <span>{item.title}:</span>
+                    <span className="font-mono">
+                      {item.impact < 0 ? `-$${Math.abs(item.impact).toLocaleString()}` : `+$${item.impact.toLocaleString()}`}
+                    </span>
+                  </div>
+                ))}
+                <div className="border-t pt-2 mt-2 flex justify-between font-medium">
+                  <span>Total:</span>
+                  <span className="font-mono">
+                    {results.breakdown.map(item => item.impact < 0 ? `-$${Math.abs(item.impact).toLocaleString()}` : `+$${item.impact.toLocaleString()}`).join(' ')} = 
+                    {results.netAnnualImpact < 0 ? ` -$${Math.abs(results.netAnnualImpact).toLocaleString()}` : ` +$${results.netAnnualImpact.toLocaleString()}`}
+                  </span>
+                </div>
+              </div>
+            </div>
+
             {/* Net Impact Summary */}
             <div className={`mt-4 p-4 rounded-lg border-2 ${results.netAnnualImpact < 0 ? 'bg-green-100 border-green-300' : 'bg-red-100 border-red-300'}`}>
               <div className="flex justify-between items-center">

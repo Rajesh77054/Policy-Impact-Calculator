@@ -133,7 +133,7 @@ function calculateHealthcareCosts(
         // HSA plans typically have lower premiums but higher deductibles
         currentCost *= 0.85; // 15% lower premiums
         costSharing = isFamily ? 4200 : 2100; // Higher deductibles typical of HDHP
-        
+
         // HSA tax advantages - annual contribution limits for 2024
         const hsaContributionLimit = isFamily ? 4150 : 3300;
         const hsaTaxSavings = hsaContributionLimit * 0.22; // Assume 22% tax bracket savings
@@ -222,7 +222,7 @@ function calculateHealthcareCosts(
       const enhancedHSALimit = isFamily ? 500 : 350; // Additional contribution room
       const additionalTaxSavings = enhancedHSALimit * 0.22; // 22% tax savings
       proposedCost -= additionalTaxSavings;
-      
+
       // Proposed: Slower premium growth for HSA plans (GPT analysis point)
       proposedCost *= 0.97; // 3% slower premium growth
     }
@@ -244,7 +244,7 @@ function calculateHealthcareCosts(
       // HSA marketplace plans typically have lower premiums but higher deductibles
       currentCost *= 0.88; // 12% lower premiums than non-HSA marketplace plans
       costSharing = isFamily ? 4000 : 2000; // Higher deductibles typical of HDHP
-      
+
       // HSA tax advantages - annual contribution limits for 2024
       const hsaContributionLimit = isFamily ? 4150 : 3300;
       const hsaTaxSavings = hsaContributionLimit * 0.22; // Assume 22% tax bracket savings
@@ -271,7 +271,7 @@ function calculateHealthcareCosts(
       const enhancedHSALimit = isFamily ? 500 : 350; // Additional contribution room
       const additionalTaxSavings = enhancedHSALimit * 0.22; // 22% tax savings
       proposedCost -= additionalTaxSavings;
-      
+
       // Proposed: Slower premium growth for HSA plans
       proposedCost *= 0.95; // 5% slower premium growth for marketplace HSA plans
     }
@@ -333,7 +333,7 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
   // Fetch comprehensive economic data from FRED API
   let economicData: EconomicIndicators | undefined;
   let economicContext: any;
-  
+
   try {
     const data = await getComprehensiveEconomicData();
     console.log('FRED economic data fetched:', { 
@@ -341,7 +341,7 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
       recession: data.recessionIndicators, 
       wages: data.wageValidation 
     });
-    
+
     economicData = {
       unemploymentRate: data.unemploymentData.national,
       inflationRate: data.macroeconomicData.inflationRate,
@@ -465,19 +465,19 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
     // Job opportunities enhanced with real-time unemployment data
     const economicActivity = stateData.cost_of_living_index * stateData.property_tax_avg / 10000;
     let baseJobOpportunities = Math.round(200 + (economicActivity * income / 1000) + (taxRevenueFactor * 50));
-    
+
     // Adjust job opportunities based on current unemployment rates
     if (economicData?.unemploymentRate) {
       const nationalUnemployment = economicData.unemploymentRate;
       const stateUnemployment = nationalUnemployment; // Using national rate as fallback
-      
+
       // Higher unemployment = more potential for policy-driven job creation
       const unemploymentFactor = Math.max(0.8, Math.min(1.5, nationalUnemployment / 3.7)); // Normalize against 3.7% baseline
       const unemploymentMultiplier = 1 + (unemploymentFactor - 1) * 0.3; // 30% adjustment based on relative unemployment
-      
+
       baseJobOpportunities = Math.round(baseJobOpportunities * unemploymentMultiplier);
     }
-    
+
     jobOpportunities = baseJobOpportunities;
 
     // State-specific adjustments
@@ -518,24 +518,24 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
   // All impacts represent Big Bill vs Current Law differences
   // Negative values = user saves money with Big Bill
   // Positive values = user pays more with Big Bill
-  
+
   // Tax impact: Big Bill vs Current Law
   const taxDifference = bigBillTax - currentTax;
-  
+
   // Healthcare impact: Big Bill vs Current Law
   const healthcareDifference = healthcareCosts.proposed - healthcareCosts.current;
-  
+
   // Energy impact: Big Bill vs Current Law
   // Big Bill includes clean energy investments that reduce long-term energy costs
   const currentEnergyImpact = Math.round(120 + (income / 2000)); // Current law baseline
   const bigBillEnergyImpact = Math.round(currentEnergyImpact * 0.85); // 15% reduction from clean energy
   const energyDifference = bigBillEnergyImpact - currentEnergyImpact;
-  
+
   // Apply income scaling to all differences
   const scaledTaxDifference = taxDifference;
   const scaledHealthcareDifference = healthcareDifference;
   const scaledEnergyDifference = energyDifference * incomeScalar;
-  
+
   // Calculate final net difference (Big Bill vs Current Law)
   const netDifference = scaledTaxDifference + scaledHealthcareDifference + stateAdjustment + scaledEnergyDifference + employmentTaxAdjustment;
 
@@ -543,12 +543,18 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
   console.log(`Tax calculation: Current=${currentTax}, BigBill=${bigBillTax}, Impact=${taxDifference}`);
   console.log(`Healthcare calculation: Current=${healthcareCosts.current}, Proposed=${healthcareCosts.proposed}, Impact=${healthcareDifference}`);
   console.log(`Employment adjustment: Status=${employmentStatus}, Adjustment=${employmentTaxAdjustment}`);
-  console.log(`Final scaled impacts: Tax=${Math.round(scaledTaxDifference)}, Healthcare=${Math.round(scaledHealthcareDifference)}, Energy=${Math.round(scaledEnergyDifference)}, Employment=${Math.round(employmentTaxAdjustment)}`);
-  console.log(`Final net impact: ${Math.round(netDifference)}`);
+  console.log(`Final scaled impacts: Tax=${Math.round(scaledTaxDifference)}, Healthcare=${Math.round(scaledHealthcareDifference)}, Energy=${Math.round(scaledEnergyDifference)}, Employment=${Math.round(employmentTaxAdjustment)}, State=${Math.round(stateAdjustment)}`);
+  console.log(`Step-by-step net calculation:`);
+  console.log(`  Tax impact: ${Math.round(scaledTaxDifference)}`);
+  console.log(`  Healthcare impact: ${Math.round(scaledHealthcareDifference)}`);
+  console.log(`  State adjustment: ${Math.round(stateAdjustment)}`);
+  console.log(`  Energy impact: ${Math.round(scaledEnergyDifference)}`);
+  console.log(`  Employment adjustment: ${Math.round(employmentTaxAdjustment)}`);
+  console.log(`  Total: ${Math.round(scaledTaxDifference)} + ${Math.round(scaledHealthcareDifference)} + ${Math.round(stateAdjustment)} + ${Math.round(scaledEnergyDifference)} + ${Math.round(employmentTaxAdjustment)} = ${Math.round(netDifference)}`);
   console.log(`Community: School=${schoolFundingImpact}%, Infrastructure=$${Math.round(infrastructureImpact/1000)}K, Jobs=${jobOpportunities}`);
   console.log(`=== CALCULATION DEBUG END ===`);
 
-  
+
 
   // Timeline calculations based on Big Bill vs Current Law differences
   const timeline = {
@@ -570,7 +576,7 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
       const deficitShareMultiplier = income / 75000; // Scale by income relative to median
       return Math.round(2400 * deficitShareMultiplier); // Base $2,400 scaled by income
     }
-    
+
     // Current law: minimal additional deficit impact
     return 0;
   };
@@ -579,18 +585,18 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
   const calculateRecessionProbability = (isBigBill: boolean = false, economicContextData?: any): number => {
     // Use real-time FRED data if available, otherwise fallback to static model
     let baselineProbability = 28; // Default fallback value
-    
+
     if (economicContextData?.recessionIndicators?.combined !== undefined) {
       baselineProbability = economicContextData.recessionIndicators.combined * 100; // Convert to percentage
     }
-    
+
     if (isBigBill) {
       // Large fiscal stimulus tends to reduce near-term recession risk
       // but may increase longer-term inflation/instability risk
       // Based on Fed stress testing and CBO economic models
       return Math.max(15, baselineProbability - 6); // 6 percentage point reduction
     }
-    
+
     return baselineProbability;
   };
 
@@ -602,58 +608,58 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
   // Purchasing Power Analysis with BLS API integration
   const currentYear = new Date().getFullYear();
   const projectionYears = [currentYear, currentYear + 5, currentYear + 10, currentYear + 20];
-  
+
   console.log('Starting purchasing power calculation...');
-  
+
   // Calculate disposable income after taxes and healthcare costs
   const currentDisposableIncome = income - currentTax - healthcareCosts.current;
   const bigBillDisposableIncome = income - bigBillTax - healthcareCosts.proposed;
-  
+
   console.log(`Disposable incomes: Current=${currentDisposableIncome}, BigBill=${bigBillDisposableIncome}`);
-  
+
   let purchasingPowerData;
   let bigBillPurchasingPowerData;
-  
+
   try {
     // Prepare location information for CPI data fetching
     const locationInfo = {
       zipCode: formData.zipCode,
       state: formData.state
     };
-    
+
     console.log('Location info for CPI calculation:', locationInfo);
-    
+
     // Fetch CPI data from BLS API - get wider range to ensure we have projections
     const cpiData = await fetchCPIData(currentYear - 3, currentYear + 25, locationInfo);
     console.log(`Retrieved ${cpiData.length} CPI data points`);
     console.log('Available years in CPI data:', cpiData.map(d => d.year).join(', '));
     console.log('Projection years needed:', projectionYears.join(', '));
-    
+
     // Generate purchasing power projections using shared baseline for proper comparison
     // Use Current Law as baseline so differences are clearly visible
     const baselineIncome = currentDisposableIncome;
-    
+
     const currentLawScenario = calculatePurchasingPowerForScenario(
       currentDisposableIncome,
       cpiData,
       'Current Law',
       baselineIncome
     );
-    
+
     const bigBillPolicyScenario = calculatePurchasingPowerForScenario(
       bigBillDisposableIncome,
       cpiData,
       'Big Bill Policy',
       baselineIncome
     );
-    
+
     const bigBillScenario = calculatePurchasingPowerForScenario(
       bigBillDisposableIncome,
       cpiData,
       'Big Bill',
       baselineIncome
     );
-    
+
     // Filter for projection years and ensure we have data
     const currentScenarioFiltered = currentLawScenario.filter(d => 
       projectionYears.includes(d.year)
@@ -664,37 +670,37 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
     const bigBillScenarioFiltered = bigBillScenario.filter(d => 
       projectionYears.includes(d.year)
     );
-    
+
     console.log(`Filtered purchasing power data: ${currentScenarioFiltered.length} points for current scenario`);
     console.log(`Filtered purchasing power data: ${proposedScenarioFiltered.length} points for proposed scenario`);
     console.log(`Filtered purchasing power data: ${bigBillScenarioFiltered.length} points for big bill scenario`);
-    
+
     // Use projection year data if available, otherwise use first 4 data points
     // Determine data source description based on location
     const { description } = getCPISeriesForLocation(locationInfo);
     const dataSourceDescription = `U.S. Bureau of Labor Statistics - ${description}`;
-    
+
     purchasingPowerData = {
       currentScenario: currentScenarioFiltered.length > 0 ? currentScenarioFiltered : currentLawScenario.slice(0, 4),
       proposedScenario: proposedScenarioFiltered.length > 0 ? proposedScenarioFiltered : bigBillPolicyScenario.slice(0, 4),
       dataSource: dataSourceDescription,
       lastUpdated: new Date().toISOString().split('T')[0]
     };
-    
+
     bigBillPurchasingPowerData = {
       currentScenario: currentScenarioFiltered.length > 0 ? currentScenarioFiltered : currentLawScenario.slice(0, 4),
       proposedScenario: bigBillScenarioFiltered.length > 0 ? bigBillScenarioFiltered : bigBillScenario.slice(0, 4),
       dataSource: dataSourceDescription,
       lastUpdated: new Date().toISOString().split('T')[0]
     };
-    
+
     console.log('Purchasing power data calculated successfully using BLS API data');
-    
+
   } catch (error) {
     console.error('Error calculating purchasing power data:', error);
     // Generate fallback data using location-adjusted inflation averages
     const { description } = getCPISeriesForLocation(locationInfo);
-    
+
     // Apply location-specific inflation rates for fallback
     let inflationRate = 0.025; // 2.5% baseline
     if (locationInfo.zipCode) {
@@ -714,7 +720,7 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
         inflationRate = 0.023; // 2.3% for low-cost states
       }
     }
-    
+
     const generateFallbackData = (disposableIncome: number) => {
       return projectionYears.map(year => {
         const yearsFromNow = year - currentYear;
@@ -726,23 +732,23 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
         };
       });
     };
-    
+
     const fallbackDescription = `Location-adjusted inflation trends (${(inflationRate * 100).toFixed(1)}% annual for ${description})`;
-    
+
     purchasingPowerData = {
       currentScenario: generateFallbackData(currentDisposableIncome),
       proposedScenario: generateFallbackData(bigBillDisposableIncome),
       dataSource: fallbackDescription,
       lastUpdated: new Date().toISOString().split('T')[0]
     };
-    
+
     bigBillPurchasingPowerData = {
       currentScenario: generateFallbackData(currentDisposableIncome),
       proposedScenario: generateFallbackData(bigBillDisposableIncome),
       dataSource: fallbackDescription,
       lastUpdated: new Date().toISOString().split('T')[0]
     };
-    
+
     console.log('Using location-adjusted fallback purchasing power data');
   }
 
