@@ -238,18 +238,24 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
 
             {/* Employment Impact - Show if significant */}
             {results.breakdown.find(item => item.category === 'employment') && (
-              <Card className="border-2 border-red-200 bg-gradient-to-br from-red-50 to-orange-50">
+              <Card className={`border-2 ${results.breakdown.find(item => item.category === 'employment')!.impact < 0 ? 'border-green-200 bg-gradient-to-br from-green-50 to-emerald-50' : 'border-red-200 bg-gradient-to-br from-red-50 to-orange-50'}`}>
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-base text-red-900 flex items-center">
+                  <CardTitle className={`text-base flex items-center ${results.breakdown.find(item => item.category === 'employment')!.impact < 0 ? 'text-green-900' : 'text-red-900'}`}>
                     <Users className="w-4 h-4 mr-2" />
                     Employment Impact
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-red-700 mb-1">
-                    Pay ${results.breakdown.find(item => item.category === 'employment')?.impact.toLocaleString()} more
+                  <div className={`text-2xl font-bold mb-1 ${results.breakdown.find(item => item.category === 'employment')!.impact < 0 ? 'text-green-700' : 'text-red-700'}`}>
+                    {results.breakdown.find(item => item.category === 'employment')!.impact < 0 ? 
+                      `Save $${Math.abs(results.breakdown.find(item => item.category === 'employment')!.impact).toLocaleString()}` : 
+                      `Pay $${results.breakdown.find(item => item.category === 'employment')!.impact.toLocaleString()} more`}
                   </div>
-                  <p className="text-xs text-red-600">Self-employment tax burden</p>
+                  <p className={`text-xs ${results.breakdown.find(item => item.category === 'employment')!.impact < 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    {results.breakdown.find(item => item.category === 'employment')!.impact < 0 ? 
+                      'Employment tax benefits for full-time workers' : 
+                      'Self-employment tax burden'}
+                  </p>
                 </CardContent>
               </Card>
             )}
