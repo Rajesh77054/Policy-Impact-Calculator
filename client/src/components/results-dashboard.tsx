@@ -160,7 +160,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                 {results.netAnnualImpact < 0 ? `Save $${Math.abs(results.netAnnualImpact).toLocaleString()}` : `Pay $${results.netAnnualImpact.toLocaleString()} more`}
               </div>
               <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-                This represents your total annual financial impact from the proposed policy, 
+                This represents your total annual financial impact from the One Big Beautiful Bill Act (Big Bill), 
                 accounting for tax relief, healthcare savings, and any additional costs.
               </p>
             </div>

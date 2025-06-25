@@ -186,9 +186,7 @@ export default function NetFinancialImpactChart({ results }: NetFinancialImpactC
             Financial Impact Timeline
           </CardTitle>
         </div>
-        <p className="text-sm text-slate-600 mt-2">
-          Cumulative financial impact over time, showing how the policy changes affect your finances in the long term
-        </p>
+        <p className="text-sm text-slate-600 mt-2">Cumulative financial impact over time, showing how the Big Bill policy changes affect your finances in the long term</p>
       </CardHeader>
       <CardContent>
         <div className="h-80 relative">
