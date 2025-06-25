@@ -316,7 +316,9 @@ function calculateHealthcareCosts(
 
 export async function calculatePolicyImpact(formData: FormData): Promise<PolicyResults> {
   // Get median income for calculations
-  const income = formData.incomeRange ? INCOME_MEDIANS[formData.incomeRange] : 62500;
+  const income = formData.incomeRange && INCOME_MEDIANS[formData.incomeRange as keyof typeof INCOME_MEDIANS] 
+    ? INCOME_MEDIANS[formData.incomeRange as keyof typeof INCOME_MEDIANS] 
+    : 62500;
 
   // Extract all form data with proper fallbacks
   const familyStatus = formData.familyStatus || "single";
@@ -699,24 +701,25 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
   } catch (error) {
     console.error('Error calculating purchasing power data:', error);
     // Generate fallback data using location-adjusted inflation averages
-    const { description } = getCPISeriesForLocation(locationInfo);
+    const { description } = getCPISeriesForLocation({ zipCode: formData.zipCode, state: formData.state });
 
     // Apply location-specific inflation rates for fallback
+    const fallbackLocationInfo = { zipCode: formData.zipCode, state: formData.state };
     let inflationRate = 0.025; // 2.5% baseline
-    if (locationInfo.zipCode) {
+    if (fallbackLocationInfo.zipCode) {
       // Major metros typically have higher inflation
       const metros = ["75", "77", "78", "90", "91", "94", "10", "11", "60", "19", "30", "02", "48", "98", "33", "85", "55"];
-      if (metros.some(metro => locationInfo.zipCode!.startsWith(metro))) {
+      if (metros.some(metro => fallbackLocationInfo.zipCode!.startsWith(metro))) {
         inflationRate = 0.028; // 2.8% for major metros
       }
-    } else if (locationInfo.state) {
+    } else if (fallbackLocationInfo.state) {
       // High-cost states have higher inflation
       const highCostStates = ["CA", "NY", "MA", "CT", "NJ", "WA", "MD", "CO"];
-      if (highCostStates.includes(locationInfo.state)) {
+      if (highCostStates.includes(fallbackLocationInfo.state)) {
         inflationRate = 0.027; // 2.7% for high-cost states
       }
       const lowCostStates = ["MS", "AR", "WV", "KY", "AL", "TN", "OK", "KS"];
-      if (lowCostStates.includes(locationInfo.state)) {
+      if (lowCostStates.includes(fallbackLocationInfo.state)) {
         inflationRate = 0.023; // 2.3% for low-cost states
       }
     }

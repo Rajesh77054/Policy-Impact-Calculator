@@ -39,7 +39,7 @@ export const formDataSchema = z.object({
 });
 
 const policyBreakdownSchema = z.object({
-  category: z.string(),
+  category: z.enum(["tax", "healthcare", "energy", "housing", "education", "employment"]),
   title: z.string(),
   description: z.string(),
   impact: z.number(),

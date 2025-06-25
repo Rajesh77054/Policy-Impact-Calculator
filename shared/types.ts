@@ -67,7 +67,7 @@ export interface PolicyResults {
   };
   economicContext?: EconomicContext;
   breakdown: Array<{
-    category: string;
+    category: "tax" | "healthcare" | "energy" | "housing" | "education" | "employment";
     title: string;
     description: string;
     impact: number;
