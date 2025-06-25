@@ -219,21 +219,21 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                   <h4 className="text-sm font-medium text-blue-800 mb-3 text-center">Current Law</h4>
                   <div className="space-y-2">
                     <div className="flex justify-between text-xs">
-                      <span className="text-blue-700">Annual Tax</span>
+                      <span className="text-blue-700">Federal Income Tax</span>
                       <span className="font-medium text-blue-900">
-                        ${results.taxCosts.current.toLocaleString()}
+                        ${Math.max(0, results.taxCosts.current - 200).toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-blue-700">Standard Deduction</span>
+                      <span className="text-blue-700">FICA Taxes</span>
                       <span className="font-medium text-blue-900">
-                        $29,200
+                        ${Math.min(200, results.taxCosts.current).toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-blue-700">Child Tax Credit</span>
+                      <span className="text-blue-700">State Income Tax</span>
                       <span className="font-medium text-blue-900">
-                        $4,000
+                        $0
                       </span>
                     </div>
                   </div>
@@ -252,21 +252,21 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                   <h4 className="text-sm font-medium text-blue-800 mb-3 text-center">Big Bill</h4>
                   <div className="space-y-2">
                     <div className="flex justify-between text-xs">
-                      <span className="text-blue-700">Annual Tax</span>
+                      <span className="text-blue-700">Federal Income Tax</span>
                       <span className="font-medium text-blue-900">
-                        ${results.taxCosts.proposed.toLocaleString()}
+                        ${Math.max(0, results.taxCosts.proposed - 200).toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-blue-700">Enhanced Std Deduction</span>
+                      <span className="text-blue-700">FICA Taxes</span>
                       <span className="font-medium text-blue-900">
-                        $34,200
+                        ${Math.min(200, results.taxCosts.proposed).toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-blue-700">Enhanced Child Credit</span>
+                      <span className="text-blue-700">State Income Tax</span>
                       <span className="font-medium text-blue-900">
-                        $5,000
+                        $0
                       </span>
                     </div>
                   </div>
@@ -320,19 +320,19 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                     <div className="flex justify-between text-xs">
                       <span className="text-green-700">Annual Premium</span>
                       <span className="font-medium text-green-900">
-                        ${results.healthcareCosts.current.toLocaleString()}
+                        ${Math.round(results.healthcareCosts.current * 0.75).toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-green-700">Deductible</span>
+                      <span className="text-green-700">Out-of-Pocket Costs</span>
                       <span className="font-medium text-green-900">
-                        ${(results.healthcareCosts.current * 0.3).toLocaleString()}
+                        ${Math.round(results.healthcareCosts.current * 0.15).toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-green-700">Out-of-Pocket Max</span>
+                      <span className="text-green-700">Prescription Costs</span>
                       <span className="font-medium text-green-900">
-                        ${(results.healthcareCosts.current * 1.8).toLocaleString()}
+                        ${Math.round(results.healthcareCosts.current * 0.10).toLocaleString()}
                       </span>
                     </div>
                   </div>
@@ -353,19 +353,19 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                     <div className="flex justify-between text-xs">
                       <span className="text-green-700">Annual Premium</span>
                       <span className="font-medium text-green-900">
-                        ${results.healthcareCosts.proposed.toLocaleString()}
+                        ${Math.round(results.healthcareCosts.proposed * 0.70).toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-green-700">Deductible</span>
+                      <span className="text-green-700">Out-of-Pocket Costs</span>
                       <span className="font-medium text-green-900">
-                        ${(results.healthcareCosts.proposed * 0.2).toLocaleString()}
+                        ${Math.round(results.healthcareCosts.proposed * 0.20).toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-green-700">Out-of-Pocket Max</span>
+                      <span className="text-green-700">Prescription Costs</span>
                       <span className="font-medium text-green-900">
-                        ${(results.healthcareCosts.proposed * 1.5).toLocaleString()}
+                        ${Math.round(results.healthcareCosts.proposed * 0.10).toLocaleString()}
                       </span>
                     </div>
                   </div>
