@@ -419,13 +419,13 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                       <div className="flex justify-between text-xs">
                         <span className="text-yellow-700">Debt-to-GDP Ratio</span>
                         <span className="font-medium text-yellow-900">
-                          {results.economicContext.fiscalData.debtToGdpRatio}%
+                          {results.economicContext?.fiscalData?.debtToGdpRatio}%
                         </span>
                       </div>
                       <div className="flex justify-between text-xs">
                         <span className="text-yellow-700">Deficit-to-GDP</span>
                         <span className="font-medium text-yellow-900">
-                          {Math.abs(results.economicContext.fiscalData.deficitToGdpRatio)}%
+                          {Math.abs(results.economicContext?.fiscalData?.deficitToGdpRatio || 0)}%
                         </span>
                       </div>
                     </div>
@@ -433,7 +433,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                       <div className="flex justify-between text-sm">
                         <span className="font-medium text-yellow-800">Fiscal Health</span>
                         <span className="font-bold text-yellow-900">
-                          {results.economicContext.fiscalData.debtToGdpRatio > 100 ? 'High Risk' : 'Stable'}
+                          {(results.economicContext?.fiscalData?.debtToGdpRatio || 0) > 100 ? 'High Risk' : 'Stable'}
                         </span>
                       </div>
                     </div>
@@ -446,13 +446,13 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                       <div className="flex justify-between text-xs">
                         <span className="text-yellow-700">Debt-to-GDP Ratio</span>
                         <span className="font-medium text-yellow-900">
-                          {(results.economicContext.fiscalData.debtToGdpRatio + 2.5).toFixed(1)}%
+                          {((results.economicContext?.fiscalData?.debtToGdpRatio || 0) + 2.5).toFixed(1)}%
                         </span>
                       </div>
                       <div className="flex justify-between text-xs">
                         <span className="text-yellow-700">Deficit-to-GDP</span>
                         <span className="font-medium text-yellow-900">
-                          {(Math.abs(results.economicContext.fiscalData.deficitToGdpRatio) + 0.8).toFixed(1)}%
+                          {(Math.abs(results.economicContext?.fiscalData?.deficitToGdpRatio || 0) + 0.8).toFixed(1)}%
                         </span>
                       </div>
                     </div>
@@ -460,7 +460,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                       <div className="flex justify-between text-sm">
                         <span className="font-medium text-yellow-800">Fiscal Health</span>
                         <span className="font-bold text-yellow-900">
-                          {(results.economicContext.fiscalData.debtToGdpRatio + 2.5) > 100 ? 'High Risk' : 'Stable'}
+                          {((results.economicContext?.fiscalData?.debtToGdpRatio || 0) + 2.5) > 100 ? 'High Risk' : 'Stable'}
                         </span>
                       </div>
                     </div>

@@ -88,6 +88,12 @@ const economicContextSchema = z.object({
     federalFundsRate: z.number(),
     lastUpdated: z.string(),
   }),
+  fiscalData: z.object({
+    totalPublicDebt: z.number(),
+    debtToGdpRatio: z.number(),
+    deficitToGdpRatio: z.number(),
+    lastUpdated: z.string(),
+  }).optional(),
 });
 
 export const policyResultsSchema = z.object({
