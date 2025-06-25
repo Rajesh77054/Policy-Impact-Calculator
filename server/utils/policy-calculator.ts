@@ -7,7 +7,7 @@ import {
   METHODOLOGY_NOTES,
   ONE_BIG_BEAUTIFUL_BILL_PROVISIONS
 } from "../data/policy-data";
-import { fetchCPIData, calculatePurchasingPowerOverTime, calculatePurchasingPowerForScenario, getIncomeMidpoint } from "../services/bls-api";
+import { fetchCPIData, calculatePurchasingPowerOverTime, calculatePurchasingPowerForScenario, getIncomeMidpoint, getCPISeriesForLocation } from "../services/bls-api";
 import { getComprehensiveEconomicData, validateIncomeRange, type EconomicIndicators } from "../services/fred-api";
 
 export function generateSessionId(): string {
@@ -615,8 +615,16 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
   let bigBillPurchasingPowerData;
   
   try {
+    // Prepare location information for CPI data fetching
+    const locationInfo = {
+      zipCode: formData.zipCode,
+      state: formData.state
+    };
+    
+    console.log('Location info for CPI calculation:', locationInfo);
+    
     // Fetch CPI data from BLS API - get wider range to ensure we have projections
-    const cpiData = await fetchCPIData(currentYear - 3, currentYear + 25);
+    const cpiData = await fetchCPIData(currentYear - 3, currentYear + 25, locationInfo);
     console.log(`Retrieved ${cpiData.length} CPI data points`);
     console.log('Available years in CPI data:', cpiData.map(d => d.year).join(', '));
     console.log('Projection years needed:', projectionYears.join(', '));
@@ -662,17 +670,21 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
     console.log(`Filtered purchasing power data: ${bigBillScenarioFiltered.length} points for big bill scenario`);
     
     // Use projection year data if available, otherwise use first 4 data points
+    // Determine data source description based on location
+    const { description } = getCPISeriesForLocation(locationInfo);
+    const dataSourceDescription = `U.S. Bureau of Labor Statistics - ${description}`;
+    
     purchasingPowerData = {
       currentScenario: currentScenarioFiltered.length > 0 ? currentScenarioFiltered : currentLawScenario.slice(0, 4),
       proposedScenario: proposedScenarioFiltered.length > 0 ? proposedScenarioFiltered : bigBillPolicyScenario.slice(0, 4),
-      dataSource: "U.S. Bureau of Labor Statistics CPI-U (Consumer Price Index, All Urban Consumers)",
+      dataSource: dataSourceDescription,
       lastUpdated: new Date().toISOString().split('T')[0]
     };
     
     bigBillPurchasingPowerData = {
       currentScenario: currentScenarioFiltered.length > 0 ? currentScenarioFiltered : currentLawScenario.slice(0, 4),
       proposedScenario: bigBillScenarioFiltered.length > 0 ? bigBillScenarioFiltered : bigBillScenario.slice(0, 4),
-      dataSource: "U.S. Bureau of Labor Statistics CPI-U (Consumer Price Index, All Urban Consumers)",
+      dataSource: dataSourceDescription,
       lastUpdated: new Date().toISOString().split('T')[0]
     };
     
@@ -680,8 +692,28 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
     
   } catch (error) {
     console.error('Error calculating purchasing power data:', error);
-    // Generate fallback data using historical inflation averages
-    const inflationRate = 0.025; // 2.5% average annual inflation
+    // Generate fallback data using location-adjusted inflation averages
+    const { description } = getCPISeriesForLocation(locationInfo);
+    
+    // Apply location-specific inflation rates for fallback
+    let inflationRate = 0.025; // 2.5% baseline
+    if (locationInfo.zipCode) {
+      // Major metros typically have higher inflation
+      const metros = ["75", "77", "78", "90", "91", "94", "10", "11", "60", "19", "30", "02", "48", "98", "33", "85", "55"];
+      if (metros.some(metro => locationInfo.zipCode!.startsWith(metro))) {
+        inflationRate = 0.028; // 2.8% for major metros
+      }
+    } else if (locationInfo.state) {
+      // High-cost states have higher inflation
+      const highCostStates = ["CA", "NY", "MA", "CT", "NJ", "WA", "MD", "CO"];
+      if (highCostStates.includes(locationInfo.state)) {
+        inflationRate = 0.027; // 2.7% for high-cost states
+      }
+      const lowCostStates = ["MS", "AR", "WV", "KY", "AL", "TN", "OK", "KS"];
+      if (lowCostStates.includes(locationInfo.state)) {
+        inflationRate = 0.023; // 2.3% for low-cost states
+      }
+    }
     
     const generateFallbackData = (disposableIncome: number) => {
       return projectionYears.map(year => {
@@ -695,21 +727,23 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
       });
     };
     
+    const fallbackDescription = `Location-adjusted inflation trends (${(inflationRate * 100).toFixed(1)}% annual for ${description})`;
+    
     purchasingPowerData = {
       currentScenario: generateFallbackData(currentDisposableIncome),
       proposedScenario: generateFallbackData(bigBillDisposableIncome),
-      dataSource: "Historical inflation trends (2.5% average annual)",
+      dataSource: fallbackDescription,
       lastUpdated: new Date().toISOString().split('T')[0]
     };
     
     bigBillPurchasingPowerData = {
       currentScenario: generateFallbackData(currentDisposableIncome),
       proposedScenario: generateFallbackData(bigBillDisposableIncome),
-      dataSource: "Historical inflation trends (2.5% average annual)",
+      dataSource: fallbackDescription,
       lastUpdated: new Date().toISOString().split('T')[0]
     };
     
-    console.log('Using fallback purchasing power data');
+    console.log('Using location-adjusted fallback purchasing power data');
   }
 
   // Use the economic context that was already built above

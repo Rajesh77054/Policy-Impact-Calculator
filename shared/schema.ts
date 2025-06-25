@@ -144,7 +144,32 @@ export const insertSessionSchema = createInsertSchema(userSessions).omit({
   createdAt: true,
 });
 
-export type FormData = z.infer<typeof formDataSchema>;
+export interface FormData {
+  // Location information
+  zipCode?: string;
+  state?: string;
+
+  // Demographics
+  ageRange?: string;
+  familyStatus?: string;
+  hasChildren?: boolean;
+  numberOfQualifyingChildren?: number;
+  numberOfOtherDependents?: number;
+
+  // Employment
+  employmentStatus?: string;
+  industry?: string;
+
+  // Healthcare
+  insuranceType?: string;
+  hasHSA?: boolean;
+
+  // Income
+  incomeRange?: string;
+
+  // Priorities
+  priorities?: string[];
+}
 export type PolicyResults = z.infer<typeof policyResultsSchema>;
 
 export const replitUserSchema = z.object({
