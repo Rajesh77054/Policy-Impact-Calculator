@@ -466,6 +466,21 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                     </div>
                   </div>
                 </div>
+                
+                {/* Policy Trade-offs Summary */}
+                <div className="mt-4 p-4 bg-yellow-25 border border-yellow-200 rounded-lg">
+                  <div className="text-center">
+                    <p className="text-sm text-yellow-800 leading-relaxed">
+                      <strong>Policy Trade-off Analysis:</strong> The Big Bill provides {results.netAnnualImpact < 0 ? 'significant personal savings' : 'modest personal costs'} 
+                      {results.netAnnualImpact < 0 ? ` of $${Math.abs(results.netAnnualImpact).toLocaleString()} annually` : ` of $${results.netAnnualImpact.toLocaleString()} annually`}, 
+                      but increases national debt-to-GDP by 2.5 percentage points and deficit-to-GDP by 0.8 percentage points. 
+                      According to Congressional Budget Office projections, both Current Law and Big Bill scenarios maintain <strong>High Risk</strong> fiscal health ratings, 
+                      indicating structural fiscal challenges that extend beyond this policy choice.
+                    </p>
+                  </div>
+                </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           )}
