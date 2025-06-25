@@ -1,196 +1,121 @@
 import { Link } from "wouter";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Database, Brain, Shield, Target, BookOpen, Users } from "lucide-react";
+import MethodologyModal from "@/components/methodology-modal";
 
 export default function Methodology() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-white dark:bg-slate-900 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <Link href="/">
+      <header className="bg-background/80 backdrop-blur-md border-b border-border sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-4">
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                <span className="text-primary-foreground font-bold text-sm">PC</span>
+              </div>
+              <h1 className="text-xl font-semibold text-foreground">Policy Impact Calculator</h1>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Back Navigation */}
+        <div className="mb-8">
+          <Link href="/">
+            <Button variant="ghost" className="inline-flex items-center space-x-2">
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to Home</span>
+            </Button>
+          </Link>
+        </div>
+
+        <div className="space-y-8">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-slate-900 mb-4">Methodology</h1>
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+              Our calculations are based on official government data and established economic methodologies.
+            </p>
+          </div>
+
+          {/* Methodology Overview */}
+          <div className="bg-white rounded-xl border border-slate-200 p-8">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">Calculation Overview</h2>
+            
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold text-slate-800 mb-3">Tax Impact Calculations</h3>
+                <p className="text-slate-600 mb-3">
+                  We calculate your tax impact using current IRS tax brackets and standard deductions, then compare them to proposed policy changes:
+                </p>
+                <ul className="list-disc list-inside text-slate-600 space-y-1 ml-4">
+                  <li>Federal income tax brackets for 2024</li>
+                  <li>Standard deductions by filing status</li>
+                  <li>Child Tax Credit and other dependent credits</li>
+                  <li>State-specific income tax rates</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-slate-800 mb-3">Healthcare Cost Analysis</h3>
+                <p className="text-slate-600 mb-3">
+                  Healthcare cost calculations use data from the Kaiser Family Foundation and include:
+                </p>
+                <ul className="list-disc list-inside text-slate-600 space-y-1 ml-4">
+                  <li>Average premium costs by coverage type</li>
+                  <li>Typical deductible amounts</li>
+                  <li>Prescription drug costs</li>
+                  <li>Regional cost variations</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-slate-800 mb-3">Economic Context</h3>
+                <p className="text-slate-600 mb-3">
+                  We incorporate real-time economic indicators from the Federal Reserve:
+                </p>
+                <ul className="list-disc list-inside text-slate-600 space-y-1 ml-4">
+                  <li>Unemployment rates (national and state)</li>
+                  <li>Inflation trends</li>
+                  <li>GDP growth projections</li>
+                  <li>Interest rate impacts</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* Detailed Methodology Modal */}
+          <div className="text-center">
+            <MethodologyModal 
+              trigger={
+                <Button variant="outline" size="lg">
+                  View Detailed Methodology
+                </Button>
+              }
+            />
+          </div>
+
+          {/* Limitations */}
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-6">
+            <h3 className="text-lg font-semibold text-amber-800 mb-3">Important Limitations</h3>
+            <ul className="list-disc list-inside text-amber-700 space-y-2 text-sm">
+              <li>Calculations are estimates based on current law and available data</li>
+              <li>Individual circumstances may vary significantly</li>
+              <li>Economic projections are subject to uncertainty</li>
+              <li>State and local tax variations may not be fully captured</li>
+              <li>This tool is for educational purposes only, not financial advice</li>
+            </ul>
+          </div>
+
+          {/* Data Sources Link */}
+          <div className="text-center">
+            <Link href="/sources">
               <Button variant="ghost" className="inline-flex items-center space-x-2">
-                <ArrowLeft className="w-4 h-4" />
-                <span>Back to Home</span>
+                <span>View Data Sources</span>
+                <ExternalLink className="w-4 h-4" />
               </Button>
             </Link>
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">PC</span>
-              </div>
-              <span className="font-semibold text-lg">Policy Impact Calculator</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">
-            Our Methodology
-          </h1>
-          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-            Understanding the rigorous approach behind our policy impact calculations
-          </p>
-        </div>
-
-        {/* Core Principles */}
-        <div className="grid gap-8 mb-12">
-          <Card className="border-2 border-blue-200 dark:border-blue-800">
-            <CardHeader>
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                  <Database className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                </div>
-                <div>
-                  <CardTitle className="text-xl">Evidence-Based Analysis</CardTitle>
-                  <CardDescription>Grounded in peer-reviewed research</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-slate-600 dark:text-slate-300 mb-4">
-                Our calculations are built on a foundation of academic research, government data, and peer-reviewed studies. 
-                We prioritize:
-              </p>
-              <ul className="space-y-2 text-slate-600 dark:text-slate-300">
-                <li>• Congressional Budget Office (CBO) analysis and scoring</li>
-                <li>• Academic studies from reputable institutions</li>
-                <li>• Historical data from similar policy implementations</li>
-                <li>• Economic modeling from established research organizations</li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card className="border-2 border-green-200 dark:border-green-800">
-            <CardHeader>
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-                  <Brain className="w-5 h-5 text-green-600 dark:text-green-400" />
-                </div>
-                <div>
-                  <CardTitle className="text-xl">AI-Assisted Modeling</CardTitle>
-                  <CardDescription>Advanced algorithms for complex calculations</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-slate-600 dark:text-slate-300 mb-4">
-                We use machine learning models trained on historical policy outcomes to estimate impacts:
-              </p>
-              <ul className="space-y-2 text-slate-600 dark:text-slate-300">
-                <li>• Natural language processing to analyze policy text</li>
-                <li>• Regression models for economic impact estimation</li>
-                <li>• Monte Carlo simulations for uncertainty quantification</li>
-                <li>• Demographic matching algorithms for personalization</li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card className="border-2 border-purple-200 dark:border-purple-800">
-            <CardHeader>
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
-                  <Shield className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-                </div>
-                <div>
-                  <CardTitle className="text-xl">Bias Mitigation</CardTitle>
-                  <CardDescription>Ensuring objective, non-partisan analysis</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-slate-600 dark:text-slate-300 mb-4">
-                We implement multiple safeguards to maintain objectivity:
-              </p>
-              <ul className="space-y-2 text-slate-600 dark:text-slate-300">
-                <li>• Cross-validation with multiple data sources</li>
-                <li>• Exclusion of politically biased sources</li>
-                <li>• Regular auditing of algorithmic outputs</li>
-                <li>• Transparent uncertainty and confidence reporting</li>
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Calculation Framework */}
-        <div className="bg-white dark:bg-slate-800 rounded-xl p-8 shadow-lg mb-8">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center">
-            <Target className="w-6 h-6 mr-3 text-red-500" />
-            Impact Calculation Framework
-          </h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <h3 className="font-semibold text-slate-900 dark:text-white mb-3">Direct Effects</h3>
-              <ul className="space-y-2 text-slate-600 dark:text-slate-300">
-                <li>• Immediate financial impact</li>
-                <li>• Tax burden changes</li>
-                <li>• Benefit eligibility modifications</li>
-                <li>• Service accessibility changes</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold text-slate-900 dark:text-white mb-3">Indirect Effects</h3>
-              <ul className="space-y-2 text-slate-600 dark:text-slate-300">
-                <li>• Economic multiplier effects</li>
-                <li>• Market behavior changes</li>
-                <li>• Long-term societal impacts</li>
-                <li>• Unintended consequences</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        {/* Limitations */}
-        <div className="bg-amber-50 dark:bg-amber-900/20 rounded-xl p-8 shadow-lg mb-8">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center">
-            <BookOpen className="w-6 h-6 mr-3 text-amber-600" />
-            Limitations & Disclaimers
-          </h2>
-          <div className="space-y-4 text-slate-700 dark:text-slate-300">
-            <p>
-              <strong>Predictive Nature:</strong> Our calculations represent informed estimates based on available data. 
-              Actual policy outcomes may vary due to implementation details, economic conditions, and unforeseen factors.
-            </p>
-            <p>
-              <strong>Simplification:</strong> Complex policies are simplified for analysis. Real-world implementation 
-              often involves nuances not captured in our models.
-            </p>
-            <p>
-              <strong>Data Currency:</strong> Analysis is based on the most recent available data, which may not 
-              reflect rapid economic or social changes.
-            </p>
-            <p>
-              <strong>Individual Variation:</strong> Personal circumstances can significantly affect actual impacts 
-              beyond what demographic categories capture.
-            </p>
-          </div>
-        </div>
-
-        {/* Validation Process */}
-        <div className="bg-white dark:bg-slate-800 rounded-xl p-8 shadow-lg">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center">
-            <Users className="w-6 h-6 mr-3 text-blue-500" />
-            Validation & Review
-          </h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Expert Review</h3>
-              <p className="text-slate-600 dark:text-slate-300">
-                Our methodology is regularly reviewed by economists, policy analysts, and data scientists 
-                from academic institutions.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Continuous Improvement</h3>
-              <p className="text-slate-600 dark:text-slate-300">
-                We continuously update our models based on new research, feedback, and observed policy outcomes 
-                to improve accuracy.
-              </p>
-            </div>
           </div>
         </div>
       </div>
