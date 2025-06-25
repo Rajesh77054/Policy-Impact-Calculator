@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { HelpCircle, TrendingUp, TrendingDown, Calculator, DollarSign, Heart, Zap, Building, Users, Shield, Download, Share2, RotateCcw } from "lucide-react";
 import { PolicyResults } from "@shared/types";
 import PolicyCharts from "./policy-charts";
@@ -262,8 +263,40 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className={`text-2xl font-bold mb-1 ${results.netAnnualImpact < 0 ? 'text-green-700' : 'text-orange-700'}`}>
-                  {results.netAnnualImpact < 0 ? `Save $${Math.abs(results.netAnnualImpact).toLocaleString()}` : `Pay $${results.netAnnualImpact.toLocaleString()} more`}
+                <div className="flex items-center justify-between">
+                  <div className={`text-2xl font-bold mb-1 ${results.netAnnualImpact < 0 ? 'text-green-700' : 'text-orange-700'}`}>
+                    {results.netAnnualImpact < 0 ? `Save $${Math.abs(results.netAnnualImpact).toLocaleString()}` : `Pay $${results.netAnnualImpact.toLocaleString()} more`}
+                  </div>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <HelpCircle className="w-4 h-4 text-slate-400 hover:text-slate-600 cursor-help ml-2" />
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-md p-4">
+                      <div className="space-y-3">
+                        <h5 className="font-medium text-slate-900 flex items-center">
+                          <Calculator className="w-4 h-4 mr-2" />
+                          Calculation Verification
+                        </h5>
+                        <div className="text-sm text-slate-700 space-y-1">
+                          {results.breakdown.map((item, index) => (
+                            <div key={index} className="flex justify-between">
+                              <span>{item.title}:</span>
+                              <span className="font-mono">
+                                {item.impact < 0 ? `-$${Math.abs(item.impact).toLocaleString()}` : `+$${item.impact.toLocaleString()}`}
+                              </span>
+                            </div>
+                          ))}
+                          <div className="border-t pt-2 mt-2 flex justify-between font-medium">
+                            <span>Total:</span>
+                            <span className="font-mono">
+                              {results.breakdown.map(item => item.impact < 0 ? `-$${Math.abs(item.impact).toLocaleString()}` : `+$${item.impact.toLocaleString()}`).join(' ')} = 
+                              {results.netAnnualImpact < 0 ? ` -$${Math.abs(results.netAnnualImpact).toLocaleString()}` : ` +$${results.netAnnualImpact.toLocaleString()}`}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
                 <p className={`text-xs ${results.netAnnualImpact < 0 ? 'text-green-600' : 'text-orange-600'}`}>
                   Total annual impact including all factors
@@ -312,42 +345,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
               ))}
             </div>
             
-            {/* Math Verification */}
-            <div className="mt-4 p-4 bg-slate-50 border rounded-lg">
-              <h5 className="font-medium text-slate-900 mb-3 flex items-center">
-                <Calculator className="w-4 h-4 mr-2" />
-                Calculation Verification
-              </h5>
-              <div className="text-sm text-slate-700 space-y-1">
-                {results.breakdown.map((item, index) => (
-                  <div key={index} className="flex justify-between">
-                    <span>{item.title}:</span>
-                    <span className="font-mono">
-                      {item.impact < 0 ? `-$${Math.abs(item.impact).toLocaleString()}` : `+$${item.impact.toLocaleString()}`}
-                    </span>
-                  </div>
-                ))}
-                <div className="border-t pt-2 mt-2 flex justify-between font-medium">
-                  <span>Total:</span>
-                  <span className="font-mono">
-                    {results.breakdown.map(item => item.impact < 0 ? `-$${Math.abs(item.impact).toLocaleString()}` : `+$${item.impact.toLocaleString()}`).join(' ')} = 
-                    {results.netAnnualImpact < 0 ? ` -$${Math.abs(results.netAnnualImpact).toLocaleString()}` : ` +$${results.netAnnualImpact.toLocaleString()}`}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Net Impact Summary */}
-            <div className={`mt-4 p-4 rounded-lg border-2 ${results.netAnnualImpact < 0 ? 'bg-green-100 border-green-300' : 'bg-red-100 border-red-300'}`}>
-              <div className="flex justify-between items-center">
-                <span className={`font-semibold ${results.netAnnualImpact < 0 ? 'text-green-900' : 'text-red-900'}`}>
-                  Net Annual Impact:
-                </span>
-                <span className={`text-xl font-bold ${results.netAnnualImpact < 0 ? 'text-green-800' : 'text-red-800'}`}>
-                  {results.netAnnualImpact < 0 ? `Save $${Math.abs(results.netAnnualImpact).toLocaleString()}` : `Pay $${results.netAnnualImpact.toLocaleString()} more`}
-                </span>
-              </div>
-            </div>
+            
           </div>
 
 
