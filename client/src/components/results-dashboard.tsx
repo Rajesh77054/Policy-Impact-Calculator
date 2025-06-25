@@ -318,22 +318,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
             </div>
           </div>
 
-          {/* Energy Impact Note (if applicable) */}
-          {results.energyCostImpact !== 0 && (
-            <Card className="bg-yellow-50 border-yellow-200 mb-8">
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-3">
-                  <Zap className="w-5 h-5 text-yellow-600" />
-                  <div>
-                    <h4 className="font-semibold text-yellow-900">Energy Cost Impact</h4>
-                    <p className="text-sm text-yellow-700">
-                      Annual energy cost change: {formatCostImpact(results.energyCostImpact)}
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
+
 
           {/* Secondary Charts Section */}
           <PolicyCharts results={results} />
