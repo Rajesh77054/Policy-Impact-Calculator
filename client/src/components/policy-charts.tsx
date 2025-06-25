@@ -221,7 +221,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                     <div className="flex justify-between text-xs">
                       <span className="text-blue-700">Annual Tax</span>
                       <span className="font-medium text-blue-900">
-                        ${results.annualTaxImpact.toLocaleString()}
+                        ${results.taxCosts.current.toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
@@ -241,7 +241,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                     <div className="flex justify-between text-sm">
                       <span className="font-medium text-blue-800">Total Annual Tax</span>
                       <span className="font-bold text-blue-900">
-                        ${results.annualTaxImpact.toLocaleString()}
+                        ${results.taxCosts.current.toLocaleString()}
                       </span>
                     </div>
                   </div>
@@ -254,7 +254,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                     <div className="flex justify-between text-xs">
                       <span className="text-blue-700">Annual Tax</span>
                       <span className="font-medium text-blue-900">
-                        ${(results.bigBillScenario?.annualTaxImpact || results.annualTaxImpact).toLocaleString()}
+                        ${results.taxCosts.proposed.toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-xs">
@@ -274,7 +274,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                     <div className="flex justify-between text-sm">
                       <span className="font-medium text-blue-800">Total Annual Tax</span>
                       <span className="font-bold text-blue-900">
-                        ${(results.bigBillScenario?.annualTaxImpact || results.annualTaxImpact).toLocaleString()}
+                        ${results.taxCosts.proposed.toLocaleString()}
                       </span>
                     </div>
                   </div>
