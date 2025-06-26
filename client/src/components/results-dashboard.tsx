@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { HelpCircle, TrendingUp, TrendingDown, Calculator, DollarSign, Heart, Zap, Building, Users, Shield, Download, Share2, RotateCcw, Loader2 } from "lucide-react";
+import { HelpCircle, TrendingUp, TrendingDown, Calculator, DollarSign, Heart, Zap, Building, Users, Shield, Download, Share2, RotateCcw, Loader2, CheckCircle } from "lucide-react";
 import { PolicyResults } from "@shared/types";
 import PolicyCharts from "./policy-charts";
 import NetFinancialImpactChart from "./net-financial-impact-chart";
@@ -219,24 +219,7 @@ export function ResultsDashboard({ results, isLoading = false }: ResultsDashboar
           </CardHeader>
         </Card>
 
-        {/* Data Integrity Indicator */}
-        {results.validationChecksum && (
-          <div className="flex justify-center mb-4">
-            <div className="flex items-center space-x-2 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
-              <CheckCircle className="w-4 h-4 text-green-600" />
-              <span className="text-sm text-green-800">
-                Calculations verified • Checksum: {results.validationChecksum}
-              </span>
-              {results.economicContext?.macroeconomicData && (
-                <DataFreshnessIndicator 
-                  lastUpdated={results.economicContext.macroeconomicData.lastUpdated}
-                  dataSource="Federal Economic Data"
-                  className="ml-2"
-                />
-              )}
-            </div>
-          </div>
-        )}
+
 
         {/* Primary Chart - Net Financial Impact Over Time */}
         <NetFinancialImpactChart results={results} />
