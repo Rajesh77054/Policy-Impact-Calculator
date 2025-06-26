@@ -129,13 +129,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Calculate policy impact
   app.post("/api/calculate", async (req, res) => {
-    // Audit logging function
+    // Audit logging function - moved req access inside the function
     const logCalculationAudit = (sessionId: string, formData: any, results?: any, error?: string) => {
       const auditEntry = {
         timestamp: new Date().toISOString(),
         sessionId,
-        userAgent: req.headers['user-agent'],
-        ipAddress: req.ip || req.connection.remoteAddress,
+        userAgent: req.headers['user-agent'] || 'unknown',
+        ipAddress: req.ip || req.connection?.remoteAddress || 'unknown',
         formData: {
           incomeRange: formData?.incomeRange,
           state: formData?.state,
