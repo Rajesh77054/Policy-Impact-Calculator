@@ -8,6 +8,7 @@ import { PolicyResults } from "@shared/types";
 import PolicyCharts from "./policy-charts";
 import NetFinancialImpactChart from "./net-financial-impact-chart";
 import EconomicContextCard from "./economic-context-card";
+import PolicyComparisonTable from "./policy-comparison-table";
 import { useReplitAuth } from "@/hooks/use-replit-auth";
 import { Link } from "wouter";
 import { DataFreshnessIndicator } from "./data-freshness-indicator";
@@ -441,14 +442,17 @@ export function ResultsDashboard({ results, isLoading = false }: ResultsDashboar
 
           </div>
 
-
+          {/* Policy Comparison Table Section */}
+          <PolicyComparisonTable className="mb-8" />
 
           {/* Secondary Charts Section */}
           <PolicyCharts results={results} />
 
           {/* Economic Context Section */}
           {results.economicContext && (
-            <EconomicContextCard results={results} className="mb-8" />
+            <div className="mb-8">
+              <EconomicContextCard results={results} />
+            </div>
           )}
 
           {/* Action Buttons Section */}
