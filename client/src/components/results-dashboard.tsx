@@ -290,34 +290,7 @@ export function ResultsDashboard({ results, isLoading = false }: ResultsDashboar
                 </div>
               ))}
 
-              {/* Energy Cost Impact - Always show if it exists */}
-              {Math.abs(results.energyCostImpact) > 0 && (
-                <div className={`p-4 rounded-lg border ${results.energyCostImpact < 0 ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
-                  <div className="flex justify-between items-start mb-2">
-                    <div>
-                      <h5 className={`font-medium ${results.energyCostImpact < 0 ? 'text-green-900' : 'text-red-900'}`}>
-                        Energy Cost Changes
-                      </h5>
-                      <p className={`text-sm ${results.energyCostImpact < 0 ? 'text-green-700' : 'text-red-700'}`}>
-                        Energy cost impact from clean energy investments and policy changes
-                      </p>
-                    </div>
-                    <div className={`text-lg font-bold ${results.energyCostImpact < 0 ? 'text-green-800' : 'text-red-800'}`}>
-                      {results.energyCostImpact < 0 ? `Save $${Math.abs(results.energyCostImpact).toLocaleString()}` : `+$${results.energyCostImpact.toLocaleString()}`}
-                    </div>
-                  </div>
-                  <div className="mt-3 space-y-1">
-                    <div className="flex justify-between text-sm">
-                      <span className={results.energyCostImpact < 0 ? 'text-green-600' : 'text-red-600'}>
-                        • Clean energy transition impact
-                      </span>
-                      <span className={`font-medium ${results.energyCostImpact < 0 ? 'text-green-700' : 'text-red-700'}`}>
-                        {results.energyCostImpact < 0 ? `Save $${Math.abs(results.energyCostImpact).toLocaleString()}` : `+$${results.energyCostImpact.toLocaleString()}`}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
+
 
               {/* State/Location Adjustment - Always show if significant */}
               {(() => {
