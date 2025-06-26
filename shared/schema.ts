@@ -191,4 +191,4 @@ export const replitUserSchema = z.object({
 export type ReplitUser = z.infer<typeof replitUserSchema>;
 export type InsertSession = z.infer<typeof insertSessionSchema>;
 export type UserSession = typeof userSessions.$inferSelect;
-export const breakdownCategorySchema = z.enum(["tax", "healthcare", "energy", "employment", "state"]);
+export const breakdownCategorySchema = z.enum(["tax", "healthcare", "energy", "employment", "housing", "education"]);
