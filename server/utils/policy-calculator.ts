@@ -816,6 +816,20 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
     });
   }
 
+  // Add state adjustment if significant (> $100)
+  if (Math.abs(stateAdjustment) > 100) {
+    breakdown.push({
+      category: "housing" as const,
+      title: "State Cost Adjustments",
+      description: "State-specific cost of living and tax adjustments",
+      impact: Math.round(stateAdjustment),
+      details: [
+        { item: "State income tax impact", amount: Math.round(stateAdjustment * 0.6) },
+        { item: "Cost of living adjustment", amount: Math.round(stateAdjustment * 0.4) }
+      ]
+    });
+  }
+
   return {
     // All values represent Big Bill vs Current Law differences
     // Negative values = user saves money with Big Bill (benefits)
