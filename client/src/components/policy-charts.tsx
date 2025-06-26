@@ -192,7 +192,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
 
   return (
     <div className="border-t pt-8 mb-8">
-      <h3 className="text-xl font-semibold text-slate-900 mb-6">Side-by-Side Comparison</h3>
+      <h3 className="text-xl font-semibold text-slate-900 mb-6">Personalized Side-by-Side Comparison</h3>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card className="border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50">
             <CardHeader className="pb-3">
