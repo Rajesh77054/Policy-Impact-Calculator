@@ -285,7 +285,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                 <div className="text-center">
                   <p className="text-xs text-blue-700">Annual Tax Savings:</p>
                   <p className="text-sm font-semibold text-blue-800">
-                    ${Math.abs(results.annualTaxImpact).toLocaleString()} saved per year
+                    ${(Math.abs(results.annualTaxImpact) * 0.1).toLocaleString()} saved per year
                   </p>
                 </div>
               </div>
@@ -466,7 +466,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Policy Trade-offs Summary */}
                 <div className="mt-4 p-4 bg-yellow-25 border border-yellow-200 rounded-lg">
                   <div className="text-center">
