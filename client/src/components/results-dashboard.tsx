@@ -292,14 +292,39 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                               </span>
                             </div>
                           ))}
+                          
+                          {/* State Adjustment */}
+                          {(() => {
+                            const stateAdjustment = results.netAnnualImpact - 
+                              results.annualTaxImpact - 
+                              results.healthcareCostImpact - 
+                              results.energyCostImpact - 
+                              (results.breakdown.find(b => b.category === 'employment')?.impact || 0);
+                            return Math.abs(stateAdjustment) > 0 ? (
+                              <div className="flex justify-between">
+                                <span>State Adjustment:</span>
+                                <span className="font-mono">
+                                  {stateAdjustment < 0 ? `-$${Math.abs(stateAdjustment).toLocaleString()}` : `+$${stateAdjustment.toLocaleString()}`}
+                                </span>
+                              </div>
+                            ) : null;
+                          })()}
+                          
+                          {/* Energy Impact */}
+                          {Math.abs(results.energyCostImpact) > 0 && (
+                            <div className="flex justify-between">
+                              <span>Energy Impact:</span>
+                              <span className="font-mono">
+                                {results.energyCostImpact < 0 ? `-$${Math.abs(results.energyCostImpact).toLocaleString()}` : `+$${results.energyCostImpact.toLocaleString()}`}
+                              </span>
+                            </div>
+                          )}
+                          
                           <div className="border-t pt-2 mt-2 flex justify-between font-medium">
                             <span>Net Total:</span>
                             <span className="font-mono">
                               {results.netAnnualImpact < 0 ? `-$${Math.abs(results.netAnnualImpact).toLocaleString()}` : `+$${results.netAnnualImpact.toLocaleString()}`}
                             </span>
-                          </div>
-                          <div className="text-xs text-slate-500 mt-1">
-                            *Includes state adjustments and energy costs
                           </div>
                         </div>
                       </div>
