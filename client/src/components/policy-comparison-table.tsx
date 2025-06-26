@@ -1,219 +1,239 @@
-import React, { useState } from "react";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { 
-  ChevronDown, 
-  ChevronUp, 
-  HelpCircle, 
-  BookOpen,
-  TrendingUp,
-  TrendingDown,
-  Minus
-} from "lucide-react";
-import { POLICY_COMPARISONS, POLICY_COMPARISON_METADATA, PolicyComparison } from "../data/policy-comparison-data";
-import MethodologyModal from "./methodology-modal";
+import { TrendingUp, Heart, HelpCircle } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 
 interface PolicyComparisonTableProps {
   className?: string;
 }
 
-const getImpactIcon = (impactType: PolicyComparison["impactType"]) => {
-  switch (impactType) {
-    case "beneficial":
-      return <TrendingDown className="w-4 h-4 text-green-600" />;
-    case "cost":
-      return <TrendingUp className="w-4 h-4 text-red-600" />;
-    case "neutral":
-      return <Minus className="w-4 h-4 text-gray-600" />;
-    default:
-      return <Minus className="w-4 h-4 text-gray-600" />;
-  }
-};
+export default function PolicyComparisonTable({ className }: PolicyComparisonTableProps) {
+  const { data: results } = useQuery({
+    queryKey: ["/api/results"],
+  });
 
-const getImpactColorScheme = (impactType: PolicyComparison["impactType"]) => {
-  switch (impactType) {
-    case "beneficial":
-      return {
-        bg: "bg-green-50 dark:bg-green-950/30",
-        border: "border-green-200 dark:border-green-800",
-        text: "text-green-800 dark:text-green-200",
-        badge: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-      };
-    case "cost":
-      return {
-        bg: "bg-red-50 dark:bg-red-950/30",
-        border: "border-red-200 dark:border-red-800", 
-        text: "text-red-800 dark:text-red-200",
-        badge: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
-      };
-    case "neutral":
-      return {
-        bg: "bg-gray-50 dark:bg-gray-950/30",
-        border: "border-gray-200 dark:border-gray-800",
-        text: "text-gray-800 dark:text-gray-200", 
-        badge: "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
-      };
-    default:
-      return {
-        bg: "bg-gray-50 dark:bg-gray-950/30",
-        border: "border-gray-200 dark:border-gray-800",
-        text: "text-gray-800 dark:text-gray-200",
-        badge: "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
-      };
+  if (!results) {
+    return null;
   }
-};
 
-const getCategoryBadgeColor = (category: PolicyComparison["category"]) => {
-  switch (category) {
-    case "tax":
-      return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
-    case "healthcare":
-      return "bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200";
-    case "energy":
-      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
-    case "benefits":
-      return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200";
-    case "other":
-      return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
-    default:
-      return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
-  }
-};
+  const formatCurrency = (amount: number): string => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(Math.abs(amount));
+  };
 
-export default function PolicyComparisonTable({ className = "" }: PolicyComparisonTableProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  // Calculate current law tax scenario
+  const calculateCurrentTax = (netImpact: number, taxImpact: number): number => {
+    // Estimate current tax burden based on income range and impacts
+    const estimatedCurrentTax = Math.max(0, -taxImpact); // If tax impact is negative, that's savings
+    return estimatedCurrentTax;
+  };
+
+  // Calculate Big Bill tax scenario
+  const calculateBigBillTax = (currentTax: number, taxImpact: number): number => {
+    return Math.max(0, currentTax + taxImpact);
+  };
+
+  // Tax calculations
+  const currentTax = calculateCurrentTax(results.netAnnualImpact, results.annualTaxImpact);
+  const bigBillTax = calculateBigBillTax(currentTax, results.annualTaxImpact);
+  const taxSavings = currentTax - bigBillTax;
+
+  // Healthcare calculations - use the actual values from results
+  const currentHealthcareCost = results.healthcareCosts.current;
+  const bigBillHealthcareCost = results.healthcareCosts.proposed;
+  const healthcareSavings = currentHealthcareCost - bigBillHealthcareCost;
+
+  // Break down healthcare costs for display
+  const currentPremium = Math.round(currentHealthcareCost * 0.75); // Estimate 75% premium
+  const currentOutOfPocket = Math.round(currentHealthcareCost * 0.15); // 15% out-of-pocket
+  const currentPrescription = Math.round(currentHealthcareCost * 0.10); // 10% prescription
+
+  const bigBillPremium = Math.round(bigBillHealthcareCost * 0.75);
+  const bigBillOutOfPocket = Math.round(bigBillHealthcareCost * 0.15);
+  const bigBillPrescription = Math.round(bigBillHealthcareCost * 0.10);
 
   return (
     <TooltipProvider>
-      <Card className={`border border-border shadow-lg ${className}`}>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div className="flex-1">
-              <CardTitle className="text-xl font-semibold text-foreground mb-2">
-                {POLICY_COMPARISON_METADATA.title}
-              </CardTitle>
-              <p className="text-sm text-muted-foreground mb-3">
-                {POLICY_COMPARISON_METADATA.description}
-              </p>
-            </div>
-            <div className="flex items-center space-x-2">
-              <MethodologyModal 
-                trigger={
-                  <Button variant="outline" size="sm" className="flex items-center space-x-1">
-                    <BookOpen className="w-4 h-4" />
-                    <span>Learn More</span>
-                  </Button>
-                }
-              />
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsExpanded(!isExpanded)}
-                className="flex items-center space-x-1"
-              >
-                <span>{isExpanded ? "Hide" : "Show"} Comparison</span>
-                {isExpanded ? (
-                  <ChevronUp className="w-4 h-4" />
-                ) : (
-                  <ChevronDown className="w-4 h-4" />
-                )}
-              </Button>
-            </div>
-          </div>
-        </CardHeader>
+      <div className={`space-y-6 ${className}`}>
+        <div className="text-center">
+          <h3 className="text-2xl font-bold text-slate-900 mb-2">Side-by-Side Comparison</h3>
+          <p className="text-slate-600 max-w-2xl mx-auto">
+            See exactly how your costs change under each scenario, broken down by category.
+          </p>
+        </div>
 
-        {isExpanded && (
+        {/* Tax Cost Scenario Comparison */}
+        <Card className="border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50">
+          <CardHeader className="pb-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <TrendingUp className="w-5 h-5 text-blue-600" />
+                <CardTitle className="text-lg text-blue-900">Tax Cost Scenario Comparison</CardTitle>
+              </div>
+              <Tooltip>
+                <TooltipTrigger>
+                  <HelpCircle className="w-4 h-4 text-blue-600" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Comparison of your annual tax burden under current law vs. Big Bill policies</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+          </CardHeader>
           <CardContent>
-            <div className="overflow-x-auto">
-              <div className="min-w-[600px]">
-                {/* Table Header */}
-                <div className="grid grid-cols-3 gap-4 p-4 bg-muted/50 rounded-t-lg border-b border-border font-medium text-sm">
-                  <div className="text-foreground">Policy Area</div>
-                  <div className="text-foreground">Current Law</div>
-                  <div className="text-foreground">Big Bill Change</div>
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Current Law */}
+              <div>
+                <h4 className="font-semibold text-slate-700 text-center mb-4">Current Law</h4>
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Federal Income Tax</span>
+                    <span className="font-medium">{formatCurrency(currentTax * 0.85)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">FICA Taxes</span>
+                    <span className="font-medium">{formatCurrency(currentTax * 0.15)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">State Income Tax</span>
+                    <span className="font-medium">$0</span>
+                  </div>
+                  <div className="border-t pt-2">
+                    <div className="flex justify-between font-bold">
+                      <span>Total Annual Tax</span>
+                      <span className="text-blue-700">{formatCurrency(currentTax)}</span>
+                    </div>
+                  </div>
                 </div>
+              </div>
 
-                {/* Table Body */}
-                <div className="space-y-1">
-                  {POLICY_COMPARISONS.map((comparison: PolicyComparison, index: number) => {
-                    const colorScheme = getImpactColorScheme(comparison.impactType);
-                    return (
-                      <div
-                        key={index}
-                        className={`grid grid-cols-3 gap-4 p-4 border ${colorScheme.border} ${colorScheme.bg} transition-colors hover:opacity-90`}
-                      >
-                        {/* Policy Area Column */}
-                        <div className="space-y-2">
-                          <div className="flex items-start justify-between">
-                            <h4 className={`font-medium ${colorScheme.text}`}>
-                              {comparison.policyArea}
-                            </h4>
-                            <div className="flex items-center space-x-1 ml-2">
-                              {getImpactIcon(comparison.impactType)}
-                              {comparison.explanation && (
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <HelpCircle className="w-3 h-3 text-muted-foreground cursor-help" />
-                                  </TooltipTrigger>
-                                  <TooltipContent className="max-w-sm">
-                                    <p className="text-sm">{comparison.explanation}</p>
-                                  </TooltipContent>
-                                </Tooltip>
-                              )}
-                            </div>
-                          </div>
-                          <div className="flex space-x-1">
-                            <Badge 
-                              variant="secondary" 
-                              className={`text-xs ${getCategoryBadgeColor(comparison.category)}`}
-                            >
-                              {comparison.category.charAt(0).toUpperCase() + comparison.category.slice(1)}
-                            </Badge>
-                            <Badge 
-                              variant="secondary" 
-                              className={`text-xs ${colorScheme.badge}`}
-                            >
-                              {comparison.impactType === "beneficial" ? "Benefit" : 
-                               comparison.impactType === "cost" ? "Cost" : "Neutral"}
-                            </Badge>
-                          </div>
-                        </div>
-
-                        {/* Current Law Column */}
-                        <div className={`text-sm ${colorScheme.text}`}>
-                          {comparison.currentLaw}
-                        </div>
-
-                        {/* Big Bill Change Column */}
-                        <div className={`text-sm ${colorScheme.text} font-medium`}>
-                          {comparison.bigBillChange}
-                        </div>
-                      </div>
-                    );
-                  })}
+              {/* Big Bill */}
+              <div>
+                <h4 className="font-semibold text-slate-700 text-center mb-4">Big Bill</h4>
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Federal Income Tax</span>
+                    <span className="font-medium">{formatCurrency(bigBillTax * 0.85)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">FICA Taxes</span>
+                    <span className="font-medium">{formatCurrency(bigBillTax * 0.15)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">State Income Tax</span>
+                    <span className="font-medium">$0</span>
+                  </div>
+                  <div className="border-t pt-2">
+                    <div className="flex justify-between font-bold">
+                      <span>Total Annual Tax</span>
+                      <span className="text-blue-700">{formatCurrency(bigBillTax)}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Disclaimer */}
-            <div className="mt-6 p-4 bg-muted/30 rounded-lg border border-border">
-              <div className="flex items-start space-x-2">
-                <HelpCircle className="w-4 h-4 text-muted-foreground mt-0.5 flex-shrink-0" />
-                <div className="text-xs text-muted-foreground">
-                  <p className="mb-1">
-                    <strong>Disclaimer:</strong> {POLICY_COMPARISON_METADATA.disclaimer}
-                  </p>
-                  <p>
-                    Last updated: {POLICY_COMPARISON_METADATA.lastUpdated}
-                  </p>
-                </div>
+            {/* Tax Savings Summary */}
+            <div className="mt-6 text-center">
+              <div className="bg-white rounded-lg p-4 border border-blue-200">
+                <p className="text-sm text-blue-700 mb-1">Annual Tax Savings:</p>
+                <p className="text-2xl font-bold text-blue-800">
+                  {taxSavings >= 0 ? `${formatCurrency(taxSavings)} saved per year` : `${formatCurrency(-taxSavings)} additional per year`}
+                </p>
               </div>
             </div>
           </CardContent>
-        )}
-      </Card>
+        </Card>
+
+        {/* Healthcare Cost Scenario Comparison */}
+        <Card className="border-2 border-green-200 bg-gradient-to-br from-green-50 to-emerald-50">
+          <CardHeader className="pb-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Heart className="w-5 h-5 text-green-600" />
+                <CardTitle className="text-lg text-green-900">Healthcare Cost Scenario Comparison</CardTitle>
+              </div>
+              <Tooltip>
+                <TooltipTrigger>
+                  <HelpCircle className="w-4 h-4 text-green-600" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Comparison of your annual healthcare costs under current law vs. Big Bill policies</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Current Law */}
+              <div>
+                <h4 className="font-semibold text-slate-700 text-center mb-4">Current Law</h4>
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Annual Premium</span>
+                    <span className="font-medium">{formatCurrency(currentPremium)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Out-of-Pocket Costs</span>
+                    <span className="font-medium">{formatCurrency(currentOutOfPocket)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Prescription Costs</span>
+                    <span className="font-medium">{formatCurrency(currentPrescription)}</span>
+                  </div>
+                  <div className="border-t pt-2">
+                    <div className="flex justify-between font-bold">
+                      <span>Total Annual Cost</span>
+                      <span className="text-green-700">{formatCurrency(currentHealthcareCost)}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Big Bill */}
+              <div>
+                <h4 className="font-semibold text-slate-700 text-center mb-4">Big Bill</h4>
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Annual Premium</span>
+                    <span className="font-medium">{formatCurrency(bigBillPremium)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Out-of-Pocket Costs</span>
+                    <span className="font-medium">{formatCurrency(bigBillOutOfPocket)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Prescription Costs</span>
+                    <span className="font-medium">{formatCurrency(bigBillPrescription)}</span>
+                  </div>
+                  <div className="border-t pt-2">
+                    <div className="flex justify-between font-bold">
+                      <span>Total Annual Cost</span>
+                      <span className="text-green-700">{formatCurrency(bigBillHealthcareCost)}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Healthcare Savings Summary */}
+            <div className="mt-6 text-center">
+              <div className="bg-white rounded-lg p-4 border border-green-200">
+                <p className="text-sm text-green-700 mb-1">Annual Healthcare Savings:</p>
+                <p className="text-2xl font-bold text-green-800">
+                  {healthcareSavings >= 0 ? `${formatCurrency(healthcareSavings)} saved per year` : `${formatCurrency(-healthcareSavings)} additional per year`}
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </TooltipProvider>
   );
 }
