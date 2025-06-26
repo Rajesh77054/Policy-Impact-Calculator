@@ -471,7 +471,7 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                 <div className="mt-4 p-4 bg-yellow-25 border border-yellow-200 rounded-lg">
                   <div className="text-center">
                     <p className="text-sm text-yellow-800 leading-relaxed mb-3">
-                      <strong>Policy Trade-off Analysis:</strong> You receive <strong>${Math.abs(results.netAnnualImpact).toLocaleString()} annually</strong> in 
+                      <strong>Policy Trade-off Analysis:</strong> You {results.netAnnualImpact < 0 ? 'receive' : 'pay'} <strong>${Math.abs(results.netAnnualImpact).toLocaleString()} annually</strong> in 
                       {results.netAnnualImpact < 0 ? 'immediate financial relief' : 'additional costs'}, but this contributes to national debt that will require 
                       future tax payments or spending cuts to service.
                     </p>
@@ -480,8 +480,8 @@ export default function PolicyCharts({ results }: PolicyChartsProps) {
                         <div>
                           <strong>Immediate Impact:</strong>
                           <ul className="list-disc list-inside ml-2 mt-1">
-                            <li>Annual savings: ${Math.abs(results.netAnnualImpact).toLocaleString()}</li>
-                            <li>20-year savings: ${Math.abs(results.timeline.twentyYear).toLocaleString()}</li>
+                            <li>Annual {results.netAnnualImpact < 0 ? 'savings' : 'costs'}: ${Math.abs(results.netAnnualImpact).toLocaleString()}</li>
+                            <li>20-year {results.timeline.twentyYear < 0 ? 'savings' : 'costs'}: ${Math.abs(results.timeline.twentyYear).toLocaleString()}</li>
                           </ul>
                         </div>
                         <div>
