@@ -127,32 +127,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Audit logging function
-  const logCalculationAudit = (sessionId: string, formData: any, results?: any, error?: string) => {
-    const auditEntry = {
-      timestamp: new Date().toISOString(),
-      sessionId,
-      userAgent: req.headers['user-agent'],
-      ipAddress: req.ip || req.connection.remoteAddress,
-      formData: {
-        incomeRange: formData?.incomeRange,
-        state: formData?.state,
-        familyStatus: formData?.familyStatus,
-        employmentStatus: formData?.employmentStatus,
-        insuranceType: formData?.insuranceType
-      },
-      results: results ? {
-        netAnnualImpact: results.netAnnualImpact,
-        validationChecksum: results.validationChecksum
-      } : null,
-      error: error || null
-    };
-    
-    console.log('AUDIT_LOG:', JSON.stringify(auditEntry));
-  };
-
   // Calculate policy impact
   app.post("/api/calculate", async (req, res) => {
+    // Audit logging function
+    const logCalculationAudit = (sessionId: string, formData: any, results?: any, error?: string) => {
+      const auditEntry = {
+        timestamp: new Date().toISOString(),
+        sessionId,
+        userAgent: req.headers['user-agent'],
+        ipAddress: req.ip || req.connection.remoteAddress,
+        formData: {
+          incomeRange: formData?.incomeRange,
+          state: formData?.state,
+          familyStatus: formData?.familyStatus,
+          employmentStatus: formData?.employmentStatus,
+          insuranceType: formData?.insuranceType
+        },
+        results: results ? {
+          netAnnualImpact: results.netAnnualImpact,
+          validationChecksum: results.validationChecksum
+        } : null,
+        error: error || null
+      };
+      
+      console.log('AUDIT_LOG:', JSON.stringify(auditEntry));
+    };
     try {
       const sessionId = req.session.policySessionId;
       console.log('Calculate request - Session ID:', sessionId);
