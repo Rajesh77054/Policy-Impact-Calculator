@@ -417,53 +417,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                 ) : null;
               })()}
               
-              {/* Show calculation transparency */}
-              <div className="mt-4 p-3 bg-slate-50 border border-slate-200 rounded-lg">
-                <p className="text-sm text-slate-600 mb-3">
-                  <strong>Complete calculation breakdown:</strong>
-                </p>
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  {results.breakdown.map((item, index) => (
-                    <div key={index} className="flex justify-between">
-                      <span>{item.title}:</span>
-                      <span className={item.impact < 0 ? 'text-green-600 font-medium' : 'text-red-600 font-medium'}>
-                        {item.impact < 0 ? `-$${Math.abs(item.impact).toLocaleString()}` : `+$${item.impact.toLocaleString()}`}
-                      </span>
-                    </div>
-                  ))}
-                  {/* Show energy costs if they exist */}
-                  {Math.abs(results.energyCostImpact) > 0 && (
-                    <div className="flex justify-between">
-                      <span>Energy costs:</span>
-                      <span className={results.energyCostImpact < 0 ? 'text-green-600 font-medium' : 'text-red-600 font-medium'}>
-                        {results.energyCostImpact < 0 ? `-$${Math.abs(results.energyCostImpact).toLocaleString()}` : `+$${results.energyCostImpact.toLocaleString()}`}
-                      </span>
-                    </div>
-                  )}
-                  {/* Show state/location adjustments */}
-                  {(() => {
-                    const stateAdjustment = results.netAnnualImpact - 
-                      results.annualTaxImpact - 
-                      results.healthcareCostImpact - 
-                      results.energyCostImpact - 
-                      (results.breakdown.find(b => b.category === 'employment')?.impact || 0);
-                    return Math.abs(stateAdjustment) > 100 ? (
-                      <div className="flex justify-between">
-                        <span>State/location factors:</span>
-                        <span className={stateAdjustment < 0 ? 'text-green-600 font-medium' : 'text-red-600 font-medium'}>
-                          {stateAdjustment < 0 ? `-$${Math.abs(stateAdjustment).toLocaleString()}` : `+$${stateAdjustment.toLocaleString()}`}
-                        </span>
-                      </div>
-                    ) : null;
-                  })()}
-                  <div className="flex justify-between pt-2 border-t border-slate-300 font-medium">
-                    <span>Net Total:</span>
-                    <span className={results.netAnnualImpact < 0 ? 'text-green-600' : 'text-red-600'}>
-                      {results.netAnnualImpact < 0 ? `-$${Math.abs(results.netAnnualImpact).toLocaleString()}` : `+$${results.netAnnualImpact.toLocaleString()}`}
-                    </span>
-                  </div>
-                </div>
-              </div>
+
             </div>
             
             
