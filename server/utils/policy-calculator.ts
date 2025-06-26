@@ -314,6 +314,28 @@ function calculateHealthcareCosts(
   };
 }
 
+// Data validation checksum generator
+function generateCalculationChecksum(formData: FormData, income: number): string {
+  const checksumData = {
+    income,
+    familyStatus: formData.familyStatus,
+    insuranceType: formData.insuranceType,
+    state: formData.state,
+    employmentStatus: formData.employmentStatus,
+    timestamp: Math.floor(Date.now() / 60000) // 1-minute buckets for consistency
+  };
+  
+  // Simple hash function for validation
+  const dataString = JSON.stringify(checksumData);
+  let hash = 0;
+  for (let i = 0; i < dataString.length; i++) {
+    const char = dataString.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  return hash.toString(16);
+}
+
 export async function calculatePolicyImpact(formData: FormData): Promise<PolicyResults> {
   // Get median income for calculations
   const income = formData.incomeRange && INCOME_MEDIANS[formData.incomeRange as keyof typeof INCOME_MEDIANS] 
@@ -816,6 +838,12 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
     });
   }
 
+  // Generate validation checksum
+  const validationChecksum = generateCalculationChecksum(formData, income);
+  
+  // Log calculation validation data
+  console.log(`Calculation checksum: ${validationChecksum} for income=${income}, state=${formData.state}`);
+  
   return {
     // All values represent Big Bill vs Current Law differences
     // Negative values = user saves money with Big Bill (benefits)
@@ -839,5 +867,6 @@ export async function calculatePolicyImpact(formData: FormData): Promise<PolicyR
     breakdown: breakdown,
     purchasingPower: purchasingPowerData,
     economicContext: economicContext,
+    validationChecksum: validationChecksum,
   };
 }

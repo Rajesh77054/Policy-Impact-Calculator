@@ -3,16 +3,19 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { HelpCircle, TrendingUp, TrendingDown, Calculator, DollarSign, Heart, Zap, Building, Users, Shield, Download, Share2, RotateCcw } from "lucide-react";
+import { HelpCircle, TrendingUp, TrendingDown, Calculator, DollarSign, Heart, Zap, Building, Users, Shield, Download, Share2, RotateCcw, Loader2 } from "lucide-react";
 import { PolicyResults } from "@shared/types";
 import PolicyCharts from "./policy-charts";
 import NetFinancialImpactChart from "./net-financial-impact-chart";
 import EconomicContextCard from "./economic-context-card";
 import { useReplitAuth } from "@/hooks/use-replit-auth";
 import { Link } from "wouter";
+import { DataFreshnessIndicator } from "./data-freshness-indicator";
+import { CalculationErrorBoundary } from "./calculation-error-boundary";
 
 interface ResultsDashboardProps {
   results: PolicyResults;
+  isLoading?: boolean;
 }
 
 const MobileTooltip = ({ 
@@ -29,7 +32,7 @@ const MobileTooltip = ({
   const IconComponent = icon === "trend-up" ? TrendingUp : 
                        icon === "trend-down" ? TrendingDown : 
                        HelpCircle;
-  
+
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -119,32 +122,76 @@ const ActionButtons = () => {
   );
 };
 
-export default function ResultsDashboard({ results }: ResultsDashboardProps) {
+const IMPACT_COLORS = {
+  positive: {
+    bg: "bg-green-50",
+    border: "border-green-200",
+    text: "text-green-600",
+  },
+  negative: {
+    bg: "bg-red-50",
+    border: "border-red-200",
+    text: "text-red-600",
+  },
+  neutral: {
+    bg: "bg-gray-50",
+    border: "border-gray-200",
+    text: "text-gray-600",
+  },
+};
+
+function LoadingDashboard() {
+  return (
+    <div className="space-y-6 animate-pulse">
+      <div className="text-center">
+        <div className="flex items-center justify-center mb-4">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+        <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-64 mx-auto mb-2"></div>
+        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-48 mx-auto"></div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {[...Array(4)].map((_, i) => (
+          <Card key={i}>
+            <CardHeader className="pb-2">
+              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+            </CardHeader>
+            <CardContent>
+              <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-2"></div>
+              <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function ResultsDashboard({ results, isLoading = false }: ResultsDashboardProps) {
+  if (isLoading) {
+    return <LoadingDashboard />;
+  }
 
   const formatCurrency = (amount: number): string => {
-    if (Math.abs(amount) >= 1000000) {
-      return `$${(Math.abs(amount) / 1000000).toFixed(1)}M`;
-    }
-    if (Math.abs(amount) >= 1000) {
-      return `$${(Math.abs(amount) / 1000).toFixed(0)}k`;
-    }
-    return `$${Math.abs(amount).toLocaleString()}`;
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(Math.abs(amount));
   };
 
-  const formatTaxImpact = (amount: number): string => {
-    if (amount === 0) return "No change";
-    if (amount < 0) return `Save ${formatCurrency(Math.abs(amount))}`;
-    return `Pay ${formatCurrency(amount)} more`;
+  const getImpactColorScheme = (impact: number) => {
+    if (impact > 0) return IMPACT_COLORS.negative; // Costs
+    if (impact < 0) return IMPACT_COLORS.positive; // Savings  
+    return IMPACT_COLORS.neutral; // Neutral
   };
 
-  const formatCostImpact = (amount: number): string => {
-    if (amount === 0) return "No change";
-    if (amount < 0) return `Save ${formatCurrency(Math.abs(amount))}`;
-    return `Cost ${formatCurrency(amount)} more`;
-  };
-
-  const formatPercentage = (value: number): string => {
-    return `${value}%`;
+  const getImpactIcon = (impact: number) => {
+    if (impact > 0) return <TrendingUp className="h-4 w-4" />;
+    if (impact < 0) return <TrendingDown className="h-4 w-4" />;
+    return <DollarSign className="h-4 w-4" />;
   };
 
   return (
@@ -174,7 +221,7 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
         {/* Secondary Supporting Information */}
         <div className="border-t pt-8">
           <h3 className="text-xl font-semibold text-slate-900 mb-6">How Your Impact Breaks Down</h3>
-          
+
           {/* Employment Status Alert for Contract Workers */}
           {results.breakdown.some(item => item.category === "employment" && item.impact > 0) && (
             <Card className="bg-amber-50 border-amber-200 mb-6">
@@ -201,141 +248,87 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
               </CardContent>
             </Card>
           )}
-          
+
           {/* Unified Impact Breakdown */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            {/* Tax Impact */}
-            <Card className="border-2 border-green-200 bg-gradient-to-br from-green-50 to-emerald-50">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base text-green-900 flex items-center">
-                  <Calculator className="w-4 h-4 mr-2" />
-                  Tax Relief
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-green-700 mb-1">
-                  {results.annualTaxImpact < 0 ? `Save $${Math.abs(results.annualTaxImpact).toLocaleString()}` : `Pay $${results.annualTaxImpact.toLocaleString()} more`}
-                </div>
-                <p className="text-xs text-green-600">Annual tax savings from Big Bill changes</p>
-              </CardContent>
-            </Card>
-
-            {/* Healthcare Impact */}
-            <Card className="border-2 border-green-200 bg-gradient-to-br from-green-50 to-emerald-50">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base text-green-900 flex items-center">
-                  <Heart className="w-4 h-4 mr-2" />
-                  Healthcare Savings
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-green-700 mb-1">
-                  {results.healthcareCostImpact < 0 ? `Save $${Math.abs(results.healthcareCostImpact).toLocaleString()}` : `Cost $${results.healthcareCostImpact.toLocaleString()} more`}
-                </div>
-                <p className="text-xs text-green-600">Annual healthcare cost reduction</p>
-              </CardContent>
-            </Card>
-
-            {/* Employment Impact - Show if significant */}
-            {results.breakdown.find(item => item.category === 'employment') && (
-              <Card className={`border-2 ${results.breakdown.find(item => item.category === 'employment')!.impact < 0 ? 'border-green-200 bg-gradient-to-br from-green-50 to-emerald-50' : 'border-red-200 bg-gradient-to-br from-red-50 to-orange-50'}`}>
-                <CardHeader className="pb-3">
-                  <CardTitle className={`text-base flex items-center ${results.breakdown.find(item => item.category === 'employment')!.impact < 0 ? 'text-green-900' : 'text-red-900'}`}>
-                    <Users className="w-4 h-4 mr-2" />
-                    Employment Impact
-                  </CardTitle>
+            <CalculationErrorBoundary component="Tax Impact Card">
+              <Card className={`border-2 ${getImpactColorScheme(results.annualTaxImpact).border} ${getImpactColorScheme(results.annualTaxImpact).bg}`}>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Tax Relief</CardTitle>
+                  <div className={getImpactColorScheme(results.annualTaxImpact).text}>
+                    {getImpactIcon(results.annualTaxImpact)}
+                  </div>
                 </CardHeader>
                 <CardContent>
-                  <div className={`text-2xl font-bold mb-1 ${results.breakdown.find(item => item.category === 'employment')!.impact < 0 ? 'text-green-700' : 'text-red-700'}`}>
-                    {results.breakdown.find(item => item.category === 'employment')!.impact < 0 ? 
-                      `Save $${Math.abs(results.breakdown.find(item => item.category === 'employment')!.impact).toLocaleString()}` : 
-                      `Pay $${results.breakdown.find(item => item.category === 'employment')!.impact.toLocaleString()} more`}
+                  <div className={`text-2xl font-bold ${getImpactColorScheme(results.annualTaxImpact).text}`}>
+                    {results.annualTaxImpact < 0 ? '+' : '-'}{formatCurrency(results.annualTaxImpact)}
                   </div>
-                  <p className={`text-xs ${results.breakdown.find(item => item.category === 'employment')!.impact < 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {results.breakdown.find(item => item.category === 'employment')!.impact < 0 ? 
-                      'Employment tax benefits for full-time workers' : 
-                      'Self-employment tax burden'}
+                  <p className="text-xs text-muted-foreground">
+                    {results.annualTaxImpact < 0 ? 'Annual savings' : 'Additional cost'}
                   </p>
                 </CardContent>
               </Card>
-            )}
+            </CalculationErrorBoundary>
 
-            {/* Net Total Impact */}
-            <Card className={`border-2 ${results.netAnnualImpact < 0 ? 'border-green-200 bg-gradient-to-br from-green-50 to-emerald-50' : 'border-orange-200 bg-gradient-to-br from-orange-50 to-amber-50'}`}>
-              <CardHeader className="pb-3">
-                <CardTitle className={`text-base flex items-center ${results.netAnnualImpact < 0 ? 'text-green-900' : 'text-orange-900'}`}>
-                  {results.netAnnualImpact < 0 ? <TrendingUp className="w-4 h-4 mr-2" /> : <TrendingDown className="w-4 h-4 mr-2" />}
-                  Net Annual Impact
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <div className={`text-2xl font-bold mb-1 ${results.netAnnualImpact < 0 ? 'text-green-700' : 'text-orange-700'}`}>
-                    {results.netAnnualImpact < 0 ? `Save $${Math.abs(results.netAnnualImpact).toLocaleString()}` : `Pay $${results.netAnnualImpact.toLocaleString()} more`}
+            <CalculationErrorBoundary component="Healthcare Impact Card">
+              <Card className={`border-2 ${getImpactColorScheme(results.healthcareCostImpact).border} ${getImpactColorScheme(results.healthcareCostImpact).bg}`}>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Healthcare</CardTitle>
+                  <Heart className={`h-4 w-4 ${getImpactColorScheme(results.healthcareCostImpact).text}`} />
+                </CardHeader>
+                <CardContent>
+                  <div className={`text-2xl font-bold ${getImpactColorScheme(results.healthcareCostImpact).text}`}>
+                    {results.healthcareCostImpact < 0 ? '+' : '-'}{formatCurrency(results.healthcareCostImpact)}
                   </div>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <HelpCircle className="w-4 h-4 text-slate-400 hover:text-slate-600 cursor-help ml-2" />
-                    </TooltipTrigger>
-                    <TooltipContent className="max-w-md p-4">
-                      <div className="space-y-3">
-                        <h5 className="font-medium text-slate-900 flex items-center">
-                          <Calculator className="w-4 h-4 mr-2" />
-                          Calculation Verification
-                        </h5>
-                        <div className="text-sm text-slate-700 space-y-1">
-                          {results.breakdown.map((item, index) => (
-                            <div key={index} className="flex justify-between">
-                              <span>{item.title}:</span>
-                              <span className="font-mono">
-                                {item.impact < 0 ? `-$${Math.abs(item.impact).toLocaleString()}` : `+$${item.impact.toLocaleString()}`}
-                              </span>
-                            </div>
-                          ))}
-                          
-                          {/* State Adjustment */}
-                          {(() => {
-                            const stateAdjustment = results.netAnnualImpact - 
-                              results.annualTaxImpact - 
-                              results.healthcareCostImpact - 
-                              results.energyCostImpact - 
-                              (results.breakdown.find(b => b.category === 'employment')?.impact || 0);
-                            return Math.abs(stateAdjustment) > 0 ? (
-                              <div className="flex justify-between">
-                                <span>State Adjustment:</span>
-                                <span className="font-mono">
-                                  {stateAdjustment < 0 ? `-$${Math.abs(stateAdjustment).toLocaleString()}` : `+$${stateAdjustment.toLocaleString()}`}
-                                </span>
-                              </div>
-                            ) : null;
-                          })()}
-                          
-                          {/* Energy Impact */}
-                          {Math.abs(results.energyCostImpact) > 0 && (
-                            <div className="flex justify-between">
-                              <span>Energy Impact:</span>
-                              <span className="font-mono">
-                                {results.energyCostImpact < 0 ? `-$${Math.abs(results.energyCostImpact).toLocaleString()}` : `+$${results.energyCostImpact.toLocaleString()}`}
-                              </span>
-                            </div>
-                          )}
-                          
-                          <div className="border-t pt-2 mt-2 flex justify-between font-medium">
-                            <span>Net Total:</span>
-                            <span className="font-mono">
-                              {results.netAnnualImpact < 0 ? `-$${Math.abs(results.netAnnualImpact).toLocaleString()}` : `+$${results.netAnnualImpact.toLocaleString()}`}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </TooltipContent>
-                  </Tooltip>
-                </div>
-                <p className={`text-xs ${results.netAnnualImpact < 0 ? 'text-green-600' : 'text-orange-600'}`}>
-                  Total annual impact including all factors
-                </p>
-              </CardContent>
-            </Card>
+                  <p className="text-xs text-muted-foreground">
+                    {results.healthcareCostImpact < 0 ? 'Annual savings' : 'Additional cost'}
+                  </p>
+                  {results.economicContext?.macroeconomicData && (
+                    <DataFreshnessIndicator 
+                      lastUpdated={results.economicContext.macroeconomicData.lastUpdated}
+                      dataSource="Federal Reserve Economic Data"
+                      className="mt-2"
+                    />
+                  )}
+                </CardContent>
+              </Card>
+            </CalculationErrorBoundary>
+
+            <CalculationErrorBoundary component="Energy Impact Card">
+              <Card className={`border-2 ${getImpactColorScheme(results.energyCostImpact).border} ${getImpactColorScheme(results.energyCostImpact).bg}`}>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Energy</CardTitle>
+                  <Zap className={`h-4 w-4 ${getImpactColorScheme(results.energyCostImpact).text}`} />
+                </CardHeader>
+                <CardContent>
+                  <div className={`text-2xl font-bold ${getImpactColorScheme(results.energyCostImpact).text}`}>
+                    {results.energyCostImpact < 0 ? '+' : '-'}{formatCurrency(results.energyCostImpact)}
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    {results.energyCostImpact < 0 ? 'Annual savings' : 'Additional cost'}
+                  </p>
+                </CardContent>
+              </Card>
+            </CalculationErrorBoundary>
+
+            <CalculationErrorBoundary component="Net Impact Card">
+              <Card className={`border-2 ${getImpactColorScheme(results.netAnnualImpact).border} ${getImpactColorScheme(results.netAnnualImpact).bg}`}>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Net Impact</CardTitle>
+                  <div className={getImpactColorScheme(results.netAnnualImpact).text}>
+                    {getImpactIcon(results.netAnnualImpact)}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className={`text-2xl font-bold ${getImpactColorScheme(results.netAnnualImpact).text}`}>
+                    {results.netAnnualImpact < 0 ? '+' : '-'}{formatCurrency(results.netAnnualImpact)}
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    {results.netAnnualImpact < 0 ? 'You save annually' : 'Additional annual cost'}
+                  </p>
+                </CardContent>
+              </Card>
+            </CalculationErrorBoundary>
           </div>
 
           {/* Detailed Impact Breakdown */}
@@ -441,11 +434,11 @@ export default function ResultsDashboard({ results }: ResultsDashboardProps) {
                   </div>
                 ) : null;
               })()}
-              
+
 
             </div>
-            
-            
+
+
           </div>
 
 

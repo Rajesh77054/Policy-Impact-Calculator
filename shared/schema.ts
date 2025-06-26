@@ -120,6 +120,7 @@ export const policyResultsSchema = z.object({
   breakdown: z.array(policyBreakdownSchema),
   purchasingPower: purchasingPowerSchema.optional(),
   economicContext: economicContextSchema.optional(),
+  validationChecksum: z.string().optional(),
   bigBillScenario: z.object({
     annualTaxImpact: z.number(),
     healthcareCostImpact: z.number(),
