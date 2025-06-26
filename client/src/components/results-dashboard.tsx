@@ -224,120 +224,34 @@ export function ResultsDashboard({ results, isLoading = false }: ResultsDashboar
         {/* Primary Chart - Net Financial Impact Over Time */}
         <NetFinancialImpactChart results={results} />
 
-        {/* Secondary Supporting Information */}
-        <div className="border-t pt-8">
-          <h3 className="text-xl font-semibold text-slate-900 mb-6">How Your Impact Breaks Down</h3>
-
-          {/* Employment Status Alert for Contract Workers */}
-          {results.breakdown.some(item => item.category === "employment" && item.impact > 0) && (
-            <Card className="bg-amber-50 border-amber-200 mb-6">
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 bg-amber-100 rounded-lg">
-                    <Building className="w-5 h-5 text-amber-700" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-semibold text-amber-900 mb-2">Employment Status Impact</h4>
-                    <p className="text-sm text-amber-800 mb-3">
-                      As a contract worker, you face additional tax burdens that offset some policy benefits. This includes self-employment taxes, 1099 complications, and lack of employer-provided benefits.
-                    </p>
-                    <div className="bg-white rounded-lg p-3 border border-amber-200">
-                      <div className="text-sm text-amber-900">
-                        <strong>Employment Impact:</strong> +${Math.abs(results.breakdown.find(item => item.category === "employment")?.impact || 0).toLocaleString()}/year
-                      </div>
-                      <div className="text-xs text-amber-700 mt-1">
-                        This reflects the real additional costs contract workers face compared to traditional employees
-                      </div>
+        {/* Employment Status Alert for Contract Workers */}
+        {results.breakdown.some(item => item.category === "employment" && item.impact > 0) && (
+          <Card className="bg-amber-50 border-amber-200 mb-6">
+            <CardContent className="pt-6">
+              <div className="flex items-start gap-3">
+                <div className="p-2 bg-amber-100 rounded-lg">
+                  <Building className="w-5 h-5 text-amber-700" />
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-semibold text-amber-900 mb-2">Employment Status Impact</h4>
+                  <p className="text-sm text-amber-800 mb-3">
+                    As a contract worker, you face additional tax burdens that offset some policy benefits. This includes self-employment taxes, 1099 complications, and lack of employer-provided benefits.
+                  </p>
+                  <div className="bg-white rounded-lg p-3 border border-amber-200">
+                    <div className="text-sm text-amber-900">
+                      <strong>Employment Impact:</strong> +${Math.abs(results.breakdown.find(item => item.category === "employment")?.impact || 0).toLocaleString()}/year
+                    </div>
+                    <div className="text-xs text-amber-700 mt-1">
+                      This reflects the real additional costs contract workers face compared to traditional employees
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
-          {/* Unified Impact Breakdown */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <CalculationErrorBoundary component="Tax Impact Card">
-              <Card className={`border-2 ${getImpactColorScheme(results.annualTaxImpact).border} ${getImpactColorScheme(results.annualTaxImpact).bg}`}>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Tax Relief</CardTitle>
-                  <div className={getImpactColorScheme(results.annualTaxImpact).text}>
-                    {getImpactIcon(results.annualTaxImpact)}
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className={`text-2xl font-bold ${getImpactColorScheme(results.annualTaxImpact).text}`}>
-                    {results.annualTaxImpact < 0 ? '+' : '-'}{formatCurrency(results.annualTaxImpact)}
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    {results.annualTaxImpact < 0 ? 'Annual savings' : 'Additional cost'}
-                  </p>
-                </CardContent>
-              </Card>
-            </CalculationErrorBoundary>
-
-            <CalculationErrorBoundary component="Healthcare Impact Card">
-              <Card className={`border-2 ${getImpactColorScheme(results.healthcareCostImpact).border} ${getImpactColorScheme(results.healthcareCostImpact).bg}`}>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Healthcare</CardTitle>
-                  <Heart className={`h-4 w-4 ${getImpactColorScheme(results.healthcareCostImpact).text}`} />
-                </CardHeader>
-                <CardContent>
-                  <div className={`text-2xl font-bold ${getImpactColorScheme(results.healthcareCostImpact).text}`}>
-                    {results.healthcareCostImpact < 0 ? '+' : '-'}{formatCurrency(results.healthcareCostImpact)}
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    {results.healthcareCostImpact < 0 ? 'Annual savings' : 'Additional cost'}
-                  </p>
-                  {results.economicContext?.macroeconomicData && (
-                    <DataFreshnessIndicator 
-                      lastUpdated={results.economicContext.macroeconomicData.lastUpdated}
-                      dataSource="Federal Reserve Economic Data"
-                      className="mt-2"
-                    />
-                  )}
-                </CardContent>
-              </Card>
-            </CalculationErrorBoundary>
-
-            <CalculationErrorBoundary component="Energy Impact Card">
-              <Card className={`border-2 ${getImpactColorScheme(results.energyCostImpact).border} ${getImpactColorScheme(results.energyCostImpact).bg}`}>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Energy</CardTitle>
-                  <Zap className={`h-4 w-4 ${getImpactColorScheme(results.energyCostImpact).text}`} />
-                </CardHeader>
-                <CardContent>
-                  <div className={`text-2xl font-bold ${getImpactColorScheme(results.energyCostImpact).text}`}>
-                    {results.energyCostImpact < 0 ? '+' : '-'}{formatCurrency(results.energyCostImpact)}
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    {results.energyCostImpact < 0 ? 'Annual savings' : 'Additional cost'}
-                  </p>
-                </CardContent>
-              </Card>
-            </CalculationErrorBoundary>
-
-            <CalculationErrorBoundary component="Net Impact Card">
-              <Card className={`border-2 ${getImpactColorScheme(results.netAnnualImpact).border} ${getImpactColorScheme(results.netAnnualImpact).bg}`}>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Net Impact</CardTitle>
-                  <div className={getImpactColorScheme(results.netAnnualImpact).text}>
-                    {getImpactIcon(results.netAnnualImpact)}
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className={`text-2xl font-bold ${getImpactColorScheme(results.netAnnualImpact).text}`}>
-                    {results.netAnnualImpact < 0 ? '+' : '-'}{formatCurrency(results.netAnnualImpact)}
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    {results.netAnnualImpact < 0 ? 'You save annually' : 'Additional annual cost'}
-                  </p>
-                </CardContent>
-              </Card>
-            </CalculationErrorBoundary>
-          </div>
-
-          {/* Detailed Impact Breakdown */}
+        {/* Complete Impact Analysis */}
           <div className="bg-white rounded-xl border border-slate-200 p-6 mb-8">
             <h4 className="text-lg font-semibold text-slate-900 mb-4 flex items-center">
               <Calculator className="w-5 h-5 mr-2 text-slate-600" />
@@ -444,25 +358,41 @@ export function ResultsDashboard({ results, isLoading = false }: ResultsDashboar
 
             </div>
 
-
+            {/* Net Impact Summary */}
+            <div className="mt-6 pt-4 border-t border-slate-200">
+              <div className={`p-4 rounded-lg border-2 ${results.netAnnualImpact < 0 ? 'bg-green-50 border-green-300' : 'bg-red-50 border-red-300'}`}>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h5 className={`text-lg font-bold ${results.netAnnualImpact < 0 ? 'text-green-900' : 'text-red-900'}`}>
+                      Net Annual Impact
+                    </h5>
+                    <p className={`text-sm ${results.netAnnualImpact < 0 ? 'text-green-700' : 'text-red-700'}`}>
+                      {results.netAnnualImpact < 0 ? 'Your total annual savings' : 'Your total additional annual cost'}
+                    </p>
+                  </div>
+                  <div className={`text-3xl font-bold ${results.netAnnualImpact < 0 ? 'text-green-800' : 'text-red-800'}`}>
+                    {results.netAnnualImpact < 0 ? `Save $${Math.abs(results.netAnnualImpact).toLocaleString()}` : `+$${results.netAnnualImpact.toLocaleString()}`}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Policy Comparison Table Section */}
-          <PolicyComparisonTable className="mb-8" />
+        {/* Policy Comparison Table Section */}
+        <PolicyComparisonTable className="mb-8" />
 
-          {/* Secondary Charts Section */}
-          <PolicyCharts results={results} />
+        {/* Secondary Charts Section */}
+        <PolicyCharts results={results} />
 
-          {/* Economic Context Section */}
-          {results.economicContext && (
-            <div className="mb-8">
-              <EconomicContextCard results={results} />
-            </div>
-          )}
+        {/* Economic Context Section */}
+        {results.economicContext && (
+          <div className="mb-8">
+            <EconomicContextCard results={results} />
+          </div>
+        )}
 
-          {/* Action Buttons Section */}
-          <ActionButtons />
-        </div>
+        {/* Action Buttons Section */}
+        <ActionButtons />
       </div>
     </TooltipProvider>
   );
