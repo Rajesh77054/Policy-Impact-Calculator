@@ -150,6 +150,9 @@ function LoadingDashboard() {
         </div>
         <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-64 mx-auto mb-2"></div>
         <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-48 mx-auto"></div>
+        <p className="text-sm text-muted-foreground mt-4">
+          Calculating your personalized policy impact using real-time economic data...
+        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -215,6 +218,25 @@ export function ResultsDashboard({ results, isLoading = false }: ResultsDashboar
             </div>
           </CardHeader>
         </Card>
+
+        {/* Data Integrity Indicator */}
+        {results.validationChecksum && (
+          <div className="flex justify-center mb-4">
+            <div className="flex items-center space-x-2 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
+              <CheckCircle className="w-4 h-4 text-green-600" />
+              <span className="text-sm text-green-800">
+                Calculations verified • Checksum: {results.validationChecksum}
+              </span>
+              {results.economicContext?.macroeconomicData && (
+                <DataFreshnessIndicator 
+                  lastUpdated={results.economicContext.macroeconomicData.lastUpdated}
+                  dataSource="Federal Economic Data"
+                  className="ml-2"
+                />
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Primary Chart - Net Financial Impact Over Time */}
         <NetFinancialImpactChart results={results} />
