@@ -621,6 +621,9 @@ export function ResultsDashboard({ results, isLoading = false }: ResultsDashboar
 
 
 
+        {/* Policy Comparison Table Section */}
+        <PolicyComparisonTable className="mb-8" />
+
         {/* Secondary Charts Section */}
         <PolicyCharts results={results} />
 
