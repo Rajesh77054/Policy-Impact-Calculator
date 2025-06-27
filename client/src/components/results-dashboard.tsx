@@ -160,7 +160,7 @@ function DetailedBreakdownSection({ results }: DetailedBreakdownSectionProps) {
         <div className="flex items-center space-x-3">
           <FileText className="w-5 h-5 text-slate-600" />
           <div className="text-left">
-            <div className="font-semibold text-slate-900">View Detailed Calculation Breakdown</div>
+            <div className="font-semibold text-slate-900">View Personalized Side-by-Side Comparison</div>
             <div className="text-sm text-slate-600">See how we calculated your tax and healthcare impacts</div>
           </div>
         </div>
@@ -619,8 +619,7 @@ export function ResultsDashboard({ results, isLoading = false }: ResultsDashboar
             </div>
           </div>
 
-        {/* Policy Comparison Table Section */}
-        <PolicyComparisonTable className="mb-8" />
+
 
         {/* Secondary Charts Section */}
         <PolicyCharts results={results} />

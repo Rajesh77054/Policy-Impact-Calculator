@@ -91,4 +91,5 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- June 27, 2025. Enhanced results dashboard with progressive disclosure UX - implemented collapsible "View Personalized Side-by-Side Comparison" section to provide detailed breakdowns without overwhelming main results flow
 - June 24, 2025. Initial setup
