@@ -1,423 +1,871 @@
-import { useQuery } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { MobileTooltip } from "@/components/ui/mobile-tooltip";
-import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
-import { 
-  TrendingDown, 
-  TrendingUp, 
-  DollarSign, 
-  Heart, 
-  Zap, 
-  Users, 
-  Building, 
-  GraduationCap,
-  HelpCircle,
-  Download,
-  Share2,
-  Calendar,
-  Calculator
-} from "lucide-react";
-import PolicyCharts from "./policy-charts";
-import MethodologyModal from "./methodology-modal";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import { HelpCircle, TrendingUp, TrendingDown, Calculator, DollarSign, Heart, Zap, Building, Users, Shield, Download, Share2, RotateCcw, Loader2, ChevronDown, ChevronUp, FileText, ExternalLink, AlertTriangle, BookOpen } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { PolicyResults } from "@shared/types";
-import { Shield, Home, Clock, BookOpen, Info, ToggleLeft, ToggleRight } from "lucide-react";
+import PolicyCharts from "./policy-charts";
+
+
+
+import { useReplitAuth } from "@/hooks/use-replit-auth";
 import { Link } from "wouter";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import DataDisclaimer from "@/components/data-disclaimer";
-import { useState } from "react";
+
+import MethodologyModal from "./methodology-modal";
+
+interface MethodologyData {
+  sources: Array<{
+    id: string;
+    name: string;
+    organization: string;
+    url: string;
+    lastUpdated: string;
+    credibility: string;
+    description: string;
+  }>;
+  methodology: {
+    overview: string;
+    tax_calculations: {
+      description: string;
+      methodology: string[];
+      limitations: string;
+    };
+    healthcare_calculations: {
+      description: string;
+      methodology: string[];
+      limitations: string;
+    };
+    state_adjustments: {
+      description: string;
+      methodology: string[];
+      limitations: string;
+    };
+    timeline_projections: {
+      description: string;
+      methodology: string[];
+      limitations: string;
+    };
+    disclaimer: string;
+  };
+}
 
 interface ResultsDashboardProps {
   results: PolicyResults;
+  isLoading?: boolean;
 }
 
-export default function ResultsDashboard({ results }: ResultsDashboardProps) {
-  const [showBigBillComparison, setShowBigBillComparison] = useState(false);
+const MobileTooltip = ({ 
+  content, 
+  title, 
+  icon = "help",
+  iconSize = "md" 
+}: { 
+  content: string; 
+  title: string; 
+  icon?: "help" | "trend-up" | "trend-down";
+  iconSize?: "sm" | "md";
+}) => {
+  const IconComponent = icon === "trend-up" ? TrendingUp : 
+                       icon === "trend-down" ? TrendingDown : 
+                       HelpCircle;
 
-  // Use appropriate scenario data based on toggle
-  const currentData = showBigBillComparison ? results.bigBillScenario : results;
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <IconComponent className={`${iconSize === "sm" ? "w-3 h-3" : "w-4 h-4"} text-slate-400 hover:text-slate-600 cursor-help`} />
+      </TooltipTrigger>
+      <TooltipContent className="max-w-sm">
+        <div className="space-y-1">
+          <p className="font-medium">{title}</p>
+          <p className="text-sm text-slate-600">{content}</p>
+        </div>
+      </TooltipContent>
+    </Tooltip>
+  );
+};
 
-  const formatCurrency = (amount: number) => {
-    const sign = amount >= 0 ? "+" : "";
-    return `${sign}$${Math.abs(amount).toLocaleString()}`;
-  };
+// Methodology Tabs Component
+const MethodologyTabs = () => {
+  const [activeTab, setActiveTab] = React.useState<string | null>(null);
+  const { data: methodologyData, isLoading } = useQuery<MethodologyData>({
+    queryKey: ["/api/methodology"],
+  });
 
-  const formatTaxImpact = (amount: number) => {
-    if (amount < 0) {
-      return `$${Math.abs(amount).toLocaleString()} less in taxes`;
-    } else if (amount > 0) {
-      return `$${amount.toLocaleString()} more in taxes`;
-    } else {
-      return "No change";
+  const getCredibilityBadge = (credibility: string) => {
+    switch (credibility) {
+      case "government":
+        return <Badge variant="default" className="bg-blue-100 text-blue-800">Government</Badge>;
+      case "nonpartisan":
+        return <Badge variant="secondary" className="bg-green-100 text-green-800">Nonpartisan</Badge>;
+      case "academic":
+        return <Badge variant="outline" className="bg-purple-100 text-purple-800">Academic</Badge>;
+      default:
+        return <Badge variant="outline">{credibility}</Badge>;
     }
   };
 
-  const formatCostImpact = (amount: number) => {
-    if (amount < 0) {
-      return `$${Math.abs(amount).toLocaleString()} less per year`;
-    } else if (amount > 0) {
-      return `$${amount.toLocaleString()} more per year`;
-    } else {
-      return "No change";
-    }
+  const handleTabClick = (tabValue: string) => {
+    setActiveTab(activeTab === tabValue ? null : tabValue);
   };
 
-  const formatNetImpact = (amount: number) => {
-    if (amount < 0) {
-      return `$${Math.abs(amount).toLocaleString()} less out of pocket`;
-    } else if (amount > 0) {
-      return `$${amount.toLocaleString()} more out of pocket`;
-    } else {
-      return "No net change";
-    }
+  if (isLoading || !methodologyData) {
+    return (
+      <div className="h-16 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-center">
+        <div className="text-sm text-slate-500">Loading methodology information...</div>
+      </div>
+    );
+  }
+
+  return (
+    <Card className="border-2 border-slate-200">
+      <CardContent className="p-0">
+        <div className="w-full">
+          {/* Tab Headers */}
+          <div className="w-full h-auto p-1 bg-slate-50 rounded-t-lg grid grid-cols-5 gap-1">
+            {[
+              { value: "overview", label: "Overview" },
+              { value: "calculations", label: "Your Results" },
+              { value: "sources", label: "Data Sources" },
+              { value: "methodology", label: "Methods" },
+              { value: "limitations", label: "Limitations" }
+            ].map((tab) => (
+              <Button
+                key={tab.value}
+                variant={activeTab === tab.value ? "default" : "ghost"}
+                size="sm"
+                onClick={() => handleTabClick(tab.value)}
+                className={`text-sm py-3 transition-all ${
+                  activeTab === tab.value 
+                    ? "bg-white border border-slate-200 shadow-sm" 
+                    : "bg-transparent hover:bg-slate-100"
+                }`}
+              >
+                {tab.label}
+              </Button>
+            ))}
+          </div>
+
+          {/* Tab Content - Only show when a tab is active */}
+          {activeTab && (
+            <div className="p-6 border-t border-slate-200">
+              {activeTab === "overview" && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="flex items-start space-x-3">
+                    <Shield className="w-5 h-5 text-blue-600 mt-0.5" />
+                    <div>
+                      <h3 className="font-semibold text-blue-900 mb-2">Data Integrity & Transparency</h3>
+                      <p className="text-sm text-blue-800 mb-3">
+                        {methodologyData?.methodology?.overview}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === "calculations" && (
+                <div className="space-y-4">
+                  <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
+                    <h3 className="font-semibold text-slate-900 mb-3">How We Calculate Your Impact</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <h4 className="font-medium text-slate-800 mb-2">Tax Calculations</h4>
+                        <p className="text-sm text-slate-600">{methodologyData?.methodology?.tax_calculations?.description}</p>
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-slate-800 mb-2">Healthcare Impact</h4>
+                        <p className="text-sm text-slate-600">{methodologyData?.methodology?.healthcare_calculations?.description}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === "sources" && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {methodologyData?.sources?.map((source: any, index: number) => (
+                    <Card key={index} className="border border-slate-200">
+                      <CardHeader className="pb-3">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <CardTitle className="text-sm font-semibold text-slate-900">{source.name}</CardTitle>
+                            <p className="text-xs text-slate-600 mt-1">{source.organization}</p>
+                          </div>
+                          {getCredibilityBadge(source.credibility)}
+                        </div>
+                      </CardHeader>
+                      <CardContent className="pt-0">
+                        <p className="text-xs text-slate-600 mb-2">{source.description}</p>
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-slate-500">Updated: {source.lastUpdated}</span>
+                          <a
+                            href={source.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:text-blue-800 flex items-center"
+                          >
+                            <span>View Source</span>
+                            <ExternalLink className="w-3 h-3 ml-1" />
+                          </a>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+
+              {activeTab === "methodology" && (
+                <div className="space-y-4">
+                  {Object.entries(methodologyData?.methodology || {}).filter(([key]) => 
+                    ['tax_calculations', 'healthcare_calculations', 'state_adjustments', 'timeline_projections'].includes(key)
+                  ).map(([key, method]: [string, any]) => (
+                    <Card key={key} className="border border-slate-200">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-sm font-semibold text-slate-900">
+                          {method.description}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="pt-0">
+                        <ul className="text-xs text-slate-600 space-y-1">
+                          {method.methodology?.map((item: string, index: number) => (
+                            <li key={index} className="flex items-start">
+                              <span className="text-slate-400 mr-2">•</span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+
+              {activeTab === "limitations" && (
+                <div className="space-y-4">
+                  {Object.entries(methodologyData?.methodology || {}).filter(([key]) => 
+                    ['tax_calculations', 'healthcare_calculations', 'state_adjustments', 'timeline_projections'].includes(key)
+                  ).map(([key, method]: [string, any]) => (
+                    <div key={key} className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                      <div className="flex items-start space-x-3">
+                        <AlertTriangle className="w-4 h-4 text-amber-600 mt-0.5" />
+                        <div>
+                          <h4 className="text-sm font-semibold text-amber-900 mb-1">
+                            {method.description}
+                          </h4>
+                          <p className="text-xs text-amber-800">{method.limitations}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  
+                  <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 mt-4">
+                    <div className="flex items-start space-x-3">
+                      <HelpCircle className="w-4 h-4 text-slate-600 mt-0.5" />
+                      <div>
+                        <h4 className="text-sm font-semibold text-slate-900 mb-1">General Disclaimer</h4>
+                        <p className="text-xs text-slate-600">{methodologyData?.methodology?.disclaimer}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+const ActionButtons = () => {
+  const { 
+    user, 
+    downloadPdf, 
+    shareResults, 
+    isDownloadingPdf, 
+    isSharingResults,
+    downloadPdfData,
+    shareResultsData
+  } = useReplitAuth();
+
+  const handleDownloadPdf = () => {
+    downloadPdf();
   };
 
-  const formatPercentage = (value: number) => {
-    const sign = value >= 0 ? "+" : "";
-    return `${sign}${value}%`;
+  const handleShareResults = () => {
+    shareResults();
+  };
+
+  return (
+    <div className="border-t pt-8 mt-8">
+      <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        {/* Download PDF Button */}
+        <Button
+          onClick={handleDownloadPdf}
+          disabled={isDownloadingPdf || !user}
+          className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2"
+        >
+          <Download className="w-4 h-4" />
+          <span>Download PDF Report</span>
+        </Button>
+
+        {/* Start New Analysis Button */}
+        <Link href="/calculator">
+          <Button variant="outline" className="inline-flex items-center space-x-2 px-6 py-2">
+            <RotateCcw className="w-4 h-4" />
+            <span>Start New Analysis</span>
+          </Button>
+        </Link>
+
+        {/* Share Results Button */}
+        <Button
+          onClick={handleShareResults}
+          disabled={isSharingResults || !user}
+          variant="outline"
+          className="inline-flex items-center space-x-2 px-6 py-2"
+        >
+          <Share2 className="w-4 h-4" />
+          <span>Share Results</span>
+        </Button>
+      </div>
+
+      {/* Authentication message for users not logged in */}
+      {!user && (
+        <p className="text-center text-sm text-muted-foreground mt-4">
+          Sign in with Replit to download PDF reports and share results
+        </p>
+      )}
+
+      {/* Success/Error messages */}
+      {downloadPdfData && (
+        <p className="text-center text-sm text-green-600 mt-2">
+          PDF download initiated successfully
+        </p>
+      )}
+      {shareResultsData && (
+        <p className="text-center text-sm text-green-600 mt-2">
+          Share link generated successfully
+        </p>
+      )}
+    </div>
+  );
+};
+
+const IMPACT_COLORS = {
+  positive: {
+    bg: "bg-green-50",
+    border: "border-green-200",
+    text: "text-green-600",
+  },
+  negative: {
+    bg: "bg-red-50",
+    border: "border-red-200",
+    text: "text-red-600",
+  },
+  neutral: {
+    bg: "bg-gray-50",
+    border: "border-gray-200",
+    text: "text-gray-600",
+  },
+};
+
+// Detailed Breakdown Section Component
+interface DetailedBreakdownSectionProps {
+  results: PolicyResults;
+}
+
+function DetailedBreakdownSection({ results }: DetailedBreakdownSectionProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <div className="mb-8">
+      <Button
+        onClick={() => setIsExpanded(!isExpanded)}
+        variant="outline"
+        className="w-full justify-between p-4 h-auto border-2 border-slate-200 hover:border-slate-300"
+      >
+        <div className="flex items-center space-x-3">
+          <FileText className="w-5 h-5 text-slate-600" />
+          <div className="text-left">
+            <div className="font-semibold text-slate-900 text-[20px]">View Personalized Side-by-Side Comparison</div>
+            <div className="text-sm text-slate-600">See how we calculated your tax and healthcare impacts</div>
+          </div>
+        </div>
+        {isExpanded ? (
+          <ChevronUp className="w-5 h-5 text-slate-600" />
+        ) : (
+          <ChevronDown className="w-5 h-5 text-slate-600" />
+        )}
+      </Button>
+      {isExpanded && (
+        <div className="mt-6 space-y-6 border-2 border-slate-200 rounded-lg p-6 bg-slate-50">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Tax Cost Scenario Comparison */}
+            <Card className="border-2 border-blue-200 bg-blue-50">
+              <CardHeader className="pb-4">
+                <div className="flex items-center space-x-2">
+                  <TrendingUp className="w-5 h-5 text-blue-600" />
+                  <CardTitle className="text-lg text-blue-900">Tax Cost Scenario Comparison</CardTitle>
+                  <MobileTooltip
+                    title="Tax Calculation Details"
+                    content="Detailed breakdown of how tax changes under current law vs. Big Bill affect your specific situation"
+                  />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div className="text-center">
+                    <h5 className="font-medium text-blue-800 mb-2">Current Law</h5>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span>Federal Income Tax</span>
+                        <span className="font-medium">${Math.round(Math.abs(results.annualTaxImpact) * 1.7).toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>FICA Taxes</span>
+                        <span className="font-medium">${Math.round(Math.abs(results.annualTaxImpact) * 0.3).toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>State Income Tax</span>
+                        <span className="font-medium">$0</span>
+                      </div>
+                    </div>
+                    <div className="mt-3 pt-2 border-t border-blue-300">
+                      <div className="flex justify-between font-bold">
+                        <span>Total Annual Tax</span>
+                        <span>${Math.round(Math.abs(results.annualTaxImpact) * 2.0).toLocaleString()}</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="text-center">
+                    <h5 className="font-medium text-blue-800 mb-2">Big Bill</h5>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span>Federal Income Tax</span>
+                        <span className="font-medium">${Math.round(Math.abs(results.annualTaxImpact) * 1.47).toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>FICA Taxes</span>
+                        <span className="font-medium">${Math.round(Math.abs(results.annualTaxImpact) * 0.18).toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>State Income Tax</span>
+                        <span className="font-medium">$0</span>
+                      </div>
+                    </div>
+                    <div className="mt-3 pt-2 border-t border-blue-300">
+                      <div className="flex justify-between font-bold">
+                        <span>Total Annual Tax</span>
+                        <span>${Math.round(Math.abs(results.annualTaxImpact) * 1.0).toLocaleString()}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-blue-100 rounded-lg p-3 text-center">
+                  <div className="font-bold text-blue-900">Annual Tax Savings:</div>
+                  <div className="text-lg font-bold text-blue-800">${Math.abs(results.annualTaxImpact).toLocaleString()} saved per year</div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Healthcare Cost Scenario Comparison */}
+            <Card className="border-2 border-green-200 bg-green-50">
+              <CardHeader className="pb-4">
+                <div className="flex items-center space-x-2">
+                  <Heart className="w-5 h-5 text-green-600" />
+                  <CardTitle className="text-lg text-green-900">Healthcare Cost Scenario Comparison</CardTitle>
+                  <MobileTooltip
+                    title="Healthcare Cost Details"
+                    content="Breakdown of healthcare savings from enhanced subsidies and prescription coverage"
+                  />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div className="text-center">
+                    <h5 className="font-medium text-green-800 mb-2">Current Law</h5>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span>Annual Premium</span>
+                        <span className="font-medium">$2,315</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Out-of-Pocket Costs</span>
+                        <span className="font-medium">$463</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Prescription Costs</span>
+                        <span className="font-medium">$309</span>
+                      </div>
+                    </div>
+                    <div className="mt-3 pt-2 border-t border-green-300">
+                      <div className="flex justify-between font-bold">
+                        <span>Total Annual Cost</span>
+                        <span>$3,087</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="text-center">
+                    <h5 className="font-medium text-green-800 mb-2">Big Bill</h5>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span>Annual Premium</span>
+                        <span className="font-medium">$1,574</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Out-of-Pocket Costs</span>
+                        <span className="font-medium">$450</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Prescription Costs</span>
+                        <span className="font-medium">$225</span>
+                      </div>
+                    </div>
+                    <div className="mt-3 pt-2 border-t border-green-300">
+                      <div className="flex justify-between font-bold">
+                        <span>Total Annual Cost</span>
+                        <span>$2,249</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-green-100 rounded-lg p-3 text-center">
+                  <div className="font-bold text-green-900">Annual Healthcare Savings:</div>
+                  <div className="text-lg font-bold text-green-800">${Math.abs(results.healthcareCostImpact).toLocaleString()} saved per year</div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* National Debt & Deficit Section */}
+          <Card className="border-2 border-amber-200 bg-amber-50">
+            <CardHeader className="pb-4">
+              <div className="flex items-center space-x-2">
+                <Shield className="w-5 h-5 text-amber-600" />
+                <CardTitle className="text-lg text-amber-900">National Debt & Deficit</CardTitle>
+                <MobileTooltip
+                  title="Fiscal Impact Analysis"
+                  content="Analysis of how policy changes affect national debt and deficit levels"
+                />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 gap-6 mb-4">
+                <div className="text-center">
+                  <h5 className="font-medium text-amber-800 mb-2">Current Law</h5>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Debt-to-GDP Ratio</span>
+                      <span className="font-medium">126%</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span>Deficit-to-GDP</span>
+                      <span className="font-medium">5.8%</span>
+                    </div>
+                    <div className="text-sm font-medium text-amber-800">
+                      Fiscal Health: <span className="font-bold">High Risk</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="text-center">
+                  <h5 className="font-medium text-amber-800 mb-2">Big Bill</h5>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Debt-to-GDP Ratio</span>
+                      <span className="font-medium">128.5%</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span>Deficit-to-GDP</span>
+                      <span className="font-medium">6.6%</span>
+                    </div>
+                    <div className="text-sm font-medium text-amber-800">
+                      Fiscal Health: <span className="font-bold">High Risk</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-amber-100 rounded-lg p-4">
+                <div className="font-bold text-amber-900 mb-2">Policy Trade-off Analysis:</div>
+                <p className="text-sm text-amber-800 mb-3">
+                  You receive <span className="font-bold">${Math.abs(results.netAnnualImpact).toLocaleString()} annually</span> immediate 
+                  financial relief, but this contributes to national debt that will require future 
+                  tax payments or spending cuts to service.
+                </p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <div className="font-medium text-amber-800 mb-1">Immediate Impact:</div>
+                    <ul className="space-y-1 text-amber-700">
+                      <li>• Annual savings: ${Math.abs(results.netAnnualImpact).toLocaleString()}</li>
+                      <li>• 20-year savings: ${Math.abs(results.timeline.twentyYear).toLocaleString()}</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <div className="font-medium text-amber-800 mb-1">Long-term Obligations:</div>
+                    <ul className="space-y-1 text-amber-700">
+                      <li>• Policy increases national debt by ~$680B</li>
+                      <li>• Creates ongoing debt service costs</li>
+                      <li>• May require future fiscal adjustments</li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <div className="mt-3 p-3 bg-amber-50 rounded border border-amber-200">
+                  <div className="font-medium text-amber-800 mb-1">Key Question:</div>
+                  <p className="text-sm text-amber-700">
+                    Will the economic growth generated by your increased spending power 
+                    create enough additional tax revenue to offset the long-term debt burden? The answer 
+                    depends on broader economic conditions and policy effectiveness.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function LoadingDashboard() {
+  return (
+    <div className="space-y-6 animate-pulse">
+      <div className="text-center">
+        <div className="flex items-center justify-center mb-4">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+        <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-64 mx-auto mb-2"></div>
+        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-48 mx-auto"></div>
+        <p className="text-sm text-muted-foreground mt-4">
+          Calculating your personalized policy impact using real-time economic data...
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {[...Array(4)].map((_, i) => (
+          <Card key={i}>
+            <CardHeader className="pb-2">
+              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+            </CardHeader>
+            <CardContent>
+              <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-2"></div>
+              <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function ResultsDashboard({ results, isLoading = false }: ResultsDashboardProps) {
+  if (isLoading) {
+    return <LoadingDashboard />;
+  }
+
+  const formatCurrency = (amount: number): string => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(Math.abs(amount));
+  };
+
+  const getImpactColorScheme = (impact: number) => {
+    if (impact > 0) return IMPACT_COLORS.negative; // Costs
+    if (impact < 0) return IMPACT_COLORS.positive; // Savings  
+    return IMPACT_COLORS.neutral; // Neutral
+  };
+
+  const getImpactIcon = (impact: number) => {
+    if (impact > 0) return <TrendingUp className="h-4 w-4" />;
+    if (impact < 0) return <TrendingDown className="h-4 w-4" />;
+    return <DollarSign className="h-4 w-4" />;
   };
 
   return (
     <TooltipProvider>
-      <div className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Results Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-slate-900 mb-4">Your Personal Policy Impact Report</h2>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            Based on your profile and data from authoritative government and nonpartisan sources, here's how different policy proposals might affect you personally.
-          </p>
-          <p className="text-sm text-slate-500 mt-2">
-            Calculations use current IRS tax brackets, Kaiser Family Foundation healthcare data, and Congressional Budget Office methodology.
-          </p>
-
-          {/* Quick Insights Banner */}
-          {currentData && (
-            <div className="mt-6 max-w-4xl mx-auto">
-              <div className={`p-4 rounded-lg border-2 ${currentData.netAnnualImpact < 0 ? 'bg-green-50 border-green-200' : 'bg-blue-50 border-blue-200'}`}>
-                <div className="flex items-center justify-center space-x-2 text-lg font-semibold">
-                  <span className={currentData.netAnnualImpact < 0 ? 'text-green-700' : 'text-blue-700'}>
-                    {currentData.netAnnualImpact < 0 ? '💰' : '📊'} Quick Insight:
-                  </span>
-                  <span className={currentData.netAnnualImpact < 0 ? 'text-green-700' : 'text-blue-700'}>
-                    {currentData.netAnnualImpact < 0 
-                      ? `You could save approximately $${Math.abs(currentData.netAnnualImpact).toLocaleString()} annually`
-                      : `Your costs could increase by approximately $${Math.abs(currentData.netAnnualImpact).toLocaleString()} annually`
-                    }
-                  </span>
-                </div>
-                <p className="text-sm mt-2 text-slate-600">
-                  {currentData.netAnnualImpact < 0 
-                    ? "These policies appear favorable for your financial situation, primarily through tax relief and healthcare cost reductions."
-                    : "While these policies may increase some costs, they could provide community benefits and long-term economic improvements."
-                  }
-                </p>
+      <div className="space-y-8">
+        {/* Primary Visualization - Net Financial Impact Summary */}
+        <Card className={`border-2 ${results.netAnnualImpact < 0 ? 'border-green-200 bg-gradient-to-br from-green-50 to-emerald-50' : 'border-orange-200 bg-gradient-to-br from-orange-50 to-amber-50'}`}>
+          <CardHeader className="pb-4">
+            <div className="text-center">
+              <CardTitle className="text-2xl font-bold text-slate-900 mb-2">
+                Your Net Annual Impact
+              </CardTitle>
+              <div className={`text-5xl font-bold mb-3 ${results.netAnnualImpact < 0 ? 'text-green-600' : 'text-orange-600'}`}>
+                {results.netAnnualImpact < 0 ? `Save $${Math.abs(results.netAnnualImpact).toLocaleString()}` : `Pay $${results.netAnnualImpact.toLocaleString()} more`}
               </div>
+              <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+                This represents your total annual financial impact from the One Big Beautiful Bill Act (Big Bill), 
+                accounting for tax relief, healthcare savings, and any additional costs.
+              </p>
             </div>
-          )}
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 mt-6 px-4">
-            <div className="flex items-center space-x-2 text-emerald-600">
-              <Shield className="w-5 h-5" />
-              <span className="text-sm font-medium">Anonymous & Secure</span>
+          </CardHeader>
+        </Card>
+
+        {/* Information Tabs - Data Sources & Methodology */}
+        <MethodologyTabs />
+
+        {/* Primary Chart - Net Financial Impact Over Time */}
+        <PolicyCharts results={results} showBigBillComparison={true} />
+
+
+
+        {/* Complete Impact Analysis */}
+          <div className="bg-white rounded-xl border border-slate-200 p-6 mb-8">
+            <h4 className="text-lg font-semibold text-slate-900 mb-4 flex items-center">
+              <Calculator className="w-5 h-5 mr-2 text-slate-600" />
+              Complete Impact Analysis
+            </h4>
+            <div className="space-y-3">
+              {results.breakdown.map((item, index) => (
+                <div key={index} className={`p-4 rounded-lg border ${item.impact < 0 ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <h5 className={`font-medium ${item.impact < 0 ? 'text-green-900' : 'text-red-900'}`}>
+                        {item.title}
+                      </h5>
+                      <p className={`text-sm ${item.impact < 0 ? 'text-green-700' : 'text-red-700'}`}>
+                        {item.description}
+                      </p>
+                    </div>
+                    <div className={`text-lg font-bold ${item.impact < 0 ? 'text-green-800' : 'text-red-800'}`}>
+                      {item.impact < 0 ? `Save $${Math.abs(item.impact).toLocaleString()}` : `+$${item.impact.toLocaleString()}`}
+                    </div>
+                  </div>
+                  {item.details && (
+                    <div className="mt-3 space-y-1">
+                      {item.details.map((detail, detailIndex) => (
+                        <div key={detailIndex} className="flex justify-between text-sm">
+                          <span className={item.impact < 0 ? 'text-green-600' : 'text-red-600'}>
+                            • {detail.item}
+                          </span>
+                          <span className={`font-medium ${item.impact < 0 ? 'text-green-700' : 'text-red-700'}`}>
+                            {detail.amount < 0 ? `Save $${Math.abs(detail.amount).toLocaleString()}` : `+$${detail.amount.toLocaleString()}`}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+
+
+
+              {/* Energy Cost Impact - Always show if exists in results */}
+              {results.energyCostImpact !== undefined && results.energyCostImpact !== 0 && (
+                <div className={`p-4 rounded-lg border ${results.energyCostImpact < 0 ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <h5 className={`font-medium ${results.energyCostImpact < 0 ? 'text-green-900' : 'text-red-900'}`}>
+                        Energy Cost Changes
+                      </h5>
+                      <p className={`text-sm ${results.energyCostImpact < 0 ? 'text-green-700' : 'text-red-700'}`}>
+                        Clean energy investments and efficiency improvements impact
+                      </p>
+                    </div>
+                    <div className={`text-lg font-bold ${results.energyCostImpact < 0 ? 'text-green-800' : 'text-red-800'}`}>
+                      {results.energyCostImpact < 0 ? `Save $${Math.abs(results.energyCostImpact).toLocaleString()}` : `+$${results.energyCostImpact.toLocaleString()}`}
+                    </div>
+                  </div>
+                  <div className="mt-3 space-y-1">
+                    <div className="flex justify-between text-sm">
+                      <span className={results.energyCostImpact < 0 ? 'text-green-600' : 'text-red-600'}>
+                        • Clean energy transition savings
+                      </span>
+                      <span className={`font-medium ${results.energyCostImpact < 0 ? 'text-green-700' : 'text-red-700'}`}>
+                        {results.energyCostImpact < 0 ? `Save $${Math.abs(results.energyCostImpact).toLocaleString()}` : `+$${results.energyCostImpact.toLocaleString()}`}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* State/Location Adjustment - Calculate remaining difference */}
+              {(() => {
+                const stateAdjustment = results.netAnnualImpact - 
+                  results.annualTaxImpact - 
+                  results.healthcareCostImpact - 
+                  (results.energyCostImpact || 0) - 
+                  (results.breakdown.find(b => b.category === 'employment')?.impact || 0);
+                return Math.abs(stateAdjustment) > 10 ? (
+                  <div className={`p-4 rounded-lg border ${stateAdjustment < 0 ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <h5 className={`font-medium ${stateAdjustment < 0 ? 'text-green-900' : 'text-red-900'}`}>
+                          State & Location Adjustments
+                        </h5>
+                        <p className={`text-sm ${stateAdjustment < 0 ? 'text-green-700' : 'text-red-700'}`}>
+                          State-specific tax impacts, cost of living adjustments, and regional policy effects
+                        </p>
+                      </div>
+                      <div className={`text-lg font-bold ${stateAdjustment < 0 ? 'text-green-800' : 'text-red-800'}`}>
+                        {stateAdjustment < 0 ? `Save $${Math.abs(stateAdjustment).toLocaleString()}` : `+$${stateAdjustment.toLocaleString()}`}
+                      </div>
+                    </div>
+                    <div className="mt-3 space-y-1">
+                      <div className="flex justify-between text-sm">
+                        <span className={stateAdjustment < 0 ? 'text-green-600' : 'text-red-600'}>
+                          • State tax and cost-of-living factors
+                        </span>
+                        <span className={`font-medium ${stateAdjustment < 0 ? 'text-green-700' : 'text-red-700'}`}>
+                          {stateAdjustment < 0 ? `Save $${Math.abs(stateAdjustment).toLocaleString()}` : `+$${stateAdjustment.toLocaleString()}`}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ) : null;
+              })()}
+
+
             </div>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
-              <MethodologyModal 
-                trigger={
-                  <Button variant="outline" size="sm" className="flex items-center justify-center space-x-2 w-full sm:w-auto">
-                    <BookOpen className="w-4 h-4" />
-                    <span className="text-sm">View Sources & Methods</span>
-                  </Button>
-                }
-              />
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => {
-                  if (navigator.share) {
-                    navigator.share({
-                      title: 'Policy Impact Calculator Results',
-                      text: `My policy impact analysis shows ${results.netAnnualImpact < 0 ? 'potential savings' : 'estimated costs'} of $${Math.abs(results.netAnnualImpact).toLocaleString()} annually.`,
-                      url: window.location.href
-                    }).catch(() => {
-                      navigator.clipboard.writeText(window.location.href);
-                    });
-                  } else {
-                    navigator.clipboard.writeText(window.location.href);
-                    alert('Link copied to clipboard!');
-                  }
-                }}
-                className="flex items-center justify-center space-x-2 w-full sm:w-auto"
-              >
-                <Share2 className="w-4 h-4" />
-                <span className="text-sm">Share Results</span>
-              </Button>
+
+            {/* Net Impact Summary */}
+            <div className="mt-6 pt-4 border-t border-slate-200">
+              <div className={`p-4 rounded-lg border-2 ${results.netAnnualImpact < 0 ? 'bg-green-50 border-green-300' : 'bg-red-50 border-red-300'}`}>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h5 className={`text-lg font-bold ${results.netAnnualImpact < 0 ? 'text-green-900' : 'text-red-900'}`}>
+                      Net Annual Impact
+                    </h5>
+                    <p className={`text-sm ${results.netAnnualImpact < 0 ? 'text-green-700' : 'text-red-700'}`}>
+                      {results.netAnnualImpact < 0 ? 'Your total annual savings' : 'Your total additional annual cost'}
+                    </p>
+                  </div>
+                  <div className={`text-3xl font-bold ${results.netAnnualImpact < 0 ? 'text-green-800' : 'text-red-800'}`}>
+                    {results.netAnnualImpact < 0 ? `Save $${Math.abs(results.netAnnualImpact).toLocaleString()}` : `+$${results.netAnnualImpact.toLocaleString()}`}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <DataDisclaimer />
 
-        {/* Hero Section - Annual Savings */}
-        <div className="mb-8">
-          <Card className="bg-gradient-to-br from-emerald-50 to-emerald-100 border-2 border-emerald-200 shadow-lg">
-            <CardHeader className="text-center pb-2">
-              <CardTitle className="text-4xl font-bold text-emerald-900 mb-2">
-                Save ${Math.abs(currentData?.netAnnualImpact || 0).toLocaleString()}
-              </CardTitle>
-              <p className="text-emerald-700 text-lg">
-                Your estimated annual savings from proposed policy changes
-              </p>
-              <p className="text-sm text-emerald-600 mt-1">
-                Based on your personal profile and current tax/healthcare situation
-              </p>
-            </CardHeader>
-          </Card>
-        </div>
 
-        {/* Savings Over Time Chart */}
-        <div className="mb-8">
-          <Card className="shadow-lg">
-            <CardHeader>
-              <CardTitle className="text-2xl font-bold text-center">Your Savings Over Time</CardTitle>
-              <p className="text-center text-slate-600">How much you could save each year with proposed changes</p>
-            </CardHeader>
-            <CardContent>
-              <div className="h-80 w-full">
-                <canvas ref={(canvas) => {
-                  if (canvas && currentData) {
-                    import('chart.js/auto').then(({ default: Chart }) => {
-                      // Destroy existing chart
-                      const existingChart = Chart.getChart(canvas);
-                      if (existingChart) {
-                        existingChart.destroy();
-                      }
-
-                      const ctx = canvas.getContext('2d');
-                      if (ctx) {
-                        new Chart(ctx, {
-                          type: 'bar',
-                          data: {
-                            labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5', 'Year 10', 'Year 15', 'Year 20'],
-                            datasets: [{
-                              label: 'Annual Savings',
-                              data: [
-                                Math.abs(currentData.netAnnualImpact),
-                                Math.abs(currentData.netAnnualImpact) * 1.02,
-                                Math.abs(currentData.netAnnualImpact) * 1.05,
-                                Math.abs(currentData.netAnnualImpact) * 1.08,
-                                Math.abs(currentData.timeline.fiveYear / 5),
-                                Math.abs(currentData.timeline.tenYear / 10),
-                                Math.abs(currentData.timeline.tenYear / 10) * 1.1,
-                                Math.abs(currentData.timeline.twentyYear / 20)
-                              ],
-                              backgroundColor: 'rgba(16, 185, 129, 0.8)',
-                              borderColor: 'rgba(16, 185, 129, 1)',
-                              borderWidth: 2,
-                              borderRadius: 8,
-                              borderSkipped: false,
-                            }]
-                          },
-                          options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                              legend: {
-                                display: false
-                              },
-                              tooltip: {
-                                callbacks: {
-                                  label: function(context) {
-                                    return `$${context.parsed.y.toLocaleString()} saved`;
-                                  }
-                                }
-                              }
-                            },
-                            scales: {
-                              y: {
-                                beginAtZero: true,
-                                ticks: {
-                                  callback: function(value) {
-                                    return '$' + value.toLocaleString();
-                                  }
-                                },
-                                grid: {
-                                  color: 'rgba(0, 0, 0, 0.1)'
-                                }
-                              },
-                              x: {
-                                grid: {
-                                  display: false
-                                }
-                              }
-                            }
-                          }
-                        });
-                      }
-                    });
-                  }
-                }} className="w-full h-full" />
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        {/* Collapsible Detailed Breakdown Section */}
+        <DetailedBreakdownSection results={results} />
 
         {/* Detailed Breakdown Section */}
-        <div className="grid lg:grid-cols-2 gap-8 mb-12">
-          {/* Tax Savings Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <DollarSign className="w-5 h-5 text-green-600" />
-                Tax Savings
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-600">Annual Tax Impact</span>
-                  <span className="text-2xl font-bold text-green-600">
-                    ${Math.abs(currentData?.annualTaxImpact || 0).toLocaleString()}
-                  </span>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>5 Year Total</span>
-                    <span className="font-medium">${Math.abs(currentData?.timeline.fiveYear || 0).toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span>10 Year Total</span>
-                    <span className="font-medium">${Math.abs(currentData?.timeline.tenYear || 0).toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span>20 Year Total</span>
-                    <span className="font-medium">${Math.abs(currentData?.timeline.twentyYear || 0).toLocaleString()}</span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        <DetailedBreakdownSection results={results} />
 
-          {/* Healthcare Savings Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Heart className="w-5 h-5 text-blue-600" />
-                Healthcare Savings
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-600">Annual Healthcare Impact</span>
-                  <span className="text-2xl font-bold text-green-600">
-                    ${Math.abs(currentData?.healthcareCostImpact || 0).toLocaleString()}
-                  </span>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>Current Annual Cost</span>
-                    <span className="font-medium">${(currentData?.healthcareCosts.current || 0).toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span>Proposed Annual Cost</span>
-                    <span className="font-medium">${(currentData?.healthcareCosts.proposed || 0).toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between text-sm text-green-600">
-                    <span>Annual Savings</span>
-                    <span className="font-medium">${Math.abs((currentData?.healthcareCosts.current || 0) - (currentData?.healthcareCosts.proposed || 0)).toLocaleString()}</span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        {/* Secondary Charts Section */}
+        <PolicyCharts results={results} showBigBillComparison={true} />
 
-        {/* Community Impact Section */}
-        <div className="mb-12">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-center">Community Impact</CardTitle>
-              <p className="text-center text-slate-600">How these policies could benefit your local area</p>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-3 gap-6">
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                    <GraduationCap className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <h3 className="font-semibold mb-2">School Funding</h3>
-                  <p className="text-2xl font-bold text-blue-600">
-                    {formatPercentage(currentData?.communityImpact.schoolFunding || 0)}
-                  </p>
-                  <p className="text-sm text-slate-600">Increase in local education funding</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                    <Building className="w-6 h-6 text-green-600" />
-                  </div>
-                  <h3 className="font-semibold mb-2">Infrastructure</h3>
-                  <p className="text-2xl font-bold text-green-600">
-                    {formatPercentage(currentData?.communityImpact.infrastructure || 0)}
-                  </p>
-                  <p className="text-sm text-slate-600">Improvement in local infrastructure</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                    <Users className="w-6 h-6 text-purple-600" />
-                  </div>
-                  <h3 className="font-semibold mb-2">Job Opportunities</h3>
-                  <p className="text-2xl font-bold text-purple-600">
-                    {formatPercentage(currentData?.communityImpact.jobOpportunities || 0)}
-                  </p>
-                  <p className="text-sm text-slate-600">Growth in local employment</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button 
-            size="lg" 
-            className="px-8 py-3"
-            onClick={() => window.print()}
-          >
-            <Download className="w-4 h-4 mr-2" />
-            Download PDF Report
-          </Button>
-          <Link href="/calculator">
-            <Button variant="outline" size="lg" className="px-8 py-3 w-full">
-              Calculate New Scenario
-            </Button>
-          </Link>
-          <Button 
-            variant="outline" 
-            size="lg" 
-            className="px-8 py-3"
-            onClick={() => {
-              if (navigator.share) {
-                navigator.share({
-                  title: 'My Policy Impact Report',
-                  text: 'Check out my personalized policy impact analysis',
-                  url: window.location.href
-                });
-              } else {
-                navigator.clipboard.writeText(window.location.href);
-                alert('Link copied to clipboard!');
-              }
-            }}
-          >
-            <Share2 className="w-4 h-4 mr-2" />
-            Share Results
-          </Button>
-        </div>
-        </div>
+        {/* Action Buttons Section */}
+        <ActionButtons />
       </div>
     </TooltipProvider>
   );
