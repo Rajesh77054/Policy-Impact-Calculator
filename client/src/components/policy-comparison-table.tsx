@@ -97,7 +97,7 @@ export default function PolicyComparisonTable({ className = "" }: PolicyComparis
             <div className="flex items-center space-x-3">
               <BookOpen className="w-5 h-5 text-slate-600" />
               <div className="text-left">
-                <div className="font-semibold text-slate-900">{POLICY_COMPARISON_METADATA.title}</div>
+                <div className="font-semibold text-slate-900 text-[20px]">{POLICY_COMPARISON_METADATA.title}</div>
                 <div className="text-sm text-slate-600">{POLICY_COMPARISON_METADATA.description}</div>
               </div>
             </div>
