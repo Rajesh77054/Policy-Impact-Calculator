@@ -858,9 +858,6 @@ export function ResultsDashboard({ results, isLoading = false }: ResultsDashboar
         {/* Collapsible Detailed Breakdown Section */}
         <DetailedBreakdownSection results={results} />
 
-        {/* Detailed Breakdown Section */}
-        <DetailedBreakdownSection results={results} />
-
         {/* Secondary Charts Section */}
         <PolicyCharts results={results} showBigBillComparison={true} />
 
@@ -870,3 +867,5 @@ export function ResultsDashboard({ results, isLoading = false }: ResultsDashboar
     </TooltipProvider>
   );
 }
+
+export default ResultsDashboard;
