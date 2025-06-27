@@ -834,66 +834,8 @@ export function ResultsDashboard({ results, isLoading = false }: ResultsDashboar
 
             </div>
 
-            {/* Mathematical Verification */}
+            {/* Net Impact Summary */}
             <div className="mt-6 pt-4 border-t border-slate-200">
-              <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 mb-4">
-                <h6 className="text-sm font-semibold text-slate-700 mb-2 flex items-center">
-                  <Calculator className="w-4 h-4 mr-2" />
-                  Mathematical Verification
-                </h6>
-                <div className="text-xs text-slate-600 space-y-1">
-                  {(() => {
-                    const taxImpact = results.annualTaxImpact || 0;
-                    const healthcareImpact = results.healthcareCostImpact || 0;
-                    const energyImpact = results.energyCostImpact || 0;
-                    const employmentImpact = results.breakdown.find(b => b.category === 'employment')?.impact || 0;
-                    const stateAdjustment = results.netAnnualImpact - taxImpact - healthcareImpact - energyImpact - employmentImpact;
-                    const calculatedTotal = taxImpact + healthcareImpact + energyImpact + employmentImpact + stateAdjustment;
-                    
-                    return (
-                      <>
-                        <div className="grid grid-cols-2 gap-2">
-                          <span>Tax Impact:</span>
-                          <span className="text-right">{taxImpact < 0 ? `-$${Math.abs(taxImpact)}` : `+$${taxImpact}`}</span>
-                          <span>Healthcare Impact:</span>
-                          <span className="text-right">{healthcareImpact < 0 ? `-$${Math.abs(healthcareImpact)}` : `+$${healthcareImpact}`}</span>
-                          {energyImpact !== 0 && (
-                            <>
-                              <span>Energy Impact:</span>
-                              <span className="text-right">{energyImpact < 0 ? `-$${Math.abs(energyImpact)}` : `+$${energyImpact}`}</span>
-                            </>
-                          )}
-                          {employmentImpact !== 0 && (
-                            <>
-                              <span>Employment Impact:</span>
-                              <span className="text-right">{employmentImpact < 0 ? `-$${Math.abs(employmentImpact)}` : `+$${employmentImpact}`}</span>
-                            </>
-                          )}
-                          {Math.abs(stateAdjustment) > 10 && (
-                            <>
-                              <span>State/Location:</span>
-                              <span className="text-right">{stateAdjustment < 0 ? `-$${Math.abs(stateAdjustment)}` : `+$${stateAdjustment}`}</span>
-                            </>
-                          )}
-                        </div>
-                        <div className="border-t border-slate-300 pt-1 mt-2">
-                          <div className="grid grid-cols-2 gap-2 font-medium">
-                            <span>Total:</span>
-                            <span className="text-right">{calculatedTotal < 0 ? `-$${Math.abs(calculatedTotal)}` : `+$${calculatedTotal}`}</span>
-                          </div>
-                          {Math.abs(calculatedTotal - results.netAnnualImpact) > 1 && (
-                            <div className="text-xs text-amber-600 mt-1">
-                              ⚠ Verification difference: ${Math.abs(calculatedTotal - results.netAnnualImpact)}
-                            </div>
-                          )}
-                        </div>
-                      </>
-                    );
-                  })()}
-                </div>
-              </div>
-
-              {/* Net Impact Summary */}
               <div className={`p-4 rounded-lg border-2 ${results.netAnnualImpact < 0 ? 'bg-green-50 border-green-300' : 'bg-red-50 border-red-300'}`}>
                 <div className="flex justify-between items-center">
                   <div>
