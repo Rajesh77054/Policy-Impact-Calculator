@@ -723,32 +723,7 @@ export function ResultsDashboard({ results, isLoading = false }: ResultsDashboar
         {/* Primary Chart - Net Financial Impact Over Time */}
         <NetFinancialImpactChart results={results} />
 
-        {/* Employment Status Alert for Contract Workers */}
-        {results.breakdown.some(item => item.category === "employment" && item.impact > 0) && (
-          <Card className="bg-amber-50 border-amber-200 mb-6">
-            <CardContent className="pt-6">
-              <div className="flex items-start gap-3">
-                <div className="p-2 bg-amber-100 rounded-lg">
-                  <Building className="w-5 h-5 text-amber-700" />
-                </div>
-                <div className="flex-1">
-                  <h4 className="font-semibold text-amber-900 mb-2">Employment Status Impact</h4>
-                  <p className="text-sm text-amber-800 mb-3">
-                    As a contract worker, you face additional tax burdens that offset some policy benefits. This includes self-employment taxes, 1099 complications, and lack of employer-provided benefits.
-                  </p>
-                  <div className="bg-white rounded-lg p-3 border border-amber-200">
-                    <div className="text-sm text-amber-900">
-                      <strong>Employment Impact:</strong> +${Math.abs(results.breakdown.find(item => item.category === "employment")?.impact || 0).toLocaleString()}/year
-                    </div>
-                    <div className="text-xs text-amber-700 mt-1">
-                      This reflects the real additional costs contract workers face compared to traditional employees
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+
 
         {/* Complete Impact Analysis */}
           <div className="bg-white rounded-xl border border-slate-200 p-6 mb-8">
