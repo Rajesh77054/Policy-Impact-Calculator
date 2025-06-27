@@ -4,7 +4,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { HelpCircle, TrendingUp, TrendingDown, Calculator, DollarSign, Heart, Zap, Building, Users, Shield, Download, Share2, RotateCcw, Loader2, ChevronDown, ChevronUp, FileText } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { HelpCircle, TrendingUp, TrendingDown, Calculator, DollarSign, Heart, Zap, Building, Users, Shield, Download, Share2, RotateCcw, Loader2, ChevronDown, ChevronUp, FileText, ExternalLink, AlertTriangle, BookOpen } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { PolicyResults } from "@shared/types";
 import PolicyCharts from "./policy-charts";
 import NetFinancialImpactChart from "./net-financial-impact-chart";
@@ -14,6 +16,7 @@ import { useReplitAuth } from "@/hooks/use-replit-auth";
 import { Link } from "wouter";
 import { DataFreshnessIndicator } from "./data-freshness-indicator";
 import { CalculationErrorBoundary } from "./calculation-error-boundary";
+import MethodologyModal from "./methodology-modal";
 
 interface ResultsDashboardProps {
   results: PolicyResults;
@@ -485,7 +488,8 @@ export function ResultsDashboard({ results, isLoading = false }: ResultsDashboar
           </CardHeader>
         </Card>
 
-
+        {/* Information Tabs - Data Sources & Methodology */}
+        <MethodologyTabs />
 
         {/* Primary Chart - Net Financial Impact Over Time */}
         <NetFinancialImpactChart results={results} />
