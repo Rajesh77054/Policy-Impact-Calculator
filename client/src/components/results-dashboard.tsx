@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { HelpCircle, TrendingUp, TrendingDown, Calculator, DollarSign, Heart, Zap, Building, Users, Shield, Download, Share2, RotateCcw, Loader2, ChevronDown, ChevronUp, FileText, ExternalLink, AlertTriangle, BookOpen } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { PolicyResults } from "@shared/types";
@@ -55,6 +56,7 @@ const MobileTooltip = ({
 
 // Methodology Tabs Component
 const MethodologyTabs = () => {
+  const [activeTab, setActiveTab] = React.useState<string | null>(null);
   const { data: methodologyData, isLoading } = useQuery({
     queryKey: ["/api/methodology"],
   });
@@ -72,6 +74,10 @@ const MethodologyTabs = () => {
     }
   };
 
+  const handleTabClick = (tabValue: string) => {
+    setActiveTab(activeTab === tabValue ? null : tabValue);
+  };
+
   if (isLoading || !methodologyData) {
     return (
       <div className="h-16 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-center">
@@ -83,138 +89,158 @@ const MethodologyTabs = () => {
   return (
     <Card className="border-2 border-slate-200">
       <CardContent className="p-0">
-        <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="w-full h-auto p-1 bg-slate-50 rounded-t-lg grid grid-cols-5 gap-1">
-            <TabsTrigger value="overview" className="text-sm py-3">Overview</TabsTrigger>
-            <TabsTrigger value="calculations" className="text-sm py-3">Your Results</TabsTrigger>
-            <TabsTrigger value="sources" className="text-sm py-3">Data Sources</TabsTrigger>
-            <TabsTrigger value="methodology" className="text-sm py-3">Methods</TabsTrigger>
-            <TabsTrigger value="limitations" className="text-sm py-3">Limitations</TabsTrigger>
-          </TabsList>
-
-          <div className="p-6">
-            <TabsContent value="overview" className="mt-0">
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <div className="flex items-start space-x-3">
-                  <Shield className="w-5 h-5 text-blue-600 mt-0.5" />
-                  <div>
-                    <h3 className="font-semibold text-blue-900 mb-2">Data Integrity & Transparency</h3>
-                    <p className="text-sm text-blue-800 mb-3">
-                      {methodologyData.methodology.overview}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="calculations" className="mt-0">
-              <div className="space-y-4">
-                <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
-                  <h3 className="font-semibold text-slate-900 mb-3">How We Calculate Your Impact</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <h4 className="font-medium text-slate-800 mb-2">Tax Calculations</h4>
-                      <p className="text-sm text-slate-600">{methodologyData.methodology.tax_calculations.description}</p>
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-slate-800 mb-2">Healthcare Impact</h4>
-                      <p className="text-sm text-slate-600">{methodologyData.methodology.healthcare_calculations.description}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="sources" className="mt-0">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {methodologyData.sources.map((source: any, index: number) => (
-                  <Card key={index} className="border border-slate-200">
-                    <CardHeader className="pb-3">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <CardTitle className="text-sm font-semibold text-slate-900">{source.name}</CardTitle>
-                          <p className="text-xs text-slate-600 mt-1">{source.organization}</p>
-                        </div>
-                        {getCredibilityBadge(source.credibility)}
-                      </div>
-                    </CardHeader>
-                    <CardContent className="pt-0">
-                      <p className="text-xs text-slate-600 mb-2">{source.description}</p>
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="text-slate-500">Updated: {source.lastUpdated}</span>
-                        <a
-                          href={source.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:text-blue-800 flex items-center"
-                        >
-                          <span>View Source</span>
-                          <ExternalLink className="w-3 h-3 ml-1" />
-                        </a>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="methodology" className="mt-0">
-              <div className="space-y-4">
-                {Object.entries(methodologyData.methodology).filter(([key]) => 
-                  ['tax_calculations', 'healthcare_calculations', 'state_adjustments', 'timeline_projections'].includes(key)
-                ).map(([key, method]: [string, any]) => (
-                  <Card key={key} className="border border-slate-200">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-sm font-semibold text-slate-900">
-                        {method.description}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="pt-0">
-                      <ul className="text-xs text-slate-600 space-y-1">
-                        {method.methodology.map((item: string, index: number) => (
-                          <li key={index} className="flex items-start">
-                            <span className="text-slate-400 mr-2">•</span>
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="limitations" className="mt-0">
-              <div className="space-y-4">
-                {Object.entries(methodologyData.methodology).filter(([key]) => 
-                  ['tax_calculations', 'healthcare_calculations', 'state_adjustments', 'timeline_projections'].includes(key)
-                ).map(([key, method]: [string, any]) => (
-                  <div key={key} className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-                    <div className="flex items-start space-x-3">
-                      <AlertTriangle className="w-4 h-4 text-amber-600 mt-0.5" />
-                      <div>
-                        <h4 className="text-sm font-semibold text-amber-900 mb-1">
-                          {method.description}
-                        </h4>
-                        <p className="text-xs text-amber-800">{method.limitations}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                
-                <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 mt-4">
-                  <div className="flex items-start space-x-3">
-                    <HelpCircle className="w-4 h-4 text-slate-600 mt-0.5" />
-                    <div>
-                      <h4 className="text-sm font-semibold text-slate-900 mb-1">General Disclaimer</h4>
-                      <p className="text-xs text-slate-600">{methodologyData.methodology.disclaimer}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </TabsContent>
+        <div className="w-full">
+          {/* Tab Headers */}
+          <div className="w-full h-auto p-1 bg-slate-50 rounded-t-lg grid grid-cols-5 gap-1">
+            {[
+              { value: "overview", label: "Overview" },
+              { value: "calculations", label: "Your Results" },
+              { value: "sources", label: "Data Sources" },
+              { value: "methodology", label: "Methods" },
+              { value: "limitations", label: "Limitations" }
+            ].map((tab) => (
+              <Button
+                key={tab.value}
+                variant={activeTab === tab.value ? "default" : "ghost"}
+                size="sm"
+                onClick={() => handleTabClick(tab.value)}
+                className={`text-sm py-3 transition-all ${
+                  activeTab === tab.value 
+                    ? "bg-white border border-slate-200 shadow-sm" 
+                    : "bg-transparent hover:bg-slate-100"
+                }`}
+              >
+                {tab.label}
+              </Button>
+            ))}
           </div>
-        </Tabs>
+
+          {/* Tab Content - Only show when a tab is active */}
+          {activeTab && (
+            <div className="p-6 border-t border-slate-200">
+              {activeTab === "overview" && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="flex items-start space-x-3">
+                    <Shield className="w-5 h-5 text-blue-600 mt-0.5" />
+                    <div>
+                      <h3 className="font-semibold text-blue-900 mb-2">Data Integrity & Transparency</h3>
+                      <p className="text-sm text-blue-800 mb-3">
+                        {methodologyData?.methodology?.overview}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === "calculations" && (
+                <div className="space-y-4">
+                  <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
+                    <h3 className="font-semibold text-slate-900 mb-3">How We Calculate Your Impact</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <h4 className="font-medium text-slate-800 mb-2">Tax Calculations</h4>
+                        <p className="text-sm text-slate-600">{methodologyData?.methodology?.tax_calculations?.description}</p>
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-slate-800 mb-2">Healthcare Impact</h4>
+                        <p className="text-sm text-slate-600">{methodologyData?.methodology?.healthcare_calculations?.description}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === "sources" && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {methodologyData?.sources?.map((source: any, index: number) => (
+                    <Card key={index} className="border border-slate-200">
+                      <CardHeader className="pb-3">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <CardTitle className="text-sm font-semibold text-slate-900">{source.name}</CardTitle>
+                            <p className="text-xs text-slate-600 mt-1">{source.organization}</p>
+                          </div>
+                          {getCredibilityBadge(source.credibility)}
+                        </div>
+                      </CardHeader>
+                      <CardContent className="pt-0">
+                        <p className="text-xs text-slate-600 mb-2">{source.description}</p>
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-slate-500">Updated: {source.lastUpdated}</span>
+                          <a
+                            href={source.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:text-blue-800 flex items-center"
+                          >
+                            <span>View Source</span>
+                            <ExternalLink className="w-3 h-3 ml-1" />
+                          </a>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+
+              {activeTab === "methodology" && (
+                <div className="space-y-4">
+                  {Object.entries(methodologyData?.methodology || {}).filter(([key]) => 
+                    ['tax_calculations', 'healthcare_calculations', 'state_adjustments', 'timeline_projections'].includes(key)
+                  ).map(([key, method]: [string, any]) => (
+                    <Card key={key} className="border border-slate-200">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-sm font-semibold text-slate-900">
+                          {method.description}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="pt-0">
+                        <ul className="text-xs text-slate-600 space-y-1">
+                          {method.methodology?.map((item: string, index: number) => (
+                            <li key={index} className="flex items-start">
+                              <span className="text-slate-400 mr-2">•</span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+
+              {activeTab === "limitations" && (
+                <div className="space-y-4">
+                  {Object.entries(methodologyData?.methodology || {}).filter(([key]) => 
+                    ['tax_calculations', 'healthcare_calculations', 'state_adjustments', 'timeline_projections'].includes(key)
+                  ).map(([key, method]: [string, any]) => (
+                    <div key={key} className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                      <div className="flex items-start space-x-3">
+                        <AlertTriangle className="w-4 h-4 text-amber-600 mt-0.5" />
+                        <div>
+                          <h4 className="text-sm font-semibold text-amber-900 mb-1">
+                            {method.description}
+                          </h4>
+                          <p className="text-xs text-amber-800">{method.limitations}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  
+                  <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 mt-4">
+                    <div className="flex items-start space-x-3">
+                      <HelpCircle className="w-4 h-4 text-slate-600 mt-0.5" />
+                      <div>
+                        <h4 className="text-sm font-semibold text-slate-900 mb-1">General Disclaimer</h4>
+                        <p className="text-xs text-slate-600">{methodologyData?.methodology?.disclaimer}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </CardContent>
     </Card>
   );
