@@ -1,9 +1,10 @@
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { HelpCircle, TrendingUp, TrendingDown, Calculator, DollarSign, Heart, Zap, Building, Users, Shield, Download, Share2, RotateCcw, Loader2 } from "lucide-react";
+import { HelpCircle, TrendingUp, TrendingDown, Calculator, DollarSign, Heart, Zap, Building, Users, Shield, Download, Share2, RotateCcw, Loader2, ChevronDown, ChevronUp, FileText } from "lucide-react";
 import { PolicyResults } from "@shared/types";
 import PolicyCharts from "./policy-charts";
 import NetFinancialImpactChart from "./net-financial-impact-chart";
@@ -140,6 +141,273 @@ const IMPACT_COLORS = {
     text: "text-gray-600",
   },
 };
+
+// Detailed Breakdown Section Component
+interface DetailedBreakdownSectionProps {
+  results: PolicyResults;
+}
+
+function DetailedBreakdownSection({ results }: DetailedBreakdownSectionProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <div className="mb-8">
+      <Button
+        onClick={() => setIsExpanded(!isExpanded)}
+        variant="outline"
+        className="w-full justify-between p-4 h-auto border-2 border-slate-200 hover:border-slate-300"
+      >
+        <div className="flex items-center space-x-3">
+          <FileText className="w-5 h-5 text-slate-600" />
+          <div className="text-left">
+            <div className="font-semibold text-slate-900">View Detailed Calculation Breakdown</div>
+            <div className="text-sm text-slate-600">See how we calculated your tax and healthcare impacts</div>
+          </div>
+        </div>
+        {isExpanded ? (
+          <ChevronUp className="w-5 h-5 text-slate-600" />
+        ) : (
+          <ChevronDown className="w-5 h-5 text-slate-600" />
+        )}
+      </Button>
+
+      {isExpanded && (
+        <div className="mt-6 space-y-6 border-2 border-slate-200 rounded-lg p-6 bg-slate-50">
+          <h4 className="text-lg font-bold text-slate-900 mb-4">Personalized Side-by-Side Comparison</h4>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Tax Cost Scenario Comparison */}
+            <Card className="border-2 border-blue-200 bg-blue-50">
+              <CardHeader className="pb-4">
+                <div className="flex items-center space-x-2">
+                  <TrendingUp className="w-5 h-5 text-blue-600" />
+                  <CardTitle className="text-lg text-blue-900">Tax Cost Scenario Comparison</CardTitle>
+                  <MobileTooltip
+                    title="Tax Calculation Details"
+                    content="Detailed breakdown of how tax changes under current law vs. Big Bill affect your specific situation"
+                  />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div className="text-center">
+                    <h5 className="font-medium text-blue-800 mb-2">Current Law</h5>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span>Federal Income Tax</span>
+                        <span className="font-medium">$8,593</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>FICA Taxes</span>
+                        <span className="font-medium">$3,683</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>State Income Tax</span>
+                        <span className="font-medium">$0</span>
+                      </div>
+                    </div>
+                    <div className="mt-3 pt-2 border-t border-blue-300">
+                      <div className="flex justify-between font-bold">
+                        <span>Total Annual Tax</span>
+                        <span>$12,275</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="text-center">
+                    <h5 className="font-medium text-blue-800 mb-2">Big Bill</h5>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span>Federal Income Tax</span>
+                        <span className="font-medium">$7,979</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>FICA Taxes</span>
+                        <span className="font-medium">$3,069</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>State Income Tax</span>
+                        <span className="font-medium">$0</span>
+                      </div>
+                    </div>
+                    <div className="mt-3 pt-2 border-t border-blue-300">
+                      <div className="flex justify-between font-bold">
+                        <span>Total Annual Tax</span>
+                        <span>$11,048</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-blue-100 rounded-lg p-3 text-center">
+                  <div className="font-bold text-blue-900">Annual Tax Savings:</div>
+                  <div className="text-lg font-bold text-blue-800">$12,275 saved per year</div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Healthcare Cost Scenario Comparison */}
+            <Card className="border-2 border-green-200 bg-green-50">
+              <CardHeader className="pb-4">
+                <div className="flex items-center space-x-2">
+                  <Heart className="w-5 h-5 text-green-600" />
+                  <CardTitle className="text-lg text-green-900">Healthcare Cost Scenario Comparison</CardTitle>
+                  <MobileTooltip
+                    title="Healthcare Cost Details"
+                    content="Breakdown of healthcare savings from enhanced subsidies and prescription coverage"
+                  />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div className="text-center">
+                    <h5 className="font-medium text-green-800 mb-2">Current Law</h5>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span>Annual Premium</span>
+                        <span className="font-medium">$2,315</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Out-of-Pocket Costs</span>
+                        <span className="font-medium">$463</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Prescription Costs</span>
+                        <span className="font-medium">$309</span>
+                      </div>
+                    </div>
+                    <div className="mt-3 pt-2 border-t border-green-300">
+                      <div className="flex justify-between font-bold">
+                        <span>Total Annual Cost</span>
+                        <span>$3,087</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="text-center">
+                    <h5 className="font-medium text-green-800 mb-2">Big Bill</h5>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span>Annual Premium</span>
+                        <span className="font-medium">$1,574</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Out-of-Pocket Costs</span>
+                        <span className="font-medium">$450</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Prescription Costs</span>
+                        <span className="font-medium">$225</span>
+                      </div>
+                    </div>
+                    <div className="mt-3 pt-2 border-t border-green-300">
+                      <div className="flex justify-between font-bold">
+                        <span>Total Annual Cost</span>
+                        <span>$2,249</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-green-100 rounded-lg p-3 text-center">
+                  <div className="font-bold text-green-900">Annual Healthcare Savings:</div>
+                  <div className="text-lg font-bold text-green-800">$838 saved per year</div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* National Debt & Deficit Section */}
+          <Card className="border-2 border-amber-200 bg-amber-50">
+            <CardHeader className="pb-4">
+              <div className="flex items-center space-x-2">
+                <Shield className="w-5 h-5 text-amber-600" />
+                <CardTitle className="text-lg text-amber-900">National Debt & Deficit</CardTitle>
+                <MobileTooltip
+                  title="Fiscal Impact Analysis"
+                  content="Analysis of how policy changes affect national debt and deficit levels"
+                />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 gap-6 mb-4">
+                <div className="text-center">
+                  <h5 className="font-medium text-amber-800 mb-2">Current Law</h5>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Debt-to-GDP Ratio</span>
+                      <span className="font-medium">126%</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span>Deficit-to-GDP</span>
+                      <span className="font-medium">5.8%</span>
+                    </div>
+                    <div className="text-sm font-medium text-amber-800">
+                      Fiscal Health: <span className="font-bold">High Risk</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="text-center">
+                  <h5 className="font-medium text-amber-800 mb-2">Big Bill</h5>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Debt-to-GDP Ratio</span>
+                      <span className="font-medium">128.5%</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span>Deficit-to-GDP</span>
+                      <span className="font-medium">6.6%</span>
+                    </div>
+                    <div className="text-sm font-medium text-amber-800">
+                      Fiscal Health: <span className="font-bold">High Risk</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-amber-100 rounded-lg p-4">
+                <div className="font-bold text-amber-900 mb-2">Policy Trade-off Analysis:</div>
+                <p className="text-sm text-amber-800 mb-3">
+                  You receive <span className="font-bold">${Math.abs(results.netAnnualImpact).toLocaleString()} annually</span> immediate 
+                  financial relief, but this contributes to national debt that will require future 
+                  tax payments or spending cuts to service.
+                </p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <div className="font-medium text-amber-800 mb-1">Immediate Impact:</div>
+                    <ul className="space-y-1 text-amber-700">
+                      <li>• Annual savings: ${Math.abs(results.netAnnualImpact).toLocaleString()}</li>
+                      <li>• 20-year savings: ${Math.abs(results.timeline.twentyYear).toLocaleString()}</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <div className="font-medium text-amber-800 mb-1">Long-term Obligations:</div>
+                    <ul className="space-y-1 text-amber-700">
+                      <li>• Policy increases national debt by ~$680B</li>
+                      <li>• Creates ongoing debt service costs</li>
+                      <li>• May require future fiscal adjustments</li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <div className="mt-3 p-3 bg-amber-50 rounded border border-amber-200">
+                  <div className="font-medium text-amber-800 mb-1">Key Question:</div>
+                  <p className="text-sm text-amber-700">
+                    Will the economic growth generated by your increased spending power 
+                    create enough additional tax revenue to offset the long-term debt burden? The answer 
+                    depends on broader economic conditions and policy effectiveness.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+    </div>
+  );
+}
 
 function LoadingDashboard() {
   return (
@@ -356,6 +624,9 @@ export function ResultsDashboard({ results, isLoading = false }: ResultsDashboar
 
         {/* Secondary Charts Section */}
         <PolicyCharts results={results} />
+
+        {/* Collapsible Detailed Breakdown Section */}
+        <DetailedBreakdownSection results={results} />
 
         {/* Economic Context Section */}
         {results.economicContext && (
