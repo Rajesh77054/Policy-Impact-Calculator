@@ -77,7 +77,7 @@ export default function NetFinancialImpactChart({ results }: NetFinancialImpactC
             },
             {
               label: 'With Policy Changes',
-              data: timelineData.map(d => d.proposed),
+              data: timelineData.map(d => -d.proposed), // Invert values for user-friendly display
               borderColor: results.netAnnualImpact < 0 ? '#059669' : '#dc2626',
               backgroundColor: results.netAnnualImpact < 0 ? 'rgba(5, 150, 105, 0.1)' : 'rgba(220, 38, 38, 0.1)',
               borderWidth: 3,
@@ -119,15 +119,22 @@ export default function NetFinancialImpactChart({ results }: NetFinancialImpactC
               displayColors: true,
               callbacks: {
                 label: function(context) {
-                  const value = context.parsed.y;
+                  const displayValue = context.parsed.y;
                   const label = context.dataset.label;
-                  if (value === 0) {
+                  
+                  // For Current Law, always show baseline
+                  if (label === 'Current Law') {
                     return `${label}: No change (baseline)`;
                   }
-                  if (value < 0) {
-                    return `${label}: Save $${Math.abs(value).toLocaleString()}`;
+                  
+                  // For Policy Changes, we inverted the data, so positive display = savings (original negative)
+                  if (displayValue === 0) {
+                    return `${label}: No change (baseline)`;
                   }
-                  return `${label}: Pay $${value.toLocaleString()} more`;
+                  if (displayValue > 0) {
+                    return `${label}: Save $${displayValue.toLocaleString()}`;
+                  }
+                  return `${label}: Pay $${Math.abs(displayValue).toLocaleString()} more`;
                 }
               }
             }
@@ -158,10 +165,11 @@ export default function NetFinancialImpactChart({ results }: NetFinancialImpactC
                 callback: function(value) {
                   const numValue = Number(value);
                   if (numValue === 0) return '$0';
-                  if (numValue < 0) {
-                    return `Save $${Math.abs(numValue).toLocaleString()}`;
+                  // With inverted axis: positive display values = savings
+                  if (numValue > 0) {
+                    return `Save $${numValue.toLocaleString()}`;
                   }
-                  return `+$${numValue.toLocaleString()}`;
+                  return `+$${Math.abs(numValue).toLocaleString()}`;
                 }
               }
             }
