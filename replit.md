@@ -97,6 +97,7 @@ The Policy Impact Calculator is a sophisticated web application that transforms 
 - `NODE_ENV`: Environment configuration (development/production)
 
 ## Changelog
+- June 27, 2025. Enhanced results dashboard with progressive disclosure UX - implemented collapsible "View Personalized Side-by-Side Comparison" section to provide detailed breakdowns without overwhelming main results flow. Added mathematical integrity fixes by displaying all calculation components (Tax, Healthcare, Energy, Employment, State adjustments) with proper transparency. Removed redundant verification displays for cleaner interface. Successfully merged development branch to main.
 - June 24, 2025. Initial setup
 
 ## User Preferences
