@@ -19,6 +19,42 @@ import { DataFreshnessIndicator } from "./data-freshness-indicator";
 import { CalculationErrorBoundary } from "./calculation-error-boundary";
 import MethodologyModal from "./methodology-modal";
 
+interface MethodologyData {
+  sources: Array<{
+    id: string;
+    name: string;
+    organization: string;
+    url: string;
+    lastUpdated: string;
+    credibility: string;
+    description: string;
+  }>;
+  methodology: {
+    overview: string;
+    tax_calculations: {
+      description: string;
+      methodology: string[];
+      limitations: string;
+    };
+    healthcare_calculations: {
+      description: string;
+      methodology: string[];
+      limitations: string;
+    };
+    state_adjustments: {
+      description: string;
+      methodology: string[];
+      limitations: string;
+    };
+    timeline_projections: {
+      description: string;
+      methodology: string[];
+      limitations: string;
+    };
+    disclaimer: string;
+  };
+}
+
 interface ResultsDashboardProps {
   results: PolicyResults;
   isLoading?: boolean;
@@ -57,7 +93,7 @@ const MobileTooltip = ({
 // Methodology Tabs Component
 const MethodologyTabs = () => {
   const [activeTab, setActiveTab] = React.useState<string | null>(null);
-  const { data: methodologyData, isLoading } = useQuery({
+  const { data: methodologyData, isLoading } = useQuery<MethodologyData>({
     queryKey: ["/api/methodology"],
   });
 
