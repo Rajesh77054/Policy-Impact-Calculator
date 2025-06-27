@@ -88,41 +88,40 @@ export default function PolicyComparisonTable({ className = "" }: PolicyComparis
   return (
     <TooltipProvider>
       <Card className={`border border-border shadow-lg ${className}`}>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div className="flex-1">
-              <CardTitle className="text-xl font-semibold text-foreground mb-2">
-                {POLICY_COMPARISON_METADATA.title}
-              </CardTitle>
-              <p className="text-sm text-muted-foreground mb-3">
-                {POLICY_COMPARISON_METADATA.description}
-              </p>
+        <div>
+          <Button
+            onClick={() => setIsExpanded(!isExpanded)}
+            variant="outline"
+            className="w-full justify-between p-4 h-auto border-2 border-slate-200 hover:border-slate-300"
+          >
+            <div className="flex items-center space-x-3">
+              <BookOpen className="w-5 h-5 text-slate-600" />
+              <div className="text-left">
+                <div className="font-semibold text-slate-900">{POLICY_COMPARISON_METADATA.title}</div>
+                <div className="text-sm text-slate-600">{POLICY_COMPARISON_METADATA.description}</div>
+              </div>
             </div>
             <div className="flex items-center space-x-2">
-              <MethodologyModal 
-                trigger={
-                  <Button variant="outline" size="sm" className="flex items-center space-x-1">
-                    <BookOpen className="w-4 h-4" />
-                    <span>Learn More</span>
-                  </Button>
-                }
-              />
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsExpanded(!isExpanded)}
-                className="flex items-center space-x-1"
-              >
-                <span>{isExpanded ? "Hide" : "Show"} Comparison</span>
-                {isExpanded ? (
-                  <ChevronUp className="w-4 h-4" />
-                ) : (
-                  <ChevronDown className="w-4 h-4" />
-                )}
-              </Button>
+              {isExpanded ? (
+                <ChevronUp className="w-5 h-5 text-slate-600" />
+              ) : (
+                <ChevronDown className="w-5 h-5 text-slate-600" />
+              )}
             </div>
-          </div>
-        </CardHeader>
+          </Button>
+        </div>
+
+        {/* Learn More Button - positioned outside the main clickable area */}
+        <div className="px-4 pb-2 flex justify-end">
+          <MethodologyModal 
+            trigger={
+              <Button variant="outline" size="sm" className="flex items-center space-x-1">
+                <BookOpen className="w-4 h-4" />
+                <span>Learn More</span>
+              </Button>
+            }
+          />
+        </div>
 
         {isExpanded && (
           <CardContent>
