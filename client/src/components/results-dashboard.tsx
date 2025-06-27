@@ -10,12 +10,13 @@ import { HelpCircle, TrendingUp, TrendingDown, Calculator, DollarSign, Heart, Za
 import { useQuery } from "@tanstack/react-query";
 import { PolicyResults } from "@shared/types";
 import PolicyCharts from "./policy-charts";
-
-
-
+import NetFinancialImpactChart from "./net-financial-impact-chart";
+import EconomicContextCard from "./economic-context-card";
+import PolicyComparisonTable from "./policy-comparison-table";
 import { useReplitAuth } from "@/hooks/use-replit-auth";
 import { Link } from "wouter";
-
+import { DataFreshnessIndicator } from "./data-freshness-indicator";
+import { CalculationErrorBoundary } from "./calculation-error-boundary";
 import MethodologyModal from "./methodology-modal";
 
 interface MethodologyData {
@@ -720,7 +721,7 @@ export function ResultsDashboard({ results, isLoading = false }: ResultsDashboar
         <MethodologyTabs />
 
         {/* Primary Chart - Net Financial Impact Over Time */}
-        <PolicyCharts results={results} showBigBillComparison={true} />
+        <NetFinancialImpactChart results={results} />
 
 
 
@@ -858,8 +859,18 @@ export function ResultsDashboard({ results, isLoading = false }: ResultsDashboar
         {/* Collapsible Detailed Breakdown Section */}
         <DetailedBreakdownSection results={results} />
 
+        {/* Policy Comparison Table Section */}
+        <PolicyComparisonTable className="mb-8" />
+
         {/* Secondary Charts Section */}
-        <PolicyCharts results={results} showBigBillComparison={true} />
+        <PolicyCharts results={results} />
+
+        {/* Economic Context Section */}
+        {results.economicContext && (
+          <div className="mb-8">
+            <EconomicContextCard results={results} />
+          </div>
+        )}
 
         {/* Action Buttons Section */}
         <ActionButtons />

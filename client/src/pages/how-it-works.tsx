@@ -1,148 +1,142 @@
 import { Link } from "wouter";
+import { ArrowLeft, CheckCircle, Shield, Calculator, BarChart3, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Calculator, Users, BarChart3, Lightbulb } from "lucide-react";
 
 export default function HowItWorks() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-white dark:bg-slate-900 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <Link href="/">
-              <Button variant="ghost" className="inline-flex items-center space-x-2">
-                <ArrowLeft className="w-4 h-4" />
-                <span>Back to Home</span>
-              </Button>
-            </Link>
-            <div className="flex items-center space-x-2">
+      <header className="bg-background/80 backdrop-blur-md border-b border-border sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-4">
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">PC</span>
+                <span className="text-primary-foreground font-bold text-sm">PC</span>
               </div>
-              <span className="font-semibold text-lg">Policy Impact Calculator</span>
+              <h1 className="text-xl font-semibold text-foreground">Policy Impact Calculator</h1>
+            </div>
+            <div className="flex items-center space-x-4">
+              <div className="hidden md:flex items-center space-x-6">
+                <div className="flex items-center space-x-2 text-emerald-600">
+                  <Shield className="w-4 h-4" />
+                  <span className="text-sm font-medium">100% Anonymous</span>
+                </div>
+                <div className="flex items-center space-x-2 text-emerald-600">
+                  <CheckCircle className="w-4 h-4" />
+                  <span className="text-sm font-medium">No Political Agenda</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
-      {/* Main Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">
-            How It Works
-          </h1>
-          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-            Understanding how our Policy Impact Calculator analyzes and presents policy effects
-          </p>
-        </div>
-
-        {/* Process Steps */}
-        <div className="grid gap-8 mb-12">
-          <Card className="border-2 border-blue-200 dark:border-blue-800">
-            <CardHeader>
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                  <Users className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                </div>
-                <div>
-                  <CardTitle className="text-xl">Step 1: Personal Profile</CardTitle>
-                  <CardDescription>Tell us about your situation</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-slate-600 dark:text-slate-300">
-                We collect basic demographic and economic information to understand how policies might affect someone in your situation. 
-                This includes your location, income range, family status, and other relevant factors that influence policy impact.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="border-2 border-green-200 dark:border-green-800">
-            <CardHeader>
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-                  <Calculator className="w-5 h-5 text-green-600 dark:text-green-400" />
-                </div>
-                <div>
-                  <CardTitle className="text-xl">Step 2: Policy Analysis</CardTitle>
-                  <CardDescription>AI-powered impact calculation</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-slate-600 dark:text-slate-300">
-                Our AI analyzes the selected policy using verified data sources and academic research. 
-                We calculate potential impacts across multiple dimensions including financial, social, and long-term effects 
-                based on your specific profile.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="border-2 border-purple-200 dark:border-purple-800">
-            <CardHeader>
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
-                  <BarChart3 className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-                </div>
-                <div>
-                  <CardTitle className="text-xl">Step 3: Results & Insights</CardTitle>
-                  <CardDescription>Personalized impact visualization</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-slate-600 dark:text-slate-300">
-                We present the analysis through clear visualizations, showing both immediate and long-term impacts. 
-                Results include confidence levels, uncertainty ranges, and explanations of how we arrived at each conclusion.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Key Features */}
-        <div className="bg-white dark:bg-slate-800 rounded-xl p-8 shadow-lg">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center">
-            <Lightbulb className="w-6 h-6 mr-3 text-yellow-500" />
-            Key Features
-          </h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Non-Partisan Analysis</h3>
-              <p className="text-slate-600 dark:text-slate-300">
-                Our calculations are based on academic research and verified data, not political opinions or advocacy positions.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Personalized Results</h3>
-              <p className="text-slate-600 dark:text-slate-300">
-                Every analysis is tailored to your specific circumstances, providing relevant and actionable insights.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Transparent Methodology</h3>
-              <p className="text-slate-600 dark:text-slate-300">
-                We show our work, including data sources, assumptions, and confidence levels for complete transparency.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Educational Focus</h3>
-              <p className="text-slate-600 dark:text-slate-300">
-                Designed to inform and educate, helping users understand policy implications beyond headlines.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* CTA */}
-        <div className="text-center mt-12">
-          <Link href="/calculator">
-            <Button size="lg" className="inline-flex items-center space-x-2">
-              <Calculator className="w-5 h-5" />
-              <span>Try the Calculator</span>
+        {/* Back Navigation */}
+        <div className="mb-8">
+          <Link href="/">
+            <Button variant="ghost" className="inline-flex items-center space-x-2">
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to Home</span>
             </Button>
           </Link>
+        </div>
+
+        <div className="space-y-12">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-slate-900 mb-4">How It Works</h1>
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+              Our calculator uses real government data to show you exactly how policy changes would affect your personal finances.
+            </p>
+          </div>
+
+          {/* Process Steps */}
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <FileText className="w-8 h-8 text-blue-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">1. Share Your Info</h3>
+              <p className="text-slate-600">
+                Tell us about your location, family situation, income, and priorities. All information is anonymous.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Calculator className="w-8 h-8 text-green-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">2. We Calculate</h3>
+              <p className="text-slate-600">
+                Our system uses official IRS tax brackets, healthcare data, and economic indicators to calculate your impact.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <BarChart3 className="w-8 h-8 text-purple-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">3. See Results</h3>
+              <p className="text-slate-600">
+                Get personalized charts showing how policies affect your taxes, healthcare costs, and long-term finances.
+              </p>
+            </div>
+          </div>
+
+          {/* Key Features */}
+          <div className="bg-slate-50 rounded-xl p-8">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">What Makes Us Different</h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="flex items-start space-x-3">
+                <CheckCircle className="w-5 h-5 text-green-500 mt-1 flex-shrink-0" />
+                <div>
+                  <h4 className="font-semibold text-slate-900">Real Government Data</h4>
+                  <p className="text-slate-600 text-sm">
+                    We use official sources like IRS tax brackets, Bureau of Labor Statistics, and Federal Reserve data.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-3">
+                <CheckCircle className="w-5 h-5 text-green-500 mt-1 flex-shrink-0" />
+                <div>
+                  <h4 className="font-semibold text-slate-900">Completely Anonymous</h4>
+                  <p className="text-slate-600 text-sm">
+                    No registration required. Your data is never stored or shared.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-3">
+                <CheckCircle className="w-5 h-5 text-green-500 mt-1 flex-shrink-0" />
+                <div>
+                  <h4 className="font-semibold text-slate-900">Non-Partisan Analysis</h4>
+                  <p className="text-slate-600 text-sm">
+                    We present facts and calculations without political bias or recommendations.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-3">
+                <CheckCircle className="w-5 h-5 text-green-500 mt-1 flex-shrink-0" />
+                <div>
+                  <h4 className="font-semibold text-slate-900">Personalized Results</h4>
+                  <p className="text-slate-600 text-sm">
+                    Every calculation is tailored to your specific situation and location.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* CTA */}
+          <div className="text-center">
+            <Link href="/calculator">
+              <Button size="lg" className="px-8 py-3">
+                Try the Calculator
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

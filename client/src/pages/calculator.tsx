@@ -41,11 +41,11 @@ export default function Calculator() {
     },
     onError: (error) => {
       console.error("Failed to create session:", error);
-      // Retry session creation after a short delay
-      setTimeout(() => {
-        console.log("Retrying session creation...");
-        createSession();
-      }, 2000);
+      toast({
+        title: "Session Error",
+        description: "Failed to create session. Please refresh the page.",
+        variant: "destructive",
+      });
     },
   });
 
@@ -69,18 +69,21 @@ export default function Calculator() {
     onSuccess: () => {
       setLocation("/results");
     },
-    onError: (error) => {
+    onError: (error: any) => {
+      console.error("Calculation error:", error);
       toast({
         title: "Calculation Error",
-        description: "There was an error calculating your results. Please try again.",
+        description: error.message || "There was an error calculating your results. Please try again.",
         variant: "destructive",
       });
     },
   });
 
   useEffect(() => {
-    createSession();
-  }, []);
+    if (!sessionReady) {
+      createSession();
+    }
+  }, [sessionReady, createSession]);
 
   const handleStepComplete = async (stepData: Partial<FormData>) => {
     console.log("Step completed with data:", stepData);
@@ -88,10 +91,10 @@ export default function Calculator() {
     console.log("Session ready status:", sessionReady);
 
     if (!sessionReady) {
-      console.error("Session not ready, cannot save form data");
+      console.error("Session not ready");
       toast({
         title: "Session Error",
-        description: "Session is not ready. Please wait a moment and try again.",
+        description: "Session not ready. Please wait a moment and try again.",
         variant: "destructive",
       });
       return;
@@ -118,20 +121,18 @@ export default function Calculator() {
       if (!response.ok) {
         const errorText = await response.text();
         console.error("Server error response:", errorText);
-        
-        // If it's a session error, try to reinitialize session
+
+        // If it's a session error, handle gracefully
         if (response.status === 404) {
-          console.log("Session not found, reinitializing...");
-          setSessionReady(false);
-          createSession();
+          console.log("Session not found");
           toast({
-            title: "Session Reinitialized",
-            description: "Please try your action again.",
-            variant: "default",
+            title: "Session Error",
+            description: "Please refresh the page to start over.",
+            variant: "destructive",
           });
           return;
         }
-        
+
         throw new Error(`Failed to save form data: ${response.status}`);
       }
 
@@ -145,7 +146,38 @@ export default function Calculator() {
 
       // Move to next step or calculate results
       if (currentStep === steps.length) {
-        calculateResults();
+        try {
+          const response = await apiRequest("POST", "/api/calculate");
+          setLocation("/results");
+        } catch (error: any) {
+          console.error("Error calculating results:", error);
+
+          // If session error, try to create a new session and retry once
+          if (error.message?.includes('session') || error.message?.includes('404')) {
+            try {
+              console.log('Session error detected, attempting recovery...');
+              await createSession();
+              // Retry calculation with new session
+              const retryResponse = await fetch('/api/calculate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include'
+              });
+
+              if (retryResponse.ok) {
+                setLocation('/results');
+                return;
+              }
+            } catch (retryError) {
+              console.error('Session recovery failed:', retryError);
+            }
+          }
+          toast({
+            title: "Calculation Error",
+            description: error.message || "There was an error calculating your results. Please try again.",
+            variant: "destructive",
+          });
+        }
       } else {
         // Small delay for visual feedback before auto-advancing
         setTimeout(() => {

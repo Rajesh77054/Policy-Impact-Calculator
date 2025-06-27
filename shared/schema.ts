@@ -36,11 +36,10 @@ export const formDataSchema = z.object({
 
   // Step 6: Priorities
   priorities: z.array(z.string()).optional(),
-  includeBigBill: z.boolean().optional(),
 });
 
 const policyBreakdownSchema = z.object({
-  category: z.string(),
+  category: z.enum(["tax", "healthcare", "energy", "housing", "education", "employment"]),
   title: z.string(),
   description: z.string(),
   impact: z.number(),
@@ -48,6 +47,53 @@ const policyBreakdownSchema = z.object({
     item: z.string(),
     amount: z.number(),
   })),
+});
+
+const purchasingPowerSchema = z.object({
+  currentScenario: z.array(z.object({
+    year: z.number(),
+    purchasingPowerIndex: z.number(),
+    projectedDisposableIncome: z.number(),
+  })),
+  proposedScenario: z.array(z.object({
+    year: z.number(),
+    purchasingPowerIndex: z.number(),
+    projectedDisposableIncome: z.number(),
+  })),
+  dataSource: z.string(),
+  lastUpdated: z.string(),
+});
+
+const economicContextSchema = z.object({
+  unemploymentRate: z.object({
+    national: z.number(),
+    state: z.number().optional(),
+    lastUpdated: z.string(),
+  }),
+  recessionIndicators: z.object({
+    yieldCurveInversion: z.number(),
+    unemploymentTrend: z.number(),
+    combined: z.number(),
+    lastUpdated: z.string(),
+  }),
+  wageValidation: z.object({
+    medianWeeklyEarnings: z.number(),
+    hourlyEarnings: z.number(),
+    incomeContext: z.string(),
+    lastUpdated: z.string(),
+  }),
+  macroeconomicData: z.object({
+    gdpGrowth: z.number(),
+    inflationRate: z.number(),
+    federalFundsRate: z.number(),
+    lastUpdated: z.string(),
+  }),
+  fiscalData: z.object({
+    totalPublicDebt: z.number(),
+    debtToGdpRatio: z.number(),
+    deficitToGdpRatio: z.number(),
+    lastUpdated: z.string(),
+  }).optional(),
 });
 
 export const policyResultsSchema = z.object({
@@ -72,6 +118,9 @@ export const policyResultsSchema = z.object({
     twentyYear: z.number(),
   }),
   breakdown: z.array(policyBreakdownSchema),
+  purchasingPower: purchasingPowerSchema.optional(),
+  economicContext: economicContextSchema.optional(),
+  validationChecksum: z.string().optional(),
   bigBillScenario: z.object({
     annualTaxImpact: z.number(),
     healthcareCostImpact: z.number(),
@@ -102,7 +151,32 @@ export const insertSessionSchema = createInsertSchema(userSessions).omit({
   createdAt: true,
 });
 
-export type FormData = z.infer<typeof formDataSchema>;
+export interface FormData {
+  // Location information
+  zipCode?: string;
+  state?: string;
+
+  // Demographics
+  ageRange?: string;
+  familyStatus?: string;
+  hasChildren?: boolean;
+  numberOfQualifyingChildren?: number;
+  numberOfOtherDependents?: number;
+
+  // Employment
+  employmentStatus?: string;
+  industry?: string;
+
+  // Healthcare
+  insuranceType?: string;
+  hasHSA?: boolean;
+
+  // Income
+  incomeRange?: string;
+
+  // Priorities
+  priorities?: string[];
+}
 export type PolicyResults = z.infer<typeof policyResultsSchema>;
 
 export const replitUserSchema = z.object({
@@ -118,3 +192,4 @@ export const replitUserSchema = z.object({
 export type ReplitUser = z.infer<typeof replitUserSchema>;
 export type InsertSession = z.infer<typeof insertSessionSchema>;
 export type UserSession = typeof userSessions.$inferSelect;
+export const breakdownCategorySchema = z.enum(["tax", "healthcare", "energy", "employment", "state"]);

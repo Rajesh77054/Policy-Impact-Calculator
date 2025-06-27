@@ -1,12 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "wouter";
-import ResultsDashboard from "@/components/results-dashboard";
-
+import { ResultsDashboard } from "@/components/results-dashboard";
 import { Button } from "@/components/ui/button";
-import { Shield, CheckCircle, ArrowLeft } from "lucide-react";
+import { ArrowLeft, Download, Share2, AlertCircle } from "lucide-react";
+import { Link } from "wouter";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { CalculationErrorBoundary } from "@/components/calculation-error-boundary";
+
+import { Shield, CheckCircle } from "lucide-react";
 
 export default function Results() {
-  const { data: results, isLoading, error } = useQuery({
+  const { data: results, isLoading, error, refetch } = useQuery({
     queryKey: ["/api/results"],
   });
 
@@ -25,7 +28,12 @@ export default function Results() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <p className="text-destructive mb-4">Error loading results. Please try again.</p>
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              Error loading results. Please try again.
+            </AlertDescription>
+          </Alert>
           <Link href="/calculator">
             <Button>Return to Calculator</Button>
           </Link>
@@ -62,7 +70,19 @@ export default function Results() {
         </div>
       </header>
 
-      <ResultsDashboard results={results as any} />
+      {results && (
+        <div className="space-y-8">
+          <CalculationErrorBoundary 
+            component="Results Dashboard"
+            onRetry={() => refetch()}
+          >
+            <ResultsDashboard 
+              results={results} 
+              isLoading={isLoading} 
+            />
+          </CalculationErrorBoundary>
+        </div>
+      )}
 
       {/* Back to Home */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">

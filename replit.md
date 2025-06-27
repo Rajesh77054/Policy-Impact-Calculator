@@ -2,104 +2,94 @@
 
 ## Overview
 
-The Policy Impact Calculator is a sophisticated web application that transforms complex legislative analysis into an engaging, user-friendly experience for understanding how policy changes affect individuals' finances, healthcare, and future. The application provides personalized financial impact analysis through an interactive multi-step questionnaire and real-time calculations.
+The Policy Impact Calculator is a full-stack web application that provides personalized policy impact analysis for users. It features a React frontend with TypeScript, an Express backend, and PostgreSQL database integration using Drizzle ORM. The application guides users through a multi-step questionnaire to gather demographic and financial information, then calculates and displays personalized policy impacts across various categories including taxes, healthcare, energy costs, and economic indicators.
 
 ## System Architecture
 
 ### Frontend Architecture
-- **Framework**: React.js with TypeScript for type safety and modern development practices
-- **Styling**: Tailwind CSS with custom glassmorphism effects and dark/light theme support
-- **UI Components**: Radix UI components for accessibility and consistency
-- **State Management**: React Query for server state management and caching
+- **Framework**: React 18 with TypeScript
+- **Build Tool**: Vite for fast development and optimized production builds
+- **Styling**: Tailwind CSS with custom utility classes and Radix UI components
+- **State Management**: React Query (TanStack Query) for server state management
 - **Routing**: Wouter for lightweight client-side routing
-- **Charts**: Chart.js for data visualization and impact charts
-- **Forms**: React Hook Form with Zod validation for robust form handling
+- **Form Handling**: React Hook Form with Zod validation
+- **Charts**: Chart.js for data visualization
 
 ### Backend Architecture
-- **Framework**: Express.js with TypeScript for API endpoints
+- **Framework**: Express.js with TypeScript
 - **Database**: PostgreSQL with Drizzle ORM for type-safe database operations
-- **Session Management**: Express sessions with PostgreSQL storage for temporary data
-- **Build System**: Vite for fast development and optimized production builds
-- **Runtime**: Node.js 20 with ESM modules
+- **Session Management**: Express sessions with PostgreSQL storage
+- **API Integration**: Federal Reserve Economic Data (FRED) and Bureau of Labor Statistics (BLS) APIs
+- **File Processing**: Excel/CSV parsing for policy data analysis
 
-### Database Design
-- **Primary Table**: `user_sessions` stores temporary session data, form responses, and calculated results
-- **Data Storage**: JSON columns for flexible form data and policy results storage
-- **Session Lifecycle**: Automatic cleanup of expired sessions, no permanent user data storage
+### Database Schema
+- **user_sessions**: Stores temporary session data including form responses and calculated results
+- Sessions are identified by unique session IDs
+- Form data and results are stored as JSON objects
+- Automatic timestamp tracking for session creation
 
 ## Key Components
 
-### Form System
-- **Multi-Step Flow**: 6-step questionnaire covering location, demographics, employment, healthcare, income, and priorities
-- **Progressive Enhancement**: Each step builds upon previous responses for personalized calculations
-- **Validation**: Zod schemas ensure data integrity and type safety
-- **State Persistence**: Form data saved to sessions for recovery and continuation
+### Form Steps System
+1. **Location Step**: State and ZIP code collection for regional calculations
+2. **Demographics Step**: Age, family status, and dependent information
+3. **Employment Step**: Employment status and industry classification
+4. **Healthcare Step**: Insurance type and HSA status
+5. **Income Step**: Income range selection aligned with IRS tax brackets
+6. **Priorities Step**: User policy preferences
 
-### Calculation Engine
-- **Real-Time Processing**: Policy impact calculations based on authoritative data sources
-- **Personalization**: Results tailored to user demographics, location, and financial situation
-- **Scenario Comparison**: Standard policy vs "One Big Beautiful Bill" scenario analysis
-- **Multi-Dimensional Impact**: Tax, healthcare, energy, and community impact calculations
-
-### Data Sources Integration
-- **IRS Tax Data**: Current federal tax brackets and standard deductions
-- **Healthcare Costs**: Kaiser Family Foundation employer survey data
-- **State-Specific Data**: Tax Foundation state tax rates and cost of living indexes
-- **Economic Projections**: Congressional Budget Office methodology and projections
+### Policy Calculation Engine
+- Real-time tax impact calculations using current IRS tax brackets
+- Healthcare cost analysis based on KFF data
+- State-specific adjustments for taxes and cost of living
+- Economic indicator integration (unemployment, recession probability)
+- Timeline projections with purchasing power adjustments
 
 ### Results Dashboard
-- **Interactive Charts**: Chart.js visualizations showing financial impacts over time
-- **Comparative Analysis**: Side-by-side scenario comparisons with toggle functionality
-- **Detailed Breakdowns**: Category-specific impact analysis with explanations
-- **Timeline Projections**: 5, 10, and 20-year impact forecasts
+- Interactive charts showing policy impacts over time
+- Comparative analysis between current law and proposed policies
+- Economic context cards with real-time indicators
+- Detailed breakdowns by policy category
 
 ## Data Flow
 
-1. **Session Initialization**: User starts calculator, server creates unique session ID
-2. **Form Collection**: Progressive data collection through 6-step questionnaire
-3. **Server Processing**: Real-time calculations using authoritative policy data
-4. **Results Generation**: Personalized impact analysis with multiple scenarios
-5. **Visualization**: Interactive charts and dashboards for data presentation
-6. **Session Cleanup**: Temporary data automatically expired and removed
+1. **Session Creation**: User starts calculator, server creates unique session ID
+2. **Form Collection**: Multi-step form collects user demographics and preferences
+3. **Real-time Validation**: Client-side validation with server-side verification
+4. **Policy Calculation**: Server processes form data through calculation engine
+5. **API Integration**: External APIs provide economic context and validation
+6. **Results Generation**: Comprehensive impact analysis with visualizations
+7. **Session Storage**: Results stored temporarily in database with session ID
 
 ## External Dependencies
 
-### Production Dependencies
-- **Database**: PostgreSQL 16 for persistent data storage
-- **Authentication**: Session-based temporary identification (no permanent accounts)
-- **UI Library**: Radix UI ecosystem for accessible components
-- **Visualization**: Chart.js for interactive data presentation
-- **Validation**: Zod for runtime type checking and form validation
+### Government Data Sources
+- **IRS**: Tax brackets, standard deductions, and tax calculation methodologies
+- **Bureau of Labor Statistics**: Employment data and Consumer Price Index
+- **Federal Reserve Economic Data**: Economic indicators and macroeconomic data
+- **Kaiser Family Foundation**: Healthcare cost data and insurance statistics
+- **Congressional Budget Office**: Policy impact analysis and budget projections
 
-### Development Tools
-- **TypeScript**: Full type safety across frontend and backend
-- **Drizzle Kit**: Database schema management and migrations
-- **Vite**: Fast development server and optimized builds
-- **Tailwind CSS**: Utility-first styling with custom design system
+### Third-party Services
+- **Neon Database**: PostgreSQL hosting with connection pooling
+- **Radix UI**: Accessible component primitives
+- **Chart.js**: Data visualization library
+- **Zod**: Runtime type validation
 
 ## Deployment Strategy
 
-### Replit Configuration
-- **Environment**: Node.js 20, PostgreSQL 16, web modules
-- **Build Process**: Vite build for frontend, esbuild for backend bundling
-- **Port Configuration**: Port 5000 for development, port 80 for production
-- **Auto-scaling**: Configured for automatic scaling based on demand
-
-### Production Setup
-- **Build Command**: `npm run build` - Creates optimized frontend and backend bundles
-- **Start Command**: `npm start` - Runs production server with bundled code
-- **Development**: `npm run dev` - Concurrent frontend and backend development servers
-- **Database**: Automatic PostgreSQL provisioning with environment variable configuration
-
-### Environment Variables
-- `DATABASE_URL`: PostgreSQL connection string (auto-provisioned by Replit)
-- `SESSION_SECRET`: Secure session encryption key
-- `NODE_ENV`: Environment configuration (development/production)
-
-## Changelog
-- June 27, 2025. Enhanced results dashboard with progressive disclosure UX - implemented collapsible "View Personalized Side-by-Side Comparison" section to provide detailed breakdowns without overwhelming main results flow. Added mathematical integrity fixes by displaying all calculation components (Tax, Healthcare, Energy, Employment, State adjustments) with proper transparency. Removed redundant verification displays for cleaner interface. Successfully merged development branch to main.
-- June 24, 2025. Initial setup
+- **Platform**: Replit with autoscale deployment target
+- **Build Process**: Vite builds frontend to `dist/public`, esbuild bundles backend
+- **Environment**: Node.js 20 runtime with PostgreSQL 16 module
+- **Port Configuration**: Internal port 5000 mapped to external port 80
+- **Static Assets**: Served from `attached_assets` directory for policy-related documents
 
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+
+## Changelog
+
+Changelog:
+- June 27, 2025. Enhanced results dashboard with progressive disclosure UX - implemented collapsible "View Personalized Side-by-Side Comparison" section to provide detailed breakdowns without overwhelming main results flow
+- June 24, 2025. Initial setup

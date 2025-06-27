@@ -5,6 +5,7 @@ import { db } from "./db";
 export interface IStorage {
   createSession(sessionId: string): Promise<UserSession>;
   getSession(sessionId: string): Promise<UserSession | undefined>;
+  getSessions(): Promise<UserSession[]>;
   updateSessionFormData(sessionId: string, formData: FormData): Promise<UserSession>;
   updateSessionResults(sessionId: string, results: PolicyResults): Promise<UserSession>;
   deleteSession(sessionId: string): Promise<void>;
@@ -64,6 +65,15 @@ export class DatabaseStorage implements IStorage {
     return session;
   }
 
+  async getSessions(): Promise<UserSession[]> {
+    const sessions = await db
+      .select()
+      .from(userSessions)
+      .orderBy(userSessions.createdAt);
+    
+    return sessions;
+  }
+
   async deleteSession(sessionId: string): Promise<void> {
     await db
       .delete(userSessions)
@@ -118,6 +128,10 @@ export class MemStorage implements IStorage {
     const updatedSession = { ...session, results };
     this.sessions.set(sessionId, updatedSession);
     return updatedSession;
+  }
+
+  async getSessions(): Promise<UserSession[]> {
+    return Array.from(this.sessions.values()).sort((a, b) => a.createdAt - b.createdAt);
   }
 
   async deleteSession(sessionId: string): Promise<void> {
