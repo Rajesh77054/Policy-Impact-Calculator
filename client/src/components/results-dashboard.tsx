@@ -766,14 +766,43 @@ export function ResultsDashboard({ results, isLoading = false }: ResultsDashboar
 
 
 
-              {/* State/Location Adjustment - Always show if significant */}
+              {/* Energy Cost Impact - Always show if exists in results */}
+              {results.energyCostImpact !== undefined && results.energyCostImpact !== 0 && (
+                <div className={`p-4 rounded-lg border ${results.energyCostImpact < 0 ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <h5 className={`font-medium ${results.energyCostImpact < 0 ? 'text-green-900' : 'text-red-900'}`}>
+                        Energy Cost Changes
+                      </h5>
+                      <p className={`text-sm ${results.energyCostImpact < 0 ? 'text-green-700' : 'text-red-700'}`}>
+                        Clean energy investments and efficiency improvements impact
+                      </p>
+                    </div>
+                    <div className={`text-lg font-bold ${results.energyCostImpact < 0 ? 'text-green-800' : 'text-red-800'}`}>
+                      {results.energyCostImpact < 0 ? `Save $${Math.abs(results.energyCostImpact).toLocaleString()}` : `+$${results.energyCostImpact.toLocaleString()}`}
+                    </div>
+                  </div>
+                  <div className="mt-3 space-y-1">
+                    <div className="flex justify-between text-sm">
+                      <span className={results.energyCostImpact < 0 ? 'text-green-600' : 'text-red-600'}>
+                        • Clean energy transition savings
+                      </span>
+                      <span className={`font-medium ${results.energyCostImpact < 0 ? 'text-green-700' : 'text-red-700'}`}>
+                        {results.energyCostImpact < 0 ? `Save $${Math.abs(results.energyCostImpact).toLocaleString()}` : `+$${results.energyCostImpact.toLocaleString()}`}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* State/Location Adjustment - Calculate remaining difference */}
               {(() => {
                 const stateAdjustment = results.netAnnualImpact - 
                   results.annualTaxImpact - 
                   results.healthcareCostImpact - 
-                  results.energyCostImpact - 
+                  (results.energyCostImpact || 0) - 
                   (results.breakdown.find(b => b.category === 'employment')?.impact || 0);
-                return Math.abs(stateAdjustment) > 100 ? (
+                return Math.abs(stateAdjustment) > 10 ? (
                   <div className={`p-4 rounded-lg border ${stateAdjustment < 0 ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
                     <div className="flex justify-between items-start mb-2">
                       <div>
@@ -805,8 +834,66 @@ export function ResultsDashboard({ results, isLoading = false }: ResultsDashboar
 
             </div>
 
-            {/* Net Impact Summary */}
+            {/* Mathematical Verification */}
             <div className="mt-6 pt-4 border-t border-slate-200">
+              <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 mb-4">
+                <h6 className="text-sm font-semibold text-slate-700 mb-2 flex items-center">
+                  <Calculator className="w-4 h-4 mr-2" />
+                  Mathematical Verification
+                </h6>
+                <div className="text-xs text-slate-600 space-y-1">
+                  {(() => {
+                    const taxImpact = results.annualTaxImpact || 0;
+                    const healthcareImpact = results.healthcareCostImpact || 0;
+                    const energyImpact = results.energyCostImpact || 0;
+                    const employmentImpact = results.breakdown.find(b => b.category === 'employment')?.impact || 0;
+                    const stateAdjustment = results.netAnnualImpact - taxImpact - healthcareImpact - energyImpact - employmentImpact;
+                    const calculatedTotal = taxImpact + healthcareImpact + energyImpact + employmentImpact + stateAdjustment;
+                    
+                    return (
+                      <>
+                        <div className="grid grid-cols-2 gap-2">
+                          <span>Tax Impact:</span>
+                          <span className="text-right">{taxImpact < 0 ? `-$${Math.abs(taxImpact)}` : `+$${taxImpact}`}</span>
+                          <span>Healthcare Impact:</span>
+                          <span className="text-right">{healthcareImpact < 0 ? `-$${Math.abs(healthcareImpact)}` : `+$${healthcareImpact}`}</span>
+                          {energyImpact !== 0 && (
+                            <>
+                              <span>Energy Impact:</span>
+                              <span className="text-right">{energyImpact < 0 ? `-$${Math.abs(energyImpact)}` : `+$${energyImpact}`}</span>
+                            </>
+                          )}
+                          {employmentImpact !== 0 && (
+                            <>
+                              <span>Employment Impact:</span>
+                              <span className="text-right">{employmentImpact < 0 ? `-$${Math.abs(employmentImpact)}` : `+$${employmentImpact}`}</span>
+                            </>
+                          )}
+                          {Math.abs(stateAdjustment) > 10 && (
+                            <>
+                              <span>State/Location:</span>
+                              <span className="text-right">{stateAdjustment < 0 ? `-$${Math.abs(stateAdjustment)}` : `+$${stateAdjustment}`}</span>
+                            </>
+                          )}
+                        </div>
+                        <div className="border-t border-slate-300 pt-1 mt-2">
+                          <div className="grid grid-cols-2 gap-2 font-medium">
+                            <span>Total:</span>
+                            <span className="text-right">{calculatedTotal < 0 ? `-$${Math.abs(calculatedTotal)}` : `+$${calculatedTotal}`}</span>
+                          </div>
+                          {Math.abs(calculatedTotal - results.netAnnualImpact) > 1 && (
+                            <div className="text-xs text-amber-600 mt-1">
+                              ⚠ Verification difference: ${Math.abs(calculatedTotal - results.netAnnualImpact)}
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    );
+                  })()}
+                </div>
+              </div>
+
+              {/* Net Impact Summary */}
               <div className={`p-4 rounded-lg border-2 ${results.netAnnualImpact < 0 ? 'bg-green-50 border-green-300' : 'bg-red-50 border-red-300'}`}>
                 <div className="flex justify-between items-center">
                   <div>
