@@ -111,17 +111,7 @@ export default function PolicyComparisonTable({ className = "" }: PolicyComparis
           </Button>
         </div>
 
-        {/* Learn More Button - positioned outside the main clickable area */}
-        <div className="px-4 pb-2 flex justify-end">
-          <MethodologyModal 
-            trigger={
-              <Button variant="outline" size="sm" className="flex items-center space-x-1">
-                <BookOpen className="w-4 h-4" />
-                <span>Learn More</span>
-              </Button>
-            }
-          />
-        </div>
+        
 
         {isExpanded && (
           <CardContent>
