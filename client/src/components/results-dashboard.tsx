@@ -160,7 +160,7 @@ function DetailedBreakdownSection({ results }: DetailedBreakdownSectionProps) {
         <div className="flex items-center space-x-3">
           <FileText className="w-5 h-5 text-slate-600" />
           <div className="text-left">
-            <div className="font-semibold text-slate-900">View Personalized Side-by-Side Comparison</div>
+            <div className="font-semibold text-slate-900 text-[20px]">View Personalized Side-by-Side Comparison</div>
             <div className="text-sm text-slate-600">See how we calculated your tax and healthcare impacts</div>
           </div>
         </div>
@@ -170,7 +170,6 @@ function DetailedBreakdownSection({ results }: DetailedBreakdownSectionProps) {
           <ChevronDown className="w-5 h-5 text-slate-600" />
         )}
       </Button>
-
       {isExpanded && (
         <div className="mt-6 space-y-6 border-2 border-slate-200 rounded-lg p-6 bg-slate-50">
           <h4 className="text-lg font-bold text-slate-900 mb-4">Personalized Side-by-Side Comparison</h4>
