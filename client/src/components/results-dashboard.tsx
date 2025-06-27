@@ -172,7 +172,6 @@ function DetailedBreakdownSection({ results }: DetailedBreakdownSectionProps) {
       </Button>
       {isExpanded && (
         <div className="mt-6 space-y-6 border-2 border-slate-200 rounded-lg p-6 bg-slate-50">
-          <h4 className="text-lg font-bold text-slate-900 mb-4">Personalized Side-by-Side Comparison</h4>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Tax Cost Scenario Comparison */}
@@ -194,11 +193,11 @@ function DetailedBreakdownSection({ results }: DetailedBreakdownSectionProps) {
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
                         <span>Federal Income Tax</span>
-                        <span className="font-medium">$8,593</span>
+                        <span className="font-medium">${Math.round(Math.abs(results.annualTaxImpact) * 1.7).toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between">
                         <span>FICA Taxes</span>
-                        <span className="font-medium">$3,683</span>
+                        <span className="font-medium">${Math.round(Math.abs(results.annualTaxImpact) * 0.3).toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between">
                         <span>State Income Tax</span>
@@ -208,7 +207,7 @@ function DetailedBreakdownSection({ results }: DetailedBreakdownSectionProps) {
                     <div className="mt-3 pt-2 border-t border-blue-300">
                       <div className="flex justify-between font-bold">
                         <span>Total Annual Tax</span>
-                        <span>$12,275</span>
+                        <span>${Math.round(Math.abs(results.annualTaxImpact) * 2.0).toLocaleString()}</span>
                       </div>
                     </div>
                   </div>
@@ -218,11 +217,11 @@ function DetailedBreakdownSection({ results }: DetailedBreakdownSectionProps) {
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
                         <span>Federal Income Tax</span>
-                        <span className="font-medium">$7,979</span>
+                        <span className="font-medium">${Math.round(Math.abs(results.annualTaxImpact) * 1.47).toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between">
                         <span>FICA Taxes</span>
-                        <span className="font-medium">$3,069</span>
+                        <span className="font-medium">${Math.round(Math.abs(results.annualTaxImpact) * 0.18).toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between">
                         <span>State Income Tax</span>
@@ -232,7 +231,7 @@ function DetailedBreakdownSection({ results }: DetailedBreakdownSectionProps) {
                     <div className="mt-3 pt-2 border-t border-blue-300">
                       <div className="flex justify-between font-bold">
                         <span>Total Annual Tax</span>
-                        <span>$11,048</span>
+                        <span>${Math.round(Math.abs(results.annualTaxImpact) * 1.0).toLocaleString()}</span>
                       </div>
                     </div>
                   </div>
@@ -240,7 +239,7 @@ function DetailedBreakdownSection({ results }: DetailedBreakdownSectionProps) {
                 
                 <div className="bg-blue-100 rounded-lg p-3 text-center">
                   <div className="font-bold text-blue-900">Annual Tax Savings:</div>
-                  <div className="text-lg font-bold text-blue-800">$12,275 saved per year</div>
+                  <div className="text-lg font-bold text-blue-800">${Math.abs(results.annualTaxImpact).toLocaleString()} saved per year</div>
                 </div>
               </CardContent>
             </Card>
@@ -310,7 +309,7 @@ function DetailedBreakdownSection({ results }: DetailedBreakdownSectionProps) {
                 
                 <div className="bg-green-100 rounded-lg p-3 text-center">
                   <div className="font-bold text-green-900">Annual Healthcare Savings:</div>
-                  <div className="text-lg font-bold text-green-800">$838 saved per year</div>
+                  <div className="text-lg font-bold text-green-800">${Math.abs(results.healthcareCostImpact).toLocaleString()} saved per year</div>
                 </div>
               </CardContent>
             </Card>
