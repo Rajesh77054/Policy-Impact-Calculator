@@ -124,40 +124,7 @@ export default function EconomicContextCard({ results }: EconomicContextCardProp
             </div>
           </div>
 
-          {/* Fiscal Context */}
-          {economicContext.fiscalData && (
-            <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
-              <h4 className="text-sm font-semibold text-blue-900 mb-2">Fiscal Context</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div className="flex justify-between">
-                  <span className="text-sm text-blue-700">Debt-to-GDP Ratio:</span>
-                  <span className="text-sm font-medium text-blue-900">
-                    {economicContext.fiscalData.debtToGdpRatio}%
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-blue-700">Deficit-to-GDP Ratio:</span>
-                  <span className="text-sm font-medium text-blue-900">
-                    {economicContext.fiscalData.deficitToGdpRatio}%
-                  </span>
-                </div>
-              </div>
-            </div>
-          )}
 
-          {/* Income Context */}
-          <div className="mt-4 p-4 bg-green-50 rounded-lg border border-green-200">
-            <h4 className="text-sm font-semibold text-green-900 mb-2">Income Context</h4>
-            <div className="text-sm text-green-700">
-              <p>
-                <span className="font-medium">Median Weekly Earnings:</span> 
-                ${economicContext.wageValidation.medianWeeklyEarnings.toLocaleString()}
-              </p>
-              <p className="mt-1 text-xs">
-                {economicContext.wageValidation.incomeContext}
-              </p>
-            </div>
-          </div>
 
           <div className="text-xs text-slate-500 text-center pt-2 border-t border-slate-200">
             Data updated: {economicContext.macroeconomicData.lastUpdated}
