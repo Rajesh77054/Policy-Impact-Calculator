@@ -856,14 +856,8 @@ export function ResultsDashboard({ results, isLoading = false }: ResultsDashboar
 
 
 
-        {/* Collapsible Detailed Breakdown Section */}
-        <DetailedBreakdownSection results={results} />
-
-        {/* Policy Comparison Table Section */}
-        <PolicyComparisonTable className="mb-8" />
-
         {/* Secondary Charts Section */}
-        <PolicyCharts results={results} />
+        <PolicyCharts results={results} showBigBillComparison={true} />
 
         {/* Economic Context Section */}
         {results.economicContext && (
